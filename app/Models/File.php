@@ -24,4 +24,8 @@ class File extends Model
         'deleted_at' => 'datetime',
     ];
 
+    public function assets()
+    {
+        return $this->hasMany(Asset::class);
+    }
 }
