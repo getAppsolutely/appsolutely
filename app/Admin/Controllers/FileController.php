@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Helpers\DashboardHelper;
 use App\Models\File;
 use Dcat\Admin\Traits\HasUploadedFile;
 use Dcat\Admin\Form;
@@ -30,15 +31,7 @@ class FileController extends AdminController
 
             // Display file preview for images
             $grid->column('preview')->display(function () {
-                $extension = strtolower($this->extension);
-                $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
-
-                if (in_array($extension, $imageExtensions)) {
-                    $url = Storage::disk('s3')->url($this->path . '/' . $this->filename);
-                    return "<img src='{$url}' style='max-width:100px;max-height:100px;'>";
-                }
-
-                return '<i class="fa fa-file-o"></i> ' . $extension;
+                return DashboardHelper::preview( $this->path . '/' . $this->filename, $this->extension);
             });
 
             $grid->column('original_filename')->sortable();
@@ -91,15 +84,7 @@ class FileController extends AdminController
 
             // Display file preview for images
             $show->field('preview')->unescape()->as(function () {
-                $extension = strtolower($this->extension);
-                $imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
-
-                if (in_array($extension, $imageExtensions)) {
-                    $url = Storage::disk('s3')->url($this->path . '/' . $this->filename);
-                    return "<img src='{$url}' style='max-width:300px;max-height:300px;'>";
-                }
-
-                return '<i class="fa fa-file-o fa-3x"></i> ' . $extension;
+                return DashboardHelper::preview( $this->path . '/' . $this->filename, $this->extension);
             });
 
             $show->field('extension');
@@ -207,4 +192,56 @@ class FileController extends AdminController
             ]);
         }
     }
+
+    /**
+     * Retrieve or download a file from storage
+     *
+     * @param string $filePath Full file path including filename
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     */
+    public function retrieve(\Illuminate\Http\Request $request, string $filePath)
+    {
+        $storageService = app(StorageService::class);
+
+        $result = $storageService->retrieve($filePath);
+
+        if ($result === null) {
+            return response()->json([
+                'status' => false,
+                'message' => 'File not found or could not be retrieved'
+            ], 404);
+        }
+
+        [$fileContents, $mimeType] = $result;
+        $fileName = basename($filePath);
+
+        // Force download if 'download' parameter is present in the query
+        if ($request->has('download')) {
+            $disposition = 'attachment';
+        } else {
+            // List of mime types that can be displayed in browser
+            $displayableMimeTypes = [
+                'image/jpeg',
+                'image/png',
+                'image/gif',
+                'image/svg+xml',
+                'image/webp',
+                'text/plain',
+                'text/html',
+                'text/css',
+                'text/javascript',
+                'application/pdf',
+            ];
+
+            $disposition = in_array($mimeType, $displayableMimeTypes) ? 'inline' : 'attachment';
+        }
+
+        return response($fileContents)
+            ->header('Content-Type', $mimeType)
+            ->header('Content-Disposition', $disposition . '; filename="' . $fileName . '"')
+            ->header('Content-Length', strlen($fileContents));
+    }
+
+
 }

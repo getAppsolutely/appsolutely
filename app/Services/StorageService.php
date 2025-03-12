@@ -105,4 +105,41 @@ class StorageService
     {
         return $this->fileRepository->find($id);
     }
+
+    /**
+     * Retrieve a file from storage, pulling from S3 if not found locally
+     *
+     * @param string $filePath Full file path including filename
+     * @return array|null Returns [file contents, mime type] if found, null if not found
+     */
+    public function retrieve(string $filePath): ?array
+    {
+        // Check if file exists in local storage
+        $localFilePath = config('appsolutely.prefix') . '/' . $filePath;
+        if (Storage::disk('public')->exists($localFilePath)) {
+            return [
+                Storage::disk('public')->get($localFilePath),
+                Storage::disk('public')->mimeType($localFilePath)
+            ];
+        }
+
+        try {
+            // If not in local storage, attempt to get from S3
+            $s3Contents = Storage::disk('s3')->get($filePath);
+
+            // Store the file locally
+            Storage::disk('public')->put($localFilePath, $s3Contents);
+
+            return [
+                $s3Contents,
+                Storage::disk('public')->mimeType($localFilePath)
+            ];
+        } catch (\Exception $e) {
+            Log::error('Failed to retrieve file from S3', [
+                'filePath' => $filePath,
+                'error' => $e->getMessage()
+            ]);
+            return null;
+        }
+    }
 }
