@@ -15,4 +15,9 @@ class FileRepository
     {
         return $file->delete();
     }
+
+    public function find(int $id): ?File
+    {
+        return File::find($id);
+    }
 }

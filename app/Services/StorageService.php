@@ -94,4 +94,15 @@ class StorageService
             now()->addMinutes($expiresInMinutes)
         );
     }
+
+    /**
+     * Find a file by its ID.
+     *
+     * @param int $id
+     * @return File|null
+     */
+    public function findFile(int $id): ?File
+    {
+        return $this->fileRepository->find($id);
+    }
 }
