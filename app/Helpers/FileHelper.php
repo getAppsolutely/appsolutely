@@ -4,6 +4,36 @@ namespace App\Helpers;
 
 class FileHelper
 {
+    const DISPLAYABLE_MIME_TYPES = [
+        'image/jpeg',
+        'image/png',
+        'image/gif',
+        'image/svg+xml',
+        'image/webp',
+        'text/plain',
+        'text/html',
+        'text/css',
+        'text/javascript',
+        'application/pdf',
+    ];
+
+    const IMAGE_MIME_TYPES = [
+        'image/jpeg',
+        'image/png',
+        'image/gif',
+        'image/svg+xml',
+        'image/webp',
+    ];
+
+    const IMAGE_EXTENSIONS = [
+        'jpg',
+        'jpeg',
+        'png',
+        'gif',
+        'svg',
+        'webp',
+    ];
+
     /**
      * Format file size to human-readable format
      *

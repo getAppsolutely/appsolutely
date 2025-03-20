@@ -48,8 +48,9 @@ class FileController extends AdminController
             $grid->column('created_at')
                 ->display(function ($timestamp) {
                     return TimeHelper::formatWithTz($timestamp);
-                })
-                ->sortable();
+                })->sortable();
+
+            $grid->quickSearch('id', 'original_filename', 'filename', 'extension');
 
             // Add filter
             $grid->filter(function (Grid\Filter $filter) {
@@ -60,7 +61,6 @@ class FileController extends AdminController
                 $filter->between('created_at')->datetime()->width(4);
             });
 
-            $grid->quickSearch('id', 'original_filename', 'filename', 'extension');
 
             $grid->actions(function (Grid\Displayers\Actions $actions) {
                 $actions->disableEdit();
@@ -220,21 +220,7 @@ class FileController extends AdminController
         if ($request->has('download')) {
             $disposition = 'attachment';
         } else {
-            // List of mime types that can be displayed in browser
-            $displayableMimeTypes = [
-                'image/jpeg',
-                'image/png',
-                'image/gif',
-                'image/svg+xml',
-                'image/webp',
-                'text/plain',
-                'text/html',
-                'text/css',
-                'text/javascript',
-                'application/pdf',
-            ];
-
-            $disposition = in_array($mimeType, $displayableMimeTypes) ? 'inline' : 'attachment';
+            $disposition = in_array($mimeType, FileHelper::DISPLAYABLE_MIME_TYPES) ? 'inline' : 'attachment';
         }
 
         return response($fileContents)
