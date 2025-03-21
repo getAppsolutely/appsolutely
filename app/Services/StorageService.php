@@ -115,7 +115,7 @@ class StorageService
     public function retrieve(string $filePath): ?array
     {
         // Check if file exists in local storage
-        $localFilePath = config('appsolutely.prefix') . '/' . $filePath;
+        $localFilePath = appsolutely() . '/' . $filePath;
         if (Storage::disk('public')->exists($localFilePath)) {
             return [
                 Storage::disk('public')->get($localFilePath),
