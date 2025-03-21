@@ -10,7 +10,7 @@ if (!function_exists('appsolutely')) {
      * Get the Appsolutely prefix for database or cache keys.
      *
      * @param string|null $prefix to append
-     * @return string The formatted prefix
+     * @return string The generated prefix
      */
     function appsolutely(?string $prefix = null): string
     {
@@ -21,7 +21,7 @@ if (!function_exists('appsolutely')) {
             config('appsolutely.prefix', $result);
         }
 
-        Log::info('Application for ', [
+        Log::info('Application Ready for ', [
             'prefix' => $prefix,
             'result' => $result
         ]);

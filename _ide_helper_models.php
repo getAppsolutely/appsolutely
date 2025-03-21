@@ -16,6 +16,89 @@ namespace App\Models{
  * 
  *
  * @property int $id
+ * @property int $file_id
+ * @property string $assetable_type
+ * @property int $assetable_id
+ * @property string $type
+ * @property string $file_path
+ * @property string|null $title
+ * @property string|null $keyword
+ * @property string|null $description
+ * @property string|null $content
+ * @property int $status
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $assetable
+ * @property-read \App\Models\File $file
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset ofType($type)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereAssetableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereAssetableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereFileId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereFilePath($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereKeyword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Asset withoutTrashed()
+ */
+	class Asset extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $original_filename
+ * @property string $filename
+ * @property string $extension
+ * @property string $mime_type
+ * @property string $path
+ * @property int $size
+ * @property string $hash
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Asset> $assets
+ * @property-read int|null $assets_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereExtension($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereFilename($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereHash($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereMimeType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereOriginalFilename($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File wherePath($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereSize($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|File withoutTrashed()
+ */
+	class File extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
  * @property int $team_id
  * @property int $user_id
  * @property string|null $role
@@ -30,7 +113,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Membership whereTeamId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Membership whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Membership whereUserId($value)
- * @mixin \Eloquent
  */
 	class Membership extends \Eloquent {}
 }
@@ -68,7 +150,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Team whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Team withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Team withoutTrashed()
- * @mixin \Eloquent
  */
 	class Team extends \Eloquent {}
 }
@@ -93,7 +174,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TeamInvitation whereRole($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TeamInvitation whereTeamId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|TeamInvitation whereUpdatedAt($value)
- * @mixin \Eloquent
  */
 	class TeamInvitation extends \Eloquent {}
 }
@@ -143,7 +223,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTwoFactorRecoveryCodes($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTwoFactorSecret($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
- * @mixin \Eloquent
  */
 	class User extends \Eloquent {}
 }
