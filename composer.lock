@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "35d8d9fc04f1997d037728fcf5dd4b72",
+    "content-hash": "20be18d0ed5fcde6743877fc3777d0b3",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1268,6 +1268,60 @@
                 }
             ],
             "time": "2023-10-12T05:21:21+00:00"
+        },
+        {
+            "name": "ghost/dcat-config",
+            "version": "v1.0.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Ghost-die/dcat-config.git",
+                "reference": "a8d00fd09fb07c438acdb7ec0c777c431fdf32cf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Ghost-die/dcat-config/zipball/a8d00fd09fb07c438acdb7ec0c777c431fdf32cf",
+                "reference": "a8d00fd09fb07c438acdb7ec0c777c431fdf32cf",
+                "shasum": ""
+            },
+            "require": {
+                "dcat/laravel-admin": "~2.0",
+                "php": ">=7.1.0|8.*"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Ghost\\DcatConfig\\DcatConfigServiceProvider"
+                    ]
+                },
+                "dcat-admin": "Ghost\\DcatConfig\\DcatConfigServiceProvider"
+            },
+            "autoload": {
+                "psr-4": {
+                    "Ghost\\DcatConfig\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ghost",
+                    "email": "wangqun1436@gmail.com"
+                }
+            ],
+            "description": "配置管理",
+            "homepage": "https://github.com/ghost-die/dcat-config",
+            "keywords": [
+                "dcat-admin",
+                "extension"
+            ],
+            "support": {
+                "issues": "https://github.com/Ghost-die/dcat-config/issues",
+                "source": "https://github.com/Ghost-die/dcat-config/tree/v1.0.9"
+            },
+            "time": "2024-01-29T05:17:49+00:00"
         },
         {
             "name": "graham-campbell/result-type",
