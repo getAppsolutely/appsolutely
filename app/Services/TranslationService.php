@@ -26,10 +26,9 @@ class TranslationService
      * @param string|null $locale The target locale
      * @param string $type The source type (php, blade, db)
      * @param string|null $callStack The call stack information
-     * @param string $translator The translator source (empty, Google, DeepSeek, OpenAI, Manual)
      * @return string The translated text or original if not found
      */
-    public function translate(string $text, ?string $locale = null, string $type = 'php', ?string $callStack = null, string $translator = ''): string
+    public function translate(string $text, ?string $locale = null, string $type = 'php', ?string $callStack = null): string
     {
         if (empty($text)) {
             return $text;
@@ -70,7 +69,7 @@ class TranslationService
             'type' => $type,
             'original_text' => $text,
             'translated_text' => null, // Will be filled by translators
-            'translator' => $translator, // Store translator source
+            'translator' => null, // Store translator source
             'call_stack' => $callStack,
             'used_count' => 1,
             'last_used' => Carbon::now(),

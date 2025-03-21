@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('type'); // php, blade, variable
             $table->text('original_text');
             $table->text('translated_text')->nullable();
-            $table->string('translator')->default(''); // Options: Google, DeepSeek, OpenAI, Manual
+            $table->string('translator')->nullable(); // Options: Google, DeepSeek, OpenAI, Manual
             $table->text('call_stack')->nullable();
             $table->integer('used_count')->default(0);
             $table->timestamp('last_used')->useCurrent();

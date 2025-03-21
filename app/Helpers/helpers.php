@@ -50,13 +50,17 @@ if (!function_exists('__translate')) {
 
         // Collect all files in the call stack
         $callStackFiles = [];
+        $basePath = base_path() . '/';
         foreach ($backtrace as $trace) {
             if (isset($trace['file']) && isset($trace['line'])) {
                 // Skip vendor files
                 if (str_contains($trace['file'], '/vendor/')) {
                     continue;
                 }
-                $callStackFiles[] = $trace['file'] . ':' . $trace['line'];
+
+                // Convert to project-relative path
+                $relativePath = str_replace($basePath, '', $trace['file']);
+                $callStackFiles[] = $relativePath . ':' . $trace['line'];
             }
         }
 
