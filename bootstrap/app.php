@@ -12,7 +12,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        // Add the SetThemeMiddleware to the web middleware group
+        $middleware->web(append: [
+            \App\Http\Middleware\SetThemeMiddleware::class,
+        ]);
+
         $middleware->alias([
             // Laravel Localization
             'localize'                => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRoutes::class,
@@ -20,6 +24,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'localeSessionRedirect'   => \Mcamara\LaravelLocalization\Middleware\LocaleSessionRedirect::class,
             'localeCookieRedirect'    => \Mcamara\LaravelLocalization\Middleware\LocaleCookieRedirect::class,
             'localeViewPath'          => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationViewPath::class,
+            // Theme middleware
+            'theme'                   => \App\Http\Middleware\SetThemeMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

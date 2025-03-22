@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\Services\TranslationService;
-use App\Settings\Settings;
 use Illuminate\Support\Facades\Log;
 
 if (!function_exists('appsolutely')) {
@@ -28,6 +27,26 @@ if (!function_exists('appsolutely')) {
         ]);
 
         return $result;
+    }
+}
+
+if (!function_exists('theme_path')) {
+    /**
+     * Get the path to a theme's views directory.
+     *
+     * @param string $themeName The name of the theme
+     * @param string $path The path within the theme's views directory
+     * @return string The full path to the theme's views directory or a path within it
+     */
+    function theme_path(string $themeName, string $path = ''): string
+    {
+        $basePath = base_path('themes/' . $themeName . '/views');
+
+        if (empty($path)) {
+            return $basePath;
+        }
+
+        return $basePath . '/' . ltrim($path, '/');
     }
 }
 
