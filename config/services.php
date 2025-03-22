@@ -35,4 +35,20 @@ return [
         ],
     ],
 
+    'translation' => [
+        'provider' => env('TRANSLATION_PROVIDER', 'deepseek'),
+        'openai' => [
+            'api_key' => env('OPENAI_API_KEY'),
+            'model' => env('OPENAI_MODEL', 'gpt-4-turbo'),
+            'max_tokens' => env('OPENAI_MAX_TOKENS', 1000),
+            'temperature' => env('OPENAI_TEMPERATURE', 0.5),
+        ],
+        'deepseek' => [
+            'api_key' => env('DEEPSEEK_API_KEY'),
+            'model' => env('DEEPSEEK_MODEL', 'deepseek-chat'),
+            'max_tokens' => env('DEEPSEEK_MAX_TOKENS', 1000),
+            'temperature' => env('DEEPSEEK_TEMPERATURE', 0.5),
+        ],
+    ],
+
 ];
