@@ -16,8 +16,8 @@ return new class() extends Migration
         Schema::create('assets', function (Blueprint $table) {
             $table->id();
             $table->foreignId('file_id')->constrained('files');
-            $table->morphs('assetable');
-            $table->string('type')->default('default');
+            $table->nullableUuidMorphs('assetable');
+            $table->string('type')->nullable();
             $table->string('file_path')->unique();
             $table->string('title')->nullable();
             $table->string('keyword')->nullable();
