@@ -4,10 +4,10 @@ namespace App\Services;
 
 use App\Models\File;
 use App\Repositories\FileRepository;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class StorageService
 {

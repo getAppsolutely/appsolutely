@@ -13,6 +13,9 @@ use Dcat\Admin\Grid;
 use Dcat\Admin\Http\Controllers\AdminController;
 use Dcat\Admin\Show;
 use Dcat\Admin\Traits\HasUploadedFile;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 
 class FileController extends AdminController
@@ -157,13 +160,20 @@ class FileController extends AdminController
     /**
      * Handle file upload.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function upload(\Illuminate\Http\Request $request)
+    public function upload(Request $request)
     {
+        $method = request()->method();
+        if (request()->method() == 'GET') {
+            return admin_redirect('files/manager');
+        }
         try {
             // Get the uploaded file
             $uploadedFile = $this->file();
+            if (! $uploadedFile) {
+                return admin_redirect('files/manager');
+            }
 
             // Use the StorageService to store the file
             $storageService = app(StorageService::class);
@@ -195,13 +205,17 @@ class FileController extends AdminController
     /**
      * Retrieve or download a file from storage
      *
-     * @param  string  $filePath  Full file path including filename
-     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @param string|null $filePath Full file path including filename
+     * @return Response|JsonResponse
      */
-    public function retrieve(\Illuminate\Http\Request $request, string $filePath)
+    public function retrieve(Request $request, string $filePath = null): Response|JsonResponse
     {
-        $storageService = app(StorageService::class);
+        if (empty($filePath)) {
+            abort(404);
+        }
 
+        $storageService = app(StorageService::class);
         $result = $storageService->retrieve($filePath);
 
         if ($result === null) {
