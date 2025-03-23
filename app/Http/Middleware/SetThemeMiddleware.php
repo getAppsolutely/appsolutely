@@ -22,7 +22,7 @@ class SetThemeMiddleware
             ? config('basic.theme') : config('theme.active');
         $parentTheme = config('theme.parent');
 
-        if ($themeName) {
+        if ($themeName && !request()->is(config('admin.route.prefix') . '*')) {
             // Create new theme finder if needed
             if (!(app('view')->getFinder() instanceof ThemeViewFinder)) {
                 // Force the view finder to be the theme finder
