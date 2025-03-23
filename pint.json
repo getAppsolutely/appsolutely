@@ -23,6 +23,7 @@
         }
     },
     "exclude": [
-        "config"
+        "config",
+        "public"
     ]
 }
