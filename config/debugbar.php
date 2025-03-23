@@ -162,7 +162,7 @@ return [
      */
 
     'collectors' => [
-        'phpinfo'         => true,  // Php version
+        'phpinfo'         => false,  // Php version
         'messages'        => true,  // Messages
         'time'            => true,  // Time Datalogger
         'memory'          => true,  // Memory usage
@@ -178,7 +178,7 @@ return [
         'mail'            => true,  // Catch mail messages
         'laravel'         => true, // Laravel version and environment
         'events'          => true, // All events fired
-        'default_request' => true, // Regular or special Symfony request logger
+        'default_request' => false, // Regular or special Symfony request logger
         'logs'            => true, // Add the latest log messages
         'files'           => true, // Show the included files
         'config'          => true, // Display config settings
@@ -239,7 +239,7 @@ return [
         ],
         'views' => [
             'timeline' => true,    // Add the views to the timeline
-            'data' => true,        // True for all data, 'keys' for only names, false for no parameters.
+            'data' => false,        // True for all data, 'keys' for only names, false for no parameters.
             'group' => 50,          // Group duplicate views. Pass value to auto-group, or true/false to force
             'exclude_paths' => [    // Add the paths which you don't want to appear in the views
                 'vendor/filament'   // Exclude Filament components by default
