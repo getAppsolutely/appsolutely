@@ -16,7 +16,7 @@ class NewDevices extends Donut
     {
         parent::init();
 
-        $color = Admin::color();
+        $color  = Admin::color();
         $colors = [$color->primary(), $color->alpha('blue2', 0.5)];
 
         $this->title('New Devices');
@@ -54,30 +54,28 @@ class NewDevices extends Donut
     /**
      * 设置图表数据.
      *
-     * @param array $data
      *
      * @return $this
      */
     public function withChart(array $data)
     {
         return $this->chart([
-            'series' => $data
+            'series' => $data,
         ]);
     }
 
     /**
      * 设置卡片头部内容.
      *
-     * @param mixed $desktop
-     * @param mixed $mobile
-     *
+     * @param  mixed  $desktop
+     * @param  mixed  $mobile
      * @return $this
      */
     protected function withContent($desktop, $mobile)
     {
         $blue = Admin::color()->alpha('blue2', 0.5);
 
-        $style = 'margin-bottom: 8px';
+        $style      = 'margin-bottom: 8px';
         $labelWidth = 120;
 
         return $this->content(

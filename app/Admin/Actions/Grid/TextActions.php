@@ -9,13 +9,13 @@ use Dcat\Admin\Grid\Displayers\Actions;
  */
 class TextActions extends Actions
 {
-
     /**
      * @return string
      */
     protected function getViewLabel()
     {
         $label = trans('admin.show');
+
         return '<i class="feather icon-eye text-success"></i> <span class="text-success">' . $label . '</span> &emsp;';
     }
 
@@ -34,7 +34,7 @@ class TextActions extends Actions
      */
     protected function getQuickEditLabel()
     {
-        $label = trans('admin.edit');
+        $label  = trans('admin.edit');
         $label2 = trans('admin.quick_edit');
 
         return '<i class="feather icon-edit-1 text-custom"></i> <span class="text-custom" title="' . $label2 . '">' . $label . '</span> &emsp;';

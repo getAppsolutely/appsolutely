@@ -24,7 +24,6 @@ class NewPasswordController extends Controller
     /**
      * Handle an incoming new password request.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      *
      * @throws \Illuminate\Validation\ValidationException
@@ -32,8 +31,8 @@ class NewPasswordController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'token' => 'required',
-            'email' => 'required|email',
+            'token'    => 'required',
+            'email'    => 'required|email',
             'password' => 'required|string|confirmed|min:8',
         ]);
 
@@ -44,7 +43,7 @@ class NewPasswordController extends Controller
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user) use ($request) {
                 $user->forceFill([
-                    'password' => Hash::make($request->password),
+                    'password'       => Hash::make($request->password),
                     'remember_token' => Str::random(60),
                 ])->save();
 
@@ -58,6 +57,6 @@ class NewPasswordController extends Controller
         return $status == Password::PASSWORD_RESET
                     ? redirect()->route('login')->with('status', __($status))
                     : back()->withInput($request->only('email'))
-                            ->withErrors(['email' => __($status)]);
+                        ->withErrors(['email' => __($status)]);
     }
 }

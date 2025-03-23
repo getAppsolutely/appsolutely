@@ -25,9 +25,9 @@ class Sessions extends Bar
         $this->title('Avg Sessions');
         // 设置下拉选项
         $this->dropdown([
-            '7' => 'Last 7 Days',
-            '28' => 'Last 28 Days',
-            '30' => 'Last Month',
+            '7'   => 'Last 7 Days',
+            '28'  => 'Last 28 Days',
+            '30'  => 'Last Month',
             '365' => 'Last Year',
         ]);
         // 设置图表颜色
@@ -37,14 +37,13 @@ class Sessions extends Bar
             $color->primary(),
             $dark35,
             $dark35,
-            $dark35
+            $dark35,
         ]);
     }
 
     /**
      * 处理请求
      *
-     * @param Request $request
      *
      * @return mixed|void
      */
@@ -69,7 +68,6 @@ class Sessions extends Bar
     /**
      * 设置图表数据.
      *
-     * @param array $data
      *
      * @return $this
      */
@@ -83,10 +81,9 @@ class Sessions extends Bar
     /**
      * 设置卡片内容.
      *
-     * @param string $title
-     * @param string $value
-     * @param string $style
-     *
+     * @param  string  $title
+     * @param  string  $value
+     * @param  string  $style
      * @return $this
      */
     public function withContent($title, $value, $style = 'success')

@@ -16,11 +16,11 @@ class AdminMenuSeeder extends Seeder
     {
         // Add Files menu item
         DB::table('admin_menu')->insert([
-            'parent_id' => 0,
-            'order'     => 8,
-            'title'     => 'Files',
-            'icon'      => 'fa-file',
-            'uri'       => 'files',
+            'parent_id'  => 0,
+            'order'      => 8,
+            'title'      => 'Files',
+            'icon'       => 'fa-file',
+            'uri'        => 'files',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

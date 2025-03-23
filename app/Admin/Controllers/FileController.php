@@ -3,17 +3,17 @@
 namespace App\Admin\Controllers;
 
 use App\Helpers\DashboardHelper;
-use App\Models\File;
-use Dcat\Admin\Traits\HasUploadedFile;
-use Dcat\Admin\Form;
-use Dcat\Admin\Grid;
-use Dcat\Admin\Show;
-use Dcat\Admin\Http\Controllers\AdminController;
-use App\Services\StorageService;
 use App\Helpers\FileHelper;
 use App\Helpers\TimeHelper;
-use Illuminate\Support\Facades\Storage;
+use App\Models\File;
+use App\Services\StorageService;
 use Dcat\Admin\Admin;
+use Dcat\Admin\Form;
+use Dcat\Admin\Grid;
+use Dcat\Admin\Http\Controllers\AdminController;
+use Dcat\Admin\Show;
+use Dcat\Admin\Traits\HasUploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class FileController extends AdminController
 {
@@ -31,7 +31,7 @@ class FileController extends AdminController
 
             // Display file preview for images
             $grid->column('preview')->display(function () {
-                return DashboardHelper::preview( $this->path . '/' . $this->filename, $this->extension);
+                return DashboardHelper::preview($this->path . '/' . $this->filename, $this->extension);
             });
 
             $grid->column('original_filename')->sortable();
@@ -61,7 +61,6 @@ class FileController extends AdminController
                 $filter->between('created_at')->datetime()->width(4);
             });
 
-
             $grid->actions(function (Grid\Displayers\Actions $actions) {
                 $actions->disableEdit();
             });
@@ -72,7 +71,7 @@ class FileController extends AdminController
     /**
      * Make a show builder.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      * @return Show
      */
     protected function detail($id)
@@ -84,7 +83,7 @@ class FileController extends AdminController
 
             // Display file preview for images
             $show->field('preview')->unescape()->as(function () {
-                return DashboardHelper::preview( $this->path . '/' . $this->filename, $this->extension);
+                return DashboardHelper::preview($this->path . '/' . $this->filename, $this->extension);
             });
 
             $show->field('extension');
@@ -119,6 +118,7 @@ class FileController extends AdminController
                 $grid->column('created_at')->display(function ($timestamp) {
                     return TimeHelper::format($timestamp);
                 });
+
                 return $grid;
             });
         });
@@ -157,7 +157,6 @@ class FileController extends AdminController
     /**
      * Handle file upload.
      *
-     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function upload(\Illuminate\Http\Request $request)
@@ -168,26 +167,26 @@ class FileController extends AdminController
 
             // Use the StorageService to store the file
             $storageService = app(StorageService::class);
-            $file = $storageService->store($uploadedFile);
+            $file           = $storageService->store($uploadedFile);
 
             return response()->json([
-                'status' => true,
-                'id' => $file->id,
+                'status'  => true,
+                'id'      => $file->id,
                 'message' => 'File uploaded successfully',
-                'data' => [
-                    'id' => $file->id,
+                'data'    => [
+                    'id'                => $file->id,
                     'original_filename' => $file->original_filename,
-                    'filename' => $file->filename,
-                    'extension' => $file->extension,
-                    'mime_type' => $file->mime_type,
-                    'path' => $file->path,
-                    'size' => FileHelper::formatSize($file->size),
-                    'url' => Storage::disk('s3')->url($file->path . '/' . $file->filename),
+                    'filename'          => $file->filename,
+                    'extension'         => $file->extension,
+                    'mime_type'         => $file->mime_type,
+                    'path'              => $file->path,
+                    'size'              => FileHelper::formatSize($file->size),
+                    'url'               => Storage::disk('s3')->url($file->path . '/' . $file->filename),
                 ],
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status' => false,
+                'status'  => false,
                 'message' => 'Upload failed: ' . $e->getMessage(),
             ]);
         }
@@ -196,8 +195,7 @@ class FileController extends AdminController
     /**
      * Retrieve or download a file from storage
      *
-     * @param string $filePath Full file path including filename
-     * @param \Illuminate\Http\Request $request
+     * @param  string  $filePath  Full file path including filename
      * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      */
     public function retrieve(\Illuminate\Http\Request $request, string $filePath)
@@ -208,13 +206,13 @@ class FileController extends AdminController
 
         if ($result === null) {
             return response()->json([
-                'status' => false,
-                'message' => 'File not found or could not be retrieved'
+                'status'  => false,
+                'message' => 'File not found or could not be retrieved',
             ], 404);
         }
 
         [$fileContents, $mimeType] = $result;
-        $fileName = basename($filePath);
+        $fileName                  = basename($filePath);
 
         // Force download if 'download' parameter is present in the query
         if ($request->has('download')) {
@@ -228,6 +226,4 @@ class FileController extends AdminController
             ->header('Content-Disposition', $disposition . '; filename="' . $fileName . '"')
             ->header('Content-Length', strlen($fileContents));
     }
-
-
 }

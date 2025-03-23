@@ -9,8 +9,8 @@ class TimeHelper
     /**
      * Format timestamp to a readable format in 24-hour time
      *
-     * @param string|null $timestamp
-     * @param string $format Default format is 'Y-m-d H:i:s' (24-hour)
+     * @param  string|null  $timestamp
+     * @param  string  $format  Default format is 'Y-m-d H:i:s' (24-hour)
      * @return string
      */
     public static function format($timestamp, $format = 'Y-m-d H:i:s')
@@ -28,7 +28,7 @@ class TimeHelper
     /**
      * Format timestamp with timezone
      *
-     * @param string|null $timestamp
+     * @param  string|null  $timestamp
      * @return string
      */
     public static function formatWithTz($timestamp)

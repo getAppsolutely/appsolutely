@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+return new class() extends Migration
 {
     public function up()
     {
@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('hash');
             $table->timestamps();
             $table->softDeletes();
-            
+
             // Add indexes for commonly queried fields
             $table->index('filename');
             $table->index('hash');

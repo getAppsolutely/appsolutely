@@ -20,7 +20,7 @@ class StorageServiceTest extends TestCase
         $this->storageService = new StorageService($this->fileRepository);
     }
 
-    public function testStoreFileSuccessfully()
+    public function test_store_file_successfully()
     {
         Storage::fake('s3');
 
@@ -33,7 +33,7 @@ class StorageServiceTest extends TestCase
         Storage::disk('s3')->assertExists($storedFile->path . '/' . $storedFile->filename);
     }
 
-    public function testStoreFileUploadFails()
+    public function test_store_file_upload_fails()
     {
         Storage::shouldReceive('disk->putFileAs')->andReturn(false);
 
@@ -45,7 +45,7 @@ class StorageServiceTest extends TestCase
         $this->storageService->store($file);
     }
 
-    public function testStoreFileNotFoundAfterUpload()
+    public function test_store_file_not_found_after_upload()
     {
         Storage::shouldReceive('disk->putFileAs')->andReturn(true);
         Storage::shouldReceive('disk->exists')->andReturn(false);
@@ -58,7 +58,7 @@ class StorageServiceTest extends TestCase
         $this->storageService->store($file);
     }
 
-    public function testDeleteFileSuccessfully()
+    public function test_delete_file_successfully()
     {
         $file = new File(['path' => '2023/03', 'filename' => 'document.pdf']);
 
@@ -70,7 +70,7 @@ class StorageServiceTest extends TestCase
         $this->assertTrue($result);
     }
 
-    public function testDeleteFileFails()
+    public function test_delete_file_fails()
     {
         $file = new File(['path' => '2023/03', 'filename' => 'document.pdf']);
 
@@ -81,7 +81,7 @@ class StorageServiceTest extends TestCase
         $this->assertFalse($result);
     }
 
-    public function testGetSignedUrl()
+    public function test_get_signed_url()
     {
         $file = new File(['path' => '2023/03', 'filename' => 'document.pdf']);
 

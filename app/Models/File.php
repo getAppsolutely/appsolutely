@@ -16,11 +16,11 @@ class File extends Model
         'mime_type',
         'path',
         'size',
-        'hash'
+        'hash',
     ];
 
     protected $casts = [
-        'size' => 'integer',
+        'size'       => 'integer',
         'deleted_at' => 'datetime',
     ];
 

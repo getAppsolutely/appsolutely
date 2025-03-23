@@ -5,11 +5,11 @@ declare(strict_types=1);
 use App\Services\TranslationService;
 use Illuminate\Support\Facades\Log;
 
-if (!function_exists('appsolutely')) {
+if (! function_exists('appsolutely')) {
     /**
      * Get the Appsolutely prefix for database or cache keys.
      *
-     * @param string|null $prefix to append
+     * @param  string|null  $prefix  to append
      * @return string The generated prefix
      */
     function appsolutely(?string $prefix = null): string
@@ -23,19 +23,19 @@ if (!function_exists('appsolutely')) {
 
         Log::info('Application Ready for ', [
             'prefix' => $prefix,
-            'result' => $result
+            'result' => $result,
         ]);
 
         return $result;
     }
 }
 
-if (!function_exists('theme_path')) {
+if (! function_exists('theme_path')) {
     /**
      * Get the path to a theme's views directory.
      *
-     * @param string $themeName The name of the theme
-     * @param string $path The path within the theme's views directory
+     * @param  string  $themeName  The name of the theme
+     * @param  string  $path  The path within the theme's views directory
      * @return string The full path to the theme's views directory or a path within it
      */
     function theme_path(string $themeName, string $path = ''): string
@@ -50,14 +50,14 @@ if (!function_exists('theme_path')) {
     }
 }
 
-if (!function_exists('__translate')) {
+if (! function_exists('__translate')) {
     /**
      * Base translation function
      *
-     * @param string $text The text to translate
-     * @param array $parameters Parameters to replace in the translated text
-     * @param string $type The source type (php, blade, variable)
-     * @param string|null $locale The locale to translate to (default: current locale)
+     * @param  string  $text  The text to translate
+     * @param  array  $parameters  Parameters to replace in the translated text
+     * @param  string  $type  The source type (php, blade, variable)
+     * @param  string|null  $locale  The locale to translate to (default: current locale)
      * @return string The translated text
      */
     function __translate(string $text, array $parameters = [], string $type = 'php', ?string $locale = null): string
@@ -69,7 +69,7 @@ if (!function_exists('__translate')) {
 
         // Collect all files in the call stack
         $callStackFiles = [];
-        $basePath = base_path() . '/';
+        $basePath       = base_path() . '/';
         foreach ($backtrace as $trace) {
             if (isset($trace['file']) && isset($trace['line'])) {
                 // Skip vendor files
@@ -78,7 +78,7 @@ if (!function_exists('__translate')) {
                 }
 
                 // Convert to project-relative path
-                $relativePath = str_replace($basePath, '', $trace['file']);
+                $relativePath     = str_replace($basePath, '', $trace['file']);
                 $callStackFiles[] = $relativePath . ':' . $trace['line'];
             }
         }
@@ -102,7 +102,7 @@ if (!function_exists('__translate')) {
         $translatedText = $translationService->translate($text, $locale, $type, $callStack);
 
         // Replace parameters if provided
-        if (!empty($parameters)) {
+        if (! empty($parameters)) {
             foreach ($parameters as $key => $value) {
                 $translatedText = str_replace(':' . $key, (string) $value, $translatedText);
             }
@@ -112,13 +112,13 @@ if (!function_exists('__translate')) {
     }
 }
 
-if (!function_exists('__t')) {
+if (! function_exists('__t')) {
     /**
      * Translate a string using the TranslationService
      *
-     * @param string $text The text to translate
-     * @param array $parameters Parameters to replace in the translated text
-     * @param string|null $locale The locale to translate to (default: current locale)
+     * @param  string  $text  The text to translate
+     * @param  array  $parameters  Parameters to replace in the translated text
+     * @param  string|null  $locale  The locale to translate to (default: current locale)
      * @return string The translated text
      */
     function __t(string $text, array $parameters = [], ?string $locale = null): string
@@ -127,14 +127,14 @@ if (!function_exists('__t')) {
     }
 }
 
-if (!function_exists('__tv')) {
+if (! function_exists('__tv')) {
     /**
      * Translate a string from a variable using the TranslationService
      * Use this for dynamic content like data from variables or database fields
      *
-     * @param string $text The text to translate
-     * @param array $parameters Parameters to replace in the translated text
-     * @param string|null $locale The locale to translate to (default: current locale)
+     * @param  string  $text  The text to translate
+     * @param  array  $parameters  Parameters to replace in the translated text
+     * @param  string|null  $locale  The locale to translate to (default: current locale)
      * @return string The translated text
      */
     function __tv(string $text, array $parameters = [], ?string $locale = null): string
@@ -142,4 +142,3 @@ if (!function_exists('__tv')) {
         return __translate($text, $parameters, 'variable', $locale);
     }
 }
-

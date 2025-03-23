@@ -30,8 +30,8 @@ class TranslationRepository
     public function findByOriginalText(string $originalText, string $locale): ?Translation
     {
         return Translation::where('original_text', $originalText)
-                         ->where('locale', $locale)
-                         ->first();
+            ->where('locale', $locale)
+            ->first();
     }
 
     /**
@@ -48,8 +48,8 @@ class TranslationRepository
     public function findByType(string $type, string $locale): Collection
     {
         return Translation::where('type', $type)
-                         ->where('locale', $locale)
-                         ->get();
+            ->where('locale', $locale)
+            ->get();
     }
 
     /**
@@ -59,7 +59,7 @@ class TranslationRepository
     {
         return $translation->update([
             'used_count' => $translation->used_count + 1,
-            'last_used' => Carbon::now(),
+            'last_used'  => Carbon::now(),
         ]);
     }
 
@@ -74,13 +74,13 @@ class TranslationRepository
     /**
      * Get all missing translations (where translated_text is null or empty)
      *
-     * @param string|null $locale Optional locale to filter by
+     * @param  string|null  $locale  Optional locale to filter by
      * @return array The missing translations
      */
     public function getMissingTranslations(?string $locale = null): array
     {
         $query = Translation::whereNull('translated_text')
-                           ->orWhere('translated_text', '');
+            ->orWhere('translated_text', '');
 
         if ($locale !== null) {
             $query->where('locale', $locale);
@@ -92,7 +92,7 @@ class TranslationRepository
     /**
      * Find a translation by ID
      *
-     * @param int $id The translation ID
+     * @param  int  $id  The translation ID
      * @return Translation|null The translation or null if not found
      */
     public function find(int $id): ?Translation

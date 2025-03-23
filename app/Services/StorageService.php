@@ -12,12 +12,12 @@ use Illuminate\Support\Str;
 class StorageService
 {
     protected FileRepository $fileRepository;
-    //protected mixed $prefixPath;
+    // protected mixed $prefixPath;
 
     public function __construct(FileRepository $fileRepository)
     {
         $this->fileRepository = $fileRepository;
-        //$this->prefixPath = config('filesystems.disks.s3.prefix');
+        // $this->prefixPath = config('filesystems.disks.s3.prefix');
     }
 
     private function getFilePath(File $file): string
@@ -28,10 +28,10 @@ class StorageService
     public function store(UploadedFile $file): File
     {
         $originalFilename = $file->getClientOriginalName();
-        $extension = $file->getClientOriginalExtension();
-        $mimeType = $file->getMimeType();
-        $size = $file->getSize();
-        $hash = hash_file('sha256', $file->getRealPath());
+        $extension        = $file->getClientOriginalExtension();
+        $mimeType         = $file->getMimeType();
+        $size             = $file->getSize();
+        $hash             = hash_file('sha256', $file->getRealPath());
 
         // Generate path based on current year and month (YYYY/MM)
         $path = now()->format('Y/m');
@@ -42,37 +42,37 @@ class StorageService
         try {
             // Store file to S3
             $filePath = $path . '/' . $filename;
-            $result = Storage::disk('s3')->putFileAs(
+            $result   = Storage::disk('s3')->putFileAs(
                 $path,
                 $file,
                 $filename,
                 ['visibility' => 'public']
             );
 
-            if (!$result) {
+            if (! $result) {
                 throw new \Exception('Failed to upload file to S3');
             }
 
             // Verify file exists
-            if (!Storage::disk('s3')->exists($filePath)) {
+            if (! Storage::disk('s3')->exists($filePath)) {
                 throw new \Exception('File not found after upload');
             }
 
             // Create database record using FileRepository
             return $this->fileRepository->create([
                 'original_filename' => $originalFilename,
-                'filename' => $filename,
-                'extension' => $extension,
-                'mime_type' => $mimeType,
-                'path' => $path,
-                'size' => $size,
-                'hash' => $hash
+                'filename'          => $filename,
+                'extension'         => $extension,
+                'mime_type'         => $mimeType,
+                'path'              => $path,
+                'size'              => $size,
+                'hash'              => $hash,
             ]);
         } catch (\Exception $e) {
             Log::error('S3 Upload failed: ' . $e->getMessage(), [
-                'file' => $originalFilename,
-                'path' => $path,
-                'error' => $e->getMessage()
+                'file'  => $originalFilename,
+                'path'  => $path,
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
@@ -84,6 +84,7 @@ class StorageService
         if (Storage::disk('s3')->delete($this->getFilePath($file))) {
             return $this->fileRepository->delete($file);
         }
+
         return false;
     }
 
@@ -97,9 +98,6 @@ class StorageService
 
     /**
      * Find a file by its ID.
-     *
-     * @param int $id
-     * @return File|null
      */
     public function findFile(int $id): ?File
     {
@@ -109,7 +107,7 @@ class StorageService
     /**
      * Retrieve a file from storage, pulling from S3 if not found locally
      *
-     * @param string $filePath Full file path including filename
+     * @param  string  $filePath  Full file path including filename
      * @return array|null Returns [file contents, mime type] if found, null if not found
      */
     public function retrieve(string $filePath): ?array
@@ -119,7 +117,7 @@ class StorageService
         if (Storage::disk('public')->exists($localFilePath)) {
             return [
                 Storage::disk('public')->get($localFilePath),
-                Storage::disk('public')->mimeType($localFilePath)
+                Storage::disk('public')->mimeType($localFilePath),
             ];
         }
 
@@ -132,13 +130,14 @@ class StorageService
 
             return [
                 $s3Contents,
-                Storage::disk('public')->mimeType($localFilePath)
+                Storage::disk('public')->mimeType($localFilePath),
             ];
         } catch (\Exception $e) {
             Log::error('Failed to retrieve file from S3', [
                 'filePath' => $filePath,
-                'error' => $e->getMessage()
+                'error'    => $e->getMessage(),
             ]);
+
             return null;
         }
     }

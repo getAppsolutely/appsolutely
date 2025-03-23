@@ -7,6 +7,7 @@
  *
  * @author jqh <841324345@qq.com>
  */
+
 namespace Dcat\Admin {
     use Illuminate\Support\Collection;
 
@@ -330,28 +331,16 @@ namespace Dcat\Admin {
      */
     class Show {}
 
-    /**
-     
-     */
     class Form {}
 
 }
 
 namespace Dcat\Admin\Grid {
-    /**
-     
-     */
     class Column {}
 
-    /**
-     
-     */
     class Filter {}
 }
 
 namespace Dcat\Admin\Show {
-    /**
-     
-     */
     class Field {}
 }

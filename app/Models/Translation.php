@@ -31,7 +31,7 @@ class Translation extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'last_used' => 'datetime',
+        'last_used'  => 'datetime',
         'used_count' => 'integer',
     ];
 }

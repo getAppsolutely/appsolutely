@@ -39,8 +39,8 @@ class AssetRepository
     public function findByAssetable(Model $assetable): Collection
     {
         return Asset::where('assetable_type', get_class($assetable))
-                    ->where('assetable_id', $assetable->id)
-                    ->get();
+            ->where('assetable_id', $assetable->id)
+            ->get();
     }
 
     /**
@@ -49,9 +49,9 @@ class AssetRepository
     public function findByAssetableAndType(Model $assetable, string $type): Collection
     {
         return Asset::where('assetable_type', get_class($assetable))
-                    ->where('assetable_id', $assetable->id)
-                    ->where('type', $type)
-                    ->get();
+            ->where('assetable_id', $assetable->id)
+            ->where('type', $type)
+            ->get();
     }
 
     /**
@@ -60,9 +60,9 @@ class AssetRepository
     public function findOneByAssetableAndType(Model $assetable, string $type): ?Asset
     {
         return Asset::where('assetable_type', get_class($assetable))
-                    ->where('assetable_id', $assetable->id)
-                    ->where('type', $type)
-                    ->first();
+            ->where('assetable_id', $assetable->id)
+            ->where('type', $type)
+            ->first();
     }
 
     /**
@@ -71,8 +71,8 @@ class AssetRepository
     public function deleteByAssetable(Model $assetable): int
     {
         return Asset::where('assetable_type', get_class($assetable))
-                    ->where('assetable_id', $assetable->id)
-                    ->delete();
+            ->where('assetable_id', $assetable->id)
+            ->delete();
     }
 
     /**
@@ -81,8 +81,8 @@ class AssetRepository
     public function deleteByAssetableAndType(Model $assetable, string $type): int
     {
         return Asset::where('assetable_type', get_class($assetable))
-                    ->where('assetable_id', $assetable->id)
-                    ->where('type', $type)
-                    ->delete();
+            ->where('assetable_id', $assetable->id)
+            ->where('type', $type)
+            ->delete();
     }
 }

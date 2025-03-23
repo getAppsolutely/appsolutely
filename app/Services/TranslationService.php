@@ -6,26 +6,26 @@ use App\Models\Translation;
 use App\Repositories\TranslationRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 
 class TranslationService
 {
     protected TranslationRepository $translationRepository;
+
     protected string $cacheKey;
 
     public function __construct(TranslationRepository $translationRepository)
     {
         $this->translationRepository = $translationRepository;
-        $this->cacheKey = appsolutely() . '.translations';
+        $this->cacheKey              = appsolutely() . '.translations';
     }
 
     /**
      * Translate a string
      *
-     * @param string $text The original text to translate
-     * @param string|null $locale The target locale
-     * @param string $type The source type (php, blade, db)
-     * @param string|null $callStack The call stack information
+     * @param  string  $text  The original text to translate
+     * @param  string|null  $locale  The target locale
+     * @param  string  $type  The source type (php, blade, db)
+     * @param  string|null  $callStack  The call stack information
      * @return string The translated text or original if not found
      */
     public function translate(string $text, ?string $locale = null, string $type = 'php', ?string $callStack = null): string
@@ -43,7 +43,7 @@ class TranslationService
         }
 
         // Check cache first
-        $cacheKey = $this->getCacheKey($text, $locale);
+        $cacheKey       = $this->getCacheKey($text, $locale);
         $translatedText = Cache::get($cacheKey);
 
         if ($translatedText !== null) {
@@ -65,14 +65,14 @@ class TranslationService
 
         // Create a new translation entry
         $translation = $this->translationRepository->create([
-            'locale' => $locale,
-            'type' => $type,
-            'original_text' => $text,
+            'locale'          => $locale,
+            'type'            => $type,
+            'original_text'   => $text,
             'translated_text' => null, // Will be filled by translators
-            'translator' => null, // Store translator source
-            'call_stack' => $callStack,
-            'used_count' => 1,
-            'last_used' => Carbon::now(),
+            'translator'      => null, // Store translator source
+            'call_stack'      => $callStack,
+            'used_count'      => 1,
+            'last_used'       => Carbon::now(),
         ]);
 
         // Cache the original text as fallback
@@ -109,7 +109,7 @@ class TranslationService
     /**
      * Get all missing translations
      */
-    public function getMissingTranslations(string $locale = null): array
+    public function getMissingTranslations(?string $locale = null): array
     {
         return $this->translationRepository->getMissingTranslations($locale);
     }
@@ -117,22 +117,22 @@ class TranslationService
     /**
      * Update a translation with a new translated text and translator
      *
-     * @param int $id The translation ID
-     * @param string $translatedText The new translated text
-     * @param string $translator The translator source (Google, DeepSeek, OpenAI, Manual)
+     * @param  int  $id  The translation ID
+     * @param  string  $translatedText  The new translated text
+     * @param  string  $translator  The translator source (Google, DeepSeek, OpenAI, Manual)
      * @return bool True if successful
      */
     public function updateTranslation(int $id, string $translatedText, string $translator): bool
     {
         $translation = $this->translationRepository->find($id);
 
-        if (!$translation) {
+        if (! $translation) {
             return false;
         }
 
         $result = $this->translationRepository->update($translation, [
             'translated_text' => $translatedText,
-            'translator' => $translator,
+            'translator'      => $translator,
         ]);
 
         if ($result) {

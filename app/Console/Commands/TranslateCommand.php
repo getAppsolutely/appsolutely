@@ -34,33 +34,35 @@ class TranslateCommand extends Command
      */
     public function handle(TranslationRepository $repository)
     {
-        $locale = $this->option('locale');
+        $locale    = $this->option('locale');
         $batchSize = $this->option('batch') ? (int) $this->option('batch') : 10;
-        $debug = $this->option('debug');
+        $debug     = $this->option('debug');
 
         // Get provider from option or config
         $configProvider = app('config')->get('services.translation.provider', 'deepseek');
-        $provider = $this->option('provider') ?: $configProvider;
+        $provider       = $this->option('provider') ?: $configProvider;
 
         // Validate provider
-        if (!in_array($provider, ['deepseek', 'openai'])) {
+        if (! in_array($provider, ['deepseek', 'openai'])) {
             $this->error("Invalid provider: $provider. Must be 'deepseek' or 'openai'.");
+
             return self::FAILURE;
         }
 
         if ($debug) {
-            $this->info("Command options:");
-            $this->info("- Locale: " . ($locale ?: 'all'));
+            $this->info('Command options:');
+            $this->info('- Locale: ' . ($locale ?: 'all'));
             $this->info("- Batch size: $batchSize");
             $this->info("- Provider: $provider");
-            $this->info("- Sync mode: " . ($this->option('sync') ? 'yes' : 'no'));
+            $this->info('- Sync mode: ' . ($this->option('sync') ? 'yes' : 'no'));
         }
 
         // Check for missing translations first
         $missingCount = count($repository->getMissingTranslations($locale));
 
-        if ($missingCount === 0 && !$this->option('force')) {
+        if ($missingCount === 0 && ! $this->option('force')) {
             $this->info('No missing translations found. Use --force to run anyway.');
+
             return self::SUCCESS;
         }
 
@@ -90,6 +92,7 @@ class TranslateCommand extends Command
                 if ($debug) {
                     $this->error($e->getTraceAsString());
                 }
+
                 return self::FAILURE;
             }
         } else {
@@ -107,8 +110,8 @@ class TranslateCommand extends Command
                 $this->info('Translation job dispatched successfully!');
 
                 Log::info('Translation job dispatched', [
-                    'provider' => $provider,
-                    'locale' => $locale ?: 'all',
+                    'provider'   => $provider,
+                    'locale'     => $locale ?: 'all',
                     'batch_size' => $batchSize,
                 ]);
             } catch (\Throwable $e) {
@@ -116,6 +119,7 @@ class TranslateCommand extends Command
                 if ($debug) {
                     $this->error($e->getTraceAsString());
                 }
+
                 return self::FAILURE;
             }
         }

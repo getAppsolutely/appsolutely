@@ -70,7 +70,7 @@ class AssetService
      */
     public function createAssetForModel(Model $model, array $data): Asset
     {
-        $data['assetable_id'] = $model->id;
+        $data['assetable_id']   = $model->id;
         $data['assetable_type'] = get_class($model);
 
         return $this->assetRepository->create($data);
@@ -86,8 +86,8 @@ class AssetService
         $this->assetRepository->deleteByAssetableAndType($model, $type);
 
         // Set the type and model data
-        $data['type'] = $type;
-        $data['assetable_id'] = $model->id;
+        $data['type']           = $type;
+        $data['assetable_id']   = $model->id;
         $data['assetable_type'] = get_class($model);
 
         // Create the new asset

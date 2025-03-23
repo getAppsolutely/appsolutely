@@ -13,6 +13,7 @@ class Team extends JetstreamTeam
 {
     /** @use HasFactory<\Database\Factories\TeamFactory> */
     use HasFactory;
+
     use SoftDeletes;
 
     /**
@@ -63,5 +64,4 @@ class Team extends JetstreamTeam
     {
         return $this->find($id) ?? $this->where('reference', $id)->first();
     }
-
 }

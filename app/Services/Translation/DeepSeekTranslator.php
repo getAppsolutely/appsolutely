@@ -23,9 +23,9 @@ class DeepSeekTranslator implements TranslatorInterface
     /**
      * Translate text using DeepSeek's API.
      *
-     * @param string $text The text to translate
-     * @param string $targetLocale The target locale (e.g., 'fr', 'es', 'de')
-     * @param string $sourceLocale The source locale (typically default locale)
+     * @param  string  $text  The text to translate
+     * @param  string  $targetLocale  The target locale (e.g., 'fr', 'es', 'de')
+     * @param  string  $sourceLocale  The source locale (typically default locale)
      * @return string The translated text
      */
     public function translate(string $text, string $targetLocale, string $sourceLocale): string
@@ -42,7 +42,7 @@ class DeepSeekTranslator implements TranslatorInterface
             $client = $this->client
                 ->withModel($model)
                 ->setTemperature($temperature)
-                ->query("You are a professional translator. Translate the text accurately and naturally, maintaining the original meaning, tone, and format.", "system")
+                ->query('You are a professional translator. Translate the text accurately and naturally, maintaining the original meaning, tone, and format.', 'system')
                 ->query($prompt);
 
             $response = $client->run();
@@ -59,7 +59,7 @@ class DeepSeekTranslator implements TranslatorInterface
             return trim($response);
         } catch (\Exception $e) {
             Log::error('DeepSeek translation error: ' . $e->getMessage(), [
-                'text' => $text,
+                'text'         => $text,
                 'targetLocale' => $targetLocale,
                 'sourceLocale' => $sourceLocale,
             ]);

@@ -1,9 +1,9 @@
 <?php
 
 use App\Admin\Controllers\FileController;
+use Dcat\Admin\Admin;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
-use Dcat\Admin\Admin;
 
 Admin::routes();
 
@@ -19,6 +19,5 @@ Route::group([
 
     // Standard resource routes for files
     $router->resource('files', FileController::class);
-
 
 });

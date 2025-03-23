@@ -22,7 +22,7 @@ class TranslationServiceProvider extends ServiceProvider
             // Create the appropriate translator instance
             return match ($provider) {
                 'openai' => new OpenAITranslator(),
-                default => new DeepSeekTranslator(),
+                default  => new DeepSeekTranslator(),
             };
         });
     }
