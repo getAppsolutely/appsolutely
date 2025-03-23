@@ -14,10 +14,10 @@ Route::group([
 ], function (Router $router) {
     $router->get('/', 'HomeController@index');
 
+    $router->any('files', [FileController::class, 'upload'])->name('files.upload');
     $router->get('assets/{path?}', [FileController::class, 'retrieve'])->where('path', '(.*)')->name('file.retrieve');
-    $router->post('file/upload', [FileController::class, 'upload']);
 
     // Standard resource routes for files
-    $router->resource('files', FileController::class);
+    $router->resource('files/manager', FileController::class);
 
 });

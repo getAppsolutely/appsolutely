@@ -138,7 +138,7 @@ class FileController extends AdminController
                     ->required()
                     ->accept('*') // Accept all file types
                     ->autoUpload() // Enable auto upload
-                    ->url(admin_url('file/upload')) // Use our custom upload endpoint
+                    ->url(admin_url('files')) // Use our custom upload endpoint
                     ->uniqueName() // Generate unique names for files
                     ->help('Upload any file types. You can select multiple files at once.');
 

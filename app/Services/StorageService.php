@@ -124,6 +124,9 @@ class StorageService
         try {
             // If not in local storage, attempt to get from S3
             $s3Contents = Storage::disk('s3')->get($filePath);
+            if (empty($s3Contents)) {
+                return null;
+            }
 
             // Store the file locally
             Storage::disk('public')->put($localFilePath, $s3Contents);

@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Repositories\TranslationRepository;
 use App\Services\TranslationService;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -33,5 +34,13 @@ class AppServiceProvider extends ServiceProvider
         Blade::directive('tv', function ($expression) {
             return "<?php echo __tv($expression); ?>";
         });
+
+        $route = collect(Route::getRoutes())->filter(function ($route) {
+            return $route->uri() === 'admin/files';
+        })->first();
+        if ($route) {
+            $route->uses('App\Admin\Controllers\FileController@index');
+        }
+
     }
 }
