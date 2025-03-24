@@ -14,8 +14,6 @@ Route::group([
 ], function (Router $router) {
     $router->get('/', 'HomeController@index');
 
-    $router->get('assets/{path?}', [FileController::class, 'retrieve'])->where('path', '(.*)')->name('file.retrieve');
-
     // Standard resource routes for files
     $router->resource('files/manager', FileController::class);
 

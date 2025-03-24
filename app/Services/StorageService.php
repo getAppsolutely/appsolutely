@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\File;
+use App\Repositories\AdminSettingRepository;
 use App\Repositories\FileRepository;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -11,14 +12,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class StorageService
 {
-    protected FileRepository $fileRepository;
-    // protected mixed $prefixPath;
 
-    public function __construct(FileRepository $fileRepository)
-    {
-        $this->fileRepository = $fileRepository;
-        // $this->prefixPath = config('filesystems.disks.s3.prefix');
-    }
+    public function __construct(protected AdminSettingRepository $adminSettingRepository,
+                                protected FileRepository $fileRepository){}
 
     private function getFilePath(File $file): string
     {

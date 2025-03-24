@@ -7,7 +7,6 @@ use App\Helpers\FileHelper;
 use App\Helpers\TimeHelper;
 use App\Models\File;
 use App\Services\StorageService;
-use Dcat\Admin\Admin;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Http\Controllers\AdminController;
@@ -15,7 +14,6 @@ use Dcat\Admin\Show;
 use Dcat\Admin\Traits\HasUploadedFile;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 
 class FileController extends AdminController
@@ -168,6 +166,10 @@ class FileController extends AdminController
         if (request()->method() == 'GET') {
             return admin_redirect('files/manager');
         }
+        if ($this->isDeleteRequest()) {
+            // 删除文件并响应
+            return $this->deleteFileAndResponse();
+        }
         try {
             // Get the uploaded file
             $uploadedFile = $this->file();
@@ -200,44 +202,5 @@ class FileController extends AdminController
                 'message' => 'Upload failed: ' . $e->getMessage(),
             ]);
         }
-    }
-
-    /**
-     * Retrieve or download a file from storage
-     *
-     * @param Request $request
-     * @param string|null $filePath Full file path including filename
-     * @return Response|JsonResponse
-     */
-    public function retrieve(Request $request, string $filePath = null): Response|JsonResponse
-    {
-        if (empty($filePath)) {
-            abort(404);
-        }
-
-        $storageService = app(StorageService::class);
-        $result = $storageService->retrieve($filePath);
-
-        if ($result === null) {
-            return response()->json([
-                'status'  => false,
-                'message' => 'File not found or could not be retrieved',
-            ], 404);
-        }
-
-        [$fileContents, $mimeType] = $result;
-        $fileName                  = basename($filePath);
-
-        // Force download if 'download' parameter is present in the query
-        if ($request->has('download')) {
-            $disposition = 'attachment';
-        } else {
-            $disposition = in_array($mimeType, FileHelper::DISPLAYABLE_MIME_TYPES) ? 'inline' : 'attachment';
-        }
-
-        return response($fileContents)
-            ->header('Content-Type', $mimeType)
-            ->header('Content-Disposition', $disposition . '; filename="' . $fileName . '"')
-            ->header('Content-Length', strlen($fileContents));
     }
 }

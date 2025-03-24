@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class File extends Model
@@ -24,8 +23,8 @@ class File extends Model
         'deleted_at' => 'datetime',
     ];
 
-    public function assets()
+    public function assessables()
     {
-        return $this->hasMany(Asset::class);
+        return $this->morphToMany(Assessable::class, 'fileable');
     }
 }

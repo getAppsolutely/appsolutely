@@ -13,18 +13,17 @@ return new class() extends Migration
      */
     public function up()
     {
-        Schema::create('assets', function (Blueprint $table) {
-            $table->id();
+        Schema::create('assessables', function (Blueprint $table) {
+            $table->string('file')->primary();
             $table->foreignId('file_id')->constrained('files');
-            $table->nullableUuidMorphs('assetable');
+            $table->nullableUuidMorphs('assessable');
             $table->string('type')->nullable();
-            $table->string('file_path')->unique();
             $table->string('title')->nullable();
             $table->string('keyword')->nullable();
             $table->text('description')->nullable();
             $table->text('content')->nullable();
+            $table->json('config')->nullable();
             $table->tinyInteger('status')->default(0);
-            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -36,6 +35,6 @@ return new class() extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('assets');
+        Schema::dropIfExists('assessables');
     }
 };

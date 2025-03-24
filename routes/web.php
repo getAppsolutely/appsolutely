@@ -9,6 +9,13 @@ Route::prefix(LaravelLocalization::setLocale())->middleware(['localeCookieRedire
     });
 });
 
+// Non-localization group
+Route::middleware([])->group(function () {
+
+    Route::get('uploads/{path?}', [FileController::class, 'retrieve'])->where('path', '(.*)')->name('file.retrieve');
+    Route::get('assets/{path?}', [FileController::class, 'retrieve'])->where('path', '(.*)')->name('file.retrieve.assets');
+
+});
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
