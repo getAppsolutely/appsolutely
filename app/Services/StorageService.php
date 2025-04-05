@@ -96,7 +96,7 @@ class StorageService
     /**
      * Find a file by its ID.
      */
-    public function findFile(int $id): ?File
+    public function findFile(int $id): \Illuminate\Database\Eloquent\Model
     {
         return $this->fileRepository->find($id);
     }

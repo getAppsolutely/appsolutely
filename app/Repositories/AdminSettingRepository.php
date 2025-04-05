@@ -4,10 +4,10 @@ namespace App\Repositories;
 
 use App\Models\AdminSetting;
 
-class AdminSettingRepository
+class AdminSettingRepository extends BaseRepository
 {
-    public function find($id): ?AdminSetting
+    public function __construct(AdminSetting $model)
     {
-        return AdminSetting::find($id);
+        $this->model = $model;
     }
 }

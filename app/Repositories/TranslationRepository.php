@@ -6,22 +6,11 @@ use App\Models\Translation;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
-class TranslationRepository
+class TranslationRepository extends BaseRepository
 {
-    /**
-     * Create a new translation
-     */
-    public function create(array $data): Translation
+    public function __construct(Translation $model)
     {
-        return Translation::create($data);
-    }
-
-    /**
-     * Update a translation
-     */
-    public function update(Translation $translation, array $data): bool
-    {
-        return $translation->update($data);
+        $this->model = $model;
     }
 
     /**
@@ -64,14 +53,6 @@ class TranslationRepository
     }
 
     /**
-     * Delete a translation
-     */
-    public function delete(Translation $translation): bool
-    {
-        return $translation->delete();
-    }
-
-    /**
      * Get all missing translations (where translated_text is null or empty)
      *
      * @param  string|null  $locale  Optional locale to filter by
@@ -87,16 +68,5 @@ class TranslationRepository
         }
 
         return $query->get()->toArray();
-    }
-
-    /**
-     * Find a translation by ID
-     *
-     * @param  int  $id  The translation ID
-     * @return Translation|null The translation or null if not found
-     */
-    public function find(int $id): ?Translation
-    {
-        return Translation::find($id);
     }
 }

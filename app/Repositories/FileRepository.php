@@ -5,21 +5,11 @@ namespace App\Repositories;
 use App\Models\Assessable;
 use App\Models\File;
 
-class FileRepository
+class FileRepository extends BaseRepository
 {
-    public function create(array $data): File
+    public function __construct(File $model)
     {
-        return File::create($data);
-    }
-
-    public function delete(File $file): bool
-    {
-        return $file->delete();
-    }
-
-    public function find(int $id): ?File
-    {
-        return File::find($id);
+        $this->model = $model;
     }
 
     public function findByAssessable($filePath): Assessable
