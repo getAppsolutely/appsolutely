@@ -107,18 +107,19 @@ class FileController extends AdminController
                 return TimeHelper::format($timestamp);
             });
 
-            // Display related assets
-            $show->relation('assets', function ($model) {
-                $grid = new Grid(new \App\Models\Asset());
+            // Display related
+            $show->relation('Assessable', function ($model) {
+                $grid = new Grid(new \App\Models\Assessable());
                 $grid->model()->where('file_id', $model->id);
                 $grid->column('id');
-                $grid->column('assetable_type');
-                $grid->column('assetable_id');
+                $grid->column('file_path');
+                $grid->column('assessable_type');
+                $grid->column('assessable_id');
                 $grid->column('type');
-                $grid->column('title');
                 $grid->column('created_at')->display(function ($timestamp) {
                     return TimeHelper::format($timestamp);
                 });
+                $grid->disableActions();
 
                 return $grid;
             });
