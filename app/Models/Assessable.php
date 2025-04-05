@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Assessable extends Model
 {
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'file_id',
         'assessable_type',
@@ -18,16 +23,25 @@ class Assessable extends Model
         'keyword',
         'description',
         'content',
+        'config',
         'status',
         'created_at',
         'updated_at',
     ];
 
-    public function fileable(): MorphTo
-    {
-        return $this->morphTo();
-    }
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'config' => 'json',
+        'status' => 'integer',
+    ];
 
+    /**
+     * Get the file that owns the assessable.
+     */
     public function file(): BelongsTo
     {
         return $this->belongsTo(File::class);

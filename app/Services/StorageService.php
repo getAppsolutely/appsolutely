@@ -108,6 +108,13 @@ class StorageService
      */
     public function retrieve(string $filePath): ?array
     {
+        if (request()->route()->getName() == 'file.assets') {
+            $assessable = $this->fileRepository->findByAssessables($filePath);
+            if (empty($assessable->file->full_path)) {
+                abort(404);
+            }
+            $filePath = $assessable->file->full_path;
+        }
         // Check if file exists in local storage
         $localFilePath = appsolutely() . '/' . $filePath;
         if (Storage::disk('public')->exists($localFilePath)) {
@@ -139,5 +146,20 @@ class StorageService
 
             return null;
         }
+    }
+
+    public function assessable(File $file, $uploader)
+    {
+        $result = $filePath = false;
+        $type = $uploader->upload_column ?? null;
+        if ($type) {
+            $adminSetting = $this->adminSettingRepository->find('ghost::admin_config');
+            $filePath = "images/{$type}." . $file->extension;
+            $sync = [$file->id => ['type' => $type, 'file_path'=>$filePath]];
+            $result  = $adminSetting->filesOfType($type)->sync($sync);
+        }
+        $check = $result ? 'found':'not found';
+
+        return $filePath;
     }
 }

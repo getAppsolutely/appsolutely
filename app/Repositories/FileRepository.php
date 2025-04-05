@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Assessable;
 use App\Models\File;
 
 class FileRepository
@@ -19,5 +20,10 @@ class FileRepository
     public function find(int $id): ?File
     {
         return File::find($id);
+    }
+
+    public function findByAssessables($filePath)
+    {
+        return Assessable::query()->with(['file'])->whereFilePath($filePath)->first();
     }
 }

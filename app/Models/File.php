@@ -23,8 +23,8 @@ class File extends Model
         'deleted_at' => 'datetime',
     ];
 
-    public function assessables()
+    function getFullPathAttribute()
     {
-        return $this->morphToMany(Assessable::class, 'fileable');
+        return $this->path . '/' . $this->filename;
     }
 }

@@ -14,10 +14,11 @@ return new class() extends Migration
     public function up()
     {
         Schema::create('assessables', function (Blueprint $table) {
-            $table->string('file')->primary();
+            $table->id();
             $table->foreignId('file_id')->constrained('files');
             $table->nullableUuidMorphs('assessable');
             $table->string('type')->nullable();
+            $table->string('file_path');
             $table->string('title')->nullable();
             $table->string('keyword')->nullable();
             $table->text('description')->nullable();

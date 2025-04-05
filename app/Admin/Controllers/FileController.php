@@ -177,16 +177,18 @@ class FileController extends AdminController
                 return admin_redirect('files/manager');
             }
 
+            $uploader = $this->uploader();
             // Use the StorageService to store the file
             $storageService = app(StorageService::class);
             $file           = $storageService->store($uploadedFile);
 
+            $path = $storageService->assessable($file, $uploader);
             return response()->json([
                 'status'  => true,
-                'id'      => $file->id,
+                'id'      => $path,
                 'message' => 'File uploaded successfully',
                 'data'    => [
-                    'id'                => $file->id,
+                    'id'                => $path,
                     'original_filename' => $file->original_filename,
                     'filename'          => $file->filename,
                     'extension'         => $file->extension,

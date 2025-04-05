@@ -11,7 +11,7 @@ use Illuminate\Http\Response;
 
 class FileController extends Controller
 {
-    
+
     /**
      * Retrieve a file from storage
      *
