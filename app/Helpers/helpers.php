@@ -20,12 +20,7 @@ if (! function_exists('appsolutely')) {
             $result = "app_{$prefix}";
             config('appsolutely.prefix', $result);
         }
-
-        Log::info('Application Ready for ', [
-            'prefix' => $prefix,
-            'result' => $result,
-        ]);
-
+        //Log::info('Application Ready for ', ['prefix' => $prefix, 'result' => $result,]);
         return $result;
     }
 }
@@ -159,7 +154,7 @@ if (! function_exists('app_log')) {
      */
     function app_log(string $message, array $context = [], string $type = 'info'): void
     {
-        \Log::log($type, string_concat($message), $context);
+        Log::log($type, string_concat($message), $context);
     }
 }
 
@@ -171,7 +166,7 @@ if (! function_exists('log_error')) {
      */
     function log_error(string $message, array $context = []): void
     {
-        \Log::log('error', string_concat($message), $context);
+        Log::log('error', string_concat($message), $context);
     }
 }
 
@@ -183,7 +178,7 @@ if (! function_exists('log_info')) {
      */
     function log_info(string $message, array $context = []): void
     {
-        \Log::log('info', string_concat($message), $context);
+        Log::log('info', string_concat($message), $context);
     }
 }
 
@@ -195,6 +190,6 @@ if (! function_exists('log_debug')) {
      */
     function log_debug(string $message, array $context = []): void
     {
-        \Log::log('debug', string_concat($message), $context);
+        Log::log('debug', string_concat($message), $context);
     }
 }
