@@ -109,7 +109,7 @@ class TranslateCommand extends Command
                 dispatch(new ProcessMissingTranslations($locale, $batchSize, $provider));
                 $this->info('Translation job dispatched successfully!');
 
-                Log::info('Translation job dispatched', [
+                log_info('Translation job dispatched', [
                     'provider'   => $provider,
                     'locale'     => $locale ?: 'all',
                     'batch_size' => $batchSize,

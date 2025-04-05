@@ -58,7 +58,7 @@ class ProcessMissingTranslations implements ShouldQueue
      */
     public function handle(TranslationRepository $repository): void
     {
-        Log::info('ProcessMissingTranslations job started', [
+        log_info('ProcessMissingTranslations job started', [
             'provider'  => $this->provider,
             'locale'    => $this->locale,
             'batchSize' => $this->batchSize,
@@ -75,14 +75,14 @@ class ProcessMissingTranslations implements ShouldQueue
             // Resolve a new instance with updated config
             $translator = app()->make(TranslatorInterface::class);
 
-            Log::info('Translator resolved', [
+            log_info('Translator resolved', [
                 'translator_type' => get_class($translator),
             ]);
 
             // Get missing translations
             $missingTranslations = $repository->getMissingTranslations($this->locale);
 
-            Log::info('Missing translations found', [
+            log_info('Missing translations found', [
                 'count' => count($missingTranslations),
             ]);
 
@@ -90,12 +90,12 @@ class ProcessMissingTranslations implements ShouldQueue
             $translationsToProcess = array_slice($missingTranslations, 0, $this->batchSize);
 
             if (empty($translationsToProcess)) {
-                Log::info('No missing translations to process.');
+                log_info('No missing translations to process.');
 
                 return;
             }
 
-            Log::info('Processing missing translations', [
+            log_info('Processing missing translations', [
                 'count'    => count($translationsToProcess),
                 'locale'   => $this->locale,
                 'provider' => $this->provider,
@@ -135,14 +135,14 @@ class ProcessMissingTranslations implements ShouldQueue
                             $translation['locale']
                         );
 
-                        Log::info('Translation updated', [
+                        log_info('Translation updated', [
                             'id'       => $translation['id'],
                             'locale'   => $translation['locale'],
                             'provider' => $this->provider,
                         ]);
                     }
                 } catch (\Exception $e) {
-                    Log::error('Error processing translation', [
+                    log_error('Error processing translation', [
                         'id'     => $translation['id'],
                         'error'  => $e->getMessage(),
                         'locale' => $translation['locale'],
@@ -158,12 +158,12 @@ class ProcessMissingTranslations implements ShouldQueue
                 // Dispatch with a delay to avoid overwhelming the API
                 dispatch($newJob)->delay(now()->addMinutes(1));
 
-                Log::info('Dispatched follow-up job for remaining translations', [
+                log_info('Dispatched follow-up job for remaining translations', [
                     'remaining' => count($missingTranslations) - $this->batchSize,
                 ]);
             }
         } catch (Throwable $exception) {
-            Log::error('Fatal error in ProcessMissingTranslations job', [
+            log_error('Fatal error in ProcessMissingTranslations job', [
                 'error' => $exception->getMessage(),
                 'file'  => $exception->getFile(),
                 'line'  => $exception->getLine(),
@@ -180,7 +180,7 @@ class ProcessMissingTranslations implements ShouldQueue
      */
     public function failed(Throwable $exception): void
     {
-        Log::error('ProcessMissingTranslations job failed', [
+        log_error('ProcessMissingTranslations job failed', [
             'provider' => $this->provider,
             'locale'   => $this->locale,
             'error'    => $exception->getMessage(),

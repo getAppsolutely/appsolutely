@@ -66,7 +66,7 @@ class StorageService
                 'hash'              => $hash,
             ]);
         } catch (\Exception $e) {
-            Log::error('S3 Upload failed: ' . $e->getMessage(), [
+            log_error('S3 Upload failed: ' . $e->getMessage(), [
                 'file'  => $originalFilename,
                 'path'  => $path,
                 'error' => $e->getMessage(),
@@ -140,7 +140,7 @@ class StorageService
                 Storage::disk('public')->mimeType($localFilePath),
             ];
         } catch (\Exception $e) {
-            Log::error('Failed to retrieve file from S3', [
+            log_error('Failed to retrieve file from S3', [
                 'filePath' => $filePath,
                 'error'    => $e->getMessage(),
             ]);

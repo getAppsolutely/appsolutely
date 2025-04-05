@@ -58,7 +58,7 @@ class DeepSeekTranslator implements TranslatorInterface
             // Fallback to the original response
             return trim($response);
         } catch (\Exception $e) {
-            Log::error('DeepSeek translation error: ' . $e->getMessage(), [
+            log_error('DeepSeek translation error: ' . $e->getMessage(), [
                 'text'         => $text,
                 'targetLocale' => $targetLocale,
                 'sourceLocale' => $sourceLocale,

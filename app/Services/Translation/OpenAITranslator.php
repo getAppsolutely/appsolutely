@@ -19,7 +19,7 @@ class OpenAITranslator implements TranslatorInterface
     {
         try {
             // Log the configuration for debugging
-            Log::debug('OpenAI translation configuration', [
+            log_debug('OpenAI translation configuration', [
                 'api_key_exists' => ! empty(config('services.translation.openai.api_key')),
                 'model'          => config('services.translation.openai.model', 'gpt-4-turbo'),
             ]);
@@ -38,7 +38,7 @@ class OpenAITranslator implements TranslatorInterface
 
             return trim($response->choices[0]->message->content);
         } catch (\Exception $e) {
-            Log::error('OpenAI translation error: ' . $e->getMessage(), [
+            log_error('OpenAI translation error: ' . $e->getMessage(), [
                 'text'           => $text,
                 'targetLocale'   => $targetLocale,
                 'sourceLocale'   => $sourceLocale,
