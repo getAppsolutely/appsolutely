@@ -3,7 +3,6 @@
 namespace App\Services\Translation;
 
 use DeepSeek\DeepSeekClient;
-use Illuminate\Support\Facades\Log;
 
 class DeepSeekTranslator implements TranslatorInterface
 {

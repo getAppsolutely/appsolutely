@@ -183,9 +183,10 @@ class FileController extends AdminController
             $file           = $storageService->store($uploadedFile);
 
             $path = $storageService->assessable($file, $uploader);
+
             return response()->json([
-                'status'  => true,
-                'data'    => [
+                'status' => true,
+                'data'   => [
                     'id'   => $path,
                     'name' => $file->filename,
                     'path' => $file->path,
@@ -194,6 +195,7 @@ class FileController extends AdminController
             ]);
         } catch (\Exception $e) {
             log_error('Upload failed: ' . $e->getMessage());
+
             return response()->json([
                 'status' => false,
             ]);

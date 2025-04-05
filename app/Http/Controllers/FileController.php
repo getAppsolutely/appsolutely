@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Helpers\FileHelper;
 use App\Services\StorageService;
 use Illuminate\Http\JsonResponse;
@@ -11,25 +10,22 @@ use Illuminate\Http\Response;
 
 class FileController extends Controller
 {
-
     /**
      * Retrieve a file from storage
      *
-     * @param Request $request
-     * @param string|null $filePath Full file path including filename
-     * @return Response|JsonResponse
+     * @param  string|null  $filePath  Full file path including filename
      */
-    public function retrieve(Request $request, string $filePath = null): Response|JsonResponse
+    public function retrieve(Request $request, ?string $filePath = null): Response|JsonResponse
     {
         if (empty($filePath)) {
             abort(404);
         }
 
         $storageService = app(StorageService::class);
-        $result = $storageService->retrieve($filePath);
+        $result         = $storageService->retrieve($filePath);
 
         if ($result === null) {
-             abort(404);
+            abort(404);
         }
 
         [$fileContents, $mimeType] = $result;

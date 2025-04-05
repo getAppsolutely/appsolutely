@@ -23,7 +23,7 @@ class File extends Model
         'deleted_at' => 'datetime',
     ];
 
-    function getFullPathAttribute()
+    public function getFullPathAttribute()
     {
         return $this->path . '/' . $this->filename;
     }

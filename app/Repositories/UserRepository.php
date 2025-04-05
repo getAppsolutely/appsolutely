@@ -19,7 +19,7 @@ class UserRepository extends BaseRepository
     {
         return $this->model->where(function (Builder $query) use ($term) {
             $query->where('name', 'like', "%{$term}%")
-                  ->orWhere('email', 'like', "%{$term}%");
+                ->orWhere('email', 'like', "%{$term}%");
         });
     }
 }

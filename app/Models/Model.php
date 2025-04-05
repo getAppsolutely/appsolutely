@@ -2,4 +2,4 @@
 
 namespace App\Models;
 
-class Model extends \Illuminate\Database\Eloquent\Model{}
+class Model extends \Illuminate\Database\Eloquent\Model {}

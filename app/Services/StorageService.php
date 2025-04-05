@@ -6,16 +6,14 @@ use App\Models\AdminSetting;
 use App\Models\File;
 use App\Repositories\AdminSettingRepository;
 use App\Repositories\FileRepository;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class StorageService
 {
-
     public function __construct(protected AdminSettingRepository $adminSettingRepository,
-                                protected FileRepository $fileRepository){}
+        protected FileRepository $fileRepository) {}
 
     private function getFilePath(File $file): string
     {
@@ -152,11 +150,11 @@ class StorageService
     public function assessable(File $file, $uploader)
     {
         $filePath = false;
-        $type = $uploader->upload_column ?? null;
+        $type     = $uploader->upload_column ?? null;
         if (in_array($type, array_keys(AdminSetting::PATH_PATTERNS)) && $pattern = config(AdminSetting::PATH_PATTERNS[$type])) {
             $adminSetting = $this->adminSettingRepository->find('ghost::admin_config');
-            $filePath = sprintf($pattern, $file->extension);
-            $sync = [$file->id => ['type' => $type, 'file_path' => $filePath]];
+            $filePath     = sprintf($pattern, $file->extension);
+            $sync         = [$file->id => ['type' => $type, 'file_path' => $filePath]];
             $adminSetting->filesOfType($type)->sync($sync);
         }
 

@@ -41,7 +41,7 @@ abstract class BaseRepository
     /**
      * Create a new record.
      *
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     public function create(array $data): Model
     {
@@ -51,7 +51,7 @@ abstract class BaseRepository
     /**
      * Update a record.
      *
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     public function update(Model $model, array $data): bool
     {
@@ -69,7 +69,7 @@ abstract class BaseRepository
     /**
      * Get paginated results.
      *
-     * @param array<string, mixed> $filters
+     * @param  array<string, mixed>  $filters
      */
     public function paginate(
         int $perPage = 15,
@@ -78,7 +78,7 @@ abstract class BaseRepository
     ): LengthAwarePaginator {
         $query = $this->model->query();
 
-        if (!empty($with)) {
+        if (! empty($with)) {
             $query->with($with);
         }
 
@@ -88,7 +88,7 @@ abstract class BaseRepository
     /**
      * Apply filters to the query.
      *
-     * @param array<string, mixed> $filters
+     * @param  array<string, mixed>  $filters
      */
     protected function applyFilters(Builder $query, array $filters): Builder
     {
@@ -110,7 +110,7 @@ abstract class BaseRepository
     /**
      * Get first record by conditions.
      *
-     * @param array<string, mixed> $conditions
+     * @param  array<string, mixed>  $conditions
      */
     public function firstWhere(array $conditions): ?Model
     {
@@ -120,7 +120,7 @@ abstract class BaseRepository
     /**
      * Get records with relationships.
      *
-     * @param array<int, string> $relations
+     * @param  array<int, string>  $relations
      */
     public function with(array $relations): Builder
     {
@@ -130,8 +130,7 @@ abstract class BaseRepository
     /**
      * Insert multiple records.
      *
-     * @param array<int, array<string, mixed>> $data
-     * @return bool
+     * @param  array<int, array<string, mixed>>  $data
      */
     public function insert(array $data): bool
     {

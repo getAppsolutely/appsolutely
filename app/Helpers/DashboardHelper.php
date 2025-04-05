@@ -5,6 +5,7 @@ namespace App\Helpers;
 class DashboardHelper
 {
     const DASHBOARD_ASSETS_PATH = 'assets/';
+
     const DASHBOARD_FILES_PATH = 'uploads/';
 
     public static function preview($filePath, $extension, $prefix = self::DASHBOARD_FILES_PATH, $maxWidth = 100, $maxHeight = 100)
@@ -19,5 +20,4 @@ class DashboardHelper
 
         return "<a href='{$url}' target='_blank'>{$html}</a>";
     }
-
 }

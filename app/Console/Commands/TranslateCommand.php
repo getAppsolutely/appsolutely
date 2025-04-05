@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use App\Jobs\ProcessMissingTranslations;
 use App\Repositories\TranslationRepository;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
 
 class TranslateCommand extends Command
 {
