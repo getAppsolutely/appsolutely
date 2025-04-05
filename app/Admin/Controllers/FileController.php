@@ -185,23 +185,17 @@ class FileController extends AdminController
             $path = $storageService->assessable($file, $uploader);
             return response()->json([
                 'status'  => true,
-                'id'      => $path,
-                'message' => 'File uploaded successfully',
                 'data'    => [
-                    'id'                => $path,
-                    'original_filename' => $file->original_filename,
-                    'filename'          => $file->filename,
-                    'extension'         => $file->extension,
-                    'mime_type'         => $file->mime_type,
-                    'path'              => $file->path,
-                    'size'              => FileHelper::formatSize($file->size),
-                    'url'               => Storage::disk('s3')->url($file->path . '/' . $file->filename),
+                    'id'   => $path,
+                    'name' => $file->filename,
+                    'path' => $file->path,
+                    'url'  => Storage::disk('s3')->url($file->full_path),
                 ],
             ]);
         } catch (\Exception $e) {
+            log_error('Upload failed: ' . $e->getMessage());
             return response()->json([
-                'status'  => false,
-                'message' => 'Upload failed: ' . $e->getMessage(),
+                'status' => false,
             ]);
         }
     }
