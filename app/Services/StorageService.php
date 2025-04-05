@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\AdminSetting;
 use App\Models\File;
 use App\Repositories\AdminSettingRepository;
 use App\Repositories\FileRepository;
@@ -109,7 +110,7 @@ class StorageService
     public function retrieve(string $filePath): ?array
     {
         if (request()->route()->getName() == 'file.assets') {
-            $assessable = $this->fileRepository->findByAssessables($filePath);
+            $assessable = $this->fileRepository->findByAssessable($filePath);
             if (empty($assessable->file->full_path)) {
                 abort(404);
             }
@@ -150,15 +151,14 @@ class StorageService
 
     public function assessable(File $file, $uploader)
     {
-        $result = $filePath = false;
+        $filePath = false;
         $type = $uploader->upload_column ?? null;
-        if ($type) {
+        if (in_array($type, array_keys(AdminSetting::PATH_PATTERNS)) && $pattern = config(AdminSetting::PATH_PATTERNS[$type])) {
             $adminSetting = $this->adminSettingRepository->find('ghost::admin_config');
-            $filePath = "images/{$type}." . $file->extension;
-            $sync = [$file->id => ['type' => $type, 'file_path'=>$filePath]];
-            $result  = $adminSetting->filesOfType($type)->sync($sync);
+            $filePath = sprintf($pattern, $file->extension);
+            $sync = [$file->id => ['type' => $type, 'file_path' => $filePath]];
+            $adminSetting->filesOfType($type)->sync($sync);
         }
-        $check = $result ? 'found':'not found';
 
         return $filePath;
     }

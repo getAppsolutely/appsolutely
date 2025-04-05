@@ -22,7 +22,7 @@ class FileRepository
         return File::find($id);
     }
 
-    public function findByAssessables($filePath)
+    public function findByAssessable($filePath): Assessable
     {
         return Assessable::query()->with(['file'])->whereFilePath($filePath)->first();
     }
