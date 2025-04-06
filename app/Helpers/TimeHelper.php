@@ -8,12 +8,8 @@ class TimeHelper
 {
     /**
      * Format timestamp to a readable format in 24-hour time
-     *
-     * @param  string|null  $timestamp
-     * @param  string  $format  Default format is 'Y-m-d H:i:s' (24-hour)
-     * @return string
      */
-    public static function format($timestamp, $format = 'Y-m-d H:i:s')
+    public static function format(?string $timestamp, string $format = 'Y-m-d H:i:s'): string
     {
         if (empty($timestamp)) {
             return '';
@@ -27,11 +23,8 @@ class TimeHelper
 
     /**
      * Format timestamp with timezone
-     *
-     * @param  string|null  $timestamp
-     * @return string
      */
-    public static function formatWithTz($timestamp)
+    public static function formatWithTz(?string $timestamp): string
     {
         return self::format($timestamp, 'Y-m-d H:i:s T'); // Example: 2025-03-12 15:30:45 NZDT
     }
