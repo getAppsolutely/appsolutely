@@ -11,6 +11,7 @@
         "deepseek-php/deepseek-php-client": "^2.0",
         "fahlisaputra/laravel-minify": "^1.2",
         "ghost/dcat-config": "^1.0",
+        "kalnoy/nestedset": "^6.0",
         "laravel/framework": "^12.0",
         "laravel/jetstream": "^5.3",
         "laravel/sanctum": "^4.0",
