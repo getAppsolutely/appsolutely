@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasFilesOfType;
+use App\Models\Traits\Sluggable;
 use Dcat\Admin\Traits\HasDateTimeFormatter;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,7 +16,31 @@ class Article extends Model
     const DEFAULT_ARTICLE_SUMMARY_LENGTH = 200;
 
     use HasDateTimeFormatter;
+    use HasFilesOfType;
+    use Sluggable;
     use SoftDeletes;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'title',
+        'keywords',
+        'description',
+        'content',
+        'slug',
+        'cover',
+        'status',
+        'published_at',
+        'expired_at',
+        'sort',
+    ];
+
+    protected $casts = [
+        'setting' => 'json',
+    ];
 
     public function categories(): BelongsToMany
     {

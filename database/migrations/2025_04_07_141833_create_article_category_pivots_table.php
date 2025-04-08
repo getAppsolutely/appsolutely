@@ -14,6 +14,7 @@ return new class() extends Migration
         Schema::create('article_category_pivots', function (Blueprint $table) {
             $table->unsignedBigInteger('article_id');
             $table->unsignedBigInteger('article_category_id');
+            $table->json('setting')->nullable();
         });
     }
 

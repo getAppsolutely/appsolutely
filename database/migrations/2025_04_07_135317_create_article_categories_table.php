@@ -23,6 +23,9 @@ return new class() extends Migration
             $table->string('cover')->nullable();
             $table->json('setting')->nullable();
             $table->tinyInteger('status')->default(0);
+
+            $table->dateTimeTz('published_at')->useCurrent();
+            $table->dateTimeTz('expired_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

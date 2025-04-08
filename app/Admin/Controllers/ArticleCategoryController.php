@@ -54,7 +54,6 @@ class ArticleCategoryController extends AdminController
 
             $grid->actions(function (Grid\Displayers\Actions $actions) {
                 $actions->disableView();
-
             });
         });
     }
@@ -105,7 +104,7 @@ class ArticleCategoryController extends AdminController
             $form->block(5, function (BlockForm $form) {
                 $form->title('Optional');
 
-                $form->image('cover')->autoUpload()->url(upload_url(['class' => ArticleCategory::class, 'id' => $form->getKey()]));
+                $form->image('cover')->autoUpload()->url(upload_url(ArticleCategory::class, $form->getKey()));
                 $form->switch('status');
                 $form->display('created_at');
                 $form->display('updated_at');

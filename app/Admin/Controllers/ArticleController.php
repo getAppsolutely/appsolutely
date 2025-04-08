@@ -2,13 +2,12 @@
 
 namespace App\Admin\Controllers;
 
+use App\Helpers\TimeHelper;
 use App\Models\Article;
 use App\Repositories\ArticleCategoryRepository;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Http\Controllers\AdminController;
-use Dcat\Admin\Show;
-use Illuminate\Support\Str;
 
 class ArticleController extends AdminController
 {
@@ -27,40 +26,29 @@ class ArticleController extends AdminController
         return Grid::make(new Article(['categories']), function (Grid $grid) {
 
             $grid->column('id')->sortable();
-            $grid->column('available', 'Availability')->switch();
+            $grid->column('status', 'Status')->switch();
             $grid->column('title');
             $grid->column('categories')->pluck('title')->label();
 
-            $grid->column('created_at')->sortable();
-            $grid->column('updated_at')->sortable();
+            $grid->column('published_at')->display(function ($timestamp) {
+                return TimeHelper::format($timestamp);
+            })->sortable();
+            $grid->column('expired_at')->display(function ($timestamp) {
+                return TimeHelper::format($timestamp);
+            })->sortable();
+            $grid->column('created_at');
+            $grid->column('updated_at');
 
             $grid->column('sort')->editable();
 
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->like('title')->width(3);
                 $filter->like('content')->width(3);
-
             });
-        });
-    }
 
-    /**
-     * Make a show builder.
-     */
-    protected function detail(mixed $id): Show
-    {
-        return Show::make($id, new Article(), function (Show $show) {
-            $show->field('id');
-            $show->field('title');
-            $show->field('slug');
-            $show->field('keywords');
-            $show->field('description');
-            $show->field('setting');
-            $show->field('content');
-            $show->field('sort');
-            $show->field('available');
-            $show->field('created_at');
-            $show->field('updated_at');
+            $grid->actions(function (Grid\Displayers\Actions $actions) {
+                $actions->disableView();
+            });
         });
     }
 
@@ -86,15 +74,15 @@ class ArticleController extends AdminController
                     });
 
                 $form->text('title')->required();
-                $form->text('slug')->saving(function ($value) use ($form) {
-                    return $value ?? Str::slug($form->model()->title);
-                });
+                $form->text('slug');
 
                 $form->markdown('content')->required();
-                $form->switch('available');
+                $form->datetime('published_at');
+                $form->datetime('expired_at');
+                $form->switch('status');
 
             })->tab('Optional', function (Form $form) {
-                $form->image('cover');
+                $form->image('cover')->autoUpload()->url(upload_url(Article::class, $form->getKey()));
                 $form->textarea('keywords')->rows(2);
                 $form->textarea('description')->rows(2);
                 $form->keyValue('setting')->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();

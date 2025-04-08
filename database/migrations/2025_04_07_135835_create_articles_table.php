@@ -23,6 +23,8 @@ return new class() extends Migration
             $table->tinyInteger('status')->default(0);
 
             $table->unsignedTinyInteger('sort')->nullable();
+            $table->dateTimeTz('published_at')->useCurrent();
+            $table->dateTimeTz('expired_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

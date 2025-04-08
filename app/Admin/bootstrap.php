@@ -47,7 +47,7 @@ Grid::resolving(function (Grid $grid) {
 
     Admin::style('
     td.grid__actions__ a {
-        display: inline-block;
+        display: block;
         margin-bottom: 5px;
     }
 

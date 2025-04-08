@@ -175,8 +175,16 @@ if (! function_exists('log_debug')) {
 }
 
 if (! function_exists('upload_url')) {
-    function upload_url(array $data = []): string
+    function upload_url(?string $class = null, $id = null): string
     {
+        $data = [];
+        if (! empty($class)) {
+            $data['class'] = $class;
+        }
+        if (! empty($id)) {
+            $data['id'] = $id;
+        }
+
         return empty($data) ? admin_url('files') : admin_url('files') . '?' . http_build_query($data);
     }
 }
