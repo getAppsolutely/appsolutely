@@ -17,6 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\SetThemeMiddleware::class,
         ]);
 
+        $middleware->group('appsolutely_middleware', [
+            \App\Http\Middleware\SetThemeMiddleware::class,
+        ]);
+
         $middleware->alias([
             // Laravel Localization
             'localize'              => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRoutes::class,

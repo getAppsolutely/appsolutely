@@ -173,3 +173,10 @@ if (! function_exists('log_debug')) {
         Log::log('debug', string_concat($message), $context);
     }
 }
+
+if (! function_exists('upload_url')) {
+    function upload_url(array $data = []): string
+    {
+        return empty($data) ? admin_url('files') : admin_url('files') . '?' . http_build_query($data);
+    }
+}

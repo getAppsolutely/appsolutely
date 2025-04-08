@@ -37,9 +37,9 @@ class AppServiceProvider extends ServiceProvider
 
         /** @var \Illuminate\Routing\Route $matched */
         $matched = collect(Route::getRoutes())->filter(function (\Illuminate\Routing\Route $route) {
-            return $route->uri() === 'admin/files';
+            return $route->uri() === config('admin.route.prefix') . '/files';
         })->first();
-        $matched?->uses('App\Admin\Controllers\FileController@upload');
+        $matched?->uses('App\Admin\Controllers\FileController@upload')->name('file.upload');
 
     }
 }

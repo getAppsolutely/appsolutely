@@ -12,8 +12,13 @@ use Dcat\Admin\Grid;
 use Dcat\Admin\Http\Controllers\AdminController;
 use Dcat\Admin\Show;
 use Dcat\Admin\Traits\HasUploadedFile;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Storage;
 
 class FileController extends AdminController
@@ -22,10 +27,8 @@ class FileController extends AdminController
 
     /**
      * Make a grid builder.
-     *
-     * @return Grid
      */
-    protected function grid()
+    protected function grid(): Grid
     {
         return Grid::make(new File(), function (Grid $grid) {
             $grid->column('id')->sortable();
@@ -35,10 +38,10 @@ class FileController extends AdminController
                 return DashboardHelper::preview($this->full_path);
             });
 
-            $grid->column('original_filename')->sortable();
-            $grid->column('filename')->sortable();
+            $grid->column('filename')->width('120px')->sortable();
+            $grid->column('original_filename')->width('80px')->sortable();
             $grid->column('extension')->sortable();
-            $grid->column('mime_type');
+            $grid->column('mime_type')->width('80px');
 
             // Use the helper to format the file size
             $grid->column('size')->display(function ($size) {
@@ -66,16 +69,14 @@ class FileController extends AdminController
                 $actions->disableEdit();
             });
 
+            $grid->model()->orderBy('id', 'DESC');
         });
     }
 
     /**
      * Make a show builder.
-     *
-     * @param  mixed  $id
-     * @return Show
      */
-    protected function detail($id)
+    protected function detail(mixed $id): Show
     {
         return Show::make($id, new File(), function (Show $show) {
             $show->field('id');
@@ -128,10 +129,8 @@ class FileController extends AdminController
 
     /**
      * Make a form builder.
-     *
-     * @return Form
      */
-    protected function form()
+    protected function form(): Form
     {
         return Form::make(new File(), function (Form $form) {
             if ($form->isCreating()) {
@@ -140,7 +139,7 @@ class FileController extends AdminController
                     ->required()
                     ->accept('*') // Accept all file types
                     ->autoUpload() // Enable auto upload
-                    ->url(admin_url('files')) // Use our custom upload endpoint
+                    ->url(upload_url()) // Use our custom upload endpoint
                     ->uniqueName() // Generate unique names for files
                     ->help('Upload any file types. You can select multiple files at once.');
 
@@ -148,7 +147,7 @@ class FileController extends AdminController
                 $form->disableResetButton();
 
                 $form->html('<div class="form-footer text-center">
-                <a href="' . admin_url('files') . '" class="btn btn-primary">
+                <a href="' . admin_url('files/manager') . '" class="btn btn-primary">
                     <i class="feather icon-list"></i><span>&nbsp;Back to List</span>
                 </a></div>');
             }
@@ -158,10 +157,8 @@ class FileController extends AdminController
 
     /**
      * Handle file upload.
-     *
-     * @return JsonResponse
      */
-    public function upload(Request $request)
+    public function upload(Request $request): Response|JsonResponse|Redirector|RedirectResponse|Application|ResponseFactory|\Dcat\Admin\Http\JsonResponse
     {
         $method = request()->method();
         if (request()->method() == 'GET') {

@@ -28,8 +28,8 @@ Grid::resolving(function (Grid $grid) {
 
     $grid->disableViewButton(false);
 
-    $grid->rowSelector()->click();
-    $grid->model()->orderBy('id', 'DESC');
+    // $grid->rowSelector()->click();
+    // $grid->model()->orderBy('id', 'DESC');
 
     $grid->filter(function (Grid\Filter $filter) {
         $filter->panel()->expand(false);
@@ -44,5 +44,24 @@ Grid::resolving(function (Grid $grid) {
         //$actions->disableDelete();
     });
     */
+
+    Admin::style('
+    td.grid__actions__ a {
+        display: inline-block;
+        margin-bottom: 5px;
+    }
+
+    td.grid__actions__ a:hover span{
+        text-decoration: underline;
+    }
+');
+
+    Admin::script('
+$(document).ready(function() {
+  if ($("table.table.data-table tr td i.fa.fa-angle-right").length > 0) {
+    $("table.table.data-table tr td i.fa.fa-angle-right").click();
+  }
+});
+');
 
 });

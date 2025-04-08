@@ -8,10 +8,8 @@ return new class() extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('assessables', function (Blueprint $table) {
             $table->id();
@@ -23,7 +21,7 @@ return new class() extends Migration
             $table->string('keyword')->nullable();
             $table->text('description')->nullable();
             $table->text('content')->nullable();
-            $table->json('config')->nullable();
+            $table->json('setting')->nullable();
             $table->tinyInteger('status')->default(0);
             $table->dateTimeTz('published_at')->useCurrent();
             $table->dateTimeTz('expired_at')->nullable();
@@ -33,10 +31,8 @@ return new class() extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('assessables');
     }

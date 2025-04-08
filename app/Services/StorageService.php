@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\AdminSetting;
 use App\Models\File;
+use App\Models\Model;
 use App\Repositories\AdminSettingRepository;
 use App\Repositories\FileRepository;
 use Illuminate\Support\Facades\Storage;
@@ -149,13 +150,28 @@ class StorageService
 
     public function assessable(File $file, $uploader)
     {
-        $filePath = false;
-        $type     = $uploader->upload_column ?? null;
+        $filePath = null;
+
+        $class = request()->query('class');
+        $key   = request()->query('id');
+        $type  = $uploader->upload_column ?? null;
+
         if (in_array($type, array_keys(AdminSetting::PATH_PATTERNS)) && $pattern = config(AdminSetting::PATH_PATTERNS[$type])) {
             $adminSetting = $this->adminSettingRepository->find('ghost::admin_config');
             $filePath     = sprintf($pattern, $file->extension);
             $sync         = [$file->id => ['type' => $type, 'file_path' => $filePath]];
             $adminSetting->filesOfType($type)->sync($sync);
+        } elseif (! empty($class) && ! empty($key) && class_exists($class) && is_a($class, Model::class, true)) {
+            $model  = new $class();
+            $object = $model->find($key);
+            if (! method_exists($object, 'filesOfType')) {
+                return false;
+            }
+            $pattern  = '%s/%s/%s.%s';
+            $slug     = $object->slug ?? $key;
+            $filePath = sprintf($pattern, Str::plural(Str::kebab(class_basename($class))), $slug, $type, $file->extension);
+            $sync     = [$file->id => ['type' => $type, 'file_path' => $filePath]];
+            $object->filesOfType($type)->sync($sync);
         }
 
         return $filePath;
