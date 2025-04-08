@@ -23,7 +23,7 @@ class ArticleController extends AdminController
      */
     protected function grid(): Grid
     {
-        return Grid::make(new Article(['categories']), function (Grid $grid) {
+        return Grid::make(Article::with(['categories']), function (Grid $grid) {
 
             $grid->column('id')->sortable();
             $grid->column('status', 'Status')->switch();
@@ -57,7 +57,7 @@ class ArticleController extends AdminController
      */
     protected function form(): Form
     {
-        return Form::make(new Article(['categories']), function (Form $form) {
+        return Form::make(Article::with(['categories']), function (Form $form) {
             $form->defaultEditingChecked();
 
             $form->tab('Basic', function (Form $form) {

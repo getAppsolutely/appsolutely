@@ -46,13 +46,19 @@ Grid::resolving(function (Grid $grid) {
     */
 
     Admin::style('
-    td.grid__actions__ a {
+    tr td.grid__actions__ a {
         display: block;
+        margin-top: 5px;
         margin-bottom: 5px;
+        min-width: 80px !important;
     }
 
-    td.grid__actions__ a:hover span{
+    tr td.grid__actions__ a:hover span {
         text-decoration: underline;
+    }
+
+    tr td span.label {
+        display: inline-block;
     }
 ');
 

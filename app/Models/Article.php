@@ -44,8 +44,7 @@ class Article extends Model
 
     public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(ArticleCategory::class, 'article_category_pivots',
-            'article_id', 'article_category_id');
+        return $this->belongsToMany(ArticleCategory::class, 'article_category_pivots');
     }
 
     public function contentSummary(): string
