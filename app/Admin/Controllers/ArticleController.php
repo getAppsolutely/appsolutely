@@ -75,7 +75,7 @@ class ArticleController extends AdminController
                 $form->text('title')->required();
                 $form->text('slug');
 
-                $form->markdown('content')->required();
+                $form->markdown('content')->required()->options(['imageUploadURL' => upload_url(Article::class, $form->getKey(), 'content', csrf_token()), 'imageUpload' => false]);
                 $form->datetime('published_at');
                 $form->datetime('expired_at');
                 $form->switch('status');

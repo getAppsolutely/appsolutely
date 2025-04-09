@@ -154,7 +154,7 @@ class StorageService
 
         $class = request()->query('class');
         $key   = request()->query('id');
-        $type  = $uploader->upload_column ?? null;
+        $type  = $uploader->upload_column ?? request()->query('type');
 
         if (in_array($type, array_keys(AdminSetting::PATH_PATTERNS)) && $pattern = config(AdminSetting::PATH_PATTERNS[$type])) {
             $adminSetting = $this->adminSettingRepository->find('ghost::admin_config');

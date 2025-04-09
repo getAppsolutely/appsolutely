@@ -175,7 +175,7 @@ if (! function_exists('log_debug')) {
 }
 
 if (! function_exists('upload_url')) {
-    function upload_url(?string $class = null, $id = null): string
+    function upload_url(?string $class = null, ?string $id = null, ?string $type = null, ?string $token = null): string
     {
         $data = [];
         if (! empty($class)) {
@@ -183,6 +183,14 @@ if (! function_exists('upload_url')) {
         }
         if (! empty($id)) {
             $data['id'] = $id;
+        }
+
+        if (! empty($type)) {
+            $data['type'] = $type;
+        }
+
+        if (! empty($token)) {
+            $data['_token'] = $token;
         }
 
         return empty($data) ? admin_url('files') : admin_url('files') . '?' . http_build_query($data);

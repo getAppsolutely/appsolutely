@@ -160,7 +160,6 @@ class FileController extends AdminController
      */
     public function upload(Request $request): Response|JsonResponse|Redirector|RedirectResponse|Application|ResponseFactory|\Dcat\Admin\Http\JsonResponse
     {
-        $method = request()->method();
         if (request()->method() == 'GET') {
             return admin_redirect('files/manager');
         }
@@ -169,10 +168,15 @@ class FileController extends AdminController
             return $this->deleteFileAndResponse();
         }
         try {
+            $fromMarkdownEditor = false;
             // Get the uploaded file
             $uploadedFile = $this->file();
             if (! $uploadedFile) {
-                return admin_redirect('files/manager');
+                $uploadedFile       = $request->file('editormd-image-file');
+                $fromMarkdownEditor = true;
+                if (! $uploadedFile) {
+                    return admin_redirect('files/manager');
+                }
             }
 
             $uploader = $this->uploader();
@@ -182,7 +186,7 @@ class FileController extends AdminController
 
             $path = $storageService->assessable($file, $uploader);
 
-            return response()->json([
+            $result = [
                 'status' => true,
                 'data'   => [
                     'id'   => $path,
@@ -190,7 +194,12 @@ class FileController extends AdminController
                     'path' => $file->path,
                     'url'  => Storage::disk('s3')->url($file->full_path),
                 ],
-            ]);
+            ];
+            if ($fromMarkdownEditor) {
+                $result =  ['success' => 1, 'url' => $path];
+            }
+
+            return response()->json($result);
         } catch (\Exception $e) {
             log_error('Upload failed: ' . $e->getMessage());
 
