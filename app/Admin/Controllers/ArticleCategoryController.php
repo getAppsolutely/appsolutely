@@ -89,7 +89,7 @@ class ArticleCategoryController extends AdminController
 
                 $form->display('id');
 
-                $availableCategories = $this->articleCategoryRepository->getAvailableTreeList();
+                $availableCategories = $this->articleCategoryRepository->getActiveList();
                 $form->select('parent_id', 'Parent')->options($availableCategories);
 
                 $form->text('title')->required();

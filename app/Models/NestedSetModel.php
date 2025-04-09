@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Kalnoy\Nestedset\Collection;
 use Kalnoy\Nestedset\NodeTrait;
 
 class NestedSetModel extends Model
@@ -20,5 +21,21 @@ class NestedSetModel extends Model
     public function getRgtName(): string
     {
         return 'right';
+    }
+
+    public static function formatTreeArray(Collection $tree, $prefix = '|-- ')
+    {
+        $data     = [];
+        $traverse = function ($categories, $prefix = '') use (&$traverse, &$data) {
+            foreach ($categories as $category) {
+                $item = [(string) $category->id => $prefix . ' ' . $category->title];
+                $data = $data + $item;
+                $traverse($category->children, str_repeat('&nbsp;', 6) . $prefix);
+            }
+        };
+
+        $traverse($tree, $prefix);
+
+        return $data;
     }
 }

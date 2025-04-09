@@ -12,7 +12,7 @@ class FileRepository extends BaseRepository
         $this->model = $model;
     }
 
-    public function findByAssessable($filePath): Assessable
+    public function findByAssessable($filePath): ?Assessable
     {
         return Assessable::query()->with(['file'])->whereFilePath($filePath)->first();
     }

@@ -63,7 +63,7 @@ class ArticleController extends AdminController
             $form->tab('Basic', function (Form $form) {
                 $form->display('id');
 
-                $availableCategories = $this->articleCategoryRepository->getAvailableTreeList();
+                $availableCategories = $this->articleCategoryRepository->getActiveList();
                 $form->multipleSelect('categories', 'Categories')->required()->options($availableCategories)
                     ->customFormat(function ($v) {
                         if (! $v) {

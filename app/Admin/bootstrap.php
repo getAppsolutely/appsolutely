@@ -59,6 +59,7 @@ Grid::resolving(function (Grid $grid) {
 
     tr td span.label {
         display: inline-block;
+        padding: 6px;
     }
 ');
 
