@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 
 trait Sluggable
 {
-    protected static function bootSluggable()
+    protected static function bootSluggable(): void
     {
         static::saving(function ($model) {
             // If slug is empty, generate from title

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\HasFilesOfType;
+use App\Models\Traits\Publishable;
 use App\Models\Traits\Sluggable;
 use Dcat\Admin\Traits\HasDateTimeFormatter;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -17,6 +18,7 @@ class Article extends Model
 
     use HasDateTimeFormatter;
     use HasFilesOfType;
+    use Publishable;
     use Sluggable;
     use SoftDeletes;
 

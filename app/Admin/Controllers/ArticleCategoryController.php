@@ -109,7 +109,7 @@ class ArticleCategoryController extends AdminController
                 $form->display('created_at');
                 $form->display('updated_at');
 
-                $form->showFooter();
+                // $form->showFooter();
             });
             $form->saving(function (Form $form) {
                 /** @var ArticleCategory $model */

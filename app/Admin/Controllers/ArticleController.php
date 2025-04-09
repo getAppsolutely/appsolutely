@@ -37,7 +37,6 @@ class ArticleController extends AdminController
                 return TimeHelper::format($timestamp);
             })->sortable();
             $grid->column('created_at');
-            $grid->column('updated_at');
 
             $grid->column('sort')->editable();
 
