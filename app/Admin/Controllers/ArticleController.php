@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Forms\Fields\Markdown;
 use App\Helpers\TimeHelper;
 use App\Models\Article;
 use App\Repositories\ArticleCategoryRepository;
@@ -75,7 +76,7 @@ class ArticleController extends AdminController
                 $form->text('title')->required();
                 $form->text('slug');
 
-                $form->markdown('content')->required()->options(['imageUploadURL' => upload_url(Article::class, $form->getKey(), 'content', csrf_token()), 'imageUpload' => false]);
+                $form->markdown('content')->required()->options(Markdown::options())->script(Markdown::script());
                 $form->datetime('published_at');
                 $form->datetime('expired_at');
                 $form->switch('status');

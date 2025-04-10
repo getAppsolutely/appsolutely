@@ -64,11 +64,11 @@ Grid::resolving(function (Grid $grid) {
 ');
 
     Admin::script('
-$(document).ready(function() {
-  if ($("table.table.data-table tr td i.fa.fa-angle-right").length > 0) {
-    $("table.table.data-table tr td i.fa.fa-angle-right").click();
-  }
-});
+    $(document).ready(function() {
+        if ($("table.table.data-table tr td i.fa.fa-angle-right").length > 0) {
+            $("table.table.data-table tr td i.fa.fa-angle-right").click();
+        }
+    });
 ');
 
 });
