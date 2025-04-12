@@ -15,7 +15,7 @@ Route::group([
 ], function () {
     Route::get('/', 'HomeController@index');
 
-    // Standard resource routes for files
+    Route::get('files/library', [FileController::class, 'library'])->name('files.library');
     Route::resource('files/manager', FileController::class)->names('files.manager');
 
     Route::resource('article-categories', ArticleCategoryController::class)->names('article_categories');

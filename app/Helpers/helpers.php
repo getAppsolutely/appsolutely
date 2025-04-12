@@ -196,3 +196,19 @@ if (! function_exists('upload_url')) {
         return empty($data) ? admin_url('files') : admin_url('files') . '?' . http_build_query($data);
     }
 }
+
+if (! function_exists('app_url')) {
+    /**
+     * Generate a URL using configured app URL or fallback to Laravel's url() helper
+     */
+    function app_url(string $uri = ''): string
+    {
+        $baseUrl = config('appsolutely.url');
+
+        if ($baseUrl) {
+            return rtrim($baseUrl, '/') . '/' . ltrim($uri, '/');
+        }
+
+        return url($uri);
+    }
+}

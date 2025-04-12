@@ -7,6 +7,8 @@ use App\Models\File;
 use App\Models\Model;
 use App\Repositories\AdminSettingRepository;
 use App\Repositories\FileRepository;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -175,5 +177,10 @@ class StorageService
         }
 
         return $filePath;
+    }
+
+    public function getLibrary(Request $request): LengthAwarePaginator
+    {
+        return $this->fileRepository->getLibrary($request);
     }
 }

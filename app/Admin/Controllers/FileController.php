@@ -25,6 +25,13 @@ class FileController extends AdminController
 {
     use HasUploadedFile;
 
+    protected StorageService $storageService;
+
+    public function __construct(StorageService $storageService)
+    {
+        $this->storageService = $storageService;
+    }
+
     /**
      * Make a grid builder.
      */
@@ -207,5 +214,18 @@ class FileController extends AdminController
                 'status' => false,
             ]);
         }
+    }
+
+    /**
+     * Get library
+     */
+    public function library(Request $request): JsonResponse
+    {
+        $files = $this->storageService->getLibrary($request);
+
+        return response()->json([
+            'status' => true,
+            'data'   => $files,
+        ]);
     }
 }
