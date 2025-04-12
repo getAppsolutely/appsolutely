@@ -59,12 +59,12 @@ class FileRepository extends BaseRepository
         $page     = max(1, intval($request->get('page', 1)));
         $pageSize = max(1, min(100, intval($request->get('page_size', 20)))); // Between 1 and 100
 
-        // Add full_path to the response
         $paginator = $query->paginate($pageSize, ['*'], 'page', $page);
 
         // Transform the items to include full_path with app URL
         $paginator->through(function ($file) {
-            $file->url = app_url('uploads/' . $file->full_path);
+            $file->full_path = $file->getAttribute('full_path');
+            $file->url       = app_url('uploads/' . $file->full_path);
 
             return $file;
         });

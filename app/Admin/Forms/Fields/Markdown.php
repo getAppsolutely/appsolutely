@@ -151,7 +151,7 @@ class Markdown
                 data.data.forEach(function(file) {
                     var img = $('<div class="image-item" style="position: relative;" role="listitem" tabindex="0" aria-label="' + file.original_filename + '">' +
                         '<div class="image-preview" style="height: ' + IMAGE_PREVIEW_SIZE.height + 'px; position: relative;">' +
-                        '<img src="' + file.url + '" alt="' + file.original_filename + '" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer;" loading="lazy">' +
+                        '<img src="' + file.url + '" alt="' + file.url + '" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer;" loading="lazy">' +
                         '<div class="image-overlay" style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5);">' +
                         '<i class="fa fa-check" style="color: white; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" aria-hidden="true"></i>' +
                         '</div>' +
@@ -162,7 +162,7 @@ class Markdown
                         '</div>');
 
                     img.data('url', file.url);
-                    img.data('filename', file.original_filename);
+                    img.data('full_path', file.full_path);
 
                     const toggleSelection = () => {
                         const isSelected = img.hasClass('selected');
@@ -251,7 +251,13 @@ class Markdown
 
             dialog.find('.insert-images').click(function() {
                 var markdown = Array.from(selectedImages)
-                    .map(url => '![image](' + url + ')')
+                    .map(url => {
+                        const item = dialog.find('.image-item').filter(function() {
+                            return $(this).data('url') === url;
+                        });
+                        const fullPath = item.data('full_path');
+                        return '![' + fullPath + '](' + url + ')';
+                    })
                     .join('\\n') + '\\n';
 
                 if (markdown) {
