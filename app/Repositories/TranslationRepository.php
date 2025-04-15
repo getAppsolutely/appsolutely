@@ -18,7 +18,7 @@ class TranslationRepository extends BaseRepository
      */
     public function findByOriginalText(string $originalText, string $locale): ?Translation
     {
-        return Translation::where('original_text', $originalText)
+        return $this->model->where('original_text', $originalText)
             ->where('locale', $locale)
             ->first();
     }
@@ -28,7 +28,7 @@ class TranslationRepository extends BaseRepository
      */
     public function findByLocale(string $locale): Collection
     {
-        return Translation::where('locale', $locale)->get();
+        return $this->model->where('locale', $locale)->get();
     }
 
     /**
@@ -36,7 +36,7 @@ class TranslationRepository extends BaseRepository
      */
     public function findByType(string $type, string $locale): Collection
     {
-        return Translation::where('type', $type)
+        return $this->model->where('type', $type)
             ->where('locale', $locale)
             ->get();
     }
@@ -60,7 +60,7 @@ class TranslationRepository extends BaseRepository
      */
     public function getMissingTranslations(?string $locale = null): array
     {
-        $query = Translation::whereNull('translated_text')
+        $query = $this->model->whereNull('translated_text')
             ->orWhere('translated_text', '');
 
         if ($locale !== null) {
