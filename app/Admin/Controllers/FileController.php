@@ -175,23 +175,19 @@ class FileController extends AdminController
             return $this->deleteFileAndResponse();
         }
         try {
-            $fromMarkdownEditor = false;
-            // Get the uploaded file
             $uploadedFile = $this->file();
             if (! $uploadedFile) {
-                $uploadedFile       = $request->file('editormd-image-file');
-                $fromMarkdownEditor = true;
+                $uploadedFile       = $request->file('file');
                 if (! $uploadedFile) {
                     return admin_redirect('files/manager');
                 }
             }
 
-            $uploader = $this->uploader();
             // Use the StorageService to store the file
             $storageService = app(StorageService::class);
             $file           = $storageService->store($uploadedFile);
 
-            $path = $storageService->assessable($file, $uploader);
+            $path = $storageService->assessable($file);
 
             $result = [
                 'status' => true,
@@ -202,9 +198,6 @@ class FileController extends AdminController
                     'url'  => Storage::disk('s3')->url($file->full_path),
                 ],
             ];
-            if ($fromMarkdownEditor) {
-                $result =  ['success' => 1, 'url' => $path];
-            }
 
             return response()->json($result);
         } catch (\Exception $e) {

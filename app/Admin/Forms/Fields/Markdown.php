@@ -85,9 +85,27 @@ class Markdown
                     '</div>' +
                     '<div class="modal-body">' +
                     '<div class="form-group mb-3">' +
-                    '<input type="text" class="form-control search-input" placeholder="Search images by name..." aria-label="Search images">' +
+                    '<div class="d-flex justify-content-between align-items-center">' +
+                    '<input type="text" class="form-control search-input mr-2" placeholder="Search images by name..." aria-label="Search images">' +
+                    '<label class="btn btn-primary mb-0" style="white-space: nowrap;">' +
+                    '<i class="fa fa-upload"></i> Upload Images' +
+                    '<input type="file" multiple accept="image/*" class="d-none" id="image-upload-input">' +
+                    '</label>' +
+                    '</div>' +
                     '</div>' +
                     '<div class="alert alert-danger error-container" style="display: none;" role="alert"></div>' +
+                    '<div class="upload-progress-container" style="display: none;">' +
+                    '<div class="overall-progress mb-3">' +
+                    '<div class="d-flex justify-content-between mb-1">' +
+                    '<span>Overall Progress:</span>' +
+                    '<span class="overall-status">0/0 files</span>' +
+                    '</div>' +
+                    '<div class="progress">' +
+                    '<div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="individual-progress"></div>' +
+                    '</div>' +
                     '<div class="image-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(' + IMAGE_PREVIEW_SIZE.width + 'px, 1fr)); gap: 10px; min-height: 400px;" role="list"></div>' +
                     '<div class="text-center loading-indicator" style="display: none; padding: 20px;">' +
                     '<i class="fa fa-spinner fa-spin fa-2x" aria-hidden="true"></i>' +
@@ -225,6 +243,114 @@ class Markdown
             }
 
             // Event handlers
+            dialog.find('#image-upload-input').on('change', async function(e) {
+                const files = Array.from(e.target.files);
+                if (!files.length) return;
+
+                const progressContainer = dialog.find('.upload-progress-container');
+                const overallProgress = dialog.find('.overall-progress .progress-bar');
+                const overallStatus = dialog.find('.overall-status');
+                const individualProgress = dialog.find('.individual-progress');
+
+                progressContainer.show();
+                individualProgress.empty();
+
+                let completedFiles = 0;
+                const totalFiles = files.length;
+
+                const updateOverallProgress = () => {
+                    const percentage = (completedFiles / totalFiles) * 100;
+                    overallProgress.css('width', percentage + '%').attr('aria-valuenow', percentage);
+                    overallStatus.text(completedFiles + '/' + totalFiles + ' files');
+                };
+
+                const createProgressItem = (file) => {
+                    const item = $('<div class="mb-2">' +
+                        '<div class="d-flex justify-content-between mb-1">' +
+                        '<small class="text-truncate" style="max-width: 200px;" title="' + file.name + '">' + file.name + '</small>' +
+                        '<small class="status">Waiting...</small>' +
+                        '</div>' +
+                        '<div class="progress" style="height: 4px;">' +
+                        '<div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>' +
+                        '</div>' +
+                        '</div>');
+                    individualProgress.append(item);
+                    return item;
+                };
+
+                const uploadFile = async (file) => {
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    const progressItem = createProgressItem(file);
+                    const progressBar = progressItem.find('.progress-bar');
+                    const statusText = progressItem.find('.status');
+
+                    try {
+                        await new Promise((resolve, reject) => {
+                            $.ajax({
+                                url: '/dash/files',
+                                method: 'POST',
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+                                xhr: function() {
+                                    const xhr = new window.XMLHttpRequest();
+                                    xhr.upload.addEventListener('progress', function(e) {
+                                        if (e.lengthComputable) {
+                                            const percentComplete = (e.loaded / e.total) * 100;
+                                            progressBar.css('width', percentComplete + '%')
+                                                     .attr('aria-valuenow', percentComplete);
+                                            statusText.text(Math.round(percentComplete) + '%');
+                                        }
+                                    }, false);
+                                    return xhr;
+                                },
+                                success: function(response) {
+                                    statusText.html('<span class="text-success">Completed</span>');
+                                    progressBar.addClass('bg-success');
+                                    resolve();
+                                },
+                                error: function(xhr, status, error) {
+                                    const errorMessage = xhr.responseJSON?.message || error || 'Unknown error';
+                                    statusText.html('<span class="text-danger">Failed</span>');
+                                    progressBar.addClass('bg-danger');
+                                    progressItem.append('<small class="text-danger d-block">' + errorMessage + '</small>');
+                                    reject(new Error(errorMessage));
+                                }
+                            });
+                        });
+                    } catch (error) {
+                        console.error('Error uploading file:', file.name, error);
+                    } finally {
+                        completedFiles++;
+                        updateOverallProgress();
+                    }
+                };
+
+                // Process files with concurrency limit
+                const concurrencyLimit = 3;
+                const chunks = [];
+                for (let i = 0; i < files.length; i += concurrencyLimit) {
+                    chunks.push(files.slice(i, i + concurrencyLimit));
+                }
+
+                for (const chunk of chunks) {
+                    await Promise.all(chunk.map(file => uploadFile(file)));
+                }
+
+                // All uploads completed
+                setTimeout(() => {
+                    loadImages(1, dialog.find('.search-input').val().trim());
+                    setTimeout(() => {
+                        progressContainer.hide();
+                    }, 1500);
+                }, 500);
+
+                // Clear the input to allow uploading the same files again
+                $(this).val('');
+            });
+
             dialog.find('.search-input').on('input', function() {
                 var searchValue = $(this).val().trim();
 

@@ -150,13 +150,12 @@ class StorageService
         }
     }
 
-    public function assessable(File $file, $uploader)
+    public function assessable(File $file): false|string|null
     {
         $filePath = null;
-
-        $class = request()->query('class');
-        $key   = request()->query('id');
-        $type  = $uploader->upload_column ?? request()->query('type');
+        $class    = request()->query('class');
+        $key      = request()->query('id');
+        $type     = request()->get('upload_column') ?? request()->query('type');
 
         if (in_array($type, array_keys(AdminSetting::PATH_PATTERNS)) && $pattern = config(AdminSetting::PATH_PATTERNS[$type])) {
             $adminSetting = $this->adminSettingRepository->find('ghost::admin_config');
