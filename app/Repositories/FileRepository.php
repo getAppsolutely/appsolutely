@@ -10,9 +10,9 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class FileRepository extends BaseRepository
 {
-    public function __construct(File $model)
+    public function model(): string
     {
-        $this->model = $model;
+        return File::class;
     }
 
     public function findByAssessable($filePath): ?Assessable

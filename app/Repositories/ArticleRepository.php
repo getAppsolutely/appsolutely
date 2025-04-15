@@ -6,8 +6,8 @@ use App\Models\Article;
 
 class ArticleRepository extends BaseRepository
 {
-    public function __construct(Article $model)
+    public function model(): string
     {
-        $this->model = $model;
+        return Article::class;
     }
 }

@@ -9,8 +9,8 @@ class ArticleCategoryRepository extends BaseRepository
 {
     use ActiveTreeList;
 
-    public function __construct(ArticleCategory $model)
+    public function model(): string
     {
-        $this->model = $model;
+        return ArticleCategory::class;
     }
 }

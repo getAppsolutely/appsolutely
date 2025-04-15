@@ -6,8 +6,8 @@ use App\Models\AdminSetting;
 
 class AdminSettingRepository extends BaseRepository
 {
-    public function __construct(AdminSetting $model)
+    public function model(): string
     {
-        $this->model = $model;
+        return AdminSetting::class;
     }
 }

@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 class TranslationRepository extends BaseRepository
 {
-    public function __construct(Translation $model)
+    public function model(): string
     {
-        $this->model = $model;
+        return Translation::class;
     }
 
     /**

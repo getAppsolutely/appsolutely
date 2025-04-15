@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Builder;
 
 class UserRepository extends BaseRepository
 {
-    public function __construct(User $model)
+    public function model(): string
     {
-        $this->model = $model;
+        return User::class;
     }
 
     /**
