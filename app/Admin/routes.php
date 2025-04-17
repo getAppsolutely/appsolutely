@@ -1,5 +1,6 @@
 <?php
 
+use App\Admin\Controllers\Api\FileController as FileApiController;
 use App\Admin\Controllers\ArticleCategoryController;
 use App\Admin\Controllers\ArticleController;
 use App\Admin\Controllers\FileController;
@@ -15,7 +16,7 @@ Route::group([
 ], function () {
     Route::get('/', 'HomeController@index');
 
-    Route::get('files/library', [FileController::class, 'library'])->name('files.library');
+    Route::get('files/library', [FileApiController::class, 'library'])->name('files.library');
     Route::resource('files/manager', FileController::class)->names('files.manager');
 
     Route::resource('article-categories', ArticleCategoryController::class)->names('article_categories');

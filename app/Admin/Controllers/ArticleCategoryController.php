@@ -7,14 +7,13 @@ use App\Models\ArticleCategory;
 use App\Repositories\ArticleCategoryRepository;
 use Dcat\Admin\Form\BlockForm;
 use Dcat\Admin\Grid;
-use Dcat\Admin\Http\Controllers\AdminController;
 use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Layout\Row;
 use Dcat\Admin\Show;
 use Dcat\Admin\Tree;
 use Illuminate\Support\Facades\Request;
 
-class ArticleCategoryController extends AdminController
+class ArticleCategoryController extends BaseAdminController
 {
     public function __construct(protected ArticleCategoryRepository $articleCategoryRepository) {}
 

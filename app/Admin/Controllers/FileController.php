@@ -6,32 +6,12 @@ use App\Helpers\DashboardHelper;
 use App\Helpers\FileHelper;
 use App\Helpers\TimeHelper;
 use App\Models\File;
-use App\Services\StorageService;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
-use Dcat\Admin\Http\Controllers\AdminController;
 use Dcat\Admin\Show;
-use Dcat\Admin\Traits\HasUploadedFile;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Routing\Redirector;
-use Illuminate\Support\Facades\Storage;
 
-class FileController extends AdminController
+class FileController extends BaseAdminController
 {
-    use HasUploadedFile;
-
-    protected StorageService $storageService;
-
-    public function __construct(StorageService $storageService)
-    {
-        $this->storageService = $storageService;
-    }
-
     /**
      * Make a grid builder.
      */
@@ -160,65 +140,5 @@ class FileController extends AdminController
             }
 
         });
-    }
-
-    /**
-     * Handle file upload.
-     */
-    public function upload(Request $request): Response|JsonResponse|Redirector|RedirectResponse|Application|ResponseFactory|\Dcat\Admin\Http\JsonResponse
-    {
-        if (request()->method() == 'GET') {
-            return admin_redirect('files/manager');
-        }
-        if ($this->isDeleteRequest()) {
-            // 删除文件并响应
-            return $this->deleteFileAndResponse();
-        }
-        try {
-            $uploadedFile = $this->file();
-            if (! $uploadedFile) {
-                $uploadedFile       = $request->file('file');
-                if (! $uploadedFile) {
-                    return admin_redirect('files/manager');
-                }
-            }
-
-            // Use the StorageService to store the file
-            $storageService = app(StorageService::class);
-            $file           = $storageService->store($uploadedFile);
-
-            $path = $storageService->assessable($file);
-
-            $result = [
-                'status' => true,
-                'data'   => [
-                    'id'   => $path,
-                    'name' => $file->filename,
-                    'path' => $file->path,
-                    'url'  => Storage::disk('s3')->url($file->full_path),
-                ],
-            ];
-
-            return response()->json($result);
-        } catch (\Exception $e) {
-            log_error('Upload failed: ' . $e->getMessage());
-
-            return response()->json([
-                'status' => false,
-            ]);
-        }
-    }
-
-    /**
-     * Get library
-     */
-    public function library(Request $request): JsonResponse
-    {
-        $files = $this->storageService->getLibrary($request);
-
-        return response()->json([
-            'status' => true,
-            'data'   => $files,
-        ]);
     }
 }
