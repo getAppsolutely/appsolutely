@@ -9,7 +9,7 @@ use App\Repositories\ArticleCategoryRepository;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 
-class ArticleController extends BaseAdminController
+class ArticleController extends AdminBaseController
 {
     protected ArticleCategoryRepository $articleCategoryRepository;
 

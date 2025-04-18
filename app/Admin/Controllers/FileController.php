@@ -10,7 +10,7 @@ use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
 
-class FileController extends BaseAdminController
+class FileController extends AdminBaseController
 {
     /**
      * Make a grid builder.

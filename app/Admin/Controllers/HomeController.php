@@ -8,7 +8,7 @@ use Dcat\Admin\Layout\Column;
 use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Layout\Row;
 
-class HomeController extends BaseAdminController
+class HomeController extends AdminBaseController
 {
     public function index(Content $content)
     {
