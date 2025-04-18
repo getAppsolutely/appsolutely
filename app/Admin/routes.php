@@ -16,9 +16,11 @@ Route::group([
 ], function () {
     Route::get('/', 'HomeController@index');
 
-    Route::get('files/library', [FileApiController::class, 'library'])->name('files.library');
     Route::resource('files/manager', FileController::class)->names('files.manager');
-
     Route::resource('article-categories', ArticleCategoryController::class)->names('article_categories');
     Route::resource('articles', ArticleController::class)->names('articles');
+
+    Route::prefix('api/')->name('api.')->group(function () {
+        Route::get('files/library', [FileApiController::class, 'library'])->name('files.library');
+    });
 });

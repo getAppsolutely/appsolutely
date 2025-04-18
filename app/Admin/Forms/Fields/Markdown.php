@@ -4,9 +4,10 @@ namespace App\Admin\Forms\Fields;
 
 class Markdown
 {
-    public static function script()
+    public static function script(): string
     {
-        $imageLibraryUrl = admin_url('files/library');
+        $imageLibraryUrl = route('dcat.admin.api.files.library');
+        $uploadUrl       = route('dcat.admin.api.files.upload');
 
         return <<<JS
     $(function () {
@@ -289,7 +290,7 @@ class Markdown
                     try {
                         await new Promise((resolve, reject) => {
                             $.ajax({
-                                url: '/dash/files',
+                                url: '$uploadUrl',
                                 method: 'POST',
                                 data: formData,
                                 processData: false,
@@ -421,7 +422,7 @@ class Markdown
 JS;
     }
 
-    public static function options()
+    public static function options(): array
     {
         return [
             'imageUpload'  => false,
