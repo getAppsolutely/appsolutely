@@ -15,6 +15,14 @@ class FileRepository extends BaseRepository
         return File::class;
     }
 
+    /**
+     * Find a file by its filename
+     */
+    public function findByFilename(string $filename): ?File
+    {
+        return $this->model->newQuery()->where('filename', $filename)->first();
+    }
+
     public function findByAssessable($filePath): ?Assessable
     {
         return Assessable::query()->with(['file'])->whereFilePath($filePath)->first();

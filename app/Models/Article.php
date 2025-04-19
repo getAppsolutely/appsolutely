@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\HasFilesOfType;
+use App\Models\Traits\HasMarkdownContent;
 use App\Models\Traits\Publishable;
 use App\Models\Traits\Sluggable;
 use Dcat\Admin\Traits\HasDateTimeFormatter;
@@ -18,6 +19,7 @@ class Article extends Model
 
     use HasDateTimeFormatter;
     use HasFilesOfType;
+    use HasMarkdownContent;
     use Publishable;
     use Sluggable;
     use SoftDeletes;

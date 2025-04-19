@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use App\Services\TranslationService;
 use Illuminate\Support\Facades\Log;
+use League\CommonMark\Environment\Environment;
+use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 
 if (! function_exists('appsolutely')) {
     /**
@@ -210,5 +212,48 @@ if (! function_exists('app_url')) {
         }
 
         return url($uri);
+    }
+}
+
+if (! function_exists('parse_markdown_images')) {
+    /**
+     * Parse markdown content and extract image attributes
+     *
+     * @param  string  $markdown  The markdown content to parse
+     * @return array Array of image attributes (url, alt, title)
+     */
+    function parse_markdown_images($markdown)
+    {
+        // Create a new environment
+        $environment = new Environment([
+            'html_input'         => 'allow',
+            'allow_unsafe_links' => false,
+        ]);
+        $environment->addExtension(new CommonMarkCoreExtension());
+
+        // Create the converter
+        $converter = new \League\CommonMark\MarkdownConverter($environment);
+
+        // Convert markdown to HTML
+        $html = $converter->convert($markdown)->getContent();
+
+        // Use DOMDocument to parse the HTML and extract image attributes
+        $dom = new \DOMDocument();
+        @$dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+        $images = [];
+        foreach ($dom->getElementsByTagName('img') as $img) {
+            $attributes = [];
+            foreach ($img->attributes as $attr) {
+                $attributes[$attr->nodeName] = $attr->nodeValue;
+            }
+            $images[] = [
+                'url'   => $attributes['src'] ?? '',
+                'alt'   => $attributes['alt'] ?? '',
+                'title' => $attributes['title'] ?? '',
+            ];
+        }
+
+        return $images;
     }
 }
