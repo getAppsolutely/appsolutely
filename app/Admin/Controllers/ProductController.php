@@ -61,9 +61,9 @@ class ProductController extends AdminBaseController
         return $content->header('Edit Product')
             ->description('Edit product and manage SKUs')
             ->body(Tab::make()
-                ->add('Basic', $this->basicForm()->edit($id))
-                ->add('SKUs', $this->skusGrid($id))
-                ->add('Optional', $this->optionalForm()->edit($id))
+                ->add('Basic', $this->basicForm()->edit($id), true, 'basic')
+                ->add('SKUs', $this->skusGrid($id), false, 'sku')
+                ->add('Optional', $this->optionalForm()->edit($id), false, 'optional')
             );
     }
 
@@ -91,6 +91,9 @@ class ProductController extends AdminBaseController
             $form->datetime('published_at');
             $form->datetime('expired_at');
             $form->switch('status');
+
+            $form->disableViewButton();
+            $form->disableViewCheck();
         });
     }
 
@@ -123,6 +126,9 @@ class ProductController extends AdminBaseController
 
             $form->display('created_at');
             $form->display('updated_at');
+
+            $form->disableViewButton();
+            $form->disableViewCheck();
         });
     }
 

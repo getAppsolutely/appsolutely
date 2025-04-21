@@ -9,7 +9,6 @@ use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Show;
-use Illuminate\Http\Request;
 
 class ProductSkuController extends AdminBaseController
 {
@@ -19,7 +18,11 @@ class ProductSkuController extends AdminBaseController
             return $content->body($this->grid());
         }
 
-        return admin_redirect(admin_route('products.edit', ['product' => session('previous.product_id')]));
+        if (session('previous.product_id')) {
+            return admin_redirect(admin_route('products.edit', ['product' => session('previous.product_id')]) . '#tab_sku');
+        }
+
+        return admin_redirect(admin_route('products.index'));
     }
 
     protected function grid(): Grid
@@ -65,8 +68,7 @@ class ProductSkuController extends AdminBaseController
 
     protected function form(): Form
     {
-        // dd(request()->route()->getName());
-        return Form::make(new ProductSku(), function (Form $form) {
+        return Form::make(ProductSku::with(['product']), function (Form $form) {
             // If creating new SKU, get product_id from query string
             if ($form->isCreating()) {
                 $productId = request('product_id');
@@ -97,11 +99,9 @@ class ProductSkuController extends AdminBaseController
             $form->display('created_at');
             $form->display('updated_at');
 
-            // After saved, redirect back to product SKUs list
-            $form->saved(function (Form $form) {
-                $productId = $form->model()->product_id ?? request('product_id');
-                session()->flash('previous.product_id', $productId);
-            });
+            $form->disableViewButton();
+            $productId = $form->model()->product_id ?? request('product_id');
+            session()->flash('previous.product_id', $productId);
         });
     }
 }
