@@ -36,6 +36,17 @@ class AdminMenuSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
+        // Add Product Categories menu item
+        DB::table('admin_menu')->insert([
+            'parent_id'  => 0,
+            'order'      => 10,
+            'title'      => 'Product Categories',
+            'icon'       => 'fa-folder',
+            'uri'        => 'product-categories',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
         // Add Files menu item
         DB::table('admin_menu')->insert([
             'parent_id'  => 0,

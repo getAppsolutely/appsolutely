@@ -11,7 +11,7 @@ use Dcat\Admin\Traits\ModelTree;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ArticleCategory extends NestedSetModel
+class ProductCategory extends NestedSetModel
 {
     use HasDateTimeFormatter;
     use HasFilesOfType;
@@ -40,8 +40,8 @@ class ArticleCategory extends NestedSetModel
         'expired_at'   => 'datetime',
     ];
 
-    public function articles(): BelongsToMany
+    public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Article::class, 'article_category_pivots');
+        return $this->belongsToMany(Product::class, 'product_category_pivots');
     }
 }

@@ -21,7 +21,7 @@ trait HasMarkdownContent
         static::updated(function ($model) {
             foreach ($model->getMarkdownFields() as $field) {
                 if ($model->isDirty($field)) {
-                    $this->replaceWithAssessables($model, $field);
+                    $model->replaceWithAssessables($model, $field);
                 }
             }
         });
