@@ -18,7 +18,7 @@ return new class() extends Migration
             $table->string('extension', 50);
             $table->string('mime_type');
             $table->string('path');
-            $table->bigInteger('size');
+            $table->unsignedBigInteger('size');
             $table->string('hash');
             $table->timestamps();
             $table->softDeletes();

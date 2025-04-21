@@ -19,7 +19,7 @@ return new class() extends Migration
             $table->text('translated_text')->nullable();
             $table->string('translator')->nullable(); // Options: Google, DeepSeek, OpenAI, Manual
             $table->text('call_stack')->nullable();
-            $table->integer('used_count')->default(0);
+            $table->unsignedBigInteger('used_count')->default(0);
             $table->dateTimeTz('last_used')->useCurrent();
             $table->timestamps();
 
