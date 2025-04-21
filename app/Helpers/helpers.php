@@ -217,13 +217,13 @@ if (! function_exists('app_url')) {
 
 if (! function_exists('parse_markdown_images')) {
     /**
-     * Parse markdown content and extract image attributes
-     *
-     * @param  string  $markdown  The markdown content to parse
-     * @return array Array of image attributes (url, alt, title)
+     * @throws \League\CommonMark\Exception\CommonMarkException
      */
-    function parse_markdown_images($markdown)
+    function parse_markdown_images(?string $markdown): array
     {
+        if (empty($markdown)) {
+            return [];
+        }
         // Create a new environment
         $environment = new Environment([
             'html_input'         => 'allow',

@@ -14,7 +14,7 @@ trait HasMarkdownContent
     {
         static::created(function ($model) {
             foreach ($model->getMarkdownFields() as $field) {
-                $this->replaceWithAssessables($model, $field);
+                $model->replaceWithAssessables($model, $field);
             }
         });
 
