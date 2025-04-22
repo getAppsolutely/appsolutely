@@ -9,9 +9,7 @@ use App\Models\ProductSku;
 use App\Repositories\ProductCategoryRepository;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
-use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Show;
-use Dcat\Admin\Widgets\Tab;
 
 class ProductController extends AdminBaseController
 {
@@ -59,105 +57,103 @@ class ProductController extends AdminBaseController
         });
     }
 
-    public function edit($id, Content $content): Content
-    {
-        return $content->header('Edit Product')
-            ->description('Edit product and manage SKUs')
-            ->body(Tab::make()
-                ->add('Basic', $this->basicForm()->edit($id), true, 'basic')
-                ->add('SKUs', $this->skusGrid($id), false, 'sku')
-                ->add('Optional', $this->optionalForm()->edit($id), false, 'optional')
-            );
-    }
-
-    protected function basicForm(): Form
-    {
-        return Form::make(Product::with(['categories']), function (Form $form) {
-            $form->display('id');
-
-            $form->radio('type')->options(Product::getProductTypes())
-                ->default(Product::TYPE_PHYSICAL_PRODUCT)
-                ->when(Product::TYPE_PHYSICAL_PRODUCT, function (Form $form) {
-                    $shipmentMethods = associative_array(Product::getShipmentMethodForPhysicalProduct());
-                    $form->multipleSelect('shipment_methods')
-                        ->options($shipmentMethods)
-                        ->default(array_shift($shipmentMethods));
-                })
-                ->when(Product::TYPE_AUTO_DELIVERABLE_VIRTUAL_PRODUCT, function (Form $form) {
-                    $shipmentMethods = associative_array(Product::getShipmentMethodForAutoVirtualProduct());
-                    $form->multipleSelect('shipment_methods')
-                        ->options($shipmentMethods)
-                        ->default(array_shift($shipmentMethods));
-                })
-                ->when(Product::TYPE_MANUAL_DELIVERABLE_VIRTUAL_PRODUCT, function (Form $form) {
-                    $shipmentMethods = associative_array(Product::getShipmentMethodForManualVirtualProduct());
-                    $form->multipleSelect('shipment_methods')
-                        ->options($shipmentMethods)
-                        ->default(array_shift($shipmentMethods));
-                })->required();
-
-            $availableCategories = $this->productCategoryRepository->getActiveList();
-            $form->multipleSelect('categories', 'Categories')
-                ->options($availableCategories)
-                ->customFormat(function ($v) {
-                    if (! $v) {
-                        return [];
-                    }
-
-                    return array_column($v, 'id');
-                });
-
-            $form->text('title')->required();
-            $form->text('slug');
-            $form->markdown('content')->options(Markdown::options())->script(Markdown::script());
-
-            $form->datetime('published_at');
-            $form->datetime('expired_at');
-            $form->switch('status');
-
-            $form->disableViewButton();
-            $form->disableViewCheck();
-        });
-    }
-
-    protected function optionalForm(): Form
-    {
-        return Form::make(Product::with(['categories']), function (Form $form) {
-            $form->image('cover')->autoUpload()->url(upload_url(Product::class, $form->getKey()));
-            $form->textarea('keywords')->rows(2);
-            $form->textarea('description')->rows(3);
-
-            $form->keyValue('setting')->default([])
-                ->setKeyLabel('Key')
-                ->setValueLabel('Value')
-                ->saveAsJson();
-
-            $form->multipleSelect('payment_methods');
-            // ->options($this->paymentRepository->list()->pluck('title', 'id'));
-
-            $form->table('additional_columns', function (Form\NestedForm $table) {
-                $table->text('field');
-                $table->text('name');
-                $table->select('input_type')->options([
-                    'input' => 'Input',
-                    'text'  => 'Text',
-                ]);
-                $table->switch('required')->default(true);
-            })->saving(function ($value) {
-                return json_encode($value);
-            });
-
-            $form->display('created_at');
-            $form->display('updated_at');
-
-            $form->disableViewButton();
-            $form->disableViewCheck();
-        });
-    }
-
     protected function form(): Form
     {
-        return $this->basicForm();
+        return Form::make(Product::with(['categories']), function (Form $form) {
+            $form->defaultEditingChecked();
+
+            $form->tab('Basic', function (Form $form) {
+                $this->basicForm($form);
+            }, true, 'basic')->tab('SKUs', function (Form $form) {
+                $form->html($this->skusGrid($form->getKey()));
+            }, false, 'skus')->tab('Optional', function (Form $form) {
+                $this->optionalForm($form);
+            }, false, 'optional');
+        });
+    }
+
+    protected function basicForm(Form $form): Form
+    {
+        $form->display('id');
+        $form->radio('type')->options(Product::getProductTypes())
+            ->default(Product::TYPE_PHYSICAL_PRODUCT)
+            ->when(Product::TYPE_PHYSICAL_PRODUCT, function (Form $form) {
+                $shipmentMethods = associative_array(Product::getShipmentMethodForPhysicalProduct());
+                $form->multipleSelect('shipment_methods')
+                    ->options($shipmentMethods)
+                    ->default(array_shift($shipmentMethods));
+            })
+            ->when(Product::TYPE_AUTO_DELIVERABLE_VIRTUAL_PRODUCT, function (Form $form) {
+                $shipmentMethods = associative_array(Product::getShipmentMethodForAutoVirtualProduct());
+                $form->multipleSelect('shipment_methods')
+                    ->options($shipmentMethods)
+                    ->default(array_shift($shipmentMethods));
+            })
+            ->when(Product::TYPE_MANUAL_DELIVERABLE_VIRTUAL_PRODUCT, function (Form $form) {
+                $shipmentMethods = associative_array(Product::getShipmentMethodForManualVirtualProduct());
+                $form->multipleSelect('shipment_methods')
+                    ->options($shipmentMethods)
+                    ->default(array_shift($shipmentMethods));
+            })->required();
+
+        $availableCategories = $this->productCategoryRepository->getActiveList();
+        $form->multipleSelect('categories', 'Categories')
+            ->options($availableCategories)
+            ->customFormat(function ($v) {
+                if (! $v) {
+                    return [];
+                }
+
+                return array_column($v, 'id');
+            });
+
+        $form->text('title')->required();
+        $form->text('slug');
+        $form->markdown('content')->options(Markdown::options())->script(Markdown::script());
+
+        $form->datetime('published_at');
+        $form->datetime('expired_at');
+        $form->switch('status');
+
+        $form->disableViewButton();
+        $form->disableViewCheck();
+
+        return $form;
+    }
+
+    protected function optionalForm(Form $form): Form
+    {
+        $form->image('cover')->autoUpload()->url(upload_url(Product::class, $form->getKey()));
+        $form->textarea('keywords')->rows(2);
+        $form->textarea('description')->rows(3);
+
+        $form->keyValue('setting')->default([])
+            ->setKeyLabel('Key')
+            ->setValueLabel('Value')
+            ->saveAsJson();
+
+        $form->multipleSelect('payment_methods');
+        // ->options($this->paymentRepository->list()->pluck('title', 'id'));
+
+        $form->table('additional_columns', function (Form\NestedForm $table) {
+            $table->text('field');
+            $table->text('name');
+            $table->select('input_type')->options([
+                'input' => 'Input',
+                'text'  => 'Text',
+            ]);
+            $table->switch('required')->default(true);
+        })->saving(function ($value) {
+            return json_encode($value);
+        });
+
+        $form->display('created_at');
+        $form->display('updated_at');
+
+        $form->disableViewButton();
+        $form->disableViewCheck();
+
+        return $form;
     }
 
     protected function skusGrid($productId): Grid

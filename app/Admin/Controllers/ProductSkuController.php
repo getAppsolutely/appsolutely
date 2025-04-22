@@ -19,7 +19,7 @@ class ProductSkuController extends AdminBaseController
         }
 
         if (session('previous.product_id')) {
-            return admin_redirect(admin_route('products.edit', ['product' => session('previous.product_id')]) . '#tab_sku');
+            return admin_redirect(admin_route('products.edit', ['product' => session('previous.product_id')]) . '#skus');
         }
 
         return admin_redirect(admin_route('products.index'));
