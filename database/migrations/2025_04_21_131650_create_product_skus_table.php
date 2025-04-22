@@ -14,7 +14,8 @@ return new class() extends Migration
         Schema::create('product_skus', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('product_id');
-            $table->string('slug')->unique();
+            $table->json('attributes')->nullable();
+            $table->string('slug');
             $table->string('title');
             $table->string('cover')->nullable();
             $table->string('keywords')->nullable();
@@ -35,6 +36,8 @@ return new class() extends Migration
                 ->references('id')
                 ->on('products')
                 ->onDelete('cascade');
+
+            $table->unique(['product_id', 'slug']);
         });
     }
 

@@ -257,3 +257,13 @@ if (! function_exists('parse_markdown_images')) {
         return $images;
     }
 }
+
+if (! function_exists('associative_array')) {
+    function associative_array(array $items): array
+    {
+        return collect($items)
+            ->unique()
+            ->mapWithKeys(fn ($item) => [$item => $item])
+            ->toArray();
+    }
+}

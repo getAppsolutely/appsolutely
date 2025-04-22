@@ -26,13 +26,15 @@ class ProductController extends AdminBaseController
     {
         return Grid::make(Product::with(['categories', 'skus']), function (Grid $grid) {
             $grid->column('id')->sortable();
-            $grid->column('type');
-            $grid->column('status')->switch();
             $grid->column('title');
             $grid->column('categories')->pluck('title')->label();
             $grid->column('skus')->display(function ($skus) {
                 return count($skus);
             });
+
+            $grid->column('type')->display(function ($type) {
+                return Product::getProductTypes()[$type] ?? $type;
+            })->label();
 
             $grid->column('published_at')->display(function ($timestamp) {
                 return TimeHelper::format($timestamp);
@@ -43,6 +45,7 @@ class ProductController extends AdminBaseController
             })->sortable();
 
             $grid->column('sort')->editable();
+            $grid->column('status')->switch();
 
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
@@ -71,7 +74,27 @@ class ProductController extends AdminBaseController
     {
         return Form::make(Product::with(['categories']), function (Form $form) {
             $form->display('id');
-            $form->select('type')->options(Product::getProductTypes())->required();
+
+            $form->radio('type')->options(Product::getProductTypes())
+                ->default(Product::TYPE_PHYSICAL_PRODUCT)
+                ->when(Product::TYPE_PHYSICAL_PRODUCT, function (Form $form) {
+                    $shipmentMethods = associative_array(Product::getShipmentMethodForPhysicalProduct());
+                    $form->multipleSelect('shipment_methods')
+                        ->options($shipmentMethods)
+                        ->default(array_shift($shipmentMethods));
+                })
+                ->when(Product::TYPE_AUTO_DELIVERABLE_VIRTUAL_PRODUCT, function (Form $form) {
+                    $shipmentMethods = associative_array(Product::getShipmentMethodForAutoVirtualProduct());
+                    $form->multipleSelect('shipment_methods')
+                        ->options($shipmentMethods)
+                        ->default(array_shift($shipmentMethods));
+                })
+                ->when(Product::TYPE_MANUAL_DELIVERABLE_VIRTUAL_PRODUCT, function (Form $form) {
+                    $shipmentMethods = associative_array(Product::getShipmentMethodForManualVirtualProduct());
+                    $form->multipleSelect('shipment_methods')
+                        ->options($shipmentMethods)
+                        ->default(array_shift($shipmentMethods));
+                })->required();
 
             $availableCategories = $this->productCategoryRepository->getActiveList();
             $form->multipleSelect('categories', 'Categories')
@@ -104,25 +127,25 @@ class ProductController extends AdminBaseController
             $form->textarea('keywords')->rows(2);
             $form->textarea('description')->rows(3);
 
-            $form->keyValue('type_config')
+            $form->keyValue('setting')->default([])
                 ->setKeyLabel('Key')
                 ->setValueLabel('Value')
                 ->saveAsJson();
 
-            $form->keyValue('setting')
-                ->setKeyLabel('Key')
-                ->setValueLabel('Value')
-                ->saveAsJson();
+            $form->multipleSelect('payment_methods');
+            // ->options($this->paymentRepository->list()->pluck('title', 'id'));
 
-            $form->keyValue('payments')
-                ->setKeyLabel('Key')
-                ->setValueLabel('Value')
-                ->saveAsJson();
-
-            $form->keyValue('form_columns')
-                ->setKeyLabel('Key')
-                ->setValueLabel('Value')
-                ->saveAsJson();
+            $form->table('form_columns', function (Form\NestedForm $table) {
+                $table->text('field');
+                $table->text('name');
+                $table->select('input_type')->options([
+                    'input' => 'Input',
+                    'text'  => 'Text',
+                ]);
+                $table->switch('required')->default(true);
+            })->saving(function ($value) {
+                return json_encode($value);
+            });
 
             $form->display('created_at');
             $form->display('updated_at');
@@ -134,7 +157,6 @@ class ProductController extends AdminBaseController
 
     protected function form(): Form
     {
-
         return $this->basicForm();
     }
 
@@ -145,11 +167,12 @@ class ProductController extends AdminBaseController
 
             $grid->column('id')->sortable();
             $grid->column('title')->editable();
-            $grid->column('stock')->editable();
+            $grid->column('slug')->editable();
             $grid->column('original_price')->editable();
             $grid->column('price')->editable();
+            $grid->column('stock')->editable();
             $grid->column('status')->switch();
-            $grid->column('sort')->editable()->sortable();
+            $grid->column('sort')->editable()->sortable()->orderable();
 
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id')->width(3);

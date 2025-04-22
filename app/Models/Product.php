@@ -20,15 +20,28 @@ class Product extends Model
     use Sluggable;
     use SoftDeletes;
 
-    const TYPE_PHYSICAL_PRODUCT = 'physical';
+    const TYPE_PHYSICAL_PRODUCT = 'PHYSICAL';
 
-    const TYPE_AUTO_DELIVERABLE_VIRTUAL_PRODUCT = 'auto_virtual';
+    const TYPE_AUTO_DELIVERABLE_VIRTUAL_PRODUCT = 'AUTO_VIRTUAL';
 
-    const TYPE_MANUAL_DELIVERABLE_VIRTUAL_PRODUCT = 'manual_virtual';
+    const TYPE_MANUAL_DELIVERABLE_VIRTUAL_PRODUCT = 'MANUAL_VIRTUAL';
+
+    const SHIPMENT_METHOD_PHYSICAL_PRODUCT = ['\App\Models\UserAddress'];
+
+    const SHIPMENT_METHOD_AUTO_DELIVERABLE_VIRTUAL_PRODUCT = ['\App\Models\User'];
+
+    const SHIPMENT_METHOD_MANUAL_DELIVERABLE_VIRTUAL_PRODUCT = [
+        'Email',
+        'Mobile',
+        'Whatsapp',
+        'Telegram',
+        'WeChat',
+        'Weixin',
+    ];
 
     protected $fillable = [
         'type',
-        'type_config',
+        'shipment_methods',
         'slug',
         'title',
         'cover',
@@ -36,7 +49,7 @@ class Product extends Model
         'description',
         'content',
         'setting',
-        'payments',
+        'payment_methods',
         'form_columns',
         'sort',
         'status',
@@ -45,12 +58,12 @@ class Product extends Model
     ];
 
     protected $casts = [
-        'type_config'  => 'json',
-        'setting'      => 'json',
-        'payments'     => 'json',
-        'form_columns' => 'json',
-        'published_at' => 'datetime',
-        'expired_at'   => 'datetime',
+        'shipment_methods' => 'json',
+        'setting'          => 'json',
+        'payment_methods'  => 'json',
+        'form_columns'     => 'json',
+        'published_at'     => 'datetime',
+        'expired_at'       => 'datetime',
     ];
 
     public function categories(): BelongsToMany
@@ -66,9 +79,24 @@ class Product extends Model
     public static function getProductTypes(): array
     {
         return [
-            self::TYPE_PHYSICAL_PRODUCT                   => 'Physical Product',
-            self::TYPE_AUTO_DELIVERABLE_VIRTUAL_PRODUCT   => 'Auto Deliverable Virtual Product',
-            self::TYPE_MANUAL_DELIVERABLE_VIRTUAL_PRODUCT => 'Manual Deliverable Virtual Product',
+            self::TYPE_PHYSICAL_PRODUCT                   => __t('Physical Product'),
+            self::TYPE_AUTO_DELIVERABLE_VIRTUAL_PRODUCT   => __t('Auto Deliverable Virtual Product'),
+            self::TYPE_MANUAL_DELIVERABLE_VIRTUAL_PRODUCT => __t('Manual Deliverable Virtual Product'),
         ];
+    }
+
+    public static function getShipmentMethodForManualVirtualProduct(): array
+    {
+        return self::SHIPMENT_METHOD_MANUAL_DELIVERABLE_VIRTUAL_PRODUCT;
+    }
+
+    public static function getShipmentMethodForAutoVirtualProduct(): array
+    {
+        return self::SHIPMENT_METHOD_AUTO_DELIVERABLE_VIRTUAL_PRODUCT;
+    }
+
+    public static function getShipmentMethodForPhysicalProduct(): array
+    {
+        return self::SHIPMENT_METHOD_PHYSICAL_PRODUCT;
     }
 }

@@ -13,8 +13,8 @@ return new class() extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('type')->default('physical');
-            $table->json('type_config')->nullable();
+            $table->string('type')->default('PHYSICAL');
+            $table->json('shipment_methods')->nullable();
             $table->string('slug')->unique();
             $table->string('title');
             $table->string('cover')->nullable();
@@ -24,7 +24,7 @@ return new class() extends Migration
             $table->unsignedBigInteger('original_price')->nullable();
 
             $table->json('setting')->nullable();
-            $table->json('payments')->nullable();
+            $table->json('payment_methods')->nullable();
             $table->json('form_columns')->nullable();
             $table->unsignedTinyInteger('sort')->nullable();
             $table->unsignedTinyInteger('status')->default(0);
