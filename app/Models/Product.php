@@ -26,9 +26,9 @@ class Product extends Model
 
     const TYPE_MANUAL_DELIVERABLE_VIRTUAL_PRODUCT = 'MANUAL_VIRTUAL';
 
-    const SHIPMENT_METHOD_PHYSICAL_PRODUCT = ['\App\Models\UserAddress'];
+    const SHIPMENT_METHOD_PHYSICAL_PRODUCT = ['App\Models\UserAddress'];
 
-    const SHIPMENT_METHOD_AUTO_DELIVERABLE_VIRTUAL_PRODUCT = ['\App\Models\User'];
+    const SHIPMENT_METHOD_AUTO_DELIVERABLE_VIRTUAL_PRODUCT = ['App\Models\User'];
 
     const SHIPMENT_METHOD_MANUAL_DELIVERABLE_VIRTUAL_PRODUCT = [
         'Email',
@@ -50,7 +50,7 @@ class Product extends Model
         'content',
         'setting',
         'payment_methods',
-        'form_columns',
+        'additional_columns',
         'sort',
         'status',
         'published_at',
@@ -58,12 +58,12 @@ class Product extends Model
     ];
 
     protected $casts = [
-        'shipment_methods' => 'json',
-        'setting'          => 'json',
-        'payment_methods'  => 'json',
-        'form_columns'     => 'json',
-        'published_at'     => 'datetime',
-        'expired_at'       => 'datetime',
+        'shipment_methods'   => 'json',
+        'setting'            => 'json',
+        'payment_methods'    => 'json',
+        'additional_columns' => 'json',
+        'published_at'       => 'datetime',
+        'expired_at'         => 'datetime',
     ];
 
     public function categories(): BelongsToMany

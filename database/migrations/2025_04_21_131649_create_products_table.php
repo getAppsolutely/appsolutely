@@ -25,7 +25,7 @@ return new class() extends Migration
 
             $table->json('setting')->nullable();
             $table->json('payment_methods')->nullable();
-            $table->json('form_columns')->nullable();
+            $table->json('additional_columns')->nullable();
             $table->unsignedTinyInteger('sort')->nullable();
             $table->unsignedTinyInteger('status')->default(0);
 

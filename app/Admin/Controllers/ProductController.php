@@ -135,7 +135,7 @@ class ProductController extends AdminBaseController
             $form->multipleSelect('payment_methods');
             // ->options($this->paymentRepository->list()->pluck('title', 'id'));
 
-            $form->table('form_columns', function (Form\NestedForm $table) {
+            $form->table('additional_columns', function (Form\NestedForm $table) {
                 $table->text('field');
                 $table->text('name');
                 $table->select('input_type')->options([
