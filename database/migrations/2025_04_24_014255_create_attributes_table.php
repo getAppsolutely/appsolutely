@@ -14,7 +14,8 @@ return new class() extends Migration
         Schema::create('attributes', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('slug')->unique();
+            $table->string('slug');
+            $table->string('note');
             $table->boolean('status')->default(true);
             $table->softDeletes();
         });
