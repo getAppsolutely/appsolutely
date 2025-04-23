@@ -40,6 +40,7 @@ class ArticleController extends AdminBaseController
 
             $grid->column('sort')->editable();
 
+            $grid->quickSearch('id', 'title');
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->like('title')->width(3);
                 $filter->like('content')->width(3);

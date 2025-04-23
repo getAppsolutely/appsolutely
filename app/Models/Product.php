@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Traits\HasFilesOfType;
 use App\Models\Traits\HasMarkdownContent;
 use App\Models\Traits\Publishable;
+use App\Models\Traits\ScopeStatus;
 use App\Models\Traits\Sluggable;
 use Dcat\Admin\Traits\HasDateTimeFormatter;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -17,6 +18,7 @@ class Product extends Model
     use HasFilesOfType;
     use HasMarkdownContent;
     use Publishable;
+    use ScopeStatus;
     use Sluggable;
     use SoftDeletes;
 

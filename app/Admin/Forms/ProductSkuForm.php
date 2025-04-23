@@ -38,33 +38,40 @@ class ProductSkuForm extends Form implements LazyRenderable
         $id        = $this->payload['id'] ?? null;
         $productId = $this->payload['product_id'] ?? null;
 
-        if ($id) {
-            $sku = ProductSku::with(['product'])->findOrFail($id);
-            $this->fill($sku);
+        $this->tab('Basic', function (Form $form) use ($id, $productId) {
+            if ($id) {
+                $sku = ProductSku::with(['product'])->findOrFail($id);
+                $form->fill($sku);
 
-            $this->display('id');
-            $this->display('product.title', 'Product');
-        }
+                $form->display('id');
+                $form->display('product.title', 'Product');
+            } else {
+                $form->hidden('product_id')->value($productId);
+            }
 
-        $this->text('title')->required();
-        $this->text('slug')->help(__t('Leave empty to auto-generate from title'));
-        $this->image('cover')->autoUpload()->url(upload_url(ProductSku::class, $id));
-        $this->textarea('keywords')->rows(2);
-        $this->textarea('description')->rows(3);
-        $this->markdown('content')->options(Markdown::options())->script(Markdown::script());
+            $form->text('title')->required();
+            $form->text('slug')->help(__t('Leave empty to auto-generate from title'));
+            $form->image('cover')->autoUpload()->url(upload_url(ProductSku::class, $id));
 
-        $this->currency('original_price')->symbol(app_currency_symbol())->default(9999);
-        $this->currency('price')->symbol(app_currency_symbol())->default(9999);
-        $this->number('stock')->default(999)->min(0);
-        $this->number('sort')->default(99);
-        $this->switch('status');
+            $form->currency('original_price')->symbol(app_currency_symbol())->default(999);
+            $form->currency('price')->symbol(app_currency_symbol())->default(999);
+            $form->number('stock')->default(999)->min(1);
 
-        if ($id) {
-            $this->display('created_at');
-            $this->display('updated_at');
-        } else {
-            $this->hidden('product_id')->value($productId);
-        }
+            $form->number('sort')->default(99);
+            $form->switch('status');
+
+        }, true, 'basic');
+
+        $this->tab('SEO', function (Form $form) {
+            $form->textarea('keywords')->rows(2);
+            $form->textarea('description')->rows(3);
+            $form->markdown('content')->options(Markdown::options())->script(Markdown::script());
+        }, false, 'seo');
+
+        $this->tab('Optional', function (Form $form) {
+            $form->display('created_at');
+            $form->display('updated_at');
+        }, false, 'optional');
     }
 
     public function default()

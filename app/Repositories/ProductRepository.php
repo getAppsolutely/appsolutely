@@ -15,4 +15,15 @@ class ProductRepository extends BaseRepository
     {
         return $this->model->status()->orderBy('sort')->get();
     }
+
+    /**
+     * Get a list of active products for dropdown selection
+     */
+    public function getActiveList(): array
+    {
+        return $this->model->status()
+            ->orderBy('title')
+            ->pluck('title', 'id')
+            ->toArray();
+    }
 }

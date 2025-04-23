@@ -47,15 +47,18 @@ class ProductController extends AdminBaseController
             $grid->column('sort')->editable();
             $grid->column('status')->switch();
 
+            $grid->quickSearch('id', 'title');
             $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('id');
-                $filter->like('title');
-                $filter->equal('type')->select(Product::getProductTypes());
+                $filter->equal('id')->width(3);
+                $filter->like('title')->width(3);
+                $filter->equal('type')->select(Product::getProductTypes())->width(3);
             });
 
             $grid->actions(function (Grid\Displayers\Actions $actions) {
                 $actions->disableView();
             });
+
+            $grid->model()->orderBy('id', 'desc');
         });
     }
 
@@ -200,13 +203,11 @@ class ProductController extends AdminBaseController
                         'id'         => $actions->row->id,
                     ]))
                     ->button(edit_action());
-
                 $actions->append($editModal);
                 $actions->append(new DeleteAction());
             });
 
-            // $grid->setResource(admin_route('product.skus'));
-            $grid->setResource('product/skus');
+            $grid->setResource(admin_route('product.skus.index'));
         });
     }
 }
