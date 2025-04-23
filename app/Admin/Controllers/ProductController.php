@@ -3,13 +3,14 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Forms\Fields\Markdown;
+use App\Admin\Forms\ProductSkuForm;
 use App\Helpers\TimeHelper;
 use App\Models\Product;
 use App\Models\ProductSku;
 use App\Repositories\ProductCategoryRepository;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
-use Dcat\Admin\Show;
+use Dcat\Admin\Widgets\Modal;
 
 class ProductController extends AdminBaseController
 {
@@ -162,6 +163,7 @@ class ProductController extends AdminBaseController
             $grid->model()->where('product_id', $productId);
 
             $grid->column('id')->sortable();
+            $grid->column('attributes');
             $grid->column('title')->editable();
             $grid->column('slug')->editable();
             $grid->column('original_price')->editable();
@@ -170,27 +172,23 @@ class ProductController extends AdminBaseController
             $grid->column('status')->switch();
             $grid->column('sort')->editable()->sortable()->orderable();
 
-            $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('id')->width(3);
-                $filter->like('title')->width(3);
-            });
-
-            // Add create button that redirects to create form with product_id
+            // Add create button that opens modal form
             $grid->tools(function (Grid\Tools $tools) use ($productId) {
-                $tools->append('<a class="btn btn-primary" href="' .
-                    admin_url('product-skus/create?product_id=' . $productId) . '">
-                    <i class="feather icon-plus"></i> Create</a>');
+                $modal = Modal::make()
+                    ->lg()
+                    ->title('Create SKU')
+                    ->body(ProductSkuForm::make()->payload(['product_id' => $productId]))
+                    ->button(button());
+
+                $tools->append($modal);
             });
 
-            // Always show quick create button
             $grid->disableCreateButton();
 
-            // Show row actions
             $grid->actions(function (Grid\Displayers\Actions $actions) {
                 $actions->disableView();
             });
 
-            // Set resource url to include product_id
             $grid->setResource('product-skus');
         });
     }

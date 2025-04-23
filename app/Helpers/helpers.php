@@ -215,6 +215,21 @@ if (! function_exists('app_url')) {
     }
 }
 
+if (! function_exists('app_currency_symbol')) {
+    function app_currency_symbol(): string
+    {
+        return config('appsolutely.currency.symbol') ?? '$';
+    }
+}
+
+if (! function_exists('button')) {
+    function button(?string $text = 'Create', ?string $icon = 'icon-plus', $button = 'primary'): string
+    {
+        return sprintf('<button class="btn btn-icon btn-%s"><i class="feather %s"></i> %s</button>',
+            $button, $icon, __t($text));
+    }
+}
+
 if (! function_exists('parse_markdown_images')) {
     /**
      * @throws \League\CommonMark\Exception\CommonMarkException

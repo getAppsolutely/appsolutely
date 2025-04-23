@@ -88,4 +88,13 @@ class ProductSku extends Model implements Sortable
     {
         return $this->original_price ?: $this->product->original_price;
     }
+
+    protected function getSlugConfig(): array
+    {
+        return [
+            'source_field' => 'title',
+            'slug_field'   => 'slug',
+            'parent_field' => 'product_id',
+        ];
+    }
 }

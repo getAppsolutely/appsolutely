@@ -24,7 +24,7 @@ Route::group([
     Route::resource('articles', ArticleController::class)->names('articles');
     Route::resource('product-categories', ProductCategoryController::class)->names('product_categories');
     Route::resource('products', ProductController::class)->names('products');
-    Route::resource('product-skus', ProductSkuController::class)->names('product_skus');
+    // Route::resource('product-skus', ProductSkuController::class)->names('product_skus');
 
     Route::prefix('api/')->name('api.')->group(function () {
         Route::get('files/library', [FileApiController::class, 'library'])->name('files.library');
