@@ -31,7 +31,7 @@ class AdminMenuSeeder extends Seeder
             'order'      => 9,
             'title'      => 'Article Categories',
             'icon'       => 'fa-folder',
-            'uri'        => 'article-categories',
+            'uri'        => 'article/categories',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -42,7 +42,7 @@ class AdminMenuSeeder extends Seeder
             'order'      => 10,
             'title'      => 'Product Categories',
             'icon'       => 'fa-folder',
-            'uri'        => 'product-categories',
+            'uri'        => 'product/categories',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

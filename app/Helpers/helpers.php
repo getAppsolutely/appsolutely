@@ -223,10 +223,32 @@ if (! function_exists('app_currency_symbol')) {
 }
 
 if (! function_exists('button')) {
-    function button(?string $text = 'Create', ?string $icon = 'icon-plus', $button = 'primary'): string
+    function button(?string $text = 'Create', ?string $icon = 'icon-plus', ?string $button = 'primary'): string
     {
         return sprintf('<button class="btn btn-icon btn-%s"><i class="feather %s"></i> %s</button>',
             $button, $icon, __t($text));
+    }
+}
+
+if (! function_exists('row_action')) {
+    function row_action(?string $text = 'Create', ?string $icon = '', ?string $color = ''): string
+    {
+        return sprintf('<i class="feather %s"></i><span class="%s"> %s</span>',
+            $icon . ' ' . $color, $color, __t($text));
+    }
+}
+
+if (! function_exists('edit_action')) {
+    function edit_action(?string $icon = 'icon-edit-1', ?string $color = 'text-custom'): string
+    {
+        return row_action(__t('Edit'), $icon, $color);
+    }
+}
+
+if (! function_exists('delete_action')) {
+    function delete_action(?string $icon = 'icon-alert-triangle', ?string $color = 'text-danger'): string
+    {
+        return row_action(__t('Delete'), $icon, $color);
     }
 }
 

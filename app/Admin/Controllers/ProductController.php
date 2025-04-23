@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Grid\DeleteAction;
 use App\Admin\Forms\Fields\Markdown;
 use App\Admin\Forms\ProductSkuForm;
 use App\Helpers\TimeHelper;
@@ -170,7 +171,7 @@ class ProductController extends AdminBaseController
             $grid->column('price')->editable();
             $grid->column('stock')->editable();
             $grid->column('status')->switch();
-            $grid->column('sort')->editable()->sortable()->orderable();
+            $grid->column('sort')->editable()->sortable();
 
             // Add create button that opens modal form
             $grid->tools(function (Grid\Tools $tools) use ($productId) {
@@ -185,11 +186,27 @@ class ProductController extends AdminBaseController
 
             $grid->disableCreateButton();
 
+            // Show row actions with edit in modal
             $grid->actions(function (Grid\Displayers\Actions $actions) {
                 $actions->disableView();
+                $actions->disableEdit();
+                $actions->disableDelete();
+
+                // Add custom edit button that opens in modal
+                $editModal = Modal::make()->xl()->scrollable()
+                    ->title('Edit SKU')
+                    ->body(ProductSkuForm::make()->payload([
+                        'product_id' => $actions->row->product_id,
+                        'id'         => $actions->row->id,
+                    ]))
+                    ->button(edit_action());
+
+                $actions->append($editModal);
+                $actions->append(new DeleteAction());
             });
 
-            $grid->setResource('product-skus');
+            // $grid->setResource(admin_route('product.skus'));
+            $grid->setResource('product/skus');
         });
     }
 }

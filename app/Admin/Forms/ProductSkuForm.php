@@ -15,23 +15,40 @@ class ProductSkuForm extends Form implements LazyRenderable
     public function handle(array $input)
     {
         try {
-            ProductSku::create($input);
+            $id = $this->payload['id'] ?? null;
 
-            return $this->response()->success(__t('SKU created successfully'))->refresh();
+            if ($id) {
+                $sku = ProductSku::findOrFail($id);
+                $sku->update($input);
+
+                return $this->response()->success(__t('SKU updated successfully'))->refresh();
+            } else {
+                ProductSku::create($input);
+
+                return $this->response()->success(__t('SKU created successfully'))->refresh();
+            }
         } catch (\Exception $e) {
-            return $this->response()->error(__t('Failed to create SKU: ') . $e->getMessage());
+            return $this->response()->error(__t('Failed to save SKU: ') . $e->getMessage());
         }
     }
 
     public function form()
     {
-        // Get product_id from payload
+        // Get data from payload
+        $id        = $this->payload['id'] ?? null;
         $productId = $this->payload['product_id'] ?? null;
-        $this->hidden('product_id')->value($productId);
+
+        if ($id) {
+            $sku = ProductSku::with(['product'])->findOrFail($id);
+            $this->fill($sku);
+
+            $this->display('id');
+            $this->display('product.title', 'Product');
+        }
 
         $this->text('title')->required();
         $this->text('slug')->help(__t('Leave empty to auto-generate from title'));
-        $this->image('cover')->autoUpload()->url(upload_url(ProductSku::class, $productId));
+        $this->image('cover')->autoUpload()->url(upload_url(ProductSku::class, $id));
         $this->textarea('keywords')->rows(2);
         $this->textarea('description')->rows(3);
         $this->markdown('content')->options(Markdown::options())->script(Markdown::script());
@@ -41,8 +58,13 @@ class ProductSkuForm extends Form implements LazyRenderable
         $this->number('stock')->default(999)->min(0);
         $this->number('sort')->default(99);
         $this->switch('status');
-        $this->display('created_at');
-        $this->display('updated_at');
+
+        if ($id) {
+            $this->display('created_at');
+            $this->display('updated_at');
+        } else {
+            $this->hidden('product_id')->value($productId);
+        }
     }
 
     public function default()
