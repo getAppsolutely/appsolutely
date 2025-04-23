@@ -44,7 +44,7 @@ class ProductController extends AdminBaseController
                 return TimeHelper::format($timestamp);
             })->sortable();
 
-            $grid->column('sort')->editable();
+            $grid->column('sort')->quickEdit();
             $grid->column('status')->switch();
 
             $grid->quickSearch('id', 'title');
@@ -168,13 +168,13 @@ class ProductController extends AdminBaseController
 
             $grid->column('id')->sortable();
             $grid->column('attributes');
-            $grid->column('title')->editable();
-            $grid->column('slug')->editable();
-            $grid->column('original_price')->editable();
-            $grid->column('price')->editable();
-            $grid->column('stock')->editable();
+            $grid->column('title')->quickEdit();
+            $grid->column('slug')->quickEdit();
+            $grid->column('original_price')->quickEdit();
+            $grid->column('price')->quickEdit();
+            $grid->column('stock')->quickEdit();
             $grid->column('status')->switch();
-            $grid->column('sort')->editable()->sortable();
+            $grid->column('sort')->quickEdit()->sortable();
 
             // Add create button that opens modal form
             $grid->tools(function (Grid\Tools $tools) use ($productId) {

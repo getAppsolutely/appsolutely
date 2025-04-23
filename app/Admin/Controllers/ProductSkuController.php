@@ -27,8 +27,8 @@ class ProductSkuController extends AdminBaseController
 
             $grid->column('id')->sortable();
             $grid->column('product.title', 'Product');
-            $grid->column('title')->editable();
-            $grid->column('slug')->editable();
+            $grid->column('title')->quickEdit();
+            $grid->column('slug')->quickEdit();
             $grid->column('attributes')->display(function ($attributes) {
                 if (is_array($attributes) && ! empty($attributes)) {
                     return collect($attributes)->map(function ($value, $key) {
@@ -38,10 +38,10 @@ class ProductSkuController extends AdminBaseController
 
                 return '';
             });
-            $grid->column('stock')->editable();
-            $grid->column('original_price')->editable();
-            $grid->column('price')->editable();
-            $grid->column('sort')->editable()->sortable();
+            $grid->column('stock')->quickEdit();
+            $grid->column('original_price')->quickEdit();
+            $grid->column('price')->quickEdit();
+            $grid->column('sort')->quickEdit()->sortable();
             $grid->column('status')->switch();
             $grid->column('published_at')->sortable();
             $grid->column('expired_at')->sortable();
@@ -82,7 +82,7 @@ class ProductSkuController extends AdminBaseController
      *
      * @return Form
      */
-    protected function form()
+    protected function form1()
     {
         return Form::make(new ProductSku(), function (Form $form) {
             $form->display('id');

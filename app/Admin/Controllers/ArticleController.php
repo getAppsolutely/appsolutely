@@ -38,7 +38,7 @@ class ArticleController extends AdminBaseController
             })->sortable();
             $grid->column('created_at');
 
-            $grid->column('sort')->editable();
+            $grid->column('sort')->quickEdit();
 
             $grid->quickSearch('id', 'title');
             $grid->filter(function (Grid\Filter $filter) {
