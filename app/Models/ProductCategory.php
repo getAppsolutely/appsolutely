@@ -42,6 +42,6 @@ class ProductCategory extends NestedSetModel
 
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class, 'product_category_pivots');
+        return $this->belongsToMany(Product::class, 'product_category_pivot');
     }
 }

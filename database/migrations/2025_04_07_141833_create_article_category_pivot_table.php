@@ -11,7 +11,7 @@ return new class() extends Migration
      */
     public function up(): void
     {
-        Schema::create('article_category_pivots', function (Blueprint $table) {
+        Schema::create('article_category_pivot', function (Blueprint $table) {
             $table->unsignedBigInteger('article_id');
             $table->unsignedBigInteger('article_category_id');
             $table->json('setting')->nullable();
@@ -23,6 +23,6 @@ return new class() extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('article_category_pivots');
+        Schema::dropIfExists('article_category_pivot');
     }
 };

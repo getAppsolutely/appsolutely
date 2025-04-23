@@ -65,13 +65,7 @@ class ArticleController extends AdminBaseController
 
                 $availableCategories = $this->articleCategoryRepository->getActiveList();
                 $form->multipleSelect('categories', 'Categories')->required()->options($availableCategories)
-                    ->customFormat(function ($v) {
-                        if (! $v) {
-                            return [];
-                        }
-
-                        return array_column($v, 'id');
-                    });
+                    ->customFormat(extract_values());
 
                 $form->text('title')->required();
                 $form->text('slug');

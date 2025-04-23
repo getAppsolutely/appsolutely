@@ -42,6 +42,6 @@ class ArticleCategory extends NestedSetModel
 
     public function articles(): BelongsToMany
     {
-        return $this->belongsToMany(Article::class, 'article_category_pivots');
+        return $this->belongsToMany(Article::class, 'article_category_pivot');
     }
 }

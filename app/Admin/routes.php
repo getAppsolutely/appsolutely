@@ -4,6 +4,9 @@ use App\Admin\Controllers\Api\CommonController;
 use App\Admin\Controllers\Api\FileController as FileApiController;
 use App\Admin\Controllers\ArticleCategoryController;
 use App\Admin\Controllers\ArticleController;
+use App\Admin\Controllers\AttributeController;
+use App\Admin\Controllers\AttributeGroupController;
+use App\Admin\Controllers\AttributeValueController;
 use App\Admin\Controllers\FileController;
 use App\Admin\Controllers\ProductCategoryController;
 use App\Admin\Controllers\ProductController;
@@ -20,16 +23,24 @@ Route::group([
 ], function () {
     Route::get('/', 'HomeController@index');
 
-    Route::resource('files/manager', FileController::class)->names('files.manager');
-    Route::resource('article/categories', ArticleCategoryController::class)->names('article.categories');
+    // Content Management Routes
     Route::resource('articles', ArticleController::class)->names('articles');
-    Route::resource('product/categories', ProductCategoryController::class)->names('product.categories');
+    Route::resource('article/categories', ArticleCategoryController::class)->names('article.categories');
+    Route::resource('files/manager', FileController::class)->names('files.manager');
+
+    // Product Management Routes
     Route::resource('products', ProductController::class)->names('products');
+    Route::resource('product/categories', ProductCategoryController::class)->names('product.categories');
     Route::resource('product/skus', ProductSkuController::class)->names('product.skus');
 
+    // Attribute Management Routes
+    Route::resource('attribute/groups', AttributeGroupController::class)->names('attribute.groups');
+    Route::resource('attributes', AttributeController::class)->names('attributes');
+    Route::resource('attribute/values', AttributeValueController::class)->names('attribute.values');
+
+    // API Routes
     Route::prefix('api/')->name('api.')->group(function () {
         Route::get('files/library', [FileApiController::class, 'library'])->name('files.library');
         Route::post('common/quick-edit', [CommonController::class, 'quickEdit'])->name('common.quick-edit');
     });
-
 });

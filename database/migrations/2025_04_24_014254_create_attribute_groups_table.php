@@ -11,10 +11,11 @@ return new class() extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_category_pivots', function (Blueprint $table) {
-            $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('product_category_id');
-            $table->json('setting')->nullable();
+        Schema::create('attribute_groups', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->boolean('status')->default(true);
+            $table->softDeletes();
         });
     }
 
@@ -23,6 +24,6 @@ return new class() extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_category_pivots');
+        Schema::dropIfExists('attribute_groups');
     }
 };

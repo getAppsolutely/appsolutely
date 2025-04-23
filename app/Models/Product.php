@@ -70,7 +70,7 @@ class Product extends Model
 
     public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(ProductCategory::class, 'product_category_pivots');
+        return $this->belongsToMany(ProductCategory::class, 'product_category_pivot');
     }
 
     public function skus(): HasMany

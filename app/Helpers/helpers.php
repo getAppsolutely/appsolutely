@@ -304,3 +304,16 @@ if (! function_exists('associative_array')) {
             ->toArray();
     }
 }
+
+if (! function_exists('extract_values')) {
+    function extract_values($columnKey = 'id'): Closure
+    {
+        return function ($v) use ($columnKey) {
+            if (! $v) {
+                return [];
+            }
+
+            return array_column($v, $columnKey);
+        };
+    }
+}

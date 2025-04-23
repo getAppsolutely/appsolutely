@@ -58,10 +58,6 @@ class ProductSkuController extends AdminBaseController
 
             $grid->actions(function (Grid\Displayers\Actions $actions) {
                 $actions->disableView();
-            });
-
-            $grid->actions(function (Grid\Displayers\Actions $actions) {
-                $actions->disableView();
                 $actions->disableEdit();
 
                 // Add custom edit button that opens in modal
