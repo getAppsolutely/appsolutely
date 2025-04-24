@@ -9,7 +9,7 @@ class TimeHelper
     /**
      * Format timestamp to a readable format in 24-hour time
      */
-    public static function format(?string $timestamp, string $format = 'Y-m-d H:i:s'): string
+    public static function format($timestamp, string $format = 'Y-m-d H:i:s'): string
     {
         if (empty($timestamp)) {
             return '';

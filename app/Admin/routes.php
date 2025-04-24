@@ -1,5 +1,6 @@
 <?php
 
+use App\Admin\Controllers\Api\AttributeGroupController as AttributeGroupApiController;
 use App\Admin\Controllers\Api\CommonController;
 use App\Admin\Controllers\Api\FileController as FileApiController;
 use App\Admin\Controllers\ArticleCategoryController;
@@ -42,5 +43,6 @@ Route::group([
     Route::prefix('api/')->name('api.')->group(function () {
         Route::get('files/library', [FileApiController::class, 'library'])->name('files.library');
         Route::post('common/quick-edit', [CommonController::class, 'quickEdit'])->name('common.quick-edit');
+        Route::get('attribute/groups', [AttributeGroupApiController::class, 'query'])->name('attribute.groups');
     });
 });

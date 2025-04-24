@@ -6,8 +6,8 @@ use App\Models\Attribute;
 
 class AttributeRepository extends BaseRepository
 {
-    public function __construct(Attribute $model)
+    public function model()
     {
-        parent::__construct($model);
+        return Attribute::class;
     }
 }

@@ -1,0 +1,103 @@
+<?php
+
+namespace App\Admin\Forms;
+
+use App\Models\ProductSku;
+use Dcat\Admin\Contracts\LazyRenderable;
+use Dcat\Admin\Traits\LazyWidget;
+use Dcat\Admin\Widgets\Form;
+
+class ProductSkuGeneratorForm extends Form implements LazyRenderable
+{
+    use LazyWidget;
+
+    public function handle(array $input)
+    {
+        try {
+            // Get selected combinations
+            $combinations = $input['attribute_combinations'] ?? [];
+            if (empty($combinations)) {
+                return $this->response()->error('Please select at least one attribute combination');
+            }
+
+            // Begin transaction
+            \DB::beginTransaction();
+
+            foreach ($combinations as $combinationKey) {
+                // Get cached combination data
+                $combinationData = cache()->get($combinationKey);
+                if (! $combinationData) {
+                    continue;
+                }
+
+                // Create SKU
+                ProductSku::create([
+                    'product_id'     => $input['product_id'],
+                    'title'          => $input['title_prefix'] ? $input['title_prefix'] . ' - ' . $combinationData['readable'] : $combinationData['readable'],
+                    'attributes'     => $combinationData,
+                    'original_price' => $input['original_price'],
+                    'price'          => $input['price'],
+                    'stock'          => $input['stock'],
+                    'status'         => $input['status'] ?? true,
+                ]);
+            }
+
+            \DB::commit();
+
+            return $this->response()->success('SKUs generated successfully')->refresh();
+
+        } catch (\Exception $e) {
+            \DB::rollBack();
+
+            return $this->response()->error('Failed to generate SKUs: ' . $e->getMessage());
+        }
+    }
+
+    public function form()
+    {
+        $productId = $this->payload['product_id'] ?? null;
+
+        $this->hidden('product_id')->value($productId);
+
+        // Add attribute group selector
+        $this->select('attribute_group_id', 'Attribute Group')
+            ->options(\App\Models\AttributeGroup::where('status', true)->pluck('title', 'id'))
+            ->load('attribute_combinations', admin_route('api.attribute.groups'), 'key', 'readable');
+
+        // Add multiselect for attribute combinations
+        $this->multipleSelect('attribute_combinations', 'Attribute Combinations')
+            ->help('Select attribute combinations to generate SKUs');
+
+        // Basic SKU fields
+        $this->text('title_prefix', 'Title Prefix')
+            ->help('This will be prefixed to each generated SKU title');
+
+        $this->currency('original_price', 'Original Price')
+            ->symbol(app_currency_symbol())
+            ->default(999);
+
+        $this->currency('price', 'Price')
+            ->symbol(app_currency_symbol())
+            ->default(999);
+
+        $this->number('stock', 'Stock')
+            ->default(999)
+            ->min(1);
+
+        $this->switch('status', 'Status')
+            ->default(true);
+    }
+
+    /**
+     * Default values for the form
+     */
+    public function default()
+    {
+        return [
+            'status'         => true,
+            'stock'          => 999,
+            'original_price' => 999,
+            'price'          => 999,
+        ];
+    }
+}

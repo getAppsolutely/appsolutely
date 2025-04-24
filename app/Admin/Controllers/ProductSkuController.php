@@ -2,14 +2,11 @@
 
 namespace App\Admin\Controllers;
 
-use App\Admin\Forms\Fields\Markdown;
 use App\Admin\Forms\ProductSkuForm;
 use App\Enums\Status;
-use App\Models\Product;
 use App\Models\ProductSku;
 use App\Repositories\ProductRepository;
 use App\Repositories\ProductSkuRepository;
-use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Widgets\Modal;
 
@@ -27,17 +24,9 @@ class ProductSkuController extends AdminBaseController
 
             $grid->column('id')->sortable();
             $grid->column('product.title', 'Product');
+            $grid->column('attributes')->display(column_value('readable'));
             $grid->column('title')->quickEdit();
             $grid->column('slug')->quickEdit();
-            $grid->column('attributes')->display(function ($attributes) {
-                if (is_array($attributes) && ! empty($attributes)) {
-                    return collect($attributes)->map(function ($value, $key) {
-                        return "<span class='badge badge-info mr-1'>$key: $value</span>";
-                    })->implode(' ');
-                }
-
-                return '';
-            });
             $grid->column('stock')->quickEdit();
             $grid->column('original_price')->quickEdit();
             $grid->column('price')->quickEdit();
@@ -60,7 +49,7 @@ class ProductSkuController extends AdminBaseController
                 $actions->disableView();
                 $actions->disableEdit();
 
-                // Add custom edit button that opens in modal
+                // Add the custom edit button that opens in modal
                 $editModal = Modal::make()->xl()->scrollable()
                     ->title('Edit SKU')
                     ->body(ProductSkuForm::make()->payload([
@@ -70,49 +59,6 @@ class ProductSkuController extends AdminBaseController
                     ->button(edit_action());
                 $actions->prepend($editModal);
             });
-        });
-    }
-
-    /**
-     * Make a form builder.
-     *
-     * @return Form
-     */
-    protected function form1()
-    {
-        return Form::make(new ProductSku(), function (Form $form) {
-            $form->display('id');
-
-            // Product selection
-            $products = $this->productRepository->getActiveList();
-            $form->select('product_id', 'Product')
-                ->options($products)
-                ->required();
-
-            $form->text('title')->required();
-            $form->text('slug')->help(__t('Leave empty to auto-generate from title'));
-
-            $form->keyValue('attributes')
-                ->setKeyLabel('Attribute')
-                ->setValueLabel('Value')
-                ->saveAsJson();
-
-            $form->image('cover')->autoUpload()->url(upload_url(ProductSku::class, $form->getKey()));
-            $form->textarea('keywords')->rows(2);
-            $form->textarea('description')->rows(3);
-            $form->markdown('content')->options(Markdown::options())->script(Markdown::script());
-
-            $form->currency('original_price')->symbol(app_currency_symbol());
-            $form->currency('price')->symbol(app_currency_symbol())->required();
-            $form->number('stock')->default(0)->min(0);
-            $form->number('sort')->default(99);
-            $form->switch('status')->default(1);
-
-            $form->datetime('published_at');
-            $form->datetime('expired_at');
-
-            $form->display('created_at');
-            $form->display('updated_at');
         });
     }
 }

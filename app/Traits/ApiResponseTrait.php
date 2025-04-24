@@ -64,6 +64,11 @@ trait ApiResponseTrait
         ], 500);
     }
 
+    protected function flattenJson($data): JsonResponse
+    {
+        return response()->json($data);
+    }
+
     /**
      * @throws BusinessException
      */

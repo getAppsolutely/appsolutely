@@ -28,7 +28,6 @@ class FileController extends AdminBaseApiController
             return admin_redirect('files/manager');
         }
         if ($this->isDeleteRequest()) {
-            // 删除文件并响应
             return $this->deleteFileAndResponse();
         }
         try {

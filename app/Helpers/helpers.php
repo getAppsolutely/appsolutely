@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Helpers\TimeHelper;
 use App\Services\TranslationService;
 use Illuminate\Support\Facades\Log;
 use League\CommonMark\Environment\Environment;
@@ -314,6 +315,33 @@ if (! function_exists('extract_values')) {
             }
 
             return array_column($v, $columnKey);
+        };
+    }
+}
+
+if (! function_exists('column_value')) {
+    function column_value($key = ''): \Closure
+    {
+        return function ($data) use ($key) {
+            return $data[$key] ?? '';
+        };
+    }
+}
+
+if (! function_exists('column_count')) {
+    function column_count(): \Closure
+    {
+        return function ($data) {
+            return count($data) ?? 0;
+        };
+    }
+}
+
+if (! function_exists('column_time_format')) {
+    function column_time_format(): \Closure
+    {
+        return function ($timestamp) {
+            return TimeHelper::format($timestamp);
         };
     }
 }

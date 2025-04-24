@@ -6,8 +6,8 @@ use App\Models\AttributeGroup;
 
 class AttributeGroupRepository extends BaseRepository
 {
-    public function __construct(AttributeGroup $model)
+    public function model()
     {
-        parent::__construct($model);
+        return AttributeGroup::class;
     }
 }

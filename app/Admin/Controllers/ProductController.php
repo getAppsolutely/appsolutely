@@ -5,7 +5,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Actions\Grid\DeleteAction;
 use App\Admin\Forms\Fields\Markdown;
 use App\Admin\Forms\ProductSkuForm;
-use App\Helpers\TimeHelper;
+use App\Admin\Forms\ProductSkuGeneratorForm;
 use App\Models\Product;
 use App\Models\ProductSku;
 use App\Repositories\ProductCategoryRepository;
@@ -28,21 +28,15 @@ class ProductController extends AdminBaseController
             $grid->column('id')->sortable();
             $grid->column('title');
             $grid->column('categories')->pluck('title')->label();
-            $grid->column('skus')->display(function ($skus) {
-                return count($skus);
-            });
+            $grid->column('skus')->display(column_count());
 
             $grid->column('type')->display(function ($type) {
                 return Product::getProductTypes()[$type] ?? $type;
             })->label();
 
-            $grid->column('published_at')->display(function ($timestamp) {
-                return TimeHelper::format($timestamp);
-            })->sortable();
+            $grid->column('published_at')->display(column_time_format())->sortable();
 
-            $grid->column('expired_at')->display(function ($timestamp) {
-                return TimeHelper::format($timestamp);
-            })->sortable();
+            $grid->column('expired_at')->display(column_time_format())->sortable();
 
             $grid->column('sort')->quickEdit();
             $grid->column('status')->switch();
@@ -161,7 +155,7 @@ class ProductController extends AdminBaseController
             $grid->model()->where('product_id', $productId);
 
             $grid->column('id')->sortable();
-            $grid->column('attributes');
+            $grid->column('attributes')->display(column_value('readable'));
             $grid->column('title')->quickEdit();
             $grid->column('slug')->quickEdit();
             $grid->column('original_price')->quickEdit();
@@ -170,12 +164,12 @@ class ProductController extends AdminBaseController
             $grid->column('status')->switch();
             $grid->column('sort')->quickEdit()->sortable();
 
-            // Add create button that opens modal form
+            // Add create button that opens the modal form
             $grid->tools(function (Grid\Tools $tools) use ($productId) {
                 $modal = Modal::make()
                     ->lg()
-                    ->title('Create SKU')
-                    ->body(ProductSkuForm::make()->payload(['product_id' => $productId]))
+                    ->title('Create SKUs')
+                    ->body(ProductSkuGeneratorForm::make()->payload(['product_id' => $productId]))
                     ->button(button());
 
                 $tools->append($modal);
