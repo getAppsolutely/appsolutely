@@ -41,7 +41,7 @@ class ArticleCategoryController extends AdminBaseController
 
             $grid->column('id')->width('50px');
             $grid->column('title')->tree(true)->width('400px');
-            $grid->column('status')->switch();
+            $grid->column('status')->switchable();
             $grid->column('slug')->textarea()->width('240px');
             $grid->order->orderable();
 

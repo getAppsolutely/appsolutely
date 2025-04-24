@@ -22,7 +22,7 @@ class AttributeController extends AdminBaseController
             $grid->column('title');
             $grid->column('note');
             $grid->column('slug');
-            $grid->column('status')->switch();
+            $grid->column('status')->switchable();
 
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id')->width(4);

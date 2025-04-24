@@ -20,7 +20,7 @@ class AttributeGroupController extends AdminBaseController
         return Grid::make(new AttributeGroup(), function (Grid $grid) {
             $grid->column('id')->sortable();
             $grid->column('title');
-            $grid->column('status')->switch();
+            $grid->column('status')->switchable();
 
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id')->width(4);

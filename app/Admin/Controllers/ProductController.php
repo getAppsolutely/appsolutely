@@ -39,7 +39,7 @@ class ProductController extends AdminBaseController
             $grid->column('expired_at')->display(column_time_format())->sortable();
 
             $grid->column('sort')->quickEdit();
-            $grid->column('status')->switch();
+            $grid->column('status')->switchable();
 
             $grid->quickSearch('id', 'title');
             $grid->filter(function (Grid\Filter $filter) {
