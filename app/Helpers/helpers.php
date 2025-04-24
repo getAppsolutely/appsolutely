@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Helpers\FileHelper;
 use App\Helpers\TimeHelper;
 use App\Services\TranslationService;
 use Illuminate\Support\Facades\Log;
@@ -342,6 +343,15 @@ if (! function_exists('column_time_format')) {
     {
         return function ($timestamp) {
             return TimeHelper::format($timestamp);
+        };
+    }
+}
+
+if (! function_exists('column_file_size')) {
+    function column_file_size(): \Closure
+    {
+        return function ($size) {
+            return FileHelper::formatSize($size);
         };
     }
 }

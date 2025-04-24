@@ -3,7 +3,6 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Forms\Fields\Markdown;
-use App\Helpers\TimeHelper;
 use App\Models\Article;
 use App\Repositories\ArticleCategoryRepository;
 use Dcat\Admin\Form;
@@ -30,12 +29,8 @@ class ArticleController extends AdminBaseController
             $grid->column('title');
             $grid->column('categories')->pluck('title')->label();
 
-            $grid->column('published_at')->display(function ($timestamp) {
-                return TimeHelper::format($timestamp);
-            })->sortable();
-            $grid->column('expired_at')->display(function ($timestamp) {
-                return TimeHelper::format($timestamp);
-            })->sortable();
+            $grid->column('published_at')->display(column_time_format())->sortable();
+            $grid->column('expired_at')->display(column_time_format())->sortable();
             $grid->column('created_at');
 
             $grid->column('sort')->quickEdit();

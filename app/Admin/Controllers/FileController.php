@@ -3,7 +3,6 @@
 namespace App\Admin\Controllers;
 
 use App\Helpers\DashboardHelper;
-use App\Helpers\FileHelper;
 use App\Helpers\TimeHelper;
 use App\Models\File;
 use Dcat\Admin\Form;
@@ -31,15 +30,11 @@ class FileController extends AdminBaseController
             $grid->column('mime_type')->width('80px');
 
             // Use the helper to format the file size
-            $grid->column('size')->display(function ($size) {
-                return FileHelper::formatSize($size);
-            })->sortable();
+            $grid->column('size')->display(column_file_size())->sortable();
 
             // Format the timestamp using TimeHelper
             $grid->column('created_at')
-                ->display(function ($timestamp) {
-                    return TimeHelper::formatWithTz($timestamp);
-                })->sortable();
+                ->display(column_time_format())->sortable();
 
             $grid->quickSearch('id', 'original_filename', 'filename', 'extension');
 
@@ -80,20 +75,14 @@ class FileController extends AdminBaseController
             $show->field('path');
 
             // Use the helper to format the file size
-            $show->field('size')->as(function ($size) {
-                return FileHelper::formatSize($size);
-            });
+            $show->field('size')->as(column_file_size());
 
             $show->field('hash');
 
             // Format timestamps using TimeHelper
-            $show->field('created_at')->as(function ($timestamp) {
-                return TimeHelper::format($timestamp);
-            });
+            $show->field('created_at')->as(column_time_format());
 
-            $show->field('updated_at')->as(function ($timestamp) {
-                return TimeHelper::format($timestamp);
-            });
+            $show->field('updated_at')->as(column_time_format());
 
             // Display related
             $show->relation('Assessable', function ($model) {
@@ -104,9 +93,7 @@ class FileController extends AdminBaseController
                 $grid->column('assessable_type');
                 $grid->column('assessable_id');
                 $grid->column('type');
-                $grid->column('created_at')->display(function ($timestamp) {
-                    return TimeHelper::format($timestamp);
-                });
+                $grid->column('created_at')->display(column_time_format());
                 $grid->disableActions();
 
                 return $grid;
