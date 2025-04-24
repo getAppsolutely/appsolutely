@@ -18,4 +18,14 @@ class ProductSkuRepository extends BaseRepository
             ->orderBy('sort')
             ->get();
     }
+
+    public function getSkusBySkuKey(string $attributeKey, string $productId)
+    {
+        return $this->model->where('product_id', $productId)
+            ->where(function ($query) use ($attributeKey) {
+
+                $query->whereJsonContains('attributes->key', $attributeKey);
+
+            })->first();
+    }
 }

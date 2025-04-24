@@ -2,7 +2,7 @@
 
 namespace App\Admin\Forms;
 
-use App\Models\ProductSku;
+use App\Repositories\ProductSkuRepository;
 use Dcat\Admin\Contracts\LazyRenderable;
 use Dcat\Admin\Traits\LazyWidget;
 use Dcat\Admin\Widgets\Form;
@@ -23,6 +23,8 @@ class ProductSkuGeneratorForm extends Form implements LazyRenderable
             // Begin transaction
             \DB::beginTransaction();
 
+            $duplicates = [];
+
             foreach ($combinations as $combinationKey) {
                 // Get cached combination data
                 $combinationData = cache()->get($combinationKey);
@@ -30,8 +32,18 @@ class ProductSkuGeneratorForm extends Form implements LazyRenderable
                     continue;
                 }
 
+                // Check if SKU with the same product_id and attributes['key'] exists
+                $productSkuRepository = app(ProductSkuRepository::class);
+                $existingSku          = $productSkuRepository->getSkusBySkuKey($combinationKey, $input['product_id']);
+
+                if ($existingSku) {
+                    $duplicates[] = $combinationData['readable'] ?? 'Unknown combination';
+
+                    continue;
+                }
+
                 // Create SKU
-                ProductSku::create([
+                $data = [
                     'product_id'     => $input['product_id'],
                     'title'          => $input['title_prefix'] ? $input['title_prefix'] . ' - ' . $combinationData['readable'] : $combinationData['readable'],
                     'attributes'     => $combinationData,
@@ -39,10 +51,17 @@ class ProductSkuGeneratorForm extends Form implements LazyRenderable
                     'price'          => $input['price'],
                     'stock'          => $input['stock'],
                     'status'         => $input['status'] ?? true,
-                ]);
+                ];
+                $productSkuRepository->create($data);
             }
 
             \DB::commit();
+
+            if (! empty($duplicates)) {
+                return $this->response()
+                    ->warning('Some SKUs were skipped because they already exist: ' . implode(', ', $duplicates))
+                    ->refresh();
+            }
 
             return $this->response()->success('SKUs generated successfully')->refresh();
 
