@@ -321,10 +321,17 @@ if (! function_exists('extract_values')) {
 }
 
 if (! function_exists('column_value')) {
-    function column_value($key = ''): \Closure
+    function column_value($key = '', $searches = ';', $replaces = '<br/>'): \Closure
     {
-        return function ($data) use ($key) {
-            return $data[$key] ?? '';
+        return function ($data) use ($key, $searches, $replaces) {
+            if (empty($data[$key])) {
+                return '';
+            }
+            if (empty($searches) || empty($replaces)) {
+                return $data[$key];
+            }
+
+            return str_replace($searches, $replaces, $data[$key]);
         };
     }
 }
