@@ -161,7 +161,7 @@ class ProductController extends AdminBaseController
             $grid->column('original_price')->quickEdit();
             $grid->column('price')->quickEdit();
             $grid->column('stock')->quickEdit();
-            $grid->column('status')->switch();
+            $grid->column('status')->switchable();
             $grid->column('sort')->quickEdit()->sortable();
 
             // Add create button that opens the modal form

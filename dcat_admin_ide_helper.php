@@ -43,6 +43,8 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection cover
      * @property Grid\Column|Collection setting
      * @property Grid\Column|Collection status
+     * @property Grid\Column|Collection published_at
+     * @property Grid\Column|Collection expired_at
      * @property Grid\Column|Collection deleted_at
      * @property Grid\Column|Collection article_id
      * @property Grid\Column|Collection article_category_id
@@ -53,8 +55,9 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection assessable_id
      * @property Grid\Column|Collection file_path
      * @property Grid\Column|Collection keyword
-     * @property Grid\Column|Collection published_at
-     * @property Grid\Column|Collection expired_at
+     * @property Grid\Column|Collection attribute_group_id
+     * @property Grid\Column|Collection attribute_id
+     * @property Grid\Column|Collection note
      * @property Grid\Column|Collection key
      * @property Grid\Column|Collection expiration
      * @property Grid\Column|Collection owner
@@ -86,6 +89,17 @@ namespace Dcat\Admin {
      * @property Grid\Column|Collection abilities
      * @property Grid\Column|Collection last_used_at
      * @property Grid\Column|Collection expires_at
+     * @property Grid\Column|Collection product_id
+     * @property Grid\Column|Collection product_category_id
+     * @property Grid\Column|Collection product_sku_id
+     * @property Grid\Column|Collection attribute_value_id
+     * @property Grid\Column|Collection stock
+     * @property Grid\Column|Collection original_price
+     * @property Grid\Column|Collection price
+     * @property Grid\Column|Collection attributes
+     * @property Grid\Column|Collection shipment_methods
+     * @property Grid\Column|Collection payment_methods
+     * @property Grid\Column|Collection additional_columns
      * @property Grid\Column|Collection ip_address
      * @property Grid\Column|Collection user_agent
      * @property Grid\Column|Collection last_activity
@@ -138,6 +152,8 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection cover(string $label = null)
      * @method Grid\Column|Collection setting(string $label = null)
      * @method Grid\Column|Collection status(string $label = null)
+     * @method Grid\Column|Collection published_at(string $label = null)
+     * @method Grid\Column|Collection expired_at(string $label = null)
      * @method Grid\Column|Collection deleted_at(string $label = null)
      * @method Grid\Column|Collection article_id(string $label = null)
      * @method Grid\Column|Collection article_category_id(string $label = null)
@@ -148,8 +164,9 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection assessable_id(string $label = null)
      * @method Grid\Column|Collection file_path(string $label = null)
      * @method Grid\Column|Collection keyword(string $label = null)
-     * @method Grid\Column|Collection published_at(string $label = null)
-     * @method Grid\Column|Collection expired_at(string $label = null)
+     * @method Grid\Column|Collection attribute_group_id(string $label = null)
+     * @method Grid\Column|Collection attribute_id(string $label = null)
+     * @method Grid\Column|Collection note(string $label = null)
      * @method Grid\Column|Collection key(string $label = null)
      * @method Grid\Column|Collection expiration(string $label = null)
      * @method Grid\Column|Collection owner(string $label = null)
@@ -181,6 +198,17 @@ namespace Dcat\Admin {
      * @method Grid\Column|Collection abilities(string $label = null)
      * @method Grid\Column|Collection last_used_at(string $label = null)
      * @method Grid\Column|Collection expires_at(string $label = null)
+     * @method Grid\Column|Collection product_id(string $label = null)
+     * @method Grid\Column|Collection product_category_id(string $label = null)
+     * @method Grid\Column|Collection product_sku_id(string $label = null)
+     * @method Grid\Column|Collection attribute_value_id(string $label = null)
+     * @method Grid\Column|Collection stock(string $label = null)
+     * @method Grid\Column|Collection original_price(string $label = null)
+     * @method Grid\Column|Collection price(string $label = null)
+     * @method Grid\Column|Collection attributes(string $label = null)
+     * @method Grid\Column|Collection shipment_methods(string $label = null)
+     * @method Grid\Column|Collection payment_methods(string $label = null)
+     * @method Grid\Column|Collection additional_columns(string $label = null)
      * @method Grid\Column|Collection ip_address(string $label = null)
      * @method Grid\Column|Collection user_agent(string $label = null)
      * @method Grid\Column|Collection last_activity(string $label = null)
@@ -238,6 +266,8 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection cover
      * @property Show\Field|Collection setting
      * @property Show\Field|Collection status
+     * @property Show\Field|Collection published_at
+     * @property Show\Field|Collection expired_at
      * @property Show\Field|Collection deleted_at
      * @property Show\Field|Collection article_id
      * @property Show\Field|Collection article_category_id
@@ -248,8 +278,9 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection assessable_id
      * @property Show\Field|Collection file_path
      * @property Show\Field|Collection keyword
-     * @property Show\Field|Collection published_at
-     * @property Show\Field|Collection expired_at
+     * @property Show\Field|Collection attribute_group_id
+     * @property Show\Field|Collection attribute_id
+     * @property Show\Field|Collection note
      * @property Show\Field|Collection key
      * @property Show\Field|Collection expiration
      * @property Show\Field|Collection owner
@@ -281,6 +312,17 @@ namespace Dcat\Admin {
      * @property Show\Field|Collection abilities
      * @property Show\Field|Collection last_used_at
      * @property Show\Field|Collection expires_at
+     * @property Show\Field|Collection product_id
+     * @property Show\Field|Collection product_category_id
+     * @property Show\Field|Collection product_sku_id
+     * @property Show\Field|Collection attribute_value_id
+     * @property Show\Field|Collection stock
+     * @property Show\Field|Collection original_price
+     * @property Show\Field|Collection price
+     * @property Show\Field|Collection attributes
+     * @property Show\Field|Collection shipment_methods
+     * @property Show\Field|Collection payment_methods
+     * @property Show\Field|Collection additional_columns
      * @property Show\Field|Collection ip_address
      * @property Show\Field|Collection user_agent
      * @property Show\Field|Collection last_activity
@@ -333,6 +375,8 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection cover(string $label = null)
      * @method Show\Field|Collection setting(string $label = null)
      * @method Show\Field|Collection status(string $label = null)
+     * @method Show\Field|Collection published_at(string $label = null)
+     * @method Show\Field|Collection expired_at(string $label = null)
      * @method Show\Field|Collection deleted_at(string $label = null)
      * @method Show\Field|Collection article_id(string $label = null)
      * @method Show\Field|Collection article_category_id(string $label = null)
@@ -343,8 +387,9 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection assessable_id(string $label = null)
      * @method Show\Field|Collection file_path(string $label = null)
      * @method Show\Field|Collection keyword(string $label = null)
-     * @method Show\Field|Collection published_at(string $label = null)
-     * @method Show\Field|Collection expired_at(string $label = null)
+     * @method Show\Field|Collection attribute_group_id(string $label = null)
+     * @method Show\Field|Collection attribute_id(string $label = null)
+     * @method Show\Field|Collection note(string $label = null)
      * @method Show\Field|Collection key(string $label = null)
      * @method Show\Field|Collection expiration(string $label = null)
      * @method Show\Field|Collection owner(string $label = null)
@@ -376,6 +421,17 @@ namespace Dcat\Admin {
      * @method Show\Field|Collection abilities(string $label = null)
      * @method Show\Field|Collection last_used_at(string $label = null)
      * @method Show\Field|Collection expires_at(string $label = null)
+     * @method Show\Field|Collection product_id(string $label = null)
+     * @method Show\Field|Collection product_category_id(string $label = null)
+     * @method Show\Field|Collection product_sku_id(string $label = null)
+     * @method Show\Field|Collection attribute_value_id(string $label = null)
+     * @method Show\Field|Collection stock(string $label = null)
+     * @method Show\Field|Collection original_price(string $label = null)
+     * @method Show\Field|Collection price(string $label = null)
+     * @method Show\Field|Collection attributes(string $label = null)
+     * @method Show\Field|Collection shipment_methods(string $label = null)
+     * @method Show\Field|Collection payment_methods(string $label = null)
+     * @method Show\Field|Collection additional_columns(string $label = null)
      * @method Show\Field|Collection ip_address(string $label = null)
      * @method Show\Field|Collection user_agent(string $label = null)
      * @method Show\Field|Collection last_activity(string $label = null)
