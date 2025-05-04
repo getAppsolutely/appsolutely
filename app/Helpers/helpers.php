@@ -336,6 +336,17 @@ if (! function_exists('column_value')) {
     }
 }
 
+if (! function_exists('column_value_simple')) {
+    function column_value_simple($column, $key = null): \Closure
+    {
+        return function ($data) use ($key, $column) {
+            $data = $data[$key] ?? $data;
+
+            return empty($column) ? '' : implode('-', array_column($data, $column));
+        };
+    }
+}
+
 if (! function_exists('column_count')) {
     function column_count(): \Closure
     {

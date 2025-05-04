@@ -24,7 +24,7 @@ class ProductSkuController extends AdminBaseController
 
             $grid->column('id')->sortable();
             $grid->column('product.title', 'Product');
-            $grid->column('attributes')->display(column_value('readable'));
+            $grid->column('attributes')->display(column_value_simple('value', 'data'));
             $grid->column('title')->quickEdit();
             $grid->column('slug')->quickEdit();
             $grid->column('stock')->quickEdit();

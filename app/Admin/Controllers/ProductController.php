@@ -155,14 +155,14 @@ class ProductController extends AdminBaseController
             $grid->model()->where('product_id', $productId);
 
             $grid->column('id')->sortable();
-            $grid->column('attributes')->display(column_value('readable'));
+            $grid->column('attributes')->display(column_value_simple('value', 'data'));
             $grid->column('title')->quickEdit();
             $grid->column('slug')->quickEdit();
             $grid->column('original_price')->quickEdit();
             $grid->column('price')->quickEdit();
             $grid->column('stock')->quickEdit();
             $grid->column('status')->switchable();
-            $grid->column('sort')->quickEdit()->sortable();
+            $grid->column('sort')->sortable()->quickEdit();
 
             // Add create button that opens the modal form
             $grid->tools(function (Grid\Tools $tools) use ($productId) {

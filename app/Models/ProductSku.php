@@ -7,6 +7,7 @@ use App\Models\Traits\HasMarkdownContent;
 use App\Models\Traits\Sluggable;
 use Dcat\Admin\Traits\HasDateTimeFormatter;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
@@ -96,5 +97,10 @@ class ProductSku extends Model implements Sortable
             'slug_field'   => 'slug',
             'parent_field' => 'product_id',
         ];
+    }
+
+    public function attributeValues(): BelongsToMany
+    {
+        return $this->belongsToMany(AttributeValue::class, 'product_sku_attribute_value');
     }
 }

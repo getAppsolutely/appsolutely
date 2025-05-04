@@ -52,7 +52,7 @@ class ProductSkuGeneratorForm extends Form implements LazyRenderable
                     'stock'          => $input['stock'],
                     'status'         => $input['status'] ?? true,
                 ];
-                $productSkuRepository->create($data);
+                $productSkuRepository->create($data)->attributeValues()->sync(array_column($combinationData['data'], 'id'));
             }
 
             \DB::commit();
@@ -104,7 +104,7 @@ class ProductSkuGeneratorForm extends Form implements LazyRenderable
             ->min(1);
 
         $this->switch('status', 'Status')
-            ->default(true);
+            ->default(false);
     }
 
     /**
@@ -113,7 +113,7 @@ class ProductSkuGeneratorForm extends Form implements LazyRenderable
     public function default()
     {
         return [
-            'status'         => true,
+            'status'         => false,
             'stock'          => 999,
             'original_price' => 999,
             'price'          => 999,
