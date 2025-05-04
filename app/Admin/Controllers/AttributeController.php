@@ -20,7 +20,7 @@ class AttributeController extends AdminBaseController
         return Grid::make(new Attribute(), function (Grid $grid) {
             $grid->column('id')->sortable();
             $grid->column('title');
-            $grid->column('note');
+            $grid->column('remark');
             $grid->column('slug');
             $grid->column('status')->switchable();
 
@@ -49,7 +49,7 @@ class AttributeController extends AdminBaseController
 
             $form->text('title')->required();
             $form->text('slug')->help(__t('Leave empty to auto-generate from title'));
-            $form->text('note');
+            $form->text('remark');
             $form->switch('status')->default(true);
 
             $form->multipleSelect('attributeGroups', 'Attribute Groups')

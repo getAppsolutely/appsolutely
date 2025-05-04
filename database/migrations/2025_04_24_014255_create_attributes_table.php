@@ -15,7 +15,7 @@ return new class() extends Migration
             $table->id();
             $table->string('title');
             $table->string('slug');
-            $table->string('note')->nullable();
+            $table->string('remark')->nullable();
             $table->boolean('status')->default(true);
             $table->softDeletes();
         });

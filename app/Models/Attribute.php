@@ -27,7 +27,7 @@ class Attribute extends Model
     protected $fillable = [
         'title',
         'slug',
-        'note',
+        'remark',
         'status',
     ];
 
