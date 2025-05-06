@@ -57,6 +57,17 @@ class AdminMenuSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
+        // Add Orders menu item
+        DB::table('admin_menu')->insert([
+            'parent_id'  => 0,
+            'order'      => 11,
+            'title'      => 'Orders',
+            'icon'       => 'fa-shopping-cart',
+            'uri'        => 'orders',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
         // Add Files menu item
         DB::table('admin_menu')->insert([
             'parent_id'  => 0,

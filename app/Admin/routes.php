@@ -9,6 +9,7 @@ use App\Admin\Controllers\AttributeController;
 use App\Admin\Controllers\AttributeGroupController;
 use App\Admin\Controllers\AttributeValueController;
 use App\Admin\Controllers\FileController;
+use App\Admin\Controllers\OrderController;
 use App\Admin\Controllers\ProductCategoryController;
 use App\Admin\Controllers\ProductController;
 use App\Admin\Controllers\ProductSkuController;
@@ -33,6 +34,9 @@ Route::group([
     Route::resource('products', ProductController::class)->names('products');
     Route::resource('product/categories', ProductCategoryController::class)->names('product.categories');
     Route::resource('product/skus', ProductSkuController::class)->names('product.skus');
+
+    // Order Management Routes
+    Route::resource('orders', OrderController::class)->names('orders');
 
     // Attribute Management Routes
     Route::resource('attribute/groups', AttributeGroupController::class)->names('attribute.groups');
