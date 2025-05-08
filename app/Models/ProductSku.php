@@ -47,7 +47,7 @@ class ProductSku extends Model implements Sortable
     ];
 
     protected $casts = [
-        'attributes'   => 'json',
+        'attributes'   => 'array',
         'stock'        => 'integer',
         'sort'         => 'integer',
         'status'       => 'integer',

@@ -60,10 +60,10 @@ class Product extends Model
     ];
 
     protected $casts = [
-        'shipment_methods'   => 'json',
-        'setting'            => 'json',
-        'payment_methods'    => 'json',
-        'additional_columns' => 'json',
+        'shipment_methods'   => 'array',
+        'setting'            => 'array',
+        'payment_methods'    => 'array',
+        'additional_columns' => 'array',
         'published_at'       => 'datetime',
         'expired_at'         => 'datetime',
     ];

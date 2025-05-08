@@ -35,7 +35,7 @@ class ProductCategory extends NestedSetModel
     ];
 
     protected $casts = [
-        'setting'      => 'json',
+        'setting'      => 'array',
         'published_at' => 'datetime',
         'expired_at'   => 'datetime',
     ];

@@ -33,7 +33,7 @@ class Assessable extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'config' => 'json',
+        'config' => 'array',
         'status' => 'integer',
     ];
 

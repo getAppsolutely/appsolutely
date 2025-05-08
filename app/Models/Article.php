@@ -43,7 +43,7 @@ class Article extends Model
     ];
 
     protected $casts = [
-        'setting' => 'json',
+        'setting' => 'array',
     ];
 
     public function categories(): BelongsToMany
