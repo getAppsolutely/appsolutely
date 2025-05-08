@@ -27,12 +27,14 @@ class OrderItem extends Model
     ];
 
     protected $casts = [
-        'original_price'    => 'integer',
-        'price'             => 'integer',
-        'quantity'          => 'integer',
-        'discounted_amount' => 'integer',
-        'amount'            => 'integer',
-        'product_snapshot'  => 'array',
+        'product_snapshot' => 'array',
+    ];
+
+    protected $monetaryFields = [
+        'original_price',
+        'price',
+        'discounted_amount',
+        'amount',
     ];
 
     public function order(): BelongsTo

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\HasFilesOfType;
 use App\Models\Traits\HasMarkdownContent;
+use App\Models\Traits\HasMonetaryFields;
 use App\Models\Traits\Sluggable;
 use Dcat\Admin\Traits\HasDateTimeFormatter;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,6 +18,7 @@ class ProductSku extends Model implements Sortable
     use HasDateTimeFormatter;
     use HasFilesOfType;
     use HasMarkdownContent;
+    use hasMonetaryFields;
     use Sluggable;
     use SoftDeletes;
     use SortableTrait;
@@ -45,14 +47,17 @@ class ProductSku extends Model implements Sortable
     ];
 
     protected $casts = [
-        'attributes'     => 'json',
-        'stock'          => 'integer',
-        'original_price' => 'integer',
-        'price'          => 'integer',
-        'sort'           => 'integer',
-        'status'         => 'integer',
-        'published_at'   => 'datetime',
-        'expired_at'     => 'datetime',
+        'attributes'   => 'json',
+        'stock'        => 'integer',
+        'sort'         => 'integer',
+        'status'       => 'integer',
+        'published_at' => 'datetime',
+        'expired_at'   => 'datetime',
+    ];
+
+    protected $monetaryFields = [
+        'original_price',
+        'price',
     ];
 
     public function product(): BelongsTo

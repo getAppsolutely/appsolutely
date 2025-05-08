@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasMonetaryFields;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
+    use HasMonetaryFields;
     use SoftDeletes;
 
     protected $fillable = [
@@ -26,11 +28,14 @@ class Order extends Model
     ];
 
     protected $casts = [
-        'delivery_info'     => 'array',
-        'request'           => 'array',
-        'amount'            => 'integer',
-        'discounted_amount' => 'integer',
-        'total_amount'      => 'integer',
+        'delivery_info' => 'array',
+        'request'       => 'array',
+    ];
+
+    protected $monetaryFields = [
+        'amount',
+        'discounted_amount',
+        'total_amount',
     ];
 
     public function user(): BelongsTo

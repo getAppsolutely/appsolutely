@@ -22,7 +22,10 @@ class OrderPayment extends Model
 
     protected $casts = [
         'vendor_extra_info' => 'array',
-        'payment_amount'    => 'integer',
+    ];
+
+    protected $monetaryFields = [
+        'payment_amount',
     ];
 
     public function order(): BelongsTo
