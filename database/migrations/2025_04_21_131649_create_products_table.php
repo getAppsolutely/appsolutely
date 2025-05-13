@@ -17,12 +17,13 @@ return new class() extends Migration
             $table->json('shipment_methods')->nullable();
             $table->string('slug')->unique();
             $table->string('title');
+            $table->string('subtitle')->nullable();
             $table->string('cover')->nullable();
             $table->string('keywords')->nullable();
             $table->string('description')->nullable();
             $table->text('content')->nullable();
             $table->unsignedBigInteger('original_price')->nullable();
-
+            $table->unsignedBigInteger('price')->nullable();
             $table->json('setting')->nullable();
             $table->json('payment_methods')->nullable();
             $table->json('additional_columns')->nullable();

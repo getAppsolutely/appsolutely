@@ -33,6 +33,7 @@ class ProductSku extends Model implements Sortable
         'attributes',
         'slug',
         'title',
+        'subtitle',
         'cover',
         'keywords',
         'description',
@@ -68,6 +69,11 @@ class ProductSku extends Model implements Sortable
     public function getTitle(): string
     {
         return $this->title ?: $this->product->title;
+    }
+
+    public function getSubtitle(): string
+    {
+        return $this->subtitle ?: $this->product->subtitle;
     }
 
     public function getCover(): ?string

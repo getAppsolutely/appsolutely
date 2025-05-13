@@ -101,8 +101,12 @@ class ProductController extends AdminBaseController
             ->customFormat(extract_values());
 
         $form->text('title')->required();
+        $form->text('subtitle');
         $form->text('slug');
         $form->markdown('content')->options(Markdown::options())->script(Markdown::script());
+
+        $form->currency('original_price')->symbol(app_currency_symbol())->default(999);
+        $form->currency('price')->symbol(app_currency_symbol())->default(999);
 
         $form->datetime('published_at');
         $form->datetime('expired_at');

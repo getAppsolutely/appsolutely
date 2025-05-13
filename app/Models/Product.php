@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\HasFilesOfType;
 use App\Models\Traits\HasMarkdownContent;
+use App\Models\Traits\HasMonetaryFields;
 use App\Models\Traits\Publishable;
 use App\Models\Traits\ScopeStatus;
 use App\Models\Traits\Sluggable;
@@ -17,6 +18,7 @@ class Product extends Model
     use HasDateTimeFormatter;
     use HasFilesOfType;
     use HasMarkdownContent;
+    use hasMonetaryFields;
     use Publishable;
     use ScopeStatus;
     use Sluggable;
@@ -46,10 +48,13 @@ class Product extends Model
         'shipment_methods',
         'slug',
         'title',
+        'subtitle',
         'cover',
         'keywords',
         'description',
         'content',
+        'original_price',
+        'price',
         'setting',
         'payment_methods',
         'additional_columns',
@@ -66,6 +71,11 @@ class Product extends Model
         'additional_columns' => 'array',
         'published_at'       => 'datetime',
         'expired_at'         => 'datetime',
+    ];
+
+    protected $monetaryFields = [
+        'original_price',
+        'price',
     ];
 
     public function categories(): BelongsToMany
