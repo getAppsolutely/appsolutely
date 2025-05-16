@@ -3,7 +3,9 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "dev": "vite",
+        "dev:default": "vite --config themes/default/vite.config.js",
+        "build:default": "vite build --config themes/default/vite.config.js"
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.7",
