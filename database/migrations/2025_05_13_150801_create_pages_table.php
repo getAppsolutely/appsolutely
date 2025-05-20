@@ -11,10 +11,23 @@ return new class() extends Migration
         Schema::create('pages', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('slug')->unique();
+            $table->string('slug');
+            $table->string('title')->nullable();
+            $table->string('keywords')->nullable();
+            $table->text('description')->nullable();
+            $table->text('content')->nullable();
+            $table->string('canonical_url')->nullable();
+            $table->string('meta_robots')->nullable();
+            $table->string('og_title')->nullable();
+            $table->text('og_description')->nullable();
+            $table->string('og_image')->nullable();
+            $table->json('structured_data')->nullable();
+            $table->string('hreflang')->nullable();
+            $table->string('language')->nullable();
+            $table->unsignedBigInteger('parent_id')->nullable();
             $table->dateTimeTz('published_at')->useCurrent();
             $table->dateTimeTz('expired_at')->nullable();
-            $table->tinyInteger('status');
+            $table->tinyInteger('status')->default(0);
             $table->timestamps();
         });
     }

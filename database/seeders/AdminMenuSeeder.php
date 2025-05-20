@@ -36,17 +36,6 @@ class AdminMenuSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
-        // Add Product Categories menu item
-        DB::table('admin_menu')->insert([
-            'parent_id'  => 0,
-            'order'      => 10,
-            'title'      => 'Product Categories',
-            'icon'       => 'fa-folder',
-            'uri'        => 'product/categories',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
         DB::table('admin_menu')->insert([
             'parent_id'  => 0,
             'order'      => 10,
@@ -57,13 +46,34 @@ class AdminMenuSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
-        // Add Orders menu item
         DB::table('admin_menu')->insert([
             'parent_id'  => 0,
             'order'      => 11,
+            'title'      => 'Product Categories',
+            'icon'       => 'fa-folder',
+            'uri'        => 'product/categories',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        // Add Orders menu item
+        DB::table('admin_menu')->insert([
+            'parent_id'  => 0,
+            'order'      => 12,
             'title'      => 'Orders',
             'icon'       => 'fa-shopping-cart',
             'uri'        => 'orders',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        // Add Pages menu item
+        DB::table('admin_menu')->insert([
+            'parent_id'  => 0,
+            'order'      => 13,
+            'title'      => 'Pages',
+            'icon'       => 'fa-file',
+            'uri'        => 'pages',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

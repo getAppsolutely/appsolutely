@@ -13,12 +13,26 @@ class Page extends Model
         'published_at',
         'expired_at',
         'status',
+        'title',
+        'description',
+        'keywords',
+        'content',
+        'canonical_url',
+        'meta_robots',
+        'og_title',
+        'og_description',
+        'og_image',
+        'structured_data',
+        'hreflang',
+        'language',
+        'parent_id',
     ];
 
     protected $casts = [
-        'published_at' => 'datetime',
-        'expired_at'   => 'datetime',
-        'status'       => 'integer',
+        'published_at'    => 'datetime',
+        'expired_at'      => 'datetime',
+        'status'          => 'integer',
+        'structured_data' => 'array',
     ];
 
     public function containers(): HasMany

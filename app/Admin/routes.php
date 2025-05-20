@@ -10,6 +10,7 @@ use App\Admin\Controllers\AttributeGroupController;
 use App\Admin\Controllers\AttributeValueController;
 use App\Admin\Controllers\FileController;
 use App\Admin\Controllers\OrderController;
+use App\Admin\Controllers\PageController;
 use App\Admin\Controllers\ProductCategoryController;
 use App\Admin\Controllers\ProductController;
 use App\Admin\Controllers\ProductSkuController;
@@ -28,6 +29,7 @@ Route::group([
     // Content Management Routes
     Route::resource('articles', ArticleController::class)->names('articles');
     Route::resource('article/categories', ArticleCategoryController::class)->names('article.categories');
+    Route::resource('pages', PageController::class)->names('pages');
     Route::resource('files/manager', FileController::class)->names('files.manager');
 
     // Product Management Routes
