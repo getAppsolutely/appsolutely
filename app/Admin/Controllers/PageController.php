@@ -72,6 +72,9 @@ class PageController extends AdminBaseController
             $form->switch('status');
             $form->display('created_at');
             $form->display('updated_at');
+
+            $form->disableViewButton();
+            $form->disableViewCheck();
         });
     }
 }

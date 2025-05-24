@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Traits\Publishable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Page extends Model
 {
+    use Publishable;
+
     protected $fillable = [
         'name',
         'slug',
