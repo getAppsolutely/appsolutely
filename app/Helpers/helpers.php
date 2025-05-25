@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use App\Helpers\FileHelper;
-use App\Helpers\TimeHelper;
 use App\Services\TranslationService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
@@ -86,7 +86,7 @@ if (! function_exists('__translate')) {
         // Create a string with each file on its own line
         $callStack = implode("\r\n", $callStackFiles);
 
-        // If type is auto-detect, determine based on source location
+        // If type is auto-detected, determine based on source location
         if ($type === 'auto') {
             $type = 'php';
             // Check all files in the call stack for blade files
@@ -359,8 +359,8 @@ if (! function_exists('column_count')) {
 if (! function_exists('column_time_format')) {
     function column_time_format(): \Closure
     {
-        return function ($timestamp) {
-            return TimeHelper::format($timestamp);
+        return function ($datetime) {
+            return to_local($datetime);
         };
     }
 }
@@ -371,5 +371,40 @@ if (! function_exists('column_file_size')) {
         return function ($size) {
             return FileHelper::formatSize($size);
         };
+    }
+}
+
+if (! function_exists('to_local')) {
+    function to_local($time, ?string $format = null): string
+    {
+        $timeZone      = config('app.timezone');
+        $localTimeZone = user_timezone() ?? config('appsolutely.local_timezone');
+        $toFormat      = $format ?? (user_time_format() ?? config('appsolutely.time_format'));
+
+        return Carbon::parse($time, $timeZone)
+            ->setTimezone($localTimeZone)
+            ->format($toFormat);
+    }
+}
+
+if (! function_exists('user_timezone')) {
+    function user_timezone(): ?string
+    {
+        if (auth()->check()) {
+            return auth()->user()->timezone ?: config('app.timezone');
+        }
+
+        return null;
+    }
+}
+
+if (! function_exists('user_time_format')) {
+    function user_time_format(): ?string
+    {
+        if (auth()->check()) {
+            return auth()->user()->time_format ?: config('appsolutely.time_format');
+        }
+
+        return null;
     }
 }

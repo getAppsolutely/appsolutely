@@ -3,7 +3,6 @@
 namespace App\Admin\Controllers;
 
 use App\Helpers\DashboardHelper;
-use App\Helpers\TimeHelper;
 use App\Models\File;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
@@ -32,9 +31,7 @@ class FileController extends AdminBaseController
             // Use the helper to format the file size
             $grid->column('size')->display(column_file_size())->sortable();
 
-            // Format the timestamp using TimeHelper
-            $grid->column('created_at')
-                ->display(column_time_format())->sortable();
+            $grid->column('created_at')->display(column_time_format())->sortable();
 
             $grid->quickSearch('id', 'original_filename', 'filename', 'extension');
 
@@ -78,10 +75,7 @@ class FileController extends AdminBaseController
             $show->field('size')->as(column_file_size());
 
             $show->field('hash');
-
-            // Format timestamps using TimeHelper
             $show->field('created_at')->as(column_time_format());
-
             $show->field('updated_at')->as(column_time_format());
 
             // Display related

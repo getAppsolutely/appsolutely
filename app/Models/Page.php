@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Traits\LocalizesDateTime;
 use App\Models\Traits\Publishable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Page extends Model
 {
+    use LocalizesDateTime;
     use Publishable;
 
     protected $fillable = [
@@ -36,6 +38,13 @@ class Page extends Model
         'expired_at'      => 'datetime',
         'status'          => 'integer',
         'structured_data' => 'array',
+    ];
+
+    protected array $localDateTimeFields = [
+        'created_at',
+        'updated_at',
+        'published_at',
+        'expired_at',
     ];
 
     public function containers(): HasMany

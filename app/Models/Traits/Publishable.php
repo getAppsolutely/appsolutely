@@ -17,7 +17,8 @@ trait Publishable
             if (empty($model->published_at)) {
                 $model->published_at = Carbon::now();
             } else {
-                $dt                  = Carbon::parse($model->published_at, config('appsolutely.local_timezone'))->setTimezone(config('app.timezone'));
+                $dt                  = Carbon::parse($model->published_at, config('appsolutely.local_timezone'))
+                    ->setTimezone(config('app.timezone'));
                 $model->published_at = $dt;
             }
         });
