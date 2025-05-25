@@ -67,10 +67,9 @@ class PageController extends AdminBaseController
             $form->keyValue('structured_data')->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
             $form->text('hreflang');
             $form->text('language');
-            $pub = optional($form->model()->published_at_local);
-            $form->datetime('published_at')->value('2025-05-26 01:55:44');
-            $form->display('published_at_local');
-            $form->datetime('expired_at');
+
+            $form->datetime('published_at_local', __t('Published At (%s)', [app_local_timezone()]));
+            $form->datetime('expired_at_local', __t('Expired At (%s)', [app_local_timezone()]));
             $form->switch('status');
             $form->display('created_at_local');
             $form->display('updated_at_local');

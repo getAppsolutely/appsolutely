@@ -105,6 +105,7 @@ if (! function_exists('__translate')) {
         if (! empty($parameters)) {
             foreach ($parameters as $key => $value) {
                 $translatedText = str_replace(':' . $key, (string) $value, $translatedText);
+                $translatedText = str_replace('%s', (string) $value, $translatedText);
             }
         }
 
@@ -214,6 +215,20 @@ if (! function_exists('app_url')) {
         }
 
         return url($uri);
+    }
+}
+
+if (! function_exists('app_local_timezone')) {
+    function app_local_timezone(): string
+    {
+        return config('appsolutely.local_timezone');
+    }
+}
+
+if (! function_exists('app_time_format')) {
+    function app_time_format(): string
+    {
+        return config('appsolutely.time_format');
     }
 }
 
@@ -374,16 +389,31 @@ if (! function_exists('column_file_size')) {
     }
 }
 
+if (! function_exists('timezone_convert')) {
+    function timezone_convert($time, $fromTimezone, $toTimezone): Carbon
+    {
+        return Carbon::parse($time, $fromTimezone)
+            ->setTimezone($toTimezone);
+    }
+}
+
 if (! function_exists('to_local')) {
     function to_local($time, ?string $format = null): string
     {
-        $timeZone      = config('app.timezone');
-        $localTimeZone = user_timezone() ?? config('appsolutely.local_timezone');
-        $toFormat      = $format ?? (user_time_format() ?? config('appsolutely.time_format'));
+        $timezone      = config('app.timezone');
+        $localTimezone = user_timezone() ?? app_local_timezone();
+        $toFormat      = $format ?? (user_time_format() ?? app_time_format());
 
-        return Carbon::parse($time, $timeZone)
-            ->setTimezone($localTimeZone)
+        return timezone_convert($time, $timezone, $localTimezone)
             ->format($toFormat);
+    }
+}
+
+if (! function_exists('to_utc')) {
+    function to_utc($time): Carbon
+    {
+        return Carbon::parse($time, app_local_timezone())
+            ->setTimezone(config('app.timezone'));
     }
 }
 
@@ -402,7 +432,7 @@ if (! function_exists('user_time_format')) {
     function user_time_format(): ?string
     {
         if (auth()->check()) {
-            return auth()->user()->time_format ?: config('appsolutely.time_format');
+            return auth()->user()->time_format ?: app_time_format();
         }
 
         return null;

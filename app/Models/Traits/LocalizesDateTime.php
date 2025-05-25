@@ -25,7 +25,11 @@ trait LocalizesDateTime
 
         static::saving(function ($model) {
             foreach ($model->getLocalDateTimeFields() as $field) {
-                unset($model->attributes[$field . '_local']);
+                $localKey = $field . '_local';
+                if (! in_array($field, static::getExceptionalKeys())) {
+                    $model->attributes[$field] = to_utc($model->attributes[$localKey]) ?? Carbon::now();
+                }
+                unset($model->attributes[$localKey]);
             }
         });
     }
@@ -37,5 +41,10 @@ trait LocalizesDateTime
     protected function getLocalDateTimeFields(): array
     {
         return property_exists($this, 'localDateTimeFields') ? $this->localDateTimeFields : [];
+    }
+
+    protected static function getExceptionalKeys(): array
+    {
+        return ['created_at', 'updated_at', 'deleted_at'];
     }
 }

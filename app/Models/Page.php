@@ -3,14 +3,12 @@
 namespace App\Models;
 
 use App\Models\Traits\LocalizesDateTime;
-use App\Models\Traits\Publishable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Page extends Model
 {
     use LocalizesDateTime;
-    use Publishable;
 
     protected $fillable = [
         'name',
