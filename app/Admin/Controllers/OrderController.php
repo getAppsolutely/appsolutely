@@ -28,8 +28,7 @@ class OrderController extends AdminBaseController
             $grid->column('discounted_amount');
             $grid->column('total_amount');
             $grid->column('status')->label();
-            $grid->column('created_at')->sortable();
-            $grid->column('updated_at')->sortable();
+            $grid->column('created_at_local')->sortable();
 
             $grid->quickSearch('id', 'reference', 'user_id');
             $grid->filter(function (Grid\Filter $filter) {
@@ -63,8 +62,8 @@ class OrderController extends AdminBaseController
             $show->field('remark');
             $show->field('ip');
             $show->field('request');
-            $show->field('created_at');
-            $show->field('updated_at');
+            $show->field('created_at_local');
+            $show->field('updated_at_local');
         });
     }
 
@@ -84,8 +83,8 @@ class OrderController extends AdminBaseController
             $form->textarea('remark');
             $form->text('ip');
             $form->textarea('request');
-            $form->display('created_at');
-            $form->display('updated_at');
+            $form->display('created_at_local');
+            $form->display('updated_at_local');
         });
     }
 }

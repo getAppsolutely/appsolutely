@@ -31,7 +31,7 @@ class FileController extends AdminBaseController
             // Use the helper to format the file size
             $grid->column('size')->display(column_file_size())->sortable();
 
-            $grid->column('created_at')->display(column_time_format())->sortable();
+            $grid->column('created_at_local')->sortable();
 
             $grid->quickSearch('id', 'original_filename', 'filename', 'extension');
 
@@ -75,8 +75,8 @@ class FileController extends AdminBaseController
             $show->field('size')->as(column_file_size());
 
             $show->field('hash');
-            $show->field('created_at')->as(column_time_format());
-            $show->field('updated_at')->as(column_time_format());
+            $show->field('created_at_local');
+            $show->field('updated_at_local');
 
             // Display related
             $show->relation('Assessable', function ($model) {
@@ -87,7 +87,7 @@ class FileController extends AdminBaseController
                 $grid->column('assessable_type');
                 $grid->column('assessable_id');
                 $grid->column('type');
-                $grid->column('created_at')->display(column_time_format());
+                $grid->column('created_at_local');
                 $grid->disableActions();
 
                 return $grid;

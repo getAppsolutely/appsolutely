@@ -4,9 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\HasFilesOfType;
 use App\Models\Traits\HasMarkdownContent;
-use App\Models\Traits\Publishable;
 use App\Models\Traits\Sluggable;
-use Dcat\Admin\Traits\HasDateTimeFormatter;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use League\CommonMark\Exception\CommonMarkException;
@@ -17,10 +15,8 @@ class Article extends Model
 {
     const DEFAULT_ARTICLE_SUMMARY_LENGTH = 200;
 
-    use HasDateTimeFormatter;
     use HasFilesOfType;
     use HasMarkdownContent;
-    use Publishable;
     use Sluggable;
     use SoftDeletes;
 
@@ -43,7 +39,9 @@ class Article extends Model
     ];
 
     protected $casts = [
-        'setting' => 'array',
+        'setting'      => 'array',
+        'published_at' => 'datetime',
+        'expired_at'   => 'datetime',
     ];
 
     public function categories(): BelongsToMany

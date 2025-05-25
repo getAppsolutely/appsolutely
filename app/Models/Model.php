@@ -2,4 +2,9 @@
 
 namespace App\Models;
 
-class Model extends \Illuminate\Database\Eloquent\Model {}
+use App\Models\Traits\LocalizesDateTime;
+
+class Model extends \Illuminate\Database\Eloquent\Model
+{
+    use LocalizesDateTime;
+}

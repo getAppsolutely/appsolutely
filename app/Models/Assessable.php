@@ -33,8 +33,10 @@ class Assessable extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'config' => 'array',
-        'status' => 'integer',
+        'config'       => 'array',
+        'status'       => 'integer',
+        'published_at' => 'datetime',
+        'expired_at'   => 'datetime',
     ];
 
     /**

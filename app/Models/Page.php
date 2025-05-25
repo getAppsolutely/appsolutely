@@ -2,14 +2,10 @@
 
 namespace App\Models;
 
-use App\Models\Traits\LocalizesDateTime;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Page extends Model
 {
-    use LocalizesDateTime;
-
     protected $fillable = [
         'name',
         'slug',

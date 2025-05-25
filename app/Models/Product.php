@@ -5,21 +5,17 @@ namespace App\Models;
 use App\Models\Traits\HasFilesOfType;
 use App\Models\Traits\HasMarkdownContent;
 use App\Models\Traits\HasMonetaryFields;
-use App\Models\Traits\Publishable;
 use App\Models\Traits\ScopeStatus;
 use App\Models\Traits\Sluggable;
-use Dcat\Admin\Traits\HasDateTimeFormatter;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasDateTimeFormatter;
     use HasFilesOfType;
     use HasMarkdownContent;
     use hasMonetaryFields;
-    use Publishable;
     use ScopeStatus;
     use Sluggable;
     use SoftDeletes;
