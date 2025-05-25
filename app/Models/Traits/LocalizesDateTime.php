@@ -26,7 +26,7 @@ trait LocalizesDateTime
         static::saving(function ($model) {
             foreach ($model->getLocalDateTimeFields() as $field) {
                 $localKey = $field . '_local';
-                if (! in_array($field, static::getExceptionalKeys())) {
+                if (! in_array($field, static::getStandardTimestampKeys())) {
                     $model->attributes[$field] = to_utc($model->attributes[$localKey]) ?? Carbon::now();
                 }
                 unset($model->attributes[$localKey]);
@@ -40,10 +40,38 @@ trait LocalizesDateTime
      */
     protected function getLocalDateTimeFields(): array
     {
-        return property_exists($this, 'localDateTimeFields') ? $this->localDateTimeFields : [];
+        $datetimeFields = [];
+
+        // Get datetime fields from $casts
+        foreach ($this->getCasts() as $field => $cast) {
+            if (in_array($cast, ['datetime', 'date', 'timestamp'])) {
+                $datetimeFields[] = $field;
+            }
+        }
+
+        foreach ($this->getStandardTimestampKeys() as $field) {
+            if ($this->hasColumn($field) && ! in_array($field, $datetimeFields)) {
+                $datetimeFields[] = $field;
+            }
+        }
+
+        return $datetimeFields;
     }
 
-    protected static function getExceptionalKeys(): array
+    /**
+     * Check if the model has a specific column
+     */
+    protected function hasColumn(string $column): bool
+    {
+        try {
+            return \Schema::hasColumn($this->getTable(), $column);
+        } catch (\Exception $e) {
+            // Fallback: check if the attribute exists in the model
+            return array_key_exists($column, $this->attributes ?? []);
+        }
+    }
+
+    protected static function getStandardTimestampKeys(): array
     {
         return ['created_at', 'updated_at', 'deleted_at'];
     }

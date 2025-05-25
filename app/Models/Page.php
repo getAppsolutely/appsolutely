@@ -38,13 +38,6 @@ class Page extends Model
         'structured_data' => 'array',
     ];
 
-    protected array $localDateTimeFields = [
-        'created_at',
-        'updated_at',
-        'published_at',
-        'expired_at',
-    ];
-
     public function containers(): HasMany
     {
         return $this->hasMany(PageContainer::class)->orderBy('sort');
