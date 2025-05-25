@@ -20,7 +20,7 @@ class FileController extends AdminBaseController
 
             // Display file preview for images
             $grid->column('preview')->display(function () {
-                return DashboardHelper::preview($this->full_path);
+                return DashboardHelper::imageThumbnail($this->full_path);
             });
 
             $grid->column('filename')->width('120px')->sortable();
@@ -64,7 +64,7 @@ class FileController extends AdminBaseController
 
             // Display file preview for images
             $show->field('preview')->unescape()->as(function () {
-                return DashboardHelper::preview($this->full_path);
+                return DashboardHelper::imageThumbnail($this->full_path);
             });
 
             $show->field('extension');

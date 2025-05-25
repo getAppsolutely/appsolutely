@@ -10,7 +10,7 @@ class DashboardHelper
 
     const DASHBOARD_FILES_PATH = 'uploads/';
 
-    public static function preview($filePath, $prefix = self::DASHBOARD_FILES_PATH, $maxWidth = 100, $maxHeight = 100): string
+    public static function imageThumbnail($filePath, $prefix = self::DASHBOARD_FILES_PATH, $maxWidth = 100, $maxHeight = 100): string
     {
         $url = url($prefix . $filePath);
 
