@@ -7,6 +7,11 @@ use Carbon\Carbon;
 trait LocalizesDateTime
 {
     /**
+     * Cache for datetime fields per model class
+     */
+    protected static array $cachedDateTimeFields = [];
+
+    /**
      * Boot the LocalizesTimestamps trait for a model.
      *
      * @return void
@@ -40,6 +45,13 @@ trait LocalizesDateTime
      */
     protected function getLocalDateTimeFields(): array
     {
+        $modelClass = static::class;
+
+        // Return cached result if available
+        if (isset(static::$cachedDateTimeFields[$modelClass])) {
+            return static::$cachedDateTimeFields[$modelClass];
+        }
+
         $datetimeFields = [];
 
         // Get datetime fields from $casts
@@ -49,26 +61,21 @@ trait LocalizesDateTime
             }
         }
 
-        foreach ($this->getStandardTimestampKeys() as $field) {
-            if ($this->hasColumn($field) && ! in_array($field, $datetimeFields)) {
-                $datetimeFields[] = $field;
-            }
+        // Get all table columns once and check for standard timestamp fields
+        try {
+            $availableFields = \Schema::getColumnListing($this->getTable());
+        } catch (\Exception $e) {
+            // Fallback: use model attributes if schema fails
+            $availableFields = array_keys($this->attributes ?? []);
         }
+
+        $existingTimestampFields = array_intersect($this->getStandardTimestampKeys(), $availableFields);
+        $datetimeFields          = array_merge($datetimeFields, array_diff($existingTimestampFields, $datetimeFields));
+
+        // Cache the result
+        static::$cachedDateTimeFields[$modelClass] = $datetimeFields;
 
         return $datetimeFields;
-    }
-
-    /**
-     * Check if the model has a specific column
-     */
-    protected function hasColumn(string $column): bool
-    {
-        try {
-            return \Schema::hasColumn($this->getTable(), $column);
-        } catch (\Exception $e) {
-            // Fallback: check if the attribute exists in the model
-            return array_key_exists($column, $this->attributes ?? []);
-        }
     }
 
     protected static function getStandardTimestampKeys(): array
