@@ -5,13 +5,13 @@
 
     <!-- Main Content Area -->
     <div class="flex-1 flex overflow-hidden">
-      <!-- Component Sidebar -->
-      <ComponentSidebar class="w-80 border-r border-gray-200 bg-white" />
-
       <!-- Canvas Area -->
       <div class="flex-1 flex flex-col">
         <PageCanvas class="flex-1" />
       </div>
+
+      <!-- Component Sidebar (moved to right) -->
+      <ComponentSidebar class="w-80 border-l border-gray-200 bg-white" />
 
       <!-- Configuration Panel -->
       <ConfigPanel
@@ -70,7 +70,9 @@ const loadInitialData = async () => {
     // Load component registry
     const registryResponse = await fetch(`${pageData.apiBase}/pages/components/registry`);
     const registry = await registryResponse.json();
-    store.setComponentRegistry(registry.categories);
+    // Support both {categories: ...} and {data: {categories: ...}}
+    const categories = registry.categories || (registry.data && registry.data.categories) || [];
+    store.setComponentRegistry(categories);
 
     // Load page data
     const pageResponse = await fetch(`${pageData.apiBase}/pages/${pageData.pageId}/data`);
