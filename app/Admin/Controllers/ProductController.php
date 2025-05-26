@@ -173,7 +173,7 @@ class ProductController extends AdminBaseController
                     ->lg()
                     ->title('Create SKUs')
                     ->body(ProductSkuGeneratorForm::make()->payload(['product_id' => $productId]))
-                    ->button(button());
+                    ->button(admin_create_button());
 
                 $tools->append($modal);
             });
@@ -193,7 +193,7 @@ class ProductController extends AdminBaseController
                         'product_id' => $actions->row->product_id,
                         'id'         => $actions->row->id,
                     ]))
-                    ->button(edit_action());
+                    ->button(admin_edit_action());
                 $actions->append($editModal);
                 $actions->append(new DeleteAction());
             });

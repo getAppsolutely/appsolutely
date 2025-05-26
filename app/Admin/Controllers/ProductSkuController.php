@@ -56,7 +56,7 @@ class ProductSkuController extends AdminBaseController
                         'product_id' => $actions->row->product_id,
                         'id'         => $actions->row->id,
                     ]))
-                    ->button(edit_action());
+                    ->button(admin_edit_action());
                 $actions->prepend($editModal);
             });
         });

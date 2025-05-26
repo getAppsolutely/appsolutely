@@ -34,15 +34,19 @@ class PageController extends AdminBaseController
 
             $grid->quickSearch('id', 'name', 'slug', 'title');
             $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('id');
-                $filter->like('name');
-                $filter->like('slug');
-                $filter->like('title');
-                $filter->equal('status');
+                $filter->equal('id')->width(4);
+                $filter->like('name')->width(4);
+                $filter->like('slug')->width(4);
+                $filter->like('title')->width(4);
+                $filter->equal('status')->width(4);
+                $filter->between('created_at')->datetime()->width(4);
             });
 
             $grid->actions(function (Grid\Displayers\Actions $actions) {
                 $actions->disableView();
+
+                // Add Design button
+                $actions->prepend(admin_link_action('Design', admin_url('pages/' . $actions->getKey() . '/design'), '_blank'));
             });
 
             $grid->model()->orderByDesc('id');
@@ -77,5 +81,18 @@ class PageController extends AdminBaseController
             $form->disableViewButton();
             $form->disableViewCheck();
         });
+    }
+
+    /**
+     * Show the page builder interface
+     */
+    public function design(int $pageId)
+    {
+        $page = $this->pageRepository->findOrFail($pageId);
+
+        return view('page-builder::index', [
+            'page'   => $page,
+            'pageId' => $pageId,
+        ]);
     }
 }

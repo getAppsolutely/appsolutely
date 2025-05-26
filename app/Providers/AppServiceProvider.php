@@ -6,6 +6,7 @@ use App\Repositories\TranslationRepository;
 use App\Services\TranslationService;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -25,6 +26,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Register Page Builder view namespace
+        View::addNamespace('page-builder', resource_path('page-builder'));
+
         // Register Blade directive for translations
         Blade::directive('t', function ($expression) {
             return "<?php echo __t($expression); ?>";

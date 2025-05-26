@@ -70,6 +70,6 @@ class DeleteAction extends RowAction
 
     public function title()
     {
-        return delete_action();
+        return admin_delete_action();
     }
 }
