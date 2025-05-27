@@ -25,12 +25,12 @@ class ProductSkuController extends AdminBaseController
             $grid->column('id')->sortable();
             $grid->column('product.title', 'Product');
             $grid->column('attributes')->display(column_value_simple('value', 'data'));
-            $grid->column('title')->quickEdit();
-            $grid->column('slug')->quickEdit();
-            $grid->column('stock')->quickEdit();
-            $grid->column('original_price')->quickEdit();
-            $grid->column('price')->quickEdit();
-            $grid->column('sort')->quickEdit()->sortable();
+            $grid->column('title')->editable();
+            $grid->column('slug')->editable();
+            $grid->column('stock')->editable();
+            $grid->column('original_price')->editable();
+            $grid->column('price')->editable();
+            $grid->column('sort')->editable()->sortable();
             $grid->column('status')->switchable();
             $grid->column('published_at_local')->sortable();
             $grid->column('expired_at_local')->sortable();

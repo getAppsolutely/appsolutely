@@ -26,14 +26,14 @@ class ArticleController extends AdminBaseController
 
             $grid->column('id')->sortable();
             $grid->column('status', 'Status')->switchable();
-            $grid->column('title');
+            $grid->column('title')->editable();
             $grid->column('categories')->pluck('title')->label();
 
             $grid->column('published_at_local')->sortable();
             $grid->column('expired_at_local')->sortable();
             $grid->column('created_at_local');
 
-            $grid->column('sort')->quickEdit();
+            $grid->column('sort')->editable();
 
             $grid->quickSearch('id', 'title');
             $grid->filter(function (Grid\Filter $filter) {

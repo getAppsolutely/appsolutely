@@ -31,7 +31,7 @@ trait LocalizesDateTime
         static::saving(function ($model) {
             foreach ($model->getLocalDateTimeFields() as $field) {
                 $localKey = $field . '_local';
-                if (! in_array($field, static::getStandardTimestampKeys())) {
+                if (! in_array($field, static::getStandardTimestampKeys()) && ! empty($model->attributes[$localKey])) {
                     $model->attributes[$field] = to_utc($model->attributes[$localKey]) ?? Carbon::now();
                 }
                 unset($model->attributes[$localKey]);

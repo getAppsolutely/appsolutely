@@ -37,7 +37,7 @@ class ProductController extends AdminBaseController
             $grid->column('published_at_local')->sortable();
             $grid->column('expired_at_local')->sortable();
 
-            $grid->column('sort')->quickEdit();
+            $grid->column('sort')->editable();
             $grid->column('status')->switchable();
 
             $grid->quickSearch('id', 'title');
@@ -159,13 +159,13 @@ class ProductController extends AdminBaseController
 
             $grid->column('id')->sortable();
             $grid->column('attributes')->display(column_value_simple('value', 'data'));
-            $grid->column('title')->quickEdit();
-            $grid->column('slug')->quickEdit();
-            $grid->column('original_price')->quickEdit();
-            $grid->column('price')->quickEdit();
-            $grid->column('stock')->quickEdit();
+            $grid->column('title')->editable();
+            $grid->column('slug')->editable();
+            $grid->column('original_price')->editable();
+            $grid->column('price')->editable();
+            $grid->column('stock')->editable();
             $grid->column('status')->switchable();
-            $grid->column('sort')->sortable()->quickEdit();
+            $grid->column('sort')->sortable()->editable();
 
             // Add create button that opens the modal form
             $grid->tools(function (Grid\Tools $tools) use ($productId) {
