@@ -1,13 +1,52 @@
 <template>
-  <div class="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+  <div class="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between fixed top-0 left-0 right-0 z-40 shadow-sm h-16">
     <!-- Left side - Page info -->
-    <div class="flex items-center space-x-4">
-      <h1 class="text-lg font-semibold text-gray-900">
+    <div class="flex items-center space-x-4 min-w-0">
+      <h1 class="text-lg font-semibold text-gray-900 truncate">
         {{ page?.title || 'Page Builder' }}
       </h1>
-      <span class="text-sm text-gray-500">
+      <span class="text-sm text-gray-500 truncate">
         {{ page?.slug }}
       </span>
+    </div>
+
+    <!-- Center - Preview Buttons -->
+    <div class="flex items-center justify-center flex-1">
+      <div class="flex items-center space-x-2">
+        <button
+          :class="previewMode === 'mobile' ? activePreviewClass : previewClass"
+          @click="setPreviewMode('mobile')"
+          title="Mobile Preview"
+        >
+          <!-- Mobile SVG (24x24) -->
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <rect x="7" y="3" width="10" height="18" rx="2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="12" cy="17" r="1.5" />
+          </svg>
+        </button>
+        <button
+          :class="previewMode === 'tablet' ? activePreviewClass : previewClass"
+          @click="setPreviewMode('tablet')"
+          title="Tablet Preview"
+        >
+          <!-- Tablet SVG (24x24) -->
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <rect x="4" y="5" width="16" height="14" rx="2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="12" cy="17" r="1.5" />
+          </svg>
+        </button>
+        <button
+          :class="previewMode === 'desktop' ? activePreviewClass : previewClass"
+          @click="setPreviewMode('desktop')"
+          title="Desktop Preview"
+        >
+          <!-- Desktop SVG (24x24) -->
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <rect x="3" y="7" width="18" height="10" rx="2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="8" y="17" width="8" height="2" rx="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
     </div>
 
     <!-- Right side - Actions -->
@@ -54,7 +93,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { usePageBuilderStore } from '../../stores/pageBuilder';
 
 const store = usePageBuilderStore();
@@ -65,9 +104,28 @@ const canUndo = computed(() => store.canUndo);
 const canRedo = computed(() => store.canRedo);
 const isSaving = computed(() => store.isSaving);
 
+// Preview mode state (could be moved to Pinia store if needed globally)
+const previewMode = ref<'mobile' | 'tablet' | 'desktop'>('desktop');
+const setPreviewMode = (mode: 'mobile' | 'tablet' | 'desktop') => {
+  previewMode.value = mode;
+  // TODO: Emit event or update store if you want to use preview mode elsewhere
+};
+
+const previewClass = 'p-2 rounded-full border border-gray-300 text-gray-500 bg-white hover:bg-gray-100';
+const activePreviewClass = 'p-2 rounded-full border-2 border-blue-500 text-blue-600 bg-blue-50 shadow';
+
 // Save page function (placeholder)
 const savePage = async () => {
   console.log('Save page functionality will be implemented');
   // TODO: Implement save functionality
 };
 </script>
+
+<style scoped>
+.bg-white.fixed {
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 40;
+}
+</style>

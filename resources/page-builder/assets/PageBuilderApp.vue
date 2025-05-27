@@ -4,13 +4,13 @@
     <PageBuilderToolbar />
 
     <!-- Main Content Area -->
-    <div class="flex-1 flex overflow-hidden">
+    <div class="flex-1 flex overflow-hidden mt-16">
       <!-- Canvas Area -->
       <div class="flex-1 flex flex-col">
         <PageCanvas class="flex-1" />
       </div>
 
-      <!-- Component Sidebar (moved to right) -->
+      <!-- Component Sidebar (right) -->
       <ComponentSidebar class="w-80 border-l border-gray-200 bg-white" />
 
       <!-- Configuration Panel -->
