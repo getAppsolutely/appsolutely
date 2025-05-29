@@ -9,8 +9,25 @@
       <div class="flex-1 flex flex-col">
         <PageCanvas class="flex-1" />
       </div>
-      <ConfigPanel class="w-80 border-l border-gray-200 bg-white" />
-      <ComponentSidebar class="w-80 border-l border-gray-200 bg-white" />
+
+      <!-- Sliding Panel Container -->
+      <div class="relative w-80 border-l border-gray-200 bg-white overflow-hidden">
+        <!-- Config Panel -->
+        <div
+          class="absolute inset-0 transform transition-all duration-300 ease-out bg-white shadow-lg"
+          :class="componentSelected ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'"
+        >
+          <ConfigPanel />
+        </div>
+
+        <!-- Component Sidebar -->
+        <div
+          class="absolute inset-0 transform transition-all duration-300 ease-out bg-white"
+          :class="componentSelected ? '-translate-x-full opacity-0' : 'translate-x-0 opacity-100'"
+        >
+          <ComponentSidebar />
+        </div>
+      </div>
     </div>
 
     <!-- Loading Overlay -->
@@ -43,6 +60,7 @@ const showMobileSidebar = ref(false);
 const isLoading = computed(() => store.isLoading);
 const selectedComponent = computed(() => store.selectedComponent);
 const previewMode = computed(() => store.previewMode);
+const componentSelected = computed(() => store.componentSelected);
 
 // Mobile sidebar methods
 const toggleMobileSidebar = () => {

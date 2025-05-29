@@ -21,6 +21,7 @@ export const usePageBuilderStore = defineStore('pageBuilder', () => {
   const isLoading = ref(false);
   const isSaving = ref(false);
   const previewMode = ref<PreviewMode>('desktop');
+  const componentSelected = ref(false);
 
   // Getters
   const canUndo = computed(() => historyIndex.value > 0);
@@ -55,6 +56,10 @@ export const usePageBuilderStore = defineStore('pageBuilder', () => {
 
   const selectComponent = (component: PageBuilderComponent | null) => {
     selectedComponent.value = component;
+    // Automatically show config panel when a component is selected
+    if (component) {
+      componentSelected.value = true;
+    }
   };
 
   const setDragging = (dragging: boolean) => {
@@ -63,6 +68,19 @@ export const usePageBuilderStore = defineStore('pageBuilder', () => {
 
   const setPreviewMode = (mode: PreviewMode) => {
     previewMode.value = mode;
+  };
+
+  const setComponentSelected = (selected: boolean) => {
+    componentSelected.value = selected;
+  };
+
+  const toggleConfigPanel = () => {
+    componentSelected.value = !componentSelected.value;
+  };
+
+  const closeConfigPanel = () => {
+    componentSelected.value = false;
+    // Don't clear the selected component, just hide the panel
   };
 
   const addToHistory = (containers: Container[]) => {
@@ -189,6 +207,7 @@ export const usePageBuilderStore = defineStore('pageBuilder', () => {
     isLoading,
     isSaving,
     previewMode,
+    componentSelected,
 
     // Getters
     canUndo,
@@ -201,6 +220,9 @@ export const usePageBuilderStore = defineStore('pageBuilder', () => {
     selectComponent,
     setDragging,
     setPreviewMode,
+    setComponentSelected,
+    toggleConfigPanel,
+    closeConfigPanel,
     addToHistory,
     undo,
     redo,
