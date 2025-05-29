@@ -109,6 +109,21 @@ const isSaving = computed(() => store.isSaving);
 const previewMode = computed(() => store.previewMode);
 const previewDimensions = computed(() => store.previewDimensions);
 
+// Helper to get savable components (empty array if only placeholder exists)
+const componentsForSaving = computed(() => {
+  if (!page.value || !page.value.components) {
+    return [];
+  }
+  if (
+    page.value.components.length === 1 &&
+    page.value.components[0].id === 'container_default' &&
+    !page.value.components[0].layout
+  ) {
+    return [];
+  }
+  return page.value.components;
+});
+
 // Actions
 const setPreviewMode = (mode: 'mobile' | 'tablet' | 'desktop') => {
   store.setPreviewMode(mode);
@@ -117,10 +132,38 @@ const setPreviewMode = (mode: 'mobile' | 'tablet' | 'desktop') => {
 const previewClass = 'p-2 rounded-full border border-gray-300 text-gray-500 bg-white hover:bg-gray-100';
 const activePreviewClass = 'p-2 rounded-full border-2 border-blue-500 text-blue-600 bg-blue-50 shadow';
 
-// Save page function (placeholder)
+// Save page function
 const savePage = async () => {
-  console.log('Save page functionality will be implemented');
-  // TODO: Implement save functionality
+  if (!page.value || !page.value.id) {
+    console.error('Page or Page ID not available for saving.');
+    // TODO: Show user feedback
+    return;
+  }
+
+  store.isSaving = true;
+  try {
+    const payload = {
+      components: componentsForSaving.value,
+      settings: page.value.settings || {},
+    };
+    console.log('Saving page with payload:', JSON.stringify(payload, null, 2));
+    const result = await store.savePageData(page.value.id, payload);
+    console.log('Save result:', result);
+    if (result && result.status) {
+      // TODO: Show success notification
+      console.log('Page saved successfully!');
+      // Optionally, re-fetch page data or update history if needed
+      // For now, let's assume the local state is the source of truth until next load.
+    } else {
+      // TODO: Show error notification
+      console.error('Failed to save page:', result?.message || 'Unknown error');
+    }
+  } catch (error) {
+    console.error('Error saving page:', error);
+    // TODO: Show error notification
+  } finally {
+    store.isSaving = false;
+  }
 };
 </script>
 

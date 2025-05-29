@@ -64,8 +64,8 @@ class PageBuilderAdminApiController extends AdminBaseApiController
                         [
                             'id'            => 'vertical',
                             'name'          => 'Vertical Layout',
-                            'icon'          => 'layout',
-                            'preview'       => '/images/components/container.png',
+                            'icon'          => '',
+                            'preview'       => '/images/components/vertical.png',
                             'config_schema' => [
                                 'background_color' => ['type' => 'color', 'default' => '#ffffff'],
                                 'padding'          => ['type' => 'spacing', 'default' => 'medium'],
@@ -74,8 +74,8 @@ class PageBuilderAdminApiController extends AdminBaseApiController
                         [
                             'id'            => 'horizontal',
                             'name'          => 'Horizontal Layout',
-                            'icon'          => 'columns',
-                            'preview'       => '/images/components/columns.png',
+                            'icon'          => '',
+                            'preview'       => '/images/components/horizontal.png',
                             'config_schema' => [
                                 'columns' => ['type' => 'number', 'default' => 2, 'min' => 1, 'max' => 6],
                                 'gap'     => ['type' => 'spacing', 'default' => 'medium'],
@@ -85,7 +85,7 @@ class PageBuilderAdminApiController extends AdminBaseApiController
                 ],
                 [
                     'id'         => 'content',
-                    'name'       => 'Content',
+                    'name'       => 'Blocks',
                     'components' => [
                         [
                             'id'            => 'heading',

@@ -22,6 +22,7 @@
             class="p-3 mb-2 border border-gray-200 rounded-lg cursor-move hover:border-blue-300 hover:bg-blue-50 transition-colors"
             draggable="true"
             @dragstart="handleDragStart($event, component)"
+            @dragend="handleDragEnd"
           >
             <div class="flex items-center space-x-3">
               <!-- Component Type Icon -->
@@ -75,6 +76,7 @@ const handleDragStart = (event: DragEvent, component: ComponentDefinition) => {
   if (!event.dataTransfer) return;
 
   store.setDragging(true);
+  store.setDraggingComponentType(component.id);
 
   // Set drag data
   event.dataTransfer.setData('application/json', JSON.stringify({
@@ -83,5 +85,10 @@ const handleDragStart = (event: DragEvent, component: ComponentDefinition) => {
   }));
 
   event.dataTransfer.effectAllowed = 'copy';
+};
+
+const handleDragEnd = () => {
+  store.setDragging(false);
+  store.setDraggingComponentType(null);
 };
 </script>

@@ -102,14 +102,8 @@ const loadInitialData = async () => {
     const pageResponse = await fetch(`${pageData.apiBase}/pages/${pageData.pageId}/data`);
     const pageInfo = (await pageResponse.json()).data;
 
-    // Initialize page with default container if no components exist
-    const components = pageInfo.components.length > 0 ? pageInfo.components : [
-      {
-        id: 'container_default',
-        components: [],
-        layout: 'vertical' as const,
-      }
-    ];
+    // Initialize page components. If API returns no components, use an empty array.
+    const components = pageInfo.components && pageInfo.components.length > 0 ? pageInfo.components : [];
 
     store.setPage({
       id: parseInt(pageData.pageId!),

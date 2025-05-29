@@ -22,6 +22,7 @@ export const usePageBuilderStore = defineStore('pageBuilder', () => {
   const isSaving = ref(false);
   const previewMode = ref<PreviewMode>('desktop');
   const componentSelected = ref(false);
+  const draggingComponentType = ref<string | null>(null);
 
   // Getters
   const canUndo = computed(() => historyIndex.value > 0);
@@ -42,12 +43,14 @@ export const usePageBuilderStore = defineStore('pageBuilder', () => {
 
   // Actions
   const setPage = (pageData: PageData) => {
-    page.value = pageData;
+    page.value = {
+      ...pageData,
+      components: pageData.components || [], // Ensure components is always an array, defaults to [] if null/undefined
+    };
     // Initialize history with current state
-    if (pageData.components) {
-      history.value = [JSON.parse(JSON.stringify(pageData.components))];
-      historyIndex.value = 0;
-    }
+    // If pageData.components was null/undefined, page.value.components is now [], which is fine for history.
+    history.value = [JSON.parse(JSON.stringify(page.value.components))];
+    historyIndex.value = 0;
   };
 
   const setComponentRegistry = (registry: ComponentCategory[]) => {
@@ -81,6 +84,10 @@ export const usePageBuilderStore = defineStore('pageBuilder', () => {
   const closeConfigPanel = () => {
     componentSelected.value = false;
     // Don't clear the selected component, just hide the panel
+  };
+
+  const setDraggingComponentType = (type: string | null) => {
+    draggingComponentType.value = type;
   };
 
   const addToHistory = (containers: Container[]) => {
@@ -117,21 +124,49 @@ export const usePageBuilderStore = defineStore('pageBuilder', () => {
   const addComponent = (containerId: string, componentType: string, index?: number) => {
     if (!page.value) return;
 
-    const newComponent: PageBuilderComponent = {
-      id: `component_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      type: componentType,
-      config: getDefaultConfig(componentType),
-    };
+    const isLayoutComponentType = componentType === 'vertical' || componentType === 'horizontal';
 
-    const container = page.value.components.find(c => c.id === containerId);
-    if (container) {
-      if (index !== undefined) {
-        container.components.splice(index, 0, newComponent);
+    if (containerId === 'container_default' && isLayoutComponentType) {
+      // Adding a new LAYOUT to an empty page or to the general "add layout" area
+      const newLayoutContainer: Container = {
+        id: `component_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        layout: componentType as ('vertical' | 'horizontal'),
+        components: [],
+      };
+
+      // Simply add the new layout to the page's components array.
+      // If an index is provided (e.g., for dropping between existing layouts), use it.
+      if (index !== undefined && index < page.value.components.length) {
+        page.value.components.splice(index, 0, newLayoutContainer);
       } else {
-        container.components.push(newComponent);
+        page.value.components.push(newLayoutContainer);
       }
-
       addToHistory(page.value.components);
+
+    } else if (containerId !== 'container_default' && !isLayoutComponentType) {
+      // Adding a BLOCK to an EXISTING LAYOUT CONTAINER
+      const targetLayoutContainer = page.value.components.find(c => c.id === containerId);
+
+      if (targetLayoutContainer) {
+        const newBlockComponent: PageBuilderComponent = {
+          id: `component_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          type: componentType,
+          config: getDefaultConfig(componentType),
+        };
+        // If an index is provided for inserting the block, use it.
+        if (index !== undefined && index < targetLayoutContainer.components.length) {
+          targetLayoutContainer.components.splice(index, 0, newBlockComponent);
+        } else {
+          targetLayoutContainer.components.push(newBlockComponent);
+        }
+        addToHistory(page.value.components);
+      } else {
+        console.warn('Target layout container for block not found:', containerId);
+      }
+    } else {
+      // This case should ideally be prevented by drag-and-drop rules UI
+      // e.g., trying to drag a layout into another layout, or a block directly to body.
+      console.warn(`Invalid component drop: type '${componentType}' into container '${containerId}'`);
     }
   };
 
@@ -208,6 +243,7 @@ export const usePageBuilderStore = defineStore('pageBuilder', () => {
     isSaving,
     previewMode,
     componentSelected,
+    draggingComponentType,
 
     // Getters
     canUndo,
@@ -223,6 +259,7 @@ export const usePageBuilderStore = defineStore('pageBuilder', () => {
     setComponentSelected,
     toggleConfigPanel,
     closeConfigPanel,
+    setDraggingComponentType,
     addToHistory,
     undo,
     redo,
