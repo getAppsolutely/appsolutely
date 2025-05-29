@@ -37,7 +37,7 @@
         >
           <!-- Container Header -->
           <div class="flex items-center justify-between mb-2">
-            <span class="text-xs text-gray-500">Container ({{ container.layout }})</span>
+            <span class="text-xs text-gray-500">Body</span>
             <span class="text-xs text-gray-400">{{ container.components.length }} components</span>
           </div>
 

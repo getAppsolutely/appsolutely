@@ -62,8 +62,8 @@ class PageBuilderAdminApiController extends AdminBaseApiController
                     'name'       => 'Layout',
                     'components' => [
                         [
-                            'id'            => 'container',
-                            'name'          => 'Container',
+                            'id'            => 'vertical',
+                            'name'          => 'Vertical Layout',
                             'icon'          => 'layout',
                             'preview'       => '/images/components/container.png',
                             'config_schema' => [
@@ -72,8 +72,8 @@ class PageBuilderAdminApiController extends AdminBaseApiController
                             ],
                         ],
                         [
-                            'id'            => 'columns',
-                            'name'          => 'Columns',
+                            'id'            => 'horizontal',
+                            'name'          => 'Horizontal Layout',
                             'icon'          => 'columns',
                             'preview'       => '/images/components/columns.png',
                             'config_schema' => [

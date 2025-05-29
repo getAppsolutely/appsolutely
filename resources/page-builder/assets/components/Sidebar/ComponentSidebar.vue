@@ -24,9 +24,26 @@
             @dragstart="handleDragStart($event, component)"
           >
             <div class="flex items-center space-x-3">
-              <!-- Icon placeholder -->
+              <!-- Component Type Icon -->
               <div class="w-8 h-8 bg-gray-200 rounded flex items-center justify-center">
-                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <!-- Vertical Layout Icon -->
+                <svg v-if="component.id.includes('vertical')"
+                     class="w-4 h-4 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                  <rect x="4" y="2" width="16" height="4" rx="1"/>
+                  <rect x="4" y="10" width="16" height="4" rx="1"/>
+                  <rect x="4" y="18" width="16" height="4" rx="1"/>
+                </svg>
+
+                <!-- Horizontal Layout Icon -->
+                <svg v-else-if="component.id.includes('horizontal')"
+                     class="w-4 h-4 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                  <rect x="2" y="4" width="4" height="16" rx="1"/>
+                  <rect x="10" y="4" width="4" height="16" rx="1"/>
+                  <rect x="18" y="4" width="4" height="16" rx="1"/>
+                </svg>
+
+                <!-- Default Component Icon -->
+                <svg v-else class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                 </svg>
               </div>
@@ -34,7 +51,6 @@
               <!-- Component Info -->
               <div class="flex-1">
                 <div class="text-sm font-medium text-gray-900">{{ component.name }}</div>
-                <div class="text-xs text-gray-500">{{ component.id }}</div>
               </div>
             </div>
           </div>
