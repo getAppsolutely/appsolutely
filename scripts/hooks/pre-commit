@@ -1,0 +1,14 @@
+#!/bin/sh
+
+FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.php$')
+
+if [ -z "$FILES" ]; then
+    exit 0
+fi
+
+echo "Running Pint on staged PHP files..."
+
+for FILE in $FILES; do
+    ./vendor/bin/pint "$FILE"
+    git add "$FILE"
+done

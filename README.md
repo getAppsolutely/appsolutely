@@ -17,6 +17,14 @@
 ## Installation
 
 General Laravel Installation
+```bash
+composer install
+```
+
+Install hooks for local environment.
+```
+composer install-hooks
+```
 
 ## Todo
 - Order management
