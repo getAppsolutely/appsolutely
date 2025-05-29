@@ -13,10 +13,13 @@
     <!-- Center - Preview Buttons -->
     <div class="flex items-center justify-center flex-1">
       <div class="flex items-center space-x-2">
+        <!-- Preview mode indicator -->
+        <span class="text-xs text-gray-500 mr-2">{{ previewDimensions.label }}</span>
+
         <button
           :class="previewMode === 'mobile' ? activePreviewClass : previewClass"
           @click="setPreviewMode('mobile')"
-          title="Mobile Preview"
+          title="Mobile Preview (375px)"
         >
           <!-- Mobile SVG (24x24) -->
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -27,7 +30,7 @@
         <button
           :class="previewMode === 'tablet' ? activePreviewClass : previewClass"
           @click="setPreviewMode('tablet')"
-          title="Tablet Preview"
+          title="Tablet Preview (768px)"
         >
           <!-- Tablet SVG (24x24) -->
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -38,7 +41,7 @@
         <button
           :class="previewMode === 'desktop' ? activePreviewClass : previewClass"
           @click="setPreviewMode('desktop')"
-          title="Desktop Preview"
+          title="Desktop Preview (100%)"
         >
           <!-- Desktop SVG (24x24) -->
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -93,7 +96,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { usePageBuilderStore } from '../../stores/pageBuilder';
 
 const store = usePageBuilderStore();
@@ -103,12 +106,12 @@ const page = computed(() => store.page);
 const canUndo = computed(() => store.canUndo);
 const canRedo = computed(() => store.canRedo);
 const isSaving = computed(() => store.isSaving);
+const previewMode = computed(() => store.previewMode);
+const previewDimensions = computed(() => store.previewDimensions);
 
-// Preview mode state (could be moved to Pinia store if needed globally)
-const previewMode = ref<'mobile' | 'tablet' | 'desktop'>('desktop');
+// Actions
 const setPreviewMode = (mode: 'mobile' | 'tablet' | 'desktop') => {
-  previewMode.value = mode;
-  // TODO: Emit event or update store if you want to use preview mode elsewhere
+  store.setPreviewMode(mode);
 };
 
 const previewClass = 'p-2 rounded-full border border-gray-300 text-gray-500 bg-white hover:bg-gray-100';

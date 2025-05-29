@@ -8,6 +8,8 @@ import type {
   Container
 } from '../types';
 
+export type PreviewMode = 'mobile' | 'tablet' | 'desktop';
+
 export const usePageBuilderStore = defineStore('pageBuilder', () => {
   // State
   const page = ref<PageData | null>(null);
@@ -18,10 +20,24 @@ export const usePageBuilderStore = defineStore('pageBuilder', () => {
   const componentRegistry = ref<ComponentCategory[]>([]);
   const isLoading = ref(false);
   const isSaving = ref(false);
+  const previewMode = ref<PreviewMode>('desktop');
 
   // Getters
   const canUndo = computed(() => historyIndex.value > 0);
   const canRedo = computed(() => historyIndex.value < history.value.length - 1);
+
+  // Preview mode dimensions
+  const previewDimensions = computed(() => {
+    switch (previewMode.value) {
+      case 'mobile':
+        return { width: 375, height: 812, label: 'Phone' };
+      case 'tablet':
+        return { width: 768, height: 1024, label: 'Tablet' };
+      case 'desktop':
+      default:
+        return { width: '100%', height: '100%', label: 'Desktop' };
+    }
+  });
 
   // Actions
   const setPage = (pageData: PageData) => {
@@ -43,6 +59,10 @@ export const usePageBuilderStore = defineStore('pageBuilder', () => {
 
   const setDragging = (dragging: boolean) => {
     isDragging.value = dragging;
+  };
+
+  const setPreviewMode = (mode: PreviewMode) => {
+    previewMode.value = mode;
   };
 
   const addToHistory = (containers: Container[]) => {
@@ -168,16 +188,19 @@ export const usePageBuilderStore = defineStore('pageBuilder', () => {
     componentRegistry,
     isLoading,
     isSaving,
+    previewMode,
 
     // Getters
     canUndo,
     canRedo,
+    previewDimensions,
 
     // Actions
     setPage,
     setComponentRegistry,
     selectComponent,
     setDragging,
+    setPreviewMode,
     addToHistory,
     undo,
     redo,

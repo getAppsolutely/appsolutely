@@ -4,20 +4,13 @@
     <PageBuilderToolbar />
 
     <!-- Main Content Area -->
-    <div class="flex-1 flex overflow-hidden mt-16">
+    <div class="flex-1 flex overflow-hidden pt-16">
       <!-- Canvas Area -->
       <div class="flex-1 flex flex-col">
         <PageCanvas class="flex-1" />
       </div>
-
-      <!-- Component Sidebar (right) -->
+      <ConfigPanel class="w-80 border-l border-gray-200 bg-white" />
       <ComponentSidebar class="w-80 border-l border-gray-200 bg-white" />
-
-      <!-- Configuration Panel -->
-      <ConfigPanel
-        v-if="selectedComponent"
-        class="w-80 border-l border-gray-200 bg-white"
-      />
     </div>
 
     <!-- Loading Overlay -->
@@ -34,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed } from 'vue';
+import { onMounted, computed, ref } from 'vue';
 import { usePageBuilderStore } from './stores/pageBuilder';
 import PageBuilderToolbar from './components/Toolbar/PageBuilderToolbar.vue';
 import ComponentSidebar from './components/Sidebar/ComponentSidebar.vue';
@@ -43,9 +36,22 @@ import ConfigPanel from './components/ConfigPanel/ConfigPanel.vue';
 
 const store = usePageBuilderStore();
 
+// Mobile sidebar state
+const showMobileSidebar = ref(false);
+
 // Computed properties
 const isLoading = computed(() => store.isLoading);
 const selectedComponent = computed(() => store.selectedComponent);
+const previewMode = computed(() => store.previewMode);
+
+// Mobile sidebar methods
+const toggleMobileSidebar = () => {
+  showMobileSidebar.value = !showMobileSidebar.value;
+};
+
+const closeMobileSidebar = () => {
+  showMobileSidebar.value = false;
+};
 
 // Get page data from DOM attributes
 const getPageData = () => {
