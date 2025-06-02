@@ -22,16 +22,16 @@ final class ReleaseController extends BaseApiController
 
         $build = $this->appService->getLatestBuild($platform, $arch);
 
-        if (! $build || version_compare($build->version->version, $currentVersion, '<=')) {
-            return response()->json([], 204);
+        if (! $build || ($currentVersion && version_compare($build->version->version, $currentVersion, '<='))) {
+            return $this->flattenJson([], 204);
         }
 
-        return response()->json([
+        return $this->flattenJson([
             'version'   => $build->version->version,
             'notes'     => $build->release_notes,
             'pub_date'  => $build->published_at?->toIso8601String(),
             'platforms' => [
-                "{$platform}-{$arch}" => [
+                ($build->platform ?? 'any') . '-' . ($build->arch ?? 'any') => [
                     'signature' => $build->signature,
                     'url'       => $build->download_url,
                 ],

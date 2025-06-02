@@ -15,6 +15,7 @@ final class AppBuild extends Model
         'version_id',
         'platform',
         'arch',
+        'path',
         'force_update',
         'gray_strategy',
         'release_notes',
@@ -45,6 +46,9 @@ final class AppBuild extends Model
 
     public function getDownloadUrlAttribute(): ?string
     {
+        if (! empty($this->path)) {
+            return app_url($this->path);
+        }
         if ($this->assessable && $this->assessable->file) {
             return app_url('uploads/' . $this->assessable->file->full_path);
         }

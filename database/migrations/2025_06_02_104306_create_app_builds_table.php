@@ -21,7 +21,7 @@ return new class() extends Migration
             $table->text('release_notes')->nullable();
             $table->string('build_status')->nullable();    // pending, success, failed
             $table->string('build_log')->nullable();
-            $table->integer('assessable_id')->nullable();
+            $table->string('path')->nullable();
             $table->string('signature')->nullable();
             $table->tinyInteger('status')->default(0);
             $table->timestamp('published_at')->nullable();

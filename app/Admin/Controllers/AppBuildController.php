@@ -20,6 +20,15 @@ final class AppBuildController extends AdminBaseController
         'other'   => 'Other',
     ];
 
+    private const ARCHS = [
+        'x86_64'    => 'x86_64 (64-bit Intel/AMD)',
+        'arm64'     => 'arm64 (Apple Silicon, ARM64)',
+        'armv7'     => 'armv7 (32-bit ARM)',
+        'ia32'      => 'ia32 (32-bit Intel/AMD)',
+        'universal' => 'universal (macOS Universal)',
+        'other'     => 'Other',
+    ];
+
     public function grid(): Grid
     {
         return Grid::make(AppBuild::with('version'), function (Grid $grid) {
@@ -74,14 +83,24 @@ final class AppBuildController extends AdminBaseController
                         $form->text('custom_platform', 'Custom Platform (optional)')
                             ->help('If filled, this will override the selected platform.');
                     });
-                $form->text('arch');
+                $form->select('arch')->options(self::ARCHS)
+                    ->help('Select the architecture or enter a custom one below.')
+                    ->when('other', function (Form $form) {
+                        $form->text('custom_arch', 'Custom Arch (optional)')
+                            ->help('If filled, this will override the selected architecture.');
+                    });
                 $form->textarea('release_notes');
                 $form->text('build_status');
                 $form->text('build_log');
-                $form->text('signature');
+                $form->file('path', 'Build File')
+                    ->autoUpload()
+                    ->url(upload_url(AppBuild::class, $form->getKey()))
+                    ->uniqueName()
+                    ->help('Upload a build file. The path will be stored and used for download. You can also enter a path manually.');
             });
 
             $form->column(6, function (Form $form) {
+                $form->text('signature');
                 $form->keyValue('gray_strategy')
                     ->default([])
                     ->setKeyLabel('Key')
@@ -97,8 +116,6 @@ final class AppBuildController extends AdminBaseController
 
             $form->disableViewButton();
             $form->disableViewCheck();
-
-            $form->ignore(['new_version_name', 'custom_platform']);
 
             $form->saving(function (Form $form) use ($hasVersions) {
                 $newVersionName = $form->new_version_name;
@@ -122,8 +139,12 @@ final class AppBuildController extends AdminBaseController
                 if (! empty($form->custom_platform)) {
                     $form->platform = $form->custom_platform;
                 }
-                unset($form->new_version_name, $form->custom_platform);
+                if (! empty($form->custom_arch)) {
+                    $form->arch = $form->custom_arch;
+                }
+                unset($form->new_version_name, $form->custom_platform, $form->custom_arch);
             });
+            $form->ignore(['new_version_name', 'custom_platform', 'custom_arch']);
         });
     }
 }
