@@ -56,4 +56,18 @@ final class AppService
     {
         return (bool) $this->buildRepository->delete($id);
     }
+
+    public function getLatestBuild(string $platform, ?string $arch = null)
+    {
+        $query = $this->buildRepository->query()
+            ->where('status', 1)
+            ->where('platform', $platform)
+            ->orderByDesc('published_at');
+
+        if ($arch) {
+            $query->where('arch', $arch);
+        }
+
+        return $query->with(['version', 'assessable.file'])->first();
+    }
 }
