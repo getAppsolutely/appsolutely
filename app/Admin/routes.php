@@ -4,6 +4,7 @@ use App\Admin\Controllers\Api\AttributeGroupController as AttributeGroupApiContr
 use App\Admin\Controllers\Api\CommonController;
 use App\Admin\Controllers\Api\FileController as FileApiController;
 use App\Admin\Controllers\Api\PageBuilderAdminApiController;
+use App\Admin\Controllers\AppBuildController;
 use App\Admin\Controllers\ArticleCategoryController;
 use App\Admin\Controllers\ArticleController;
 use App\Admin\Controllers\AttributeController;
@@ -48,6 +49,9 @@ Route::group([
     Route::resource('attributes', AttributeController::class)->names('attributes');
     Route::resource('attribute/values', AttributeValueController::class)->names('attribute.values');
 
+    // Application relates
+    Route::resource('releases', AppBuildController::class)->names('releases');
+
     // API Routes
     Route::prefix('api/')->name('api.')->group(function () {
         Route::get('files/library', [FileApiController::class, 'library'])->name('files.library');
@@ -59,4 +63,5 @@ Route::group([
         Route::post('pages/{pageId}/save', [PageBuilderAdminApiController::class, 'savePageData'])->name('api.pages.save');
         Route::get('pages/components/registry', [PageBuilderAdminApiController::class, 'getComponentsRegistry'])->name('api.components.registry');
     });
+
 });

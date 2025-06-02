@@ -78,6 +78,17 @@ class AdminMenuSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
+        // Add Releases menu item
+        DB::table('admin_menu')->insert([
+            'parent_id'  => 0,
+            'order'      => 14,
+            'title'      => 'Releases',
+            'icon'       => 'fa-rocket',
+            'uri'        => 'releases',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
         // Add Files menu item
         DB::table('admin_menu')->insert([
             'parent_id'  => 0,
