@@ -28,7 +28,7 @@ class AdminBaseController extends AdminController
         }
         $object     = (new $model())->find($id);
         $filterData = \Arr::except($data, self::UPDATE_TO_IGNORE_FIELDS);
-        $object->setDirty($filterData)->update($filterData);
+        $object->update($filterData);
 
         return (new Form())->response()->success(trans('admin.update_succeeded'))->refresh();
     }

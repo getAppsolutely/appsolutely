@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\AdminSetting;
+use App\Models\AppBuild;
 use App\Models\File;
 use App\Models\Model;
 use App\Repositories\AdminSettingRepository;
@@ -163,14 +164,23 @@ class StorageService
             $sync         = [$file->id => ['type' => $type, 'file_path' => $filePath]];
             $adminSetting->filesOfType($type)->sync($sync);
         } elseif (! empty($class) && ! empty($key) && class_exists($class) && is_a($class, Model::class, true)) {
-            $model  = new $class();
-            $object = $model->find($key);
+            $object = (new $class())->find($key);
             if (! method_exists($object, 'filesOfType')) {
                 return false;
             }
-            $pattern  = '%s/%s/%s.%s';
-            $slug     = $object->slug ?? $key;
-            $filePath = sprintf($pattern, Str::plural(Str::kebab(class_basename($class))), $slug, $type, $file->extension);
+            if ($object instanceof AppBuild) {
+                $pattern     = 'release/v%s/%s';
+                $build       = (new $class())::with(['version'])->find($key);
+                $subFolder   = $build?->version->version;
+                $filePath    = sprintf($pattern, $subFolder, $file->original_filename);
+            } else {
+                $pattern       = '%s/%s/%s.%s';
+                $folder        = Str::plural(Str::kebab(class_basename($class)));
+                $subFolder     = $object->slug ?? $key;
+                $filename      = $type;
+                $filePath      = sprintf($pattern, $folder, $subFolder, $filename, $file->extension);
+            }
+
             $sync     = [$file->id => ['type' => $type, 'file_path' => $filePath]];
             $object->filesOfType($type)->sync($sync);
         }

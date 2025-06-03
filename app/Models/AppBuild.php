@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasFilesOfType;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 final class AppBuild extends Model
 {
+    use HasFilesOfType;
     use SoftDeletes;
 
     protected $fillable = [
