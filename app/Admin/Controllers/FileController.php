@@ -75,8 +75,8 @@ class FileController extends AdminBaseController
             $show->field('size')->as(column_file_size());
 
             $show->field('hash');
-            $show->field('created_at')->display(column_time_format());
-            $show->field('updated_at')->display(column_time_format());
+            $show->field('created_at');
+            $show->field('updated_at');
 
             // Display related
             $show->relation('Assessable', function ($model) {

@@ -61,21 +61,12 @@ final class AppBuildController extends AdminBaseController
     {
         return Form::make(AppBuild::with('version'), function (Form $form) {
             $form->display('id');
-
             $versionOptions = AppVersion::pluck('version', 'id')->toArray();
-            $hasVersions    = count($versionOptions) > 0;
 
-            $form->column(6, function (Form $form) use ($hasVersions, $versionOptions) {
-                if ($hasVersions) {
-                    $form->select('version_id', 'Version')
-                        ->options($versionOptions + ['__new__' => '➕ Add new version'])
-                        ->when('__new__', function (Form $form) {
-                            $form->text('_version_name', 'New Version Name');
-                        })
-                        ->required();
-                } else {
-                    $form->text('_version_name', 'Version Name')->required();
-                }
+            $form->column(6, function (Form $form) use ($versionOptions) {
+                $form->select('version_id', 'Version')
+                    ->options($versionOptions)->required();
+
                 $form->select('platform')->options(self::PLATFORMS)
                     ->default('windows')
                     ->help('Select a platform or enter a custom one below.')
@@ -118,25 +109,7 @@ final class AppBuildController extends AdminBaseController
             $form->disableViewButton();
             $form->disableViewCheck();
 
-            $form->saving(function (Form $form) use ($hasVersions) {
-                $newVersionName = $form->_version_name;
-                if ($hasVersions && $form->version_id === '__new__') {
-                    if (! $newVersionName) {
-                        return $form->response()->error('Please enter a version name.');
-                    }
-                }
-                if ((! $hasVersions && $newVersionName) || ($hasVersions && $form->version_id === '__new__' && $newVersionName)) {
-                    $existing = AppVersion::where('version', $newVersionName)->first();
-                    if ($existing) {
-                        return $form->response()->error('Version already exists. Please select it from the list.');
-                    }
-                    $version = AppVersion::create([
-                        'version'      => $newVersionName,
-                        'status'       => 1,
-                        'published_at' => now(),
-                    ]);
-                    $form->version_id = $version->id;
-                }
+            $form->saving(function (Form $form) {
                 if (! empty($form->custom_platform)) {
                     $form->platform = $form->_custom_platform;
                 }
@@ -144,7 +117,7 @@ final class AppBuildController extends AdminBaseController
                     $form->arch = $form->_custom_arch;
                 }
             });
-            $form->ignore(['_version_name', '_platform', '_arch']);
+            $form->ignore(['_platform', '_arch']);
         });
     }
 }

@@ -107,8 +107,8 @@ class ProductController extends AdminBaseController
         $form->currency('original_price')->symbol(app_currency_symbol())->default(999);
         $form->currency('price')->symbol(app_currency_symbol())->default(999);
 
-        $form->datetime('published_at')->display(column_time_format());
-        $form->datetime('expired_at')->display(column_time_format());
+        $form->datetime('published_at');
+        $form->datetime('expired_at');
         $form->switch('status');
 
         $form->disableViewButton();
@@ -143,8 +143,8 @@ class ProductController extends AdminBaseController
             return json_encode($value);
         });
 
-        $form->display('created_at')->display(column_time_format());
-        $form->display('updated_at')->display(column_time_format());
+        $form->display('created_at');
+        $form->display('updated_at');
 
         $form->disableViewButton();
         $form->disableViewCheck();

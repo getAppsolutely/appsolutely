@@ -75,8 +75,8 @@ class PageController extends AdminBaseController
             $form->datetime('published_at_local', __t('Published At (%s)', [app_local_timezone()]));
             $form->datetime('expired_at_local', __t('Expired At (%s)', [app_local_timezone()]));
             $form->switch('status');
-            $form->display('created_at')->display(column_time_format());
-            $form->display('updated_at')->display(column_time_format());
+            $form->display('created_at');
+            $form->display('updated_at');
 
             $form->disableViewButton();
             $form->disableViewCheck();

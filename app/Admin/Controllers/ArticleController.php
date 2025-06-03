@@ -66,8 +66,8 @@ class ArticleController extends AdminBaseController
                 $form->text('slug');
 
                 $form->markdown('content')->required()->options(Markdown::options())->script(Markdown::script());
-                $form->datetime('published_at')->display(column_time_format());
-                $form->datetime('expired_at')->display(column_time_format());
+                $form->datetime('published_at');
+                $form->datetime('expired_at');
                 $form->switch('status');
 
             })->tab('Optional', function (Form $form) {
@@ -76,8 +76,8 @@ class ArticleController extends AdminBaseController
                 $form->textarea('description')->rows(2);
                 $form->keyValue('setting')->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
 
-                $form->display('created_at')->display(column_time_format());
-                $form->display('updated_at')->display(column_time_format());
+                $form->display('created_at');
+                $form->display('updated_at');
             });
         });
     }

@@ -62,8 +62,8 @@ class OrderController extends AdminBaseController
             $show->field('remark');
             $show->field('ip');
             $show->field('request');
-            $show->field('created_at')->display(column_time_format());
-            $show->field('updated_at')->display(column_time_format());
+            $show->field('created_at');
+            $show->field('updated_at');
         });
     }
 
@@ -83,8 +83,8 @@ class OrderController extends AdminBaseController
             $form->textarea('remark');
             $form->text('ip');
             $form->textarea('request');
-            $form->display('created_at')->display(column_time_format());
-            $form->display('updated_at')->display(column_time_format());
+            $form->display('created_at');
+            $form->display('updated_at');
         });
     }
 }
