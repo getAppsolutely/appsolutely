@@ -11,6 +11,8 @@ trait LocalizesDateTime
      */
     protected static array $cachedDateTimeFields = [];
 
+    protected array $_dirty;
+
     public const PREFIX = '_';
 
     /**
@@ -25,7 +27,7 @@ trait LocalizesDateTime
                 // Only override if the attribute exists
                 if (array_key_exists($field, $model->attributes ?? []) && $model->getOriginal($field) instanceof Carbon) {
                     $time = $model->getRawOriginal($field);
-                    $model->setAttribute(self::getPrefix() . $field, to_local($time));
+                    $model->setAttribute(self::getPrefix() . $field, utc_to_app_timezone($time));
                 }
             }
         });
@@ -33,8 +35,15 @@ trait LocalizesDateTime
         static::saving(function ($model) {
             foreach ($model->getLocalDateTimeFields() as $field) {
                 $localKey = self::getPrefix() . $field;
-                if (! in_array($field, static::getStandardTimestampKeys()) && ! empty($model->attributes[$localKey])) {
-                    $model->attributes[$field] = to_utc($model->attributes[$localKey]) ?? Carbon::now();
+                if (! $model->isDirty($field) && ! in_array($field, static::getStandardTimestampKeys()) && ! empty($model->attributes[$localKey])) {
+                    if (! empty($model->_dirty[$localKey])) {
+                        $value = $model->_dirty[$localKey];
+                    } elseif (! empty($model->attributes[$localKey])) {
+                        $value = $model->attributes[$localKey];
+                    } else {
+                        $value = Carbon::now();
+                    }
+                    $model->attributes[$field] = app_timezone_to_utc($value) ?? Carbon::now();
                 }
                 unset($model->attributes[$localKey]);
             }
@@ -88,5 +97,12 @@ trait LocalizesDateTime
     public static function getPrefix(): string
     {
         return self::PREFIX;
+    }
+
+    public function setDirty(array $data): static
+    {
+        $this->_dirty = $data;
+
+        return $this;
     }
 }

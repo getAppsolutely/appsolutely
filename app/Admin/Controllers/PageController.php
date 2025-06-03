@@ -27,10 +27,10 @@ class PageController extends AdminBaseController
             $grid->column('name');
             $grid->column('slug');
             $grid->column('title');
-            $grid->column('published_at_local')->sortable();
-            $grid->column('expired_at_local')->sortable();
+            $grid->column('published_at')->display(column_time_format())->sortable();
+            $grid->column('expired_at')->display(column_time_format())->sortable();
             $grid->column('status')->switch();
-            $grid->column('created_at_local');
+            $grid->column('created_at')->display(column_time_format());
 
             $grid->quickSearch('id', 'name', 'slug', 'title');
             $grid->filter(function (Grid\Filter $filter) {
@@ -75,8 +75,8 @@ class PageController extends AdminBaseController
             $form->datetime('published_at_local', __t('Published At (%s)', [app_local_timezone()]));
             $form->datetime('expired_at_local', __t('Expired At (%s)', [app_local_timezone()]));
             $form->switch('status');
-            $form->display('created_at_local');
-            $form->display('updated_at_local');
+            $form->display('created_at')->display(column_time_format());
+            $form->display('updated_at')->display(column_time_format());
 
             $form->disableViewButton();
             $form->disableViewCheck();

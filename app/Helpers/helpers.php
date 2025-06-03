@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Helpers\FileHelper;
 use App\Services\TranslationService;
 use Carbon\Carbon;
+use Illuminate\Container\Attributes\Database;
 use Illuminate\Support\Facades\Log;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
@@ -391,7 +392,7 @@ if (! function_exists('column_time_format')) {
     function column_time_format(): \Closure
     {
         return function ($datetime) {
-            return to_local($datetime);
+            return utc_to_app_timezone($datetime);
         };
     }
 }
@@ -413,20 +414,18 @@ if (! function_exists('timezone_convert')) {
     }
 }
 
-if (! function_exists('to_local')) {
-    function to_local($time, ?string $format = null): string
+if (! function_exists('utc_to_app_timezone')) {
+    function utc_to_app_timezone($time, ?string $format = null): string
     {
-        $timezone      = config('app.timezone');
-        $localTimezone = user_timezone() ?? app_local_timezone();
-        $toFormat      = $format ?? (user_time_format() ?? app_time_format());
+        $format = $format ?? app_time_format();
 
-        return timezone_convert($time, $timezone, $localTimezone)
-            ->format($toFormat);
+        return timezone_convert($time, config('app.timezone'), app_local_timezone())
+            ->format($format);
     }
 }
 
-if (! function_exists('to_utc')) {
-    function to_utc($time): Carbon
+if (! function_exists('app_timezone_to_utc')) {
+    function app_timezone_to_utc($time): Carbon
     {
         $standardTime = Carbon::createFromFormat(app_time_format(), $time, app_local_timezone());
 
@@ -437,21 +436,40 @@ if (! function_exists('to_utc')) {
 if (! function_exists('user_timezone')) {
     function user_timezone(): ?string
     {
-        if (auth()->check()) {
-            return auth()->user()->timezone ?: config('app.timezone');
+        if (auth()->check() && ! empty(auth()->user()->timezone)) {
+            return auth()->user()->timezone;
         }
 
-        return null;
+        return app_local_timezone();
     }
 }
 
 if (! function_exists('user_time_format')) {
     function user_time_format(): ?string
     {
-        if (auth()->check()) {
-            return auth()->user()->time_format ?: app_time_format();
+        if (auth()->check() && ! empty(auth()->user()->time_format)) {
+            return auth()->user()->time_format;
         }
 
-        return null;
+        return app_time_format();
+    }
+}
+
+if (! function_exists('utc_to_user_timezone')) {
+    function utc_to_user_timezone($time, ?string $format = null): string
+    {
+        $format = $format ?? app_time_format();
+
+        return timezone_convert($time, config('app.timezone'), app_local_timezone())
+            ->format($format);
+    }
+}
+
+if (! function_exists('user_timezone_to_utc')) {
+    function user_timezone_to_utc($time): Carbon
+    {
+        $standardTime = Carbon::createFromFormat(user_time_format(), $time, user_timezone());
+
+        return $standardTime->copy()->setTimezone(config('app.timezone'));
     }
 }

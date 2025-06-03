@@ -70,8 +70,8 @@ class ProductSkuForm extends Form implements LazyRenderable
         }, false, 'seo');
 
         $this->tab('Optional', function (Form $form) {
-            $form->display('created_at_local');
-            $form->display('updated_at_local');
+            $form->display('created_at')->display(column_time_format());
+            $form->display('updated_at')->display(column_time_format());
         }, false, 'optional');
     }
 

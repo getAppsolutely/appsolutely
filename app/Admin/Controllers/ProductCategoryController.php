@@ -71,8 +71,8 @@ class ProductCategoryController extends AdminBaseController
             $show->field('setting');
             $show->field('status');
             $show->field('cover');
-            $show->field('created_at_local');
-            $show->field('updated_at_local');
+            $show->field('created_at')->display(column_time_format());
+            $show->field('updated_at')->display(column_time_format());
         });
     }
 
@@ -104,8 +104,8 @@ class ProductCategoryController extends AdminBaseController
 
                 $form->image('cover')->autoUpload()->url(upload_url(ProductCategory::class, $form->getKey()));
                 $form->switch('status');
-                $form->display('created_at_local');
-                $form->display('updated_at_local');
+                $form->display('created_at')->display(column_time_format());
+                $form->display('updated_at')->display(column_time_format());
 
                 $form->showFooter();
             });

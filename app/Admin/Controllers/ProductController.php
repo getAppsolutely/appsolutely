@@ -34,8 +34,8 @@ class ProductController extends AdminBaseController
                 return Product::getProductTypes()[$type] ?? $type;
             })->label();
 
-            $grid->column('published_at_local')->sortable();
-            $grid->column('expired_at_local')->sortable();
+            $grid->column('published_at')->display(column_time_format())->sortable();
+            $grid->column('expired_at')->display(column_time_format())->sortable();
 
             $grid->column('sort')->editable();
             $grid->column('status')->switchable();
@@ -107,8 +107,8 @@ class ProductController extends AdminBaseController
         $form->currency('original_price')->symbol(app_currency_symbol())->default(999);
         $form->currency('price')->symbol(app_currency_symbol())->default(999);
 
-        $form->datetime('published_at_local');
-        $form->datetime('expired_at_local');
+        $form->datetime('published_at')->display(column_time_format());
+        $form->datetime('expired_at')->display(column_time_format());
         $form->switch('status');
 
         $form->disableViewButton();
@@ -143,8 +143,8 @@ class ProductController extends AdminBaseController
             return json_encode($value);
         });
 
-        $form->display('created_at_local');
-        $form->display('updated_at_local');
+        $form->display('created_at')->display(column_time_format());
+        $form->display('updated_at')->display(column_time_format());
 
         $form->disableViewButton();
         $form->disableViewCheck();

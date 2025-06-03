@@ -2,14 +2,12 @@
 
 namespace App\Models;
 
-use App\Models\Traits\LocalizesDateTime;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 final class AppVersion extends Model
 {
-    use LocalizesDateTime, SoftDeletes;
+    use SoftDeletes;
 
     protected $fillable = [
         'version',
