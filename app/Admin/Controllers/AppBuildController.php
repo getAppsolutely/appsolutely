@@ -90,17 +90,6 @@ final class AppBuildController extends AdminBaseController
                             ->help('If filled, this will override the selected architecture.');
                     });
                 $form->textarea('release_notes');
-                $form->text('build_status');
-                $form->text('build_log');
-                $form->file('path', 'Build File')
-                    ->autoUpload()
-                    ->url(upload_url(AppBuild::class, $form->getKey()))
-                    ->uniqueName()
-                    ->help('Upload a build file. The path will be stored and used for download. You can also enter a path manually.');
-            });
-
-            $form->column(6, function (Form $form) {
-                $form->text('signature');
                 $form->keyValue('gray_strategy')
                     ->default([])
                     ->setKeyLabel('Key')
@@ -108,10 +97,22 @@ final class AppBuildController extends AdminBaseController
                     ->saveAsJson()
                     ->help('Key-value pairs will be saved as JSON. Example: Key: percent   Value: 20 | Key: uuid_hash_range   Value: [0, 2000]');
 
+            });
+
+            $form->column(6, function (Form $form) {
+                $form->text('build_status');
+                $form->text('build_log');
+                $form->file('path', 'Build File')
+                    ->autoUpload()
+                    ->url(upload_url(AppBuild::class, $form->getKey()))
+                    ->uniqueName()
+                    ->help('Upload a build file. The path will be stored and used for download. You can also enter a path manually.');
+
+                $form->text('signature');
+
                 $form->switch('force_update');
                 $form->switch('status');
-                $form->datetime('_published_at');
-                $form->display('_created_at');
+                $form->datetime('published_at');
             });
 
             $form->disableViewButton();

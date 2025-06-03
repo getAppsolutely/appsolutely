@@ -392,6 +392,10 @@ if (! function_exists('column_time_format')) {
     function column_time_format(): \Closure
     {
         return function ($datetime) {
+            if (! $datetime) {
+                return '—';
+            }
+
             return utc_to_app_timezone($datetime);
         };
     }

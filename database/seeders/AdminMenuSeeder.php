@@ -82,9 +82,9 @@ class AdminMenuSeeder extends Seeder
         DB::table('admin_menu')->insert([
             'parent_id'  => 0,
             'order'      => 14,
-            'title'      => 'Releases',
+            'title'      => 'App Builds',
             'icon'       => 'fa-rocket',
-            'uri'        => 'releases',
+            'uri'        => 'builds',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
