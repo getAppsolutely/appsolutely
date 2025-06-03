@@ -39,8 +39,8 @@ final class AppBuildController extends AdminBaseController
             $grid->column('force_update')->bool();
             $grid->column('build_status');
             $grid->column('status')->switch();
-            $grid->column('published_at_local')->sortable();
-            $grid->column('created_at_local')->sortable();
+            $grid->column('_published_at')->sortable();
+            $grid->column('_created_at')->sortable();
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('version_id')->select(AppVersion::pluck('version', 'id'));
                 $filter->equal('platform')->select([
@@ -70,23 +70,23 @@ final class AppBuildController extends AdminBaseController
                     $form->select('version_id', 'Version')
                         ->options($versionOptions + ['__new__' => '➕ Add new version'])
                         ->when('__new__', function (Form $form) {
-                            $form->text('new_version_name', 'New Version Name');
+                            $form->text('_version_name', 'New Version Name');
                         })
                         ->required();
                 } else {
-                    $form->text('new_version_name', 'Version Name')->required();
+                    $form->text('_version_name', 'Version Name')->required();
                 }
                 $form->select('platform')->options(self::PLATFORMS)
                     ->default('windows')
                     ->help('Select a platform or enter a custom one below.')
                     ->when('other', function (Form $form) {
-                        $form->text('custom_platform', 'Custom Platform (optional)')
+                        $form->text('_platform', 'Custom Platform (optional)')
                             ->help('If filled, this will override the selected platform.');
                     });
                 $form->select('arch')->options(self::ARCHS)
                     ->help('Select the architecture or enter a custom one below.')
                     ->when('other', function (Form $form) {
-                        $form->text('custom_arch', 'Custom Arch (optional)')
+                        $form->text('_arch', 'Custom Arch (optional)')
                             ->help('If filled, this will override the selected architecture.');
                     });
                 $form->textarea('release_notes');
@@ -110,15 +110,15 @@ final class AppBuildController extends AdminBaseController
 
                 $form->switch('force_update');
                 $form->switch('status');
-                $form->datetime('published_at_local');
-                $form->display('created_at_local');
+                $form->datetime('_published_at');
+                $form->display('_created_at');
             });
 
             $form->disableViewButton();
             $form->disableViewCheck();
 
             $form->saving(function (Form $form) use ($hasVersions) {
-                $newVersionName = $form->new_version_name;
+                $newVersionName = $form->_version_name;
                 if ($hasVersions && $form->version_id === '__new__') {
                     if (! $newVersionName) {
                         return $form->response()->error('Please enter a version name.');
@@ -137,14 +137,13 @@ final class AppBuildController extends AdminBaseController
                     $form->version_id = $version->id;
                 }
                 if (! empty($form->custom_platform)) {
-                    $form->platform = $form->custom_platform;
+                    $form->platform = $form->_custom_platform;
                 }
                 if (! empty($form->custom_arch)) {
-                    $form->arch = $form->custom_arch;
+                    $form->arch = $form->_custom_arch;
                 }
-                unset($form->new_version_name, $form->custom_platform, $form->custom_arch);
             });
-            $form->ignore(['new_version_name', 'custom_platform', 'custom_arch']);
+            $form->ignore(['_version_name', '_platform', '_arch']);
         });
     }
 }

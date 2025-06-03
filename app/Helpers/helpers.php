@@ -428,8 +428,9 @@ if (! function_exists('to_local')) {
 if (! function_exists('to_utc')) {
     function to_utc($time): Carbon
     {
-        return Carbon::parse($time, app_local_timezone())
-            ->setTimezone(config('app.timezone'));
+        $standardTime = Carbon::createFromFormat(app_time_format(), $time, app_local_timezone());
+
+        return $standardTime->copy()->setTimezone(config('app.timezone'));
     }
 }
 

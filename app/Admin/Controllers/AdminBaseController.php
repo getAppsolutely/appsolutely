@@ -9,6 +9,8 @@ use Illuminate\Support\Str;
 
 class AdminBaseController extends AdminController
 {
+    const UPDATE_TO_IGNORE_FIELDS = ['_inline_edit_', '_method', '_token'];
+
     protected function form() {}
 
     /**
@@ -25,8 +27,8 @@ class AdminBaseController extends AdminController
             throw new \Exception($message);
         }
         $object     = (new $model())->find($id);
-        $filterData = array_intersect_key($data, array_flip($object->getFillable()));
-        $object->update($filterData);
+        $filterData = \Arr::except($data, self::UPDATE_TO_IGNORE_FIELDS);
+        $object->setDirty($filterData)->update($filterData);
 
         return (new Form())->response()->success(trans('admin.update_succeeded'))->refresh();
     }

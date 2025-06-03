@@ -5,6 +5,7 @@ use App\Admin\Controllers\Api\CommonController;
 use App\Admin\Controllers\Api\FileController as FileApiController;
 use App\Admin\Controllers\Api\PageBuilderAdminApiController;
 use App\Admin\Controllers\AppBuildController;
+use App\Admin\Controllers\AppVersionController;
 use App\Admin\Controllers\ArticleCategoryController;
 use App\Admin\Controllers\ArticleController;
 use App\Admin\Controllers\AttributeController;
@@ -50,7 +51,8 @@ Route::group([
     Route::resource('attribute/values', AttributeValueController::class)->names('attribute.values');
 
     // Application relates
-    Route::resource('releases', AppBuildController::class)->names('releases');
+    Route::resource('builds', AppBuildController::class)->names('app.builds');
+    Route::resource('versions', AppVersionController::class)->names('app.versions');
 
     // API Routes
     Route::prefix('api/')->name('api.')->group(function () {

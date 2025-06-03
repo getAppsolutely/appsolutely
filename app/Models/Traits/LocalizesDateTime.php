@@ -11,6 +11,8 @@ trait LocalizesDateTime
      */
     protected static array $cachedDateTimeFields = [];
 
+    public const PREFIX = '_';
+
     /**
      * Boot the LocalizesTimestamps trait for a model.
      *
@@ -23,14 +25,14 @@ trait LocalizesDateTime
                 // Only override if the attribute exists
                 if (array_key_exists($field, $model->attributes ?? []) && $model->getOriginal($field) instanceof Carbon) {
                     $time = $model->getRawOriginal($field);
-                    $model->setAttribute($field . '_local', to_local($time));
+                    $model->setAttribute(self::getPrefix() . $field, to_local($time));
                 }
             }
         });
 
         static::saving(function ($model) {
             foreach ($model->getLocalDateTimeFields() as $field) {
-                $localKey = $field . '_local';
+                $localKey = self::getPrefix() . $field;
                 if (! in_array($field, static::getStandardTimestampKeys()) && ! empty($model->attributes[$localKey])) {
                     $model->attributes[$field] = to_utc($model->attributes[$localKey]) ?? Carbon::now();
                 }
@@ -81,5 +83,10 @@ trait LocalizesDateTime
     protected static function getStandardTimestampKeys(): array
     {
         return ['created_at', 'updated_at', 'deleted_at'];
+    }
+
+    public static function getPrefix(): string
+    {
+        return self::PREFIX;
     }
 }
