@@ -14,6 +14,7 @@ return new class() extends Migration
         Schema::create('attribute_groups', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('remark')->nullable();
             $table->boolean('status')->default(true);
             $table->softDeletes();
         });

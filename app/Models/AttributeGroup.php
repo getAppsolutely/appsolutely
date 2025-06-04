@@ -22,6 +22,7 @@ class AttributeGroup extends Model
      */
     protected $fillable = [
         'title',
+        'remark',
         'status',
     ];
 

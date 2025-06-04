@@ -20,6 +20,7 @@ class AttributeGroupController extends AdminBaseController
         return Grid::make(new AttributeGroup(), function (Grid $grid) {
             $grid->column('id')->sortable();
             $grid->column('title')->editable();
+            $grid->column('remark')->editable();
             $grid->column('status')->switch();
             $grid->model()->orderByDesc('id');
 
@@ -47,6 +48,7 @@ class AttributeGroupController extends AdminBaseController
             $form->disableViewButton();
             $form->display('id');
             $form->text('title')->required();
+            $form->text('remark');
             $form->multipleSelect('attributes', 'Attributes')
                 ->options(Attribute::where('status', true)->pluck('title', 'id'))
                 ->customFormat(extract_values());
