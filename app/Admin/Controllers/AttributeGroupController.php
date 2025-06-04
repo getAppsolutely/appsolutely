@@ -19,8 +19,8 @@ class AttributeGroupController extends AdminBaseController
     {
         return Grid::make(new AttributeGroup(), function (Grid $grid) {
             $grid->column('id')->sortable();
-            $grid->column('title');
-            $grid->column('status')->switchable();
+            $grid->column('title')->editable();
+            $grid->column('status')->switch();
 
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id')->width(4);
@@ -42,6 +42,7 @@ class AttributeGroupController extends AdminBaseController
     protected function form()
     {
         return Form::make(AttributeGroup::with(['attributes']), function (Form $form) {
+            $form->disableViewButton();
             $form->display('id');
             $form->text('title')->required();
             $form->multipleSelect('attributes', 'Attributes')

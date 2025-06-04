@@ -25,7 +25,7 @@ class ArticleController extends AdminBaseController
         return Grid::make(Article::with(['categories']), function (Grid $grid) {
 
             $grid->column('id')->sortable();
-            $grid->column('status', 'Status')->switchable();
+            $grid->column('status', 'Status')->switch();
             $grid->column('title')->editable();
             $grid->column('categories')->pluck('title')->label();
 

@@ -19,10 +19,10 @@ class AttributeController extends AdminBaseController
     {
         return Grid::make(new Attribute(), function (Grid $grid) {
             $grid->column('id')->sortable();
-            $grid->column('title');
-            $grid->column('remark');
-            $grid->column('slug');
-            $grid->column('status')->switchable();
+            $grid->column('title')->editable();
+            $grid->column('remark')->editable();
+            $grid->column('slug')->editable();
+            $grid->column('status')->switch();
 
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id')->width(4);
@@ -45,6 +45,7 @@ class AttributeController extends AdminBaseController
     protected function form()
     {
         return Form::make(Attribute::with(['attributeGroups']), function (Form $form) {
+            $form->disableViewButton();
             $form->display('id');
 
             $form->text('title')->required();

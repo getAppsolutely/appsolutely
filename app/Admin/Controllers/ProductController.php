@@ -38,7 +38,7 @@ class ProductController extends AdminBaseController
             $grid->column('expired_at')->display(column_time_format())->sortable();
 
             $grid->column('sort')->editable();
-            $grid->column('status')->switchable();
+            $grid->column('status')->switch();
 
             $grid->quickSearch('id', 'title');
             $grid->filter(function (Grid\Filter $filter) {
@@ -164,7 +164,7 @@ class ProductController extends AdminBaseController
             $grid->column('original_price')->editable();
             $grid->column('price')->editable();
             $grid->column('stock')->editable();
-            $grid->column('status')->switchable();
+            $grid->column('status')->switch();
             $grid->column('sort')->sortable()->editable();
 
             // Add create button that opens the modal form

@@ -31,7 +31,7 @@ class ProductSkuController extends AdminBaseController
             $grid->column('original_price')->editable();
             $grid->column('price')->editable();
             $grid->column('sort')->editable()->sortable();
-            $grid->column('status')->switchable();
+            $grid->column('status')->switch();
             $grid->column('published_at')->display(column_time_format())->sortable();
             $grid->column('expired_at')->display(column_time_format())->sortable();
 

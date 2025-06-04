@@ -20,9 +20,9 @@ class AttributeValueController extends AdminBaseController
         return Grid::make(AttributeValue::with(['attribute']), function (Grid $grid) {
             $grid->column('id')->sortable();
             $grid->column('attribute.title', 'Attribute');
-            $grid->column('value');
-            $grid->column('slug');
-            $grid->column('status')->switchable();
+            $grid->column('value')->editable();
+            $grid->column('slug')->editable();
+            $grid->column('status')->switch();
 
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id')->width(4);
@@ -48,6 +48,7 @@ class AttributeValueController extends AdminBaseController
     protected function form()
     {
         return Form::make(new AttributeValue(), function (Form $form) {
+            $form->disableViewButton();
             $form->display('id');
             $form->select('attribute_id', 'Attribute')
                 ->options(Attribute::where('status', true)->pluck('title', 'id'))
