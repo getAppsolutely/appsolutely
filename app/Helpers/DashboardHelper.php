@@ -6,13 +6,9 @@ use Illuminate\Support\Facades\File;
 
 class DashboardHelper
 {
-    const DASHBOARD_ASSETS_PATH = 'assets/';
-
-    const DASHBOARD_FILES_PATH = 'uploads/';
-
-    public static function imageThumbnail($filePath, $prefix = self::DASHBOARD_FILES_PATH, $maxWidth = 100, $maxHeight = 100): string
+    public static function imageThumbnail($filePath, $maxWidth = 100, $maxHeight = 100): string
     {
-        $url = url($prefix . $filePath);
+        $url = upload_url($filePath);
 
         $extension = strtolower(File::extension($filePath));
 

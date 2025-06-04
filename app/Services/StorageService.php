@@ -2,13 +2,16 @@
 
 namespace App\Services;
 
+use App\Helpers\FileHelper;
 use App\Models\AdminSetting;
 use App\Models\AppBuild;
 use App\Models\File;
 use App\Models\Model;
 use App\Repositories\AdminSettingRepository;
 use App\Repositories\FileRepository;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -111,7 +114,7 @@ class StorageService
      */
     public function retrieve(string $filePath): ?array
     {
-        if (request()->route()->getName() == 'file.assets') {
+        if (request()->route()->getName() == 'file.public.retrieve') {
             $assessable = $this->fileRepository->findByAssessable($filePath);
             if (empty($assessable->file->full_path)) {
                 abort(404);
@@ -191,5 +194,28 @@ class StorageService
     public function getLibrary(Request $request): LengthAwarePaginator
     {
         return $this->fileRepository->getLibrary($request);
+    }
+
+    public function response(Request $request, ?string $filePath = null): Response|JsonResponse
+    {
+        $result = $this->retrieve($filePath);
+        if ($result === null) {
+            abort(404);
+        }
+
+        [$fileContents, $mimeType] = $result;
+        $fileName                  = basename($filePath);
+
+        // Force download if 'download' parameter is present in the query
+        if ($request->has('download')) {
+            $disposition = 'attachment';
+        } else {
+            $disposition = in_array($mimeType, FileHelper::DISPLAYABLE_MIME_TYPES) ? 'inline' : 'attachment';
+        }
+
+        return response($fileContents)
+            ->header('Content-Type', $mimeType)
+            ->header('Content-Disposition', $disposition . '; filename="' . $fileName . '"')
+            ->header('Content-Length', strlen($fileContents));
     }
 }

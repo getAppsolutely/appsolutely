@@ -55,6 +55,6 @@ final class AppBuild extends Model
             return null;
         }
 
-        return app_url('storage/' . $path);
+        return public_url($path);
     }
 }

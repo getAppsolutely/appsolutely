@@ -219,6 +219,22 @@ if (! function_exists('app_url')) {
     }
 }
 
+if (! function_exists('dashboard_url')) {
+    /**
+     * Generate a URL using configured app URL or fallback to Laravel's url() helper
+     */
+    function dashboard_url(string $uri = ''): string
+    {
+        $baseUrl = config('admin.route.domain');
+
+        if ($baseUrl) {
+            return URL::formatScheme('') . rtrim($baseUrl, '/') . '/' . ltrim($uri, '/');
+        }
+
+        return url($uri);
+    }
+}
+
 if (! function_exists('public_url')) {
     /**
      * files for public viewing
@@ -237,9 +253,31 @@ if (! function_exists('upload_url')) {
      */
     function upload_url(string $uri = ''): string
     {
-        $uri = (config('appsolutely.storage.dashboard') ?? 'uploads/') . $uri;
+        $uri = admin_route_prefix() . (config('appsolutely.storage.dash_files') ?? 'uploads/') . $uri;
 
-        return app_url($uri);
+        return dashboard_url($uri);
+    }
+}
+
+if (! function_exists('asset_url')) {
+    /**
+     * files for dashboard viewing
+     */
+    function asset_url(string $uri = ''): string
+    {
+        $uri = admin_route_prefix() . (config('appsolutely.storage.dash_assets') ?? 'assets/') . $uri;
+
+        return dashboard_url($uri);
+    }
+}
+
+if (! function_exists('admin_route_prefix')) {
+    /**
+     * files for dashboard viewing
+     */
+    function admin_route_prefix(string $uri = ''): string
+    {
+        return config('admin.route.prefix') . '/';
     }
 }
 

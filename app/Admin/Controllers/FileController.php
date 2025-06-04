@@ -4,9 +4,13 @@ namespace App\Admin\Controllers;
 
 use App\Helpers\DashboardHelper;
 use App\Models\File;
+use App\Services\StorageService;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class FileController extends AdminBaseController
 {
@@ -120,5 +124,15 @@ class FileController extends AdminBaseController
             }
 
         });
+    }
+
+    public function retrieve(Request $request, ?string $filePath = null): Response|JsonResponse
+    {
+        if (empty($filePath)) {
+            abort(404);
+        }
+        $storageService = app(StorageService::class);
+
+        return $storageService->response($request, $filePath);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\FileHelper;
 use App\Services\StorageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,27 +19,8 @@ class FileController extends BaseController
         if (empty($filePath)) {
             abort(404);
         }
-
         $storageService = app(StorageService::class);
-        $result         = $storageService->retrieve($filePath);
 
-        if ($result === null) {
-            abort(404);
-        }
-
-        [$fileContents, $mimeType] = $result;
-        $fileName                  = basename($filePath);
-
-        // Force download if 'download' parameter is present in the query
-        if ($request->has('download')) {
-            $disposition = 'attachment';
-        } else {
-            $disposition = in_array($mimeType, FileHelper::DISPLAYABLE_MIME_TYPES) ? 'inline' : 'attachment';
-        }
-
-        return response($fileContents)
-            ->header('Content-Type', $mimeType)
-            ->header('Content-Disposition', $disposition . '; filename="' . $fileName . '"')
-            ->header('Content-Length', strlen($fileContents));
+        return $storageService->response($request, $filePath);
     }
 }

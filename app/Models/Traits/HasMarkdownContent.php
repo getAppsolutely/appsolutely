@@ -56,7 +56,7 @@ trait HasMarkdownContent
             if ($file) {
                 $filePath            = sprintf('%s/%s', Str::plural(Str::kebab(class_basename(($this)))), $file->getAttribute('full_path'));
                 $searches[]          = $image['url'];
-                $replaces[]          = app_url('assets/' . $filePath);
+                $replaces[]          = asset_url($filePath);
                 $syncData[$file->id] = [
                     'type'      => $field,
                     'file_path' => $filePath,

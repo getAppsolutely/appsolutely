@@ -9,7 +9,8 @@ return [
         'symbol' => 'USD',
     ],
     'storage' => [
-        'dashboard' => 'uploads/',
-        'public'    => 'storage/',
+        'dash_files'  => 'uploads/',
+        'dash_assets' => 'assets/',
+        'public'      => 'storage/',
     ],
 ];

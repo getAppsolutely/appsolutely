@@ -12,6 +12,7 @@ use App\Admin\Controllers\AttributeController;
 use App\Admin\Controllers\AttributeGroupController;
 use App\Admin\Controllers\AttributeValueController;
 use App\Admin\Controllers\FileController;
+use App\Admin\Controllers\HomeController;
 use App\Admin\Controllers\OrderController;
 use App\Admin\Controllers\PageController;
 use App\Admin\Controllers\ProductCategoryController;
@@ -27,7 +28,10 @@ Route::group([
     'namespace'  => config('admin.route.namespace'),
     'middleware' => config('admin.route.middleware'),
 ], function () {
-    Route::get('/', 'HomeController@index');
+    Route::get('/', [HomeController::class, 'index']);
+
+    Route::get('uploads/{path?}', [FileController::class, 'retrieve'])->where('path', '(.*)')->name('file.self');
+    Route::get('assets/{path?}', [FileController::class, 'retrieve'])->where('path', '(.*)')->name('file.mask');
 
     // Content Management Routes
     Route::resource('articles', ArticleController::class)->names('articles');
