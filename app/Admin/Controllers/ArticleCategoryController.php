@@ -103,7 +103,7 @@ class ArticleCategoryController extends AdminBaseController
             $form->block(5, function (BlockForm $form) {
                 $form->title('Optional');
 
-                $form->image('cover')->autoUpload()->url(upload_url(ArticleCategory::class, $form->getKey()));
+                $form->image('cover')->autoUpload()->url(upload_to_api(ArticleCategory::class, $form->getKey()));
                 $form->switch('status');
                 $form->display('created_at');
                 $form->display('updated_at');

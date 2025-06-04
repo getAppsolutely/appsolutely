@@ -180,8 +180,8 @@ if (! function_exists('log_debug')) {
     }
 }
 
-if (! function_exists('upload_url')) {
-    function upload_url(?string $class = null, ?string $id = null, ?string $type = null, ?string $token = null): string
+if (! function_exists('upload_to_api')) {
+    function upload_to_api(?string $class = null, ?string $id = null, ?string $type = null, ?string $token = null): string
     {
         $data = [];
         if (! empty($class)) {
@@ -216,6 +216,30 @@ if (! function_exists('app_url')) {
         }
 
         return url($uri);
+    }
+}
+
+if (! function_exists('public_url')) {
+    /**
+     * files for public viewing
+     */
+    function public_url(string $uri = ''): string
+    {
+        $uri = (config('appsolutely.storage.public') ?? 'public/') . $uri;
+
+        return app_url($uri);
+    }
+}
+
+if (! function_exists('upload_url')) {
+    /**
+     * files for dashboard viewing
+     */
+    function upload_url(string $uri = ''): string
+    {
+        $uri = (config('appsolutely.storage.dashboard') ?? 'uploads/') . $uri;
+
+        return app_url($uri);
     }
 }
 

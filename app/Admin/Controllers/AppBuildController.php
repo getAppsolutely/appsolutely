@@ -95,7 +95,7 @@ final class AppBuildController extends AdminBaseController
                 $form->text('build_log');
                 $form->file('path', 'Build File')
                     ->autoUpload()
-                    ->url(upload_url(AppBuild::class, $form->getKey()))
+                    ->url(upload_to_api(AppBuild::class, $form->getKey()))
                     ->uniqueName()
                     ->help('Upload a build file. The path will be stored and used for download. You can also enter a path manually.');
 

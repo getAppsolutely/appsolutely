@@ -8,4 +8,8 @@ return [
     'currency'       => [
         'symbol' => 'USD',
     ],
+    'storage' => [
+        'dashboard' => 'uploads/',
+        'public'    => 'storage/',
+    ],
 ];

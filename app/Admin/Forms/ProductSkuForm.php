@@ -52,7 +52,7 @@ class ProductSkuForm extends Form implements LazyRenderable
             $form->text('title')->required();
             $form->text('subtitle');
             $form->text('slug')->help(__t('Leave empty to auto-generate from title'));
-            $form->image('cover')->autoUpload()->url(upload_url(ProductSku::class, $id));
+            $form->image('cover')->autoUpload()->url(upload_to_api(ProductSku::class, $id));
 
             $form->currency('original_price')->symbol(app_currency_symbol())->default(999);
             $form->currency('price')->symbol(app_currency_symbol())->default(999);

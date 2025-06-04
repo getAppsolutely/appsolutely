@@ -47,12 +47,14 @@ final class AppBuild extends Model
     public function getDownloadUrlAttribute(): ?string
     {
         if (! empty($this->path)) {
-            return app_url($this->path);
+            $path = $this->path;
+        } elseif ($this->assessable && $this->assessable->file) {
+            $path = $this->assessable->file->full_path;
         }
-        if ($this->assessable && $this->assessable->file) {
-            return app_url('uploads/' . $this->assessable->file->full_path);
+        if (empty($path)) {
+            return null;
         }
 
-        return null;
+        return app_url('storage/' . $path);
     }
 }

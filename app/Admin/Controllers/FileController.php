@@ -102,13 +102,12 @@ class FileController extends AdminBaseController
     {
         return Form::make(new File(), function (Form $form) {
             if ($form->isCreating()) {
-                // Use Dcat Admin's file upload component with multiple option
                 $form->multipleFile('files', 'Upload Files')
                     ->required()
-                    ->accept('*') // Accept all file types
-                    ->autoUpload() // Enable auto upload
-                    ->url(upload_url()) // Use our custom upload endpoint
-                    ->uniqueName() // Generate unique names for files
+                    ->accept('*')
+                    ->autoUpload()
+                    ->url(upload_to_api())
+                    ->uniqueName()
                     ->help('Upload any file types. You can select multiple files at once.');
 
                 $form->disableSubmitButton();

@@ -71,7 +71,7 @@ class ArticleController extends AdminBaseController
                 $form->switch('status');
 
             })->tab('Optional', function (Form $form) {
-                $form->image('cover')->autoUpload()->url(upload_url(Article::class, $form->getKey()));
+                $form->image('cover')->autoUpload()->url(upload_to_api(Article::class, $form->getKey()));
                 $form->textarea('keywords')->rows(2);
                 $form->textarea('description')->rows(2);
                 $form->keyValue('setting')->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();

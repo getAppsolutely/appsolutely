@@ -119,7 +119,7 @@ class ProductController extends AdminBaseController
 
     protected function optionalForm(Form $form): Form
     {
-        $form->image('cover')->autoUpload()->url(upload_url(Product::class, $form->getKey()));
+        $form->image('cover')->autoUpload()->url(upload_to_api(Product::class, $form->getKey()));
         $form->textarea('keywords')->rows(2);
         $form->textarea('description')->rows(3);
 
