@@ -9,7 +9,6 @@ use Dcat\Admin\Form\BlockForm;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Layout\Row;
-use Dcat\Admin\Show;
 use Dcat\Admin\Tree;
 use Illuminate\Support\Facades\Request;
 
@@ -35,15 +34,15 @@ class ArticleCategoryController extends AdminBaseController
     protected function grid(): Grid
     {
         return Grid::make(new ArticleCategory(), function (Grid $grid) {
-            $grid->enableDialogCreate();
-            $grid->setDialogFormDimensions('85%', '85%');
-            $grid->model()->orderBy('left', 'ASC');
-
             $grid->column('id')->width('50px');
             $grid->column('title')->tree(true)->width('400px');
             $grid->column('status')->switch();
             $grid->column('slug')->textarea()->width('240px');
             $grid->order->orderable();
+            $grid->model()->orderBy('left', 'ASC');
+
+            $grid->enableDialogCreate();
+            $grid->setDialogFormDimensions('85%', '85%');
 
             $grid->quickSearch('id', 'title');
             $grid->filter(function (Grid\Filter $filter) {
@@ -54,26 +53,6 @@ class ArticleCategoryController extends AdminBaseController
             $grid->actions(function (Grid\Displayers\Actions $actions) {
                 $actions->disableView();
             });
-        });
-    }
-
-    /**
-     * Make a show builder.
-     */
-    protected function detail(mixed $id): Show
-    {
-        return Show::make($id, new ArticleCategory(), function (Show $show) {
-            $show->field('id');
-            $show->field('parent_id');
-            $show->field('title');
-            $show->field('keywords');
-            $show->field('description');
-            $show->field('slug');
-            $show->field('setting');
-            $show->field('status');
-            $show->field('cover');
-            $show->field('created_at');
-            $show->field('updated_at');
         });
     }
 
@@ -95,19 +74,14 @@ class ArticleCategoryController extends AdminBaseController
                 $form->text('slug');
 
                 $form->textarea('keywords')->rows(3);
-                $form->textarea('description')->rows(5);
-                $form->keyValue('setting')->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
-
+                $form->textarea('description')->rows();
             });
 
             $form->block(5, function (BlockForm $form) {
                 $form->title('Optional');
-
+                $form->keyValue('setting')->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
                 $form->image('cover')->autoUpload()->url(upload_to_api(ArticleCategory::class, $form->getKey()));
                 $form->switch('status');
-                $form->display('created_at');
-                $form->display('updated_at');
-
                 $form->showFooter();
             });
             $form->saving(function (Form $form) {

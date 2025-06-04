@@ -11,7 +11,7 @@ final class AppVersion extends Model
 
     protected $fillable = [
         'version',
-        'remarks',
+        'remark',
         'release_channel',
         'status',
         'published_at',

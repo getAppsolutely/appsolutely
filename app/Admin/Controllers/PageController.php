@@ -10,15 +10,7 @@ use Dcat\Admin\Grid;
 
 class PageController extends AdminBaseController
 {
-    protected PageRepository $pageRepository;
-
-    protected PageService $pageService;
-
-    public function __construct(PageRepository $pageRepository, PageService $pageService)
-    {
-        $this->pageRepository = $pageRepository;
-        $this->pageService    = $pageService;
-    }
+    public function __construct(protected PageRepository $pageRepository, protected PageService $pageService) {}
 
     protected function grid(): Grid
     {
@@ -31,6 +23,7 @@ class PageController extends AdminBaseController
             $grid->column('expired_at')->display(column_time_format())->sortable();
             $grid->column('status')->switch();
             $grid->column('created_at')->display(column_time_format());
+            $grid->model()->orderByDesc('id');
 
             $grid->quickSearch('id', 'name', 'slug', 'title');
             $grid->filter(function (Grid\Filter $filter) {
@@ -44,12 +37,8 @@ class PageController extends AdminBaseController
 
             $grid->actions(function (Grid\Displayers\Actions $actions) {
                 $actions->disableView();
-
-                // Add Design button
                 $actions->prepend(admin_link_action('Design', admin_url('pages/' . $actions->getKey() . '/design'), '_blank'));
             });
-
-            $grid->model()->orderByDesc('id');
         });
     }
 
@@ -72,11 +61,9 @@ class PageController extends AdminBaseController
             $form->text('hreflang');
             $form->text('language');
 
-            $form->datetime('published_at_local', __t('Published At (%s)', [app_local_timezone()]));
-            $form->datetime('expired_at_local', __t('Expired At (%s)', [app_local_timezone()]));
+            $form->datetime('published_at', __t('Published At (%s)', [app_local_timezone()]));
+            $form->datetime('expired_at', __t('Expired At (%s)', [app_local_timezone()]));
             $form->switch('status');
-            $form->display('created_at');
-            $form->display('updated_at');
 
             $form->disableViewButton();
             $form->disableViewCheck();

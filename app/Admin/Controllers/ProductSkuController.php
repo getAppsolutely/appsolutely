@@ -6,14 +6,12 @@ use App\Admin\Forms\ProductSkuForm;
 use App\Enums\Status;
 use App\Models\ProductSku;
 use App\Repositories\ProductRepository;
-use App\Repositories\ProductSkuRepository;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Widgets\Modal;
 
 class ProductSkuController extends AdminBaseController
 {
-    public function __construct(protected ProductRepository $productRepository,
-        protected ProductSkuRepository $productSkuRepository) {}
+    public function __construct(protected ProductRepository $productRepository) {}
 
     /**
      * Make a grid builder.
@@ -21,7 +19,6 @@ class ProductSkuController extends AdminBaseController
     protected function grid(): Grid
     {
         return Grid::make(ProductSku::with(['product']), function (Grid $grid) {
-
             $grid->column('id')->sortable();
             $grid->column('product.title', 'Product');
             $grid->column('attributes')->display(column_value_simple('value', 'data'));
@@ -34,8 +31,7 @@ class ProductSkuController extends AdminBaseController
             $grid->column('status')->switch();
             $grid->column('published_at')->display(column_time_format())->sortable();
             $grid->column('expired_at')->display(column_time_format())->sortable();
-
-            $grid->model()->orderBy('id', 'desc');
+            $grid->model()->orderByDesc('id');
 
             $grid->quickSearch('id', 'title');
             $grid->filter(function (Grid\Filter $filter) {

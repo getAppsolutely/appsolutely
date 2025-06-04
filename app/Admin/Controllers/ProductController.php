@@ -15,12 +15,7 @@ use Dcat\Admin\Widgets\Modal;
 
 class ProductController extends AdminBaseController
 {
-    protected ProductCategoryRepository $productCategoryRepository;
-
-    public function __construct(ProductCategoryRepository $productCategoryRepository)
-    {
-        $this->productCategoryRepository = $productCategoryRepository;
-    }
+    public function __construct(protected ProductCategoryRepository $productCategoryRepository) {}
 
     protected function grid(): Grid
     {
@@ -36,9 +31,9 @@ class ProductController extends AdminBaseController
 
             $grid->column('published_at')->display(column_time_format())->sortable();
             $grid->column('expired_at')->display(column_time_format())->sortable();
-
             $grid->column('sort')->editable();
             $grid->column('status')->switch();
+            $grid->model()->orderByDesc('id');
 
             $grid->quickSearch('id', 'title');
             $grid->filter(function (Grid\Filter $filter) {
@@ -50,8 +45,6 @@ class ProductController extends AdminBaseController
             $grid->actions(function (Grid\Displayers\Actions $actions) {
                 $actions->disableView();
             });
-
-            $grid->model()->orderBy('id', 'desc');
         });
     }
 
@@ -142,9 +135,6 @@ class ProductController extends AdminBaseController
         })->saving(function ($value) {
             return json_encode($value);
         });
-
-        $form->display('created_at');
-        $form->display('updated_at');
 
         $form->disableViewButton();
         $form->disableViewCheck();

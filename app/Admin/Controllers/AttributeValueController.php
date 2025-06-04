@@ -23,7 +23,9 @@ class AttributeValueController extends AdminBaseController
             $grid->column('value')->editable();
             $grid->column('slug')->editable();
             $grid->column('status')->switch();
+            $grid->model()->orderByDesc('id');
 
+            $grid->quickSearch('id', 'value');
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id')->width(4);
                 $filter->like('value')->width(4);

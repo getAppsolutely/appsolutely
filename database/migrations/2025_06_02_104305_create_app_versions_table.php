@@ -14,7 +14,7 @@ return new class() extends Migration
         Schema::create('app_versions', function (Blueprint $table) {
             $table->id();
             $table->string('version');
-            $table->string('remarks')->nullable();
+            $table->string('remark')->nullable();
             $table->string('release_channel')->nullable(); // stable, beta, dev
             $table->tinyInteger('status');
             $table->timestamp('published_at');

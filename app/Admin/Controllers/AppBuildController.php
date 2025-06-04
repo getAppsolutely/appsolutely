@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin\Controllers;
 
+use App\Enums\Status;
 use App\Models\AppBuild;
 use App\Models\AppVersion;
 use Dcat\Admin\Form;
@@ -39,18 +40,17 @@ final class AppBuildController extends AdminBaseController
             $grid->column('force_update')->bool();
             $grid->column('build_status');
             $grid->column('status')->switch();
-            $grid->column('_published_at')->sortable();
-            $grid->column('_created_at')->sortable();
-            $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('version_id')->select(AppVersion::pluck('version', 'id'));
-                $filter->equal('platform')->select([
-                    'windows' => 'Windows',
-                    'darwin'  => 'Darwin',
-                    'linux'   => 'Linux',
-                ]);
-                $filter->equal('status')->select([0 => 'Inactive', 1 => 'Active']);
-            });
+            $grid->column('published_at')->sortable();
+            $grid->column('created_at')->sortable();
             $grid->model()->orderByDesc('id');
+
+            $grid->quickSearch('id', 'platform', 'arch');
+            $grid->filter(function (Grid\Filter $filter) {
+                $filter->equal('version_id')->select(AppVersion::pluck('version', 'id'))->width(3);
+                $filter->equal('platform')->select(self::PLATFORMS)->width(3);
+                $filter->equal('status')->select(Status::toArray())->width(3);
+            });
+
             $grid->actions(function (Grid\Displayers\Actions $actions) {
                 $actions->disableView();
             });

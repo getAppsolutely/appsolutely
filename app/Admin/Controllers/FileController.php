@@ -31,15 +31,11 @@ class FileController extends AdminBaseController
             $grid->column('original_filename')->width('80px')->sortable();
             $grid->column('extension')->sortable();
             $grid->column('mime_type')->width('80px');
-
-            // Use the helper to format the file size
             $grid->column('size')->display(column_file_size())->sortable();
-
             $grid->column('created_at')->display(column_time_format())->sortable();
+            $grid->model()->orderByDesc('id');
 
             $grid->quickSearch('id', 'original_filename', 'filename', 'extension');
-
-            // Add filter
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->like('original_filename')->width(4);
                 $filter->like('filename')->width(4);
@@ -51,8 +47,6 @@ class FileController extends AdminBaseController
             $grid->actions(function (Grid\Displayers\Actions $actions) {
                 $actions->disableEdit();
             });
-
-            $grid->model()->orderBy('id', 'DESC');
         });
     }
 
@@ -79,9 +73,10 @@ class FileController extends AdminBaseController
             $show->field('size')->as(column_file_size());
 
             $show->field('hash');
-            $show->field('created_at');
-            $show->field('updated_at');
+            $show->field('created_at')->as(column_time_format());
+            $show->field('updated_at')->as(column_time_format());
 
+            $show->disableEditButton();
             // Display related
             $show->relation('Assessable', function ($model) {
                 $grid = new Grid(new \App\Models\Assessable());

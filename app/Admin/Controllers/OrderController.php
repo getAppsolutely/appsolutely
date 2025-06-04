@@ -6,16 +6,10 @@ use App\Models\Order;
 use App\Services\OrderService;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
-use Dcat\Admin\Show;
 
 class OrderController extends AdminBaseController
 {
-    protected OrderService $orderService;
-
-    public function __construct(OrderService $orderService)
-    {
-        $this->orderService = $orderService;
-    }
+    public function __construct(protected OrderService $orderService) {}
 
     protected function grid(): Grid
     {
@@ -29,6 +23,7 @@ class OrderController extends AdminBaseController
             $grid->column('total_amount');
             $grid->column('status')->label();
             $grid->column('created_at')->display(column_time_format())->sortable();
+            $grid->model()->orderByDesc('id');
 
             $grid->quickSearch('id', 'reference', 'user_id');
             $grid->filter(function (Grid\Filter $filter) {
@@ -42,28 +37,7 @@ class OrderController extends AdminBaseController
                 $actions->disableView();
             });
 
-            $grid->model()->orderBy('id', 'desc');
-        });
-    }
-
-    protected function detail(mixed $id): Show
-    {
-        return Show::make($id, new Order(), function (Show $show) {
-            $show->field('id');
-            $show->field('reference');
-            $show->field('user_id');
-            $show->field('summary');
-            $show->field('amount');
-            $show->field('discounted_amount');
-            $show->field('total_amount');
-            $show->field('status');
-            $show->field('delivery_info');
-            $show->field('note');
-            $show->field('remark');
-            $show->field('ip');
-            $show->field('request');
-            $show->field('created_at');
-            $show->field('updated_at');
+            $grid->disableCreateButton();
         });
     }
 
@@ -83,8 +57,6 @@ class OrderController extends AdminBaseController
             $form->textarea('remark');
             $form->text('ip');
             $form->textarea('request');
-            $form->display('created_at');
-            $form->display('updated_at');
         });
     }
 }

@@ -23,7 +23,9 @@ class AttributeController extends AdminBaseController
             $grid->column('remark')->editable();
             $grid->column('slug')->editable();
             $grid->column('status')->switch();
+            $grid->model()->orderByDesc('id');
 
+            $grid->quickSearch('id', 'title');
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id')->width(4);
                 $filter->like('title')->width(4);

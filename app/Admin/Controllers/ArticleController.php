@@ -32,8 +32,8 @@ class ArticleController extends AdminBaseController
             $grid->column('published_at')->display(column_time_format())->sortable();
             $grid->column('expired_at')->display(column_time_format())->sortable();
             $grid->column('created_at')->display(column_time_format());
-
             $grid->column('sort')->editable();
+            $grid->model()->orderByDesc('id');
 
             $grid->quickSearch('id', 'title');
             $grid->filter(function (Grid\Filter $filter) {
@@ -75,9 +75,6 @@ class ArticleController extends AdminBaseController
                 $form->textarea('keywords')->rows(2);
                 $form->textarea('description')->rows(2);
                 $form->keyValue('setting')->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
-
-                $form->display('created_at');
-                $form->display('updated_at');
             });
         });
     }

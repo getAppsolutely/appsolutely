@@ -235,18 +235,6 @@ if (! function_exists('dashboard_url')) {
     }
 }
 
-if (! function_exists('public_url')) {
-    /**
-     * files for public viewing
-     */
-    function public_url(string $uri = ''): string
-    {
-        $uri = (config('appsolutely.storage.public') ?? 'public/') . $uri;
-
-        return app_url($uri);
-    }
-}
-
 if (! function_exists('upload_url')) {
     /**
      * files for dashboard viewing
@@ -266,6 +254,18 @@ if (! function_exists('asset_url')) {
     function asset_url(string $uri = ''): string
     {
         $uri = (config('appsolutely.storage.assets') ?? 'assets/') . $uri;
+
+        return app_url($uri);
+    }
+}
+
+if (! function_exists('public_url')) {
+    /**
+     * files for public viewing
+     */
+    function public_url(string $uri = ''): string
+    {
+        $uri = (config('appsolutely.storage.public') ?? 'public/') . $uri;
 
         return app_url($uri);
     }
