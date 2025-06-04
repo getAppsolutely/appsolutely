@@ -34,10 +34,10 @@ class ProductCategoryController extends AdminBaseController
     {
         return Grid::make(new ProductCategory(), function (Grid $grid) {
 
-            $grid->column('id')->width('50px');
-            $grid->column('title')->tree(true)->width('400px');
-            $grid->column('status')->switch();
-            $grid->column('slug')->textarea()->width('240px');
+            $grid->column('id', __t('ID'))->width('50px');
+            $grid->column('title', __t('Title'))->tree(true)->width('400px');
+            $grid->column('status', __t('Status'))->switch();
+            $grid->column('slug', __t('Slug'))->textarea()->width('240px');
             $grid->order->orderable();
             $grid->model()->orderBy('left', 'ASC');
 

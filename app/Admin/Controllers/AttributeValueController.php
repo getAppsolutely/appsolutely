@@ -18,11 +18,11 @@ class AttributeValueController extends AdminBaseController
     protected function grid()
     {
         return Grid::make(AttributeValue::with(['attribute']), function (Grid $grid) {
-            $grid->column('id')->sortable();
-            $grid->column('attribute.title', 'Attribute');
-            $grid->column('value')->editable();
-            $grid->column('slug')->editable();
-            $grid->column('status')->switch();
+            $grid->column('id', __t('ID'))->sortable();
+            $grid->column('attribute.title', __t('Attribute'));
+            $grid->column('value', __t('Value'))->editable();
+            $grid->column('slug', __t('Slug'))->editable();
+            $grid->column('status', __t('Status'))->switch();
             $grid->model()->orderByDesc('id');
 
             $grid->quickSearch('id', 'value');
@@ -51,13 +51,13 @@ class AttributeValueController extends AdminBaseController
     {
         return Form::make(new AttributeValue(), function (Form $form) {
             $form->disableViewButton();
-            $form->display('id');
+            $form->display('id', __t('ID'));
             $form->select('attribute_id', 'Attribute')
                 ->options(Attribute::where('status', true)->pluck('title', 'id'))
                 ->required();
-            $form->text('value')->required();
-            $form->text('slug');
-            $form->switch('status')->default(true);
+            $form->text('value', __t('Value'))->required();
+            $form->text('slug', __t('Slug'));
+            $form->switch('status', __t('Status'))->default(true);
         });
     }
 }

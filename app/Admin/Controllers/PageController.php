@@ -15,14 +15,14 @@ class PageController extends AdminBaseController
     protected function grid(): Grid
     {
         return Grid::make(Page::query(), function (Grid $grid) {
-            $grid->column('id')->sortable();
-            $grid->column('name');
-            $grid->column('slug');
-            $grid->column('title');
-            $grid->column('published_at')->display(column_time_format())->sortable();
-            $grid->column('expired_at')->display(column_time_format())->sortable();
-            $grid->column('status')->switch();
-            $grid->column('created_at')->display(column_time_format());
+            $grid->column('id', __t('ID'))->sortable();
+            $grid->column('name', __t('Name'));
+            $grid->column('slug', __t('Slug'));
+            $grid->column('title', __t('Title'));
+            $grid->column('published_at', __t('Published At'))->display(column_time_format())->sortable();
+            $grid->column('expired_at', __t('Expired At'))->display(column_time_format())->sortable();
+            $grid->column('status', __t('Status'))->switch();
+            $grid->column('created_at', __t('Created At'))->display(column_time_format());
             $grid->model()->orderByDesc('id');
 
             $grid->quickSearch('id', 'name', 'slug', 'title');
@@ -45,25 +45,25 @@ class PageController extends AdminBaseController
     protected function form(): Form
     {
         return Form::make(Page::query(), function (Form $form) {
-            $form->display('id');
-            $form->text('name')->required();
-            $form->text('slug')->required();
-            $form->text('title')->required();
-            $form->textarea('description')->rows(3);
-            $form->text('keywords');
-            $form->textarea('content')->rows(6);
-            $form->text('canonical_url');
-            $form->text('meta_robots');
-            $form->text('og_title');
-            $form->textarea('og_description')->rows(3);
-            $form->text('og_image');
-            $form->keyValue('structured_data')->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
-            $form->text('hreflang');
-            $form->text('language');
+            $form->display('id', __t('ID'));
+            $form->text('name', __t('Name'))->required();
+            $form->text('slug', __t('Slug'))->required();
+            $form->text('title', __t('Title'))->required();
+            $form->textarea('description', __t('Description'))->rows(3);
+            $form->text('keywords', __t('Keywords'));
+            $form->textarea('content', __t('Content'))->rows(6);
+            $form->text('canonical_url', __t('Canonical URL'));
+            $form->text('meta_robots', __t('Meta Robots'));
+            $form->text('og_title', __t('OG Title'));
+            $form->textarea('og_description', __t('OG Description'))->rows(3);
+            $form->text('og_image', __t('OG Image'));
+            $form->keyValue('structured_data', __t('Structured Data'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
+            $form->text('hreflang', __t('Hreflang'));
+            $form->text('language', __t('Language'));
 
             $form->datetime('published_at', __t('Published At (%s)', [app_local_timezone()]));
             $form->datetime('expired_at', __t('Expired At (%s)', [app_local_timezone()]));
-            $form->switch('status');
+            $form->switch('status', __t('Status'));
 
             $form->disableViewButton();
             $form->disableViewCheck();

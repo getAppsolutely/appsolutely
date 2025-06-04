@@ -20,19 +20,19 @@ class ProductController extends AdminBaseController
     protected function grid(): Grid
     {
         return Grid::make(Product::with(['categories', 'skus']), function (Grid $grid) {
-            $grid->column('id')->sortable();
-            $grid->column('title');
-            $grid->column('categories')->pluck('title')->label();
-            $grid->column('skus')->display(column_count());
+            $grid->column('id', __t('ID'))->sortable();
+            $grid->column('title', __t('Title'));
+            $grid->column('categories', __t('Categories'))->pluck('title')->label();
+            $grid->column('skus', __t('SKUs'))->display(column_count());
 
-            $grid->column('type')->display(function ($type) {
+            $grid->column('type', __t('Type'))->display(function ($type) {
                 return Product::getProductTypes()[$type] ?? $type;
             })->label();
 
-            $grid->column('published_at')->display(column_time_format())->sortable();
-            $grid->column('expired_at')->display(column_time_format())->sortable();
-            $grid->column('sort')->editable();
-            $grid->column('status')->switch();
+            $grid->column('published_at', __t('Published At'))->display(column_time_format())->sortable();
+            $grid->column('expired_at', __t('Expired At'))->display(column_time_format())->sortable();
+            $grid->column('sort', __t('Sort'))->editable();
+            $grid->column('status', __t('Status'))->switch();
             $grid->model()->orderByDesc('id');
 
             $grid->quickSearch('id', 'title');
@@ -65,44 +65,44 @@ class ProductController extends AdminBaseController
 
     protected function basicForm(Form $form): Form
     {
-        $form->display('id');
-        $form->radio('type')->options(Product::getProductTypes())
+        $form->display('id', __t('ID'));
+        $form->radio('type', __t('Type'))->options(Product::getProductTypes())
             ->default(Product::TYPE_PHYSICAL_PRODUCT)
             ->when(Product::TYPE_PHYSICAL_PRODUCT, function (Form $form) {
                 $shipmentMethods = associative_array(Product::getShipmentMethodForPhysicalProduct());
-                $form->multipleSelect('shipment_methods')
+                $form->multipleSelect('shipment_methods', __t('Shipment Methods'))
                     ->options($shipmentMethods)
                     ->default(array_shift($shipmentMethods));
             })
             ->when(Product::TYPE_AUTO_DELIVERABLE_VIRTUAL_PRODUCT, function (Form $form) {
                 $shipmentMethods = associative_array(Product::getShipmentMethodForAutoVirtualProduct());
-                $form->multipleSelect('shipment_methods')
+                $form->multipleSelect('shipment_methods', __t('Shipment Methods'))
                     ->options($shipmentMethods)
                     ->default(array_shift($shipmentMethods));
             })
             ->when(Product::TYPE_MANUAL_DELIVERABLE_VIRTUAL_PRODUCT, function (Form $form) {
                 $shipmentMethods = associative_array(Product::getShipmentMethodForManualVirtualProduct());
-                $form->multipleSelect('shipment_methods')
+                $form->multipleSelect('shipment_methods', __t('Shipment Methods'))
                     ->options($shipmentMethods)
                     ->default(array_shift($shipmentMethods));
             })->required();
 
         $availableCategories = $this->productCategoryRepository->getActiveList();
-        $form->multipleSelect('categories', 'Categories')
+        $form->multipleSelect('categories', __t('Categories'))
             ->options($availableCategories)
             ->customFormat(extract_values());
 
-        $form->text('title')->required();
-        $form->text('subtitle');
-        $form->text('slug');
-        $form->markdown('content')->options(Markdown::options())->script(Markdown::script());
+        $form->text('title', __t('Title'))->required();
+        $form->text('subtitle', __t('Subtitle'));
+        $form->text('slug', __t('Slug'));
+        $form->markdown('content', __t('Content'))->options(Markdown::options())->script(Markdown::script());
 
-        $form->currency('original_price')->symbol(app_currency_symbol())->default(999);
-        $form->currency('price')->symbol(app_currency_symbol())->default(999);
+        $form->currency('original_price', __t('Original Price'))->symbol(app_currency_symbol())->default(999);
+        $form->currency('price', __t('Price'))->symbol(app_currency_symbol())->default(999);
 
-        $form->datetime('published_at');
-        $form->datetime('expired_at');
-        $form->switch('status');
+        $form->datetime('published_at', __t('Published At'));
+        $form->datetime('expired_at', __t('Expired At'));
+        $form->switch('status', __t('Status'));
 
         $form->disableViewButton();
         $form->disableViewCheck();
@@ -112,16 +112,16 @@ class ProductController extends AdminBaseController
 
     protected function optionalForm(Form $form): Form
     {
-        $form->image('cover')->autoUpload()->url(upload_to_api(Product::class, $form->getKey()));
-        $form->textarea('keywords')->rows(2);
-        $form->textarea('description')->rows(3);
+        $form->image('cover', __t('Cover'))->autoUpload()->url(upload_to_api(Product::class, $form->getKey()));
+        $form->textarea('keywords', __t('Keywords'))->rows(2);
+        $form->textarea('description', __t('Description'))->rows(3);
 
-        $form->keyValue('setting')->default([])
+        $form->keyValue('setting', __t('Setting'))->default([])
             ->setKeyLabel('Key')
             ->setValueLabel('Value')
             ->saveAsJson();
 
-        $form->multipleSelect('payment_methods');
+        $form->multipleSelect('payment_methods', __t('Payment Methods'));
         // ->options($this->paymentRepository->list()->pluck('title', 'id'));
 
         $form->table('additional_columns', function (Form\NestedForm $table) {

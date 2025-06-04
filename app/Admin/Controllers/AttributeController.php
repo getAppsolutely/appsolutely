@@ -18,11 +18,11 @@ class AttributeController extends AdminBaseController
     protected function grid()
     {
         return Grid::make(new Attribute(), function (Grid $grid) {
-            $grid->column('id')->sortable();
-            $grid->column('title')->editable();
-            $grid->column('remark')->editable();
-            $grid->column('slug')->editable();
-            $grid->column('status')->switch();
+            $grid->column('id', __t('ID'))->sortable();
+            $grid->column('title', __t('Title'))->editable();
+            $grid->column('remark', __t('Remark'))->editable();
+            $grid->column('slug', __t('Slug'))->editable();
+            $grid->column('status', __t('Status'))->switch();
             $grid->model()->orderByDesc('id');
 
             $grid->quickSearch('id', 'title');
@@ -48,12 +48,12 @@ class AttributeController extends AdminBaseController
     {
         return Form::make(Attribute::with(['attributeGroups']), function (Form $form) {
             $form->disableViewButton();
-            $form->display('id');
+            $form->display('id', __t('ID'));
 
-            $form->text('title')->required();
-            $form->text('slug')->help(__t('Leave empty to auto-generate from title'));
-            $form->text('remark');
-            $form->switch('status')->default(true);
+            $form->text('title', __t('Title'))->required();
+            $form->text('slug', __t('Slug'))->help(__t('Leave empty to auto-generate from title'));
+            $form->text('remark', __t('Remark'));
+            $form->switch('status', __t('Status'))->default(true);
 
             $form->multipleSelect('attributeGroups', 'Attribute Groups')
                 ->options(AttributeGroup::where('status', true)->pluck('title', 'id'))

@@ -34,10 +34,10 @@ class ArticleCategoryController extends AdminBaseController
     protected function grid(): Grid
     {
         return Grid::make(new ArticleCategory(), function (Grid $grid) {
-            $grid->column('id')->width('50px');
-            $grid->column('title')->tree(true)->width('400px');
-            $grid->column('status')->switch();
-            $grid->column('slug')->textarea()->width('240px');
+            $grid->column('id', __t('ID'))->width('50px');
+            $grid->column('title', __t('Title'))->tree(true)->width('400px');
+            $grid->column('status', __t('Status'))->switch();
+            $grid->column('slug', __t('Slug'))->textarea()->width('240px');
             $grid->order->orderable();
             $grid->model()->orderBy('left', 'ASC');
 
@@ -65,23 +65,23 @@ class ArticleCategoryController extends AdminBaseController
             $form->block(7, function (BlockForm $form) {
                 $form->title(__('Basic'));
 
-                $form->display('id');
+                $form->display('id', __t('ID'));
 
                 $availableCategories = $this->articleCategoryRepository->getActiveList();
                 $form->select('parent_id', 'Parent')->options($availableCategories);
 
-                $form->text('title')->required();
-                $form->text('slug');
+                $form->text('title', __t('Title'))->required();
+                $form->text('slug', __t('Slug'));
 
-                $form->textarea('keywords')->rows(3);
-                $form->textarea('description')->rows();
+                $form->textarea('keywords', __t('Keywords'))->rows(3);
+                $form->textarea('description', __t('Description'))->rows();
             });
 
             $form->block(5, function (BlockForm $form) {
                 $form->title('Optional');
-                $form->keyValue('setting')->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
-                $form->image('cover')->autoUpload()->url(upload_to_api(ArticleCategory::class, $form->getKey()));
-                $form->switch('status');
+                $form->keyValue('setting', __t('Setting'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
+                $form->image('cover', __t('Cover'))->autoUpload()->url(upload_to_api(ArticleCategory::class, $form->getKey()));
+                $form->switch('status', __t('Status'));
                 $form->showFooter();
             });
             $form->saving(function (Form $form) {

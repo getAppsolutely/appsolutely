@@ -18,10 +18,10 @@ class AttributeGroupController extends AdminBaseController
     protected function grid()
     {
         return Grid::make(new AttributeGroup(), function (Grid $grid) {
-            $grid->column('id')->sortable();
-            $grid->column('title')->editable();
-            $grid->column('remark')->editable();
-            $grid->column('status')->switch();
+            $grid->column('id', __t('ID'))->sortable();
+            $grid->column('title', __t('Title'))->editable();
+            $grid->column('remark', __t('Remark'))->editable();
+            $grid->column('status', __t('Status'))->switch();
             $grid->model()->orderByDesc('id');
 
             $grid->quickSearch('id', 'title');
@@ -46,13 +46,13 @@ class AttributeGroupController extends AdminBaseController
     {
         return Form::make(AttributeGroup::with(['attributes']), function (Form $form) {
             $form->disableViewButton();
-            $form->display('id');
-            $form->text('title')->required();
-            $form->text('remark');
+            $form->display('id', __t('ID'));
+            $form->text('title', __t('Title'))->required();
+            $form->text('remark', __t('Remark'));
             $form->multipleSelect('attributes', 'Attributes')
                 ->options(Attribute::where('status', true)->pluck('title', 'id'))
                 ->customFormat(extract_values());
-            $form->switch('status')->default(true);
+            $form->switch('status', __t('Status'))->default(true);
         });
     }
 }

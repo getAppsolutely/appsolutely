@@ -19,18 +19,18 @@ class ProductSkuController extends AdminBaseController
     protected function grid(): Grid
     {
         return Grid::make(ProductSku::with(['product']), function (Grid $grid) {
-            $grid->column('id')->sortable();
-            $grid->column('product.title', 'Product');
-            $grid->column('attributes')->display(column_value_simple('value', 'data'));
-            $grid->column('title')->editable();
-            $grid->column('slug')->editable();
-            $grid->column('stock')->editable();
-            $grid->column('original_price')->editable();
-            $grid->column('price')->editable();
-            $grid->column('sort')->editable()->sortable();
-            $grid->column('status')->switch();
-            $grid->column('published_at')->display(column_time_format())->sortable();
-            $grid->column('expired_at')->display(column_time_format())->sortable();
+            $grid->column('id', __t('ID'))->sortable();
+            $grid->column('product.title', __t('Product'));
+            $grid->column('attributes', __t('Attributes'))->display(column_value_simple('value', 'data'));
+            $grid->column('title', __t('Title'))->editable();
+            $grid->column('slug', __t('Slug'))->editable();
+            $grid->column('stock', __t('Stock'))->editable();
+            $grid->column('original_price', __t('Original Price'))->editable();
+            $grid->column('price', __t('Price'))->editable();
+            $grid->column('sort', __t('Sort'))->editable()->sortable();
+            $grid->column('status', __t('Status'))->switch();
+            $grid->column('published_at', __t('Published At'))->display(column_time_format())->sortable();
+            $grid->column('expired_at', __t('Expired At'))->display(column_time_format())->sortable();
             $grid->model()->orderByDesc('id');
 
             $grid->quickSearch('id', 'title');

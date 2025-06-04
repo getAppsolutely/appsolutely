@@ -20,19 +20,19 @@ class FileController extends AdminBaseController
     protected function grid(): Grid
     {
         return Grid::make(new File(), function (Grid $grid) {
-            $grid->column('id')->sortable();
+            $grid->column('id', __t('ID'))->sortable();
 
             // Display file preview for images
-            $grid->column('preview')->display(function () {
+            $grid->column('preview', __t('Preview'))->display(function () {
                 return DashboardHelper::imageThumbnail($this->full_path);
             });
 
-            $grid->column('filename')->width('120px')->sortable();
-            $grid->column('original_filename')->width('80px')->sortable();
-            $grid->column('extension')->sortable();
-            $grid->column('mime_type')->width('80px');
-            $grid->column('size')->display(column_file_size())->sortable();
-            $grid->column('created_at')->display(column_time_format())->sortable();
+            $grid->column('filename', __t('Filename'))->width('120px')->sortable();
+            $grid->column('original_filename', __t('Original Filename'))->width('80px')->sortable();
+            $grid->column('extension', __t('Extension'))->sortable();
+            $grid->column('mime_type', __t('MIME Type'))->width('80px');
+            $grid->column('size', __t('Size'))->display(column_file_size())->sortable();
+            $grid->column('created_at', __t('Created At'))->display(column_time_format())->sortable();
             $grid->model()->orderByDesc('id');
 
             $grid->quickSearch('id', 'original_filename', 'filename', 'extension');

@@ -14,15 +14,15 @@ class OrderController extends AdminBaseController
     protected function grid(): Grid
     {
         return Grid::make(Order::with(['user']), function (Grid $grid) {
-            $grid->column('id')->sortable();
-            $grid->column('reference');
-            $grid->column('user_id');
-            $grid->column('summary');
-            $grid->column('amount');
-            $grid->column('discounted_amount');
-            $grid->column('total_amount');
-            $grid->column('status')->label();
-            $grid->column('created_at')->display(column_time_format())->sortable();
+            $grid->column('id', __t('ID'))->sortable();
+            $grid->column('reference', __t('Reference'));
+            $grid->column('user_id', __t('User ID'));
+            $grid->column('summary', __t('Summary'));
+            $grid->column('amount', __t('Amount'));
+            $grid->column('discounted_amount', __t('Discounted Amount'));
+            $grid->column('total_amount', __t('Total Amount'));
+            $grid->column('status', __t('Status'))->label();
+            $grid->column('created_at', __t('Created At'))->display(column_time_format())->sortable();
             $grid->model()->orderByDesc('id');
 
             $grid->quickSearch('id', 'reference', 'user_id');
@@ -44,19 +44,19 @@ class OrderController extends AdminBaseController
     protected function form(): Form
     {
         return Form::make(Order::with(['user']), function (Form $form) {
-            $form->display('id');
-            $form->text('reference')->required();
-            $form->text('user_id')->required();
-            $form->text('summary');
-            $form->number('amount');
-            $form->number('discounted_amount');
-            $form->number('total_amount');
-            $form->text('status');
-            $form->textarea('delivery_info');
-            $form->textarea('note');
-            $form->textarea('remark');
-            $form->text('ip');
-            $form->textarea('request');
+            $form->display('id', __t('ID'));
+            $form->text('reference', __t('Reference'))->required();
+            $form->text('user_id', __t('User ID'))->required();
+            $form->text('summary', __t('Summary'));
+            $form->number('amount', __t('Amount'));
+            $form->number('discounted_amount', __t('Discounted Amount'));
+            $form->number('total_amount', __t('Total Amount'));
+            $form->text('status', __t('Status'));
+            $form->textarea('delivery_info', __t('Delivery Info'));
+            $form->textarea('note', __t('Note'));
+            $form->textarea('remark', __t('Remark'));
+            $form->text('ip', __t('IP'));
+            $form->textarea('request', __t('Request'));
         });
     }
 }

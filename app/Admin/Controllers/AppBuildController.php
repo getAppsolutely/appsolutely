@@ -33,15 +33,15 @@ final class AppBuildController extends AdminBaseController
     public function grid(): Grid
     {
         return Grid::make(AppBuild::with('version'), function (Grid $grid) {
-            $grid->column('id')->sortable();
-            $grid->column('version.version', 'Version');
-            $grid->column('platform');
-            $grid->column('arch');
-            $grid->column('force_update')->bool();
-            $grid->column('build_status');
-            $grid->column('status')->switch();
-            $grid->column('published_at')->sortable();
-            $grid->column('created_at')->sortable();
+            $grid->column('id', __t('ID'))->sortable();
+            $grid->column('version.version', __t('Version'));
+            $grid->column('platform', __t('Platform'));
+            $grid->column('arch', __t('Arch'));
+            $grid->column('force_update', __t('Force Update'))->bool();
+            $grid->column('build_status', __t('Build Status'));
+            $grid->column('status', __t('Status'))->switch();
+            $grid->column('published_at', __t('Published At'))->sortable();
+            $grid->column('created_at', __t('Created At'))->sortable();
             $grid->model()->orderByDesc('id');
 
             $grid->quickSearch('id', 'platform', 'arch');
@@ -60,28 +60,28 @@ final class AppBuildController extends AdminBaseController
     public function form(): Form
     {
         return Form::make(AppBuild::with('version'), function (Form $form) {
-            $form->display('id');
+            $form->display('id', __t('ID'));
             $versionOptions = AppVersion::pluck('version', 'id')->toArray();
 
             $form->column(6, function (Form $form) use ($versionOptions) {
-                $form->select('version_id', 'Version')
+                $form->select('version_id', __t('Version'))
                     ->options($versionOptions)->required();
 
-                $form->select('platform')->options(self::PLATFORMS)
+                $form->select('platform', __t('Platform'))->options(self::PLATFORMS)
                     ->default('windows')
                     ->help('Select a platform or enter a custom one below.')
                     ->when('other', function (Form $form) {
-                        $form->text('_platform', 'Custom Platform (optional)')
+                        $form->text('_platform', __t('Custom Platform (optional)'))
                             ->help('If filled, this will override the selected platform.');
                     });
-                $form->select('arch')->options(self::ARCHS)
+                $form->select('arch', __t('Arch'))->options(self::ARCHS)
                     ->help('Select the architecture or enter a custom one below.')
                     ->when('other', function (Form $form) {
-                        $form->text('_arch', 'Custom Arch (optional)')
+                        $form->text('_arch', __t('Custom Arch (optional)'))
                             ->help('If filled, this will override the selected architecture.');
                     });
-                $form->textarea('release_notes');
-                $form->keyValue('gray_strategy')
+                $form->textarea('release_notes', __t('Release Notes'));
+                $form->keyValue('gray_strategy', __t('Gray Strategy'))
                     ->default([])
                     ->setKeyLabel('Key')
                     ->setValueLabel('Value')
@@ -91,19 +91,19 @@ final class AppBuildController extends AdminBaseController
             });
 
             $form->column(6, function (Form $form) {
-                $form->text('build_status');
-                $form->text('build_log');
-                $form->file('path', 'Build File')
+                $form->text('build_status', __t('Build Status'));
+                $form->text('build_log', __t('Build Log'));
+                $form->file('path', __t('Build File'))
                     ->autoUpload()
                     ->url(upload_to_api(AppBuild::class, $form->getKey()))
                     ->uniqueName()
                     ->help('Upload a build file. The path will be stored and used for download. You can also enter a path manually.');
 
-                $form->text('signature');
+                $form->text('signature', __t('Signature'));
 
-                $form->switch('force_update');
-                $form->switch('status');
-                $form->datetime('published_at');
+                $form->switch('force_update', __t('Force Update'));
+                $form->switch('status', __t('Status'));
+                $form->datetime('published_at', __t('Published At'));
             });
 
             $form->disableViewButton();
