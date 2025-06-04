@@ -9,14 +9,11 @@ use Illuminate\Support\Facades\Cache;
 
 class TranslationService
 {
-    protected TranslationRepository $translationRepository;
-
     protected string $cacheKey;
 
-    public function __construct(TranslationRepository $translationRepository)
+    public function __construct(protected TranslationRepository $translationRepository)
     {
-        $this->translationRepository = $translationRepository;
-        $this->cacheKey              = appsolutely() . '.translations';
+        $this->cacheKey = appsolutely() . '.translations';
     }
 
     /**
@@ -38,7 +35,7 @@ class TranslationService
         $locale = $locale ?? app()->getLocale();
 
         // Don't translate if using default locale
-        if ($locale === config('app.locale')) {
+        if ($locale !== config('app.locale')) {
             return $text;
         }
 

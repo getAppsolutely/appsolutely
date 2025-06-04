@@ -8,12 +8,7 @@ use Illuminate\Http\Request;
 
 class PageBuilderAdminApiController extends AdminBaseApiController
 {
-    protected PageRepository $pageRepository;
-
-    public function __construct(PageRepository $pageRepository)
-    {
-        $this->pageRepository = $pageRepository;
-    }
+    public function __construct(protected PageRepository $pageRepository) {}
 
     /**
      * Get page data for the builder

@@ -36,9 +36,9 @@ class ProductSkuController extends AdminBaseController
             $grid->quickSearch('id', 'title');
             $grid->filter(function (Grid\Filter $filter) {
                 $products = $this->productRepository->getActiveList();
-                $filter->equal('product_id', 'Product')->select($products)->width(3);
-                $filter->like('title', 'Title')->width(3);
-                $filter->equal('status')->select(Status::toArray())->width(3);
+                $filter->equal('product_id', __t('Product'))->select($products)->width(3);
+                $filter->like('title', __t('Title'))->width(3);
+                $filter->equal('status', __t('Status'))->select(Status::toArray())->width(3);
             });
 
             $grid->actions(function (Grid\Displayers\Actions $actions) {

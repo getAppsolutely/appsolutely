@@ -27,10 +27,10 @@ class AttributeController extends AdminBaseController
 
             $grid->quickSearch('id', 'title');
             $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('id')->width(4);
-                $filter->like('title')->width(4);
-                $filter->like('slug')->width(4);
-                $filter->equal('status')->select(Status::toArray())->width(4);
+                $filter->equal('id', __t('ID'))->width(4);
+                $filter->like('title', __t('Title'))->width(4);
+                $filter->like('slug', __t('Slug'))->width(4);
+                $filter->equal('status', __t('Status'))->select(Status::toArray())->width(4);
             });
 
             $grid->actions(function (Grid\Displayers\Actions $actions) {
@@ -55,7 +55,7 @@ class AttributeController extends AdminBaseController
             $form->text('remark', __t('Remark'));
             $form->switch('status', __t('Status'))->default(true);
 
-            $form->multipleSelect('attributeGroups', 'Attribute Groups')
+            $form->multipleSelect('attributeGroups', __t('Attribute Groups'))
                 ->options(AttributeGroup::where('status', true)->pluck('title', 'id'))
                 ->customFormat(extract_values());
         });

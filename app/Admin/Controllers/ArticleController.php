@@ -10,12 +10,7 @@ use Dcat\Admin\Grid;
 
 class ArticleController extends AdminBaseController
 {
-    protected ArticleCategoryRepository $articleCategoryRepository;
-
-    public function __construct(ArticleCategoryRepository $articleCategoryRepository)
-    {
-        $this->articleCategoryRepository = $articleCategoryRepository;
-    }
+    public function __construct(protected ArticleCategoryRepository $articleCategoryRepository) {}
 
     /**
      * Make a grid builder.

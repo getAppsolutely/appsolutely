@@ -27,13 +27,13 @@ class AttributeValueController extends AdminBaseController
 
             $grid->quickSearch('id', 'value');
             $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('id')->width(4);
-                $filter->like('value')->width(4);
-                $filter->like('slug')->width(4);
-                $filter->equal('attribute_id', 'Attribute')->select(
+                $filter->equal('id', __t('ID'))->width(4);
+                $filter->like('value', __t('Value'))->width(4);
+                $filter->like('slug', __t('Slug'))->width(4);
+                $filter->equal('attribute_id', __t('Attribute'))->select(
                     Attribute::where('status', true)->pluck('title', 'id')
                 )->width(4);
-                $filter->equal('status')->select(Status::toArray())->width(4);
+                $filter->equal('status', __t('Status'))->select(Status::toArray())->width(4);
             });
 
             $grid->actions(function (Grid\Displayers\Actions $actions) {
