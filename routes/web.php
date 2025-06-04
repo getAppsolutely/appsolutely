@@ -12,7 +12,8 @@ Route::prefix(LaravelLocalization::setLocale())->middleware(['localeCookieRedire
 
 // Non-localization group
 Route::middleware([])->group(function () {
-    Route::get('storage/{path?}', [FileController::class, 'retrieve'])->where('path', '(.*)')->name('file.public.retrieve');
+    Route::get('assets/{path?}', [FileController::class, 'retrieve'])->where('path', '(.*)')->name('file.public.assets');
+    Route::get('storage/{path?}', [FileController::class, 'retrieve'])->where('path', '(.*)')->name('file.public.storage');
 });
 
 Route::middleware([

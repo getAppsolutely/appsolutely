@@ -31,7 +31,6 @@ Route::group([
     Route::get('/', [HomeController::class, 'index']);
 
     Route::get('uploads/{path?}', [FileController::class, 'retrieve'])->where('path', '(.*)')->name('file.self');
-    Route::get('assets/{path?}', [FileController::class, 'retrieve'])->where('path', '(.*)')->name('file.mask');
 
     // Content Management Routes
     Route::resource('articles', ArticleController::class)->names('articles');

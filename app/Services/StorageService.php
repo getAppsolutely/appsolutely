@@ -114,7 +114,7 @@ class StorageService
      */
     public function retrieve(string $filePath): ?array
     {
-        if (request()->route()->getName() == 'file.public.retrieve') {
+        if (request()->route()->getName() == 'file.public.assets') {
             $assessable = $this->fileRepository->findByAssessable($filePath);
             if (empty($assessable->file->full_path)) {
                 abort(404);

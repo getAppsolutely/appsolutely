@@ -72,7 +72,7 @@ class FileRepository extends BaseRepository
         // Transform the items to include full_path with app URL
         $paginator->through(function ($file) {
             $file->full_path = $file->getAttribute('full_path');
-            $file->url       = app_url('uploads/' . $file->full_path);
+            $file->url       = asset_url($file->full_path);
 
             return $file;
         });

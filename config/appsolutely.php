@@ -9,8 +9,8 @@ return [
         'symbol' => 'USD',
     ],
     'storage' => [
-        'dash_files'  => 'uploads/',
-        'dash_assets' => 'assets/',
-        'public'      => 'storage/',
+        'dash_files' => 'uploads/',
+        'assets'     => 'assets/',
+        'public'     => 'storage/',
     ],
 ];

@@ -265,9 +265,9 @@ if (! function_exists('asset_url')) {
      */
     function asset_url(string $uri = ''): string
     {
-        $uri = admin_route_prefix() . (config('appsolutely.storage.dash_assets') ?? 'assets/') . $uri;
+        $uri = (config('appsolutely.storage.assets') ?? 'assets/') . $uri;
 
-        return dashboard_url($uri);
+        return app_url($uri);
     }
 }
 
