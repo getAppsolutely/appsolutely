@@ -22,7 +22,12 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         // Add the SetThemeMiddleware to the web middleware group
         $middleware->web(append: [
+            \App\Http\Middleware\RestrictRoutePrefixes::class,
             \App\Http\Middleware\SetThemeMiddleware::class,
+        ]);
+
+        $middleware->api(append: [
+            \App\Http\Middleware\RestrictRoutePrefixes::class,
         ]);
 
         $middleware->group('appsolutely_middleware', [

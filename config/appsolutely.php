@@ -13,4 +13,7 @@ return [
         'assets'     => 'assets/',
         'public'     => 'storage/',
     ],
+    'features' => [
+        'disabled' => env('DISABLED_FEATURES', ''),
+    ],
 ];

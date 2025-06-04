@@ -48,11 +48,11 @@ class PageController extends AdminBaseController
             $form->tab(__t('Basic'), function (Form $form) {
                 $form->display('id', __t('ID'));
                 $form->text('name', __t('Name'))->required();
-                $form->text('slug', __t('Slug'))->required();
                 $form->text('title', __t('Title'))->required();
-                $form->textarea('description', __t('Description'))->rows(3);
+                $form->text('slug', __t('Slug'))->required();
                 $form->text('keywords', __t('Keywords'));
-                $form->textarea('content', __t('Content'))->rows(6);
+                $form->textarea('description', __t('Description'))->rows(3);
+                $form->editor('content', __t('Content'));
                 $form->datetime('published_at', __t('Published At (%s)', [app_local_timezone()]));
                 $form->datetime('expired_at', __t('Expired At (%s)', [app_local_timezone()]));
                 $form->switch('status', __t('Status'));
