@@ -351,34 +351,24 @@
             .then(res => res.json())
             .then(result => {
                 const categories = result.data;
-                categories.forEach(cat => {
-                    cat.components.forEach(comp => {
-                        editor.DomComponents.addType(comp.type, {
-                            model: {
-                                defaults: {
-                                    tagName: comp.tagName || 'div',
-                                    content: comp.content,
-                                    style: comp.style || { padding: '20px', border: '1px dashed #ccc' }
-                                }
-                            }
-                        });
-                    });
-                });
+                registerGrapesComponentTypes(editor, categories);
                 renderComponentSidebar(categories);
             });
 
-        function renderComponentCard(comp) {
-            return `
-      <div class="component-card bg-slate-50 rounded-lg p-4" draggable="true" data-type="${comp.type}">
-        <div class="flex items-start">
-          <div class="bg-gray-200 border-2 border-dashed rounded-xl w-10 h-10 mr-3"></div>
-          <div class="flex-1">
-            <h4 class="font-semibold">${comp.label}</h4>
-            <p class="text-sm text-slate-500 mt-1">${comp.desc || ''}</p>
-          </div>
-        </div>
-      </div>
-    `;
+        function registerGrapesComponentTypes(editor, categories) {
+            categories.forEach(cat => {
+                cat.components.forEach(comp => {
+                    editor.DomComponents.addType(comp.type, {
+                        model: {
+                            defaults: {
+                                tagName: comp.tagName || 'div',
+                                components: comp.content, // 👈 正确用法
+                                style: comp.style || {}
+                            }
+                        }
+                    });
+                });
+            });
         }
 
         function renderComponentSidebar(categories) {
@@ -413,6 +403,20 @@
                     card.classList.remove('opacity-50');
                 });
             });
+        }
+
+        function renderComponentCard(comp) {
+            return `
+      <div class="component-card bg-slate-50 rounded-lg p-4" draggable="true" data-type="${comp.type}">
+        <div class="flex items-start">
+          <div class="bg-gray-200 border-2 border-dashed rounded-xl w-10 h-10 mr-3"></div>
+          <div class="flex-1">
+            <h4 class="font-semibold">${comp.label}</h4>
+            <p class="text-sm text-slate-500 mt-1">${comp.desc || ''}</p>
+          </div>
+        </div>
+      </div>
+    `;
         }
 
         // ================ Panel ================
