@@ -353,17 +353,27 @@
                 const categories = result.data;
                 registerGrapesComponentTypes(editor, categories);
                 renderComponentSidebar(categories);
+                bindCanvasDrop(editor);
             });
 
         function registerGrapesComponentTypes(editor, categories) {
+            window.COMPONENT_REGISTRY = {}; // 用于后面 lookup
+
             categories.forEach(cat => {
                 cat.components.forEach(comp => {
+                    const safeContent = wrapContentInDiv(comp.content);
+                    COMPONENT_REGISTRY[comp.type] = {
+                        content: safeContent,
+                        style: comp.style || {},
+                        tagName: comp.tagName || 'div'
+                    };
+
                     editor.DomComponents.addType(comp.type, {
                         model: {
                             defaults: {
                                 tagName: comp.tagName || 'div',
-                                components: comp.content, // 👈 正确用法
-                                style: comp.style || {}
+                                style: comp.style || {},
+                                // 👇 不设置 components，否则 parse 报错
                             }
                         }
                     });
@@ -371,6 +381,10 @@
             });
         }
 
+        function wrapContentInDiv(html) {
+            if (!html) return '<div></div>';
+            return html.trim().startsWith('<') ? html : `<div>${html}</div>`;
+        }
         function renderComponentSidebar(categories) {
             const sidebar = document.getElementById('component-wrapper');
             const sortedCategories = categories.sort((a, b) => a.sort - b.sort);
@@ -419,6 +433,43 @@
     `;
         }
 
+        function bindCanvasDrop(editor) {
+            const canvas = editor.Canvas.getElement();
+
+            canvas.addEventListener('dragover', e => e.preventDefault());
+
+            canvas.addEventListener('drop', e => {
+                e.preventDefault();
+
+                const type = e.dataTransfer.getData('text/plain');
+                const comp = COMPONENT_REGISTRY[type];
+                if (!comp) return;
+
+                editor.addComponents({
+                    tagName: comp.tagName,
+                    components: comp.content,
+                    style: comp.style
+                });
+            });
+        }function bindCanvasDrop(editor) {
+            const canvas = editor.Canvas.getElement();
+
+            canvas.addEventListener('dragover', e => e.preventDefault());
+
+            canvas.addEventListener('drop', e => {
+                e.preventDefault();
+
+                const type = e.dataTransfer.getData('text/plain');
+                const comp = COMPONENT_REGISTRY[type];
+                if (!comp) return;
+
+                editor.addComponents({
+                    tagName: comp.tagName,
+                    components: comp.content,
+                    style: comp.style
+                });
+            });
+        }
         // ================ Panel ================
         document.querySelectorAll('.device-btn').forEach(btn => {
             btn.addEventListener('click', function() {
