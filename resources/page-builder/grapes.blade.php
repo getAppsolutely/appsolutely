@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -109,395 +110,411 @@
         }
     </style>
 </head>
+
 <body class="bg-slate-50 text-slate-800">
-<!-- 拖放覆盖层 -->
-<div class="drag-overlay" id="drag-overlay">
-    <div class="drag-placeholder">Drag and drop components here</div>
-</div>
-
-<!-- 顶部工具栏 -->
-<header class="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
-    <div class="mx-auto px-4 py-2 flex items-center justify-between">
-        <!-- 左侧：Logo -->
-        <div class="flex items-center">
-            <div class="bg-primary w-8 h-8 rounded-lg flex items-center justify-center mr-3">
-                <i class="fas fa-magic text-white"></i>
-            </div>
-            <h1 class="text-xl font-bold text-slate-800">Page Builder</h1>
-        </div>
-
-        <!-- 中间：设备预览 -->
-        <div class="flex items-center bg-slate-100 rounded-lg p-1">
-            <button class="device-btn px-4 py-1 rounded-md text-sm active" data-device="desktop">
-                <i class="fas fa-desktop mr-2"></i>Desktop
-            </button>
-            <button class="device-btn px-4 py-1 rounded-md text-sm ml-1" data-device="tablet">
-                <i class="fas fa-tablet-alt mr-2"></i>Tablet
-            </button>
-            <button class="device-btn px-4 py-1 rounded-md text-sm ml-1" data-device="mobile">
-                <i class="fas fa-mobile-alt mr-2"></i>Mobile
-            </button>
-        </div>
-
-        <!-- 右侧：操作按钮 -->
-        <div class="flex space-x-2">
-            <div class="text-sm text-slate-500">
-                <i class="fas fa-cube mr-1 mt-1"></i><span id="component-count">0</span> 个组件
-            </div>
-            <button id="undo-btn"
-                    class="flex items-center bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-md text-sm">
-                <i class="fas fa-undo mr-2"></i>Undo
-            </button>
-            <button id="redo-btn"
-                    class="flex items-center bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-md text-sm">
-                <i class="fas fa-redo mr-2"></i>Redo
-            </button>
-            <button id="save-btn"
-                    class="flex items-center bg-primary hover:bg-indigo-600 px-4 py-1 rounded-md text-sm text-white">
-                <i class="fas fa-save mr-2"></i>Save
-            </button>
-            <button id="preview-btn"
-                    class="flex items-center bg-secondary hover:bg-purple-600 px-4 py-1 rounded-md text-sm text-white">
-                <i class="fas fa-eye mr-2"></i>Preview
-            </button>
-        </div>
+    <!-- 拖放覆盖层 -->
+    <div class="drag-overlay" id="drag-overlay">
+        <div class="drag-placeholder">Drag and drop components here</div>
     </div>
-</header>
 
-<main class="pt-16 mx-auto flex grapes-editor">
-    <section class="flex-1 shadow-lg rounded-lg mr-4 px-6 editor-canvas-wrapper">
-        <div id="editor-canvas" class="border-slate-300 rounded-lg mb-4">
-        </div>
-    </section>
-    <aside class="w-80 bg-white shadow-lg rounded-lg p-4 overflow-y-auto">
-        <div class="flex border-b border-slate-200 mb-4">
-            <button id="components-tab" class="tab-btn active py-2 px-4 font-medium">Components</button>
-            <button id="config-tab" class="tab-btn py-2 px-4 font-medium">Config</button>
-        </div>
-
-        <div id="components-content" class="config-panel">
-            <h2 class="text-lg font-semibold mb-4 text-slate-700">
-                <i class="fas fa-boxes mr-2 text-secondary"></i>Advanced Components
-            </h2>
-
-            <!-- 组件搜索 -->
-            <div class="relative mb-4">
-                <input type="text" placeholder="Search components..."
-                       class="w-full px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
-                <i class="fas fa-search absolute right-3 top-3 text-slate-400"></i>
+    <!-- 顶部工具栏 -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
+        <div class="mx-auto px-4 py-2 flex items-center justify-between">
+            <!-- 左侧：Logo -->
+            <div class="flex items-center">
+                <div class="bg-primary w-8 h-8 rounded-lg flex items-center justify-center mr-3">
+                    <i class="fas fa-magic text-white"></i>
+                </div>
+                <h1 class="text-xl font-bold text-slate-800">Page Builder</h1>
             </div>
 
-            <!-- 组件分类 -->
-            <div class="space-y-6">
-                <!-- Hero组件 -->
-                <div class="component-category">
-                    <h3 class="font-medium text-slate-700 mb-3 flex items-center">
-                        <i class="fas fa-star mr-2 text-amber-500"></i>Hero
-                    </h3>
-                    <div class="grid grid-cols-1 gap-3">
-                        <div class="component-card bg-slate-50 rounded-lg p-4" draggable="true" data-type="hero">
-                            <div class="flex items-start">
-                                <div class="bg-gray-200 border-2 border-dashed rounded-xl mr-3"/>
-                                <div class="flex-1">
-                                    <h4 class="font-semibold">主横幅区域</h4>
-                                    <p class="text-sm text-slate-500 mt-1">添加引人注目的顶部横幅区域</p>
+            <!-- 中间：设备预览 -->
+            <div class="flex items-center bg-slate-100 rounded-lg p-1">
+                <button class="device-btn px-4 py-1 rounded-md text-sm active" data-device="desktop">
+                    <i class="fas fa-desktop mr-2"></i>Desktop
+                </button>
+                <button class="device-btn px-4 py-1 rounded-md text-sm ml-1" data-device="tablet">
+                    <i class="fas fa-tablet-alt mr-2"></i>Tablet
+                </button>
+                <button class="device-btn px-4 py-1 rounded-md text-sm ml-1" data-device="mobile">
+                    <i class="fas fa-mobile-alt mr-2"></i>Mobile
+                </button>
+            </div>
+
+            <!-- 右侧：操作按钮 -->
+            <div class="flex space-x-2">
+                <div class="text-sm text-slate-500">
+                    <i class="fas fa-cube mr-1 mt-1"></i><span id="component-count">0</span> components
+                </div>
+                <button id="undo-btn"
+                    class="flex items-center bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-md text-sm">
+                    <i class="fas fa-undo mr-2"></i>Undo
+                </button>
+                <button id="redo-btn"
+                    class="flex items-center bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-md text-sm">
+                    <i class="fas fa-redo mr-2"></i>Redo
+                </button>
+                <button id="save-btn"
+                    class="flex items-center bg-primary hover:bg-indigo-600 px-4 py-1 rounded-md text-sm text-white">
+                    <i class="fas fa-save mr-2"></i>Save
+                </button>
+                <button id="preview-btn"
+                    class="flex items-center bg-secondary hover:bg-purple-600 px-4 py-1 rounded-md text-sm text-white">
+                    <i class="fas fa-eye mr-2"></i>Preview
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-16 mx-auto flex grapes-editor">
+        <section class="flex-1 shadow-lg rounded-lg mr-4 px-6 editor-canvas-wrapper">
+            <div id="editor-canvas" class="border-slate-300 rounded-lg mb-4">
+            </div>
+        </section>
+        <aside class="w-80 bg-white shadow-lg rounded-lg p-4 overflow-y-auto">
+            <div class="flex border-b border-slate-200 mb-4">
+                <button id="components-tab" class="tab-btn active py-2 px-4 font-medium">Components</button>
+                <button id="config-tab" class="tab-btn py-2 px-4 font-medium">Config</button>
+            </div>
+
+            <div id="components-content" class="config-panel">
+                <h2 class="text-lg font-semibold mb-4 text-slate-700">
+                    <i class="fas fa-boxes mr-2 text-secondary"></i>Advanced Components
+                </h2>
+
+                <!-- 组件搜索 -->
+                <div class="relative mb-4">
+                    <input type="text" placeholder="Search components..."
+                        class="w-full px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                    <i class="fas fa-search absolute right-3 top-3 text-slate-400"></i>
+                </div>
+
+                <!-- 组件分类 -->
+                <div class="space-y-6">
+                    <!-- Hero组件 -->
+                    <div class="component-category">
+                        <h3 class="font-medium text-slate-700 mb-3 flex items-center">
+                            <i class="fas fa-star mr-2 text-amber-500"></i>Hero
+                        </h3>
+                        <div class="grid grid-cols-1 gap-3">
+                            <div class="component-card bg-slate-50 rounded-lg p-4" draggable="true" data-type="hero">
+                                <div class="flex items-start">
+                                    <div class="bg-gray-200 border-2 border-dashed rounded-xl mr-3"></div>
+                                    <div class="flex-1">
+                                        <h4 class="font-semibold">主横幅区域</h4>
+                                        <p class="text-sm text-slate-500 mt-1">添加引人注目的顶部横幅区域</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- 内容组件 -->
-                <div class="component-category">
-                    <h3 class="font-medium text-slate-700 mb-3 flex items-center">
-                        <i class="fas fa-align-left mr-2 text-blue-500"></i>内容区域
-                    </h3>
-                    <div class="grid grid-cols-1 gap-3">
-                        <div class="component-card bg-slate-50 rounded-lg p-4" draggable="true" data-type="feature">
-                            <div class="flex items-start">
-                                <div class="bg-gray-200 border-2 border-dashed rounded-xl mr-3"/>
-                                <div class="flex-1">
-                                    <h4 class="font-semibold">特性展示</h4>
-                                    <p class="text-sm text-slate-500 mt-1">展示产品特性或服务优势</p>
+                    <!-- 内容组件 -->
+                    <div class="component-category">
+                        <h3 class="font-medium text-slate-700 mb-3 flex items-center">
+                            <i class="fas fa-align-left mr-2 text-blue-500"></i>内容区域
+                        </h3>
+                        <div class="grid grid-cols-1 gap-3">
+                            <div class="component-card bg-slate-50 rounded-lg p-4" draggable="true" data-type="feature">
+                                <div class="flex items-start">
+                                    <div class="bg-gray-200 border-2 border-dashed rounded-xl mr-3"></div>
+                                    <div class="flex-1">
+                                        <h4 class="font-semibold">特性展示</h4>
+                                        <p class="text-sm text-slate-500 mt-1">展示产品特性或服务优势</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="component-card bg-slate-50 rounded-lg p-4" draggable="true" data-type="testimonial">
-                            <div class="flex items-start">
-                                <div class="bg-gray-200 border-2 border-dashed rounded-xl mr-3"/>
-                                <div class="flex-1">
-                                    <h4 class="font-semibold">客户评价</h4>
-                                    <p class="text-sm text-slate-500 mt-1">展示客户推荐和评价</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 行动号召 -->
-                <div class="component-category">
-                    <h3 class="font-medium text-slate-700 mb-3 flex items-center">
-                        <i class="fas fa-bullhorn mr-2 text-purple-500"></i>行动号召
-                    </h3>
-                    <div class="grid grid-cols-1 gap-3">
-                        <div class="component-card bg-slate-50 rounded-lg p-4" draggable="true" data-type="cta">
-                            <div class="flex items-start">
-                                <div class="bg-gray-200 border-2 border-dashed rounded-xl mr-3"/>
-                                <div class="flex-1">
-                                    <h4 class="font-semibold">行动号召区域</h4>
-                                    <p class="text-sm text-slate-500 mt-1">引导用户采取下一步行动</p>
+                            <div class="component-card bg-slate-50 rounded-lg p-4" draggable="true" data-type="testimonial">
+                                <div class="flex items-start">
+                                    <div class="bg-gray-200 border-2 border-dashed rounded-xl mr-3"></div>
+                                    <div class="flex-1">
+                                        <h4 class="font-semibold">客户评价</h4>
+                                        <p class="text-sm text-slate-500 mt-1">展示客户推荐和评价</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- 页脚 -->
-                <div class="component-category">
-                    <h3 class="font-medium text-slate-700 mb-3 flex items-center">
-                        <i class="fas fa-shoe-prints mr-2 text-gray-500"></i>页脚
-                    </h3>
-                    <div class="grid grid-cols-1 gap-3">
-                        <div class="component-card bg-slate-50 rounded-lg p-4" draggable="true" data-type="footer">
-                            <div class="flex items-start">
-                                <div class="bg-gray-200 border-2 border-dashed rounded-xl mr-3"/>
-                                <div class="flex-1">
-                                    <h4 class="font-semibold">网站页脚</h4>
-                                    <p class="text-sm text-slate-500 mt-1">包含版权、链接等信息</p>
+                    <!-- 行动号召 -->
+                    <div class="component-category">
+                        <h3 class="font-medium text-slate-700 mb-3 flex items-center">
+                            <i class="fas fa-bullhorn mr-2 text-purple-500"></i>行动号召
+                        </h3>
+                        <div class="grid grid-cols-1 gap-3">
+                            <div class="component-card bg-slate-50 rounded-lg p-4" draggable="true" data-type="cta">
+                                <div class="flex items-start">
+                                    <div class="bg-gray-200 border-2 border-dashed rounded-xl mr-3"></div>
+                                    <div class="flex-1">
+                                        <h4 class="font-semibold">行动号召区域</h4>
+                                        <p class="text-sm text-slate-500 mt-1">引导用户采取下一步行动</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 页脚 -->
+                    <div class="component-category">
+                        <h3 class="font-medium text-slate-700 mb-3 flex items-center">
+                            <i class="fas fa-shoe-prints mr-2 text-gray-500"></i>页脚
+                        </h3>
+                        <div class="grid grid-cols-1 gap-3">
+                            <div class="component-card bg-slate-50 rounded-lg p-4" draggable="true" data-type="footer">
+                                <div class="flex items-start">
+                                    <div class="bg-gray-200 border-2 border-dashed rounded-xl mr-3"></div>
+                                    <div class="flex-1">
+                                        <h4 class="font-semibold">网站页脚</h4>
+                                        <p class="text-sm text-slate-500 mt-1">包含版权、链接等信息</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- 配置面板内容 -->
-        <div id="config-content" class="hidden config-panel">
-            <h2 class="text-lg font-semibold mb-4 text-slate-700">
-                <i class="fas fa-cog mr-2 text-primary"></i>组件配置
-            </h2>
+            <!-- 配置面板内容 -->
+            <div id="config-content" class="hidden config-panel">
+                <h2 class="text-lg font-semibold mb-4 text-slate-700">
+                    <i class="fas fa-cog mr-2 text-primary"></i>组件配置
+                </h2>
 
-            <div id="config-form" class="space-y-6">
-                <div class="text-center py-10 text-slate-400">
-                    <i class="fas fa-mouse-pointer text-4xl mb-3"></i>
-                    <p>请选择一个组件进行配置</p>
-                </div>
-
-                <!-- Hero配置表单 (默认隐藏) -->
-                <div id="hero-config" class="hidden space-y-4">
-                    <div>
-                        <h3 class="font-medium text-slate-700 mb-2">主横幅配置</h3>
-                        <p class="text-sm text-slate-500 mb-4">设置吸引人的顶部横幅区域</p>
+                <div id="config-form" class="space-y-6">
+                    <div class="text-center py-10 text-slate-400">
+                        <i class="fas fa-mouse-pointer text-4xl mb-3"></i>
+                        <p>请选择一个组件进行配置</p>
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">标题</label>
-                        <input type="text" class="w-full px-3 py-2 border border-slate-300 rounded-md"
-                               placeholder="输入主标题" value="欢迎来到我们的平台">
-                    </div>
+                    <!-- Hero配置表单 (默认隐藏) -->
+                    <div id="hero-config" class="hidden space-y-4">
+                        <div>
+                            <h3 class="font-medium text-slate-700 mb-2">主横幅配置</h3>
+                            <p class="text-sm text-slate-500 mb-4">设置吸引人的顶部横幅区域</p>
+                        </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">副标题</label>
-                        <input type="text" class="w-full px-3 py-2 border border-slate-300 rounded-md"
-                               placeholder="输入副标题" value="发现我们的优质产品和服务">
-                    </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">标题</label>
+                            <input type="text" class="w-full px-3 py-2 border border-slate-300 rounded-md"
+                                placeholder="输入主标题" value="欢迎来到我们的平台">
+                        </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">背景图片</label>
-                        <div class="flex items-center space-x-3">
-                            <div class="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16"></div>
-                            <button class="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded-md text-sm">
-                                上传图片
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">副标题</label>
+                            <input type="text" class="w-full px-3 py-2 border border-slate-300 rounded-md"
+                                placeholder="输入副标题" value="发现我们的优质产品和服务">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">背景图片</label>
+                            <div class="flex items-center space-x-3">
+                                <div class="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16"></div>
+                                <button class="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded-md text-sm">
+                                    上传图片
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">按钮文字</label>
+                                <input type="text" class="w-full px-3 py-2 border border-slate-300 rounded-md"
+                                    placeholder="例如：了解更多" value="开始探索">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">按钮链接</label>
+                                <input type="text" class="w-full px-3 py-2 border border-slate-300 rounded-md"
+                                    placeholder="输入URL" value="/products">
+                            </div>
+                        </div>
+
+                        <div class="pt-4">
+                            <button id="add-hero-btn"
+                                class="w-full bg-primary hover:bg-indigo-600 text-white py-2 rounded-md font-medium">
+                                添加到页面
                             </button>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3">
+                    <!-- 特性展示配置表单 (默认隐藏) -->
+                    <div id="feature-config" class="hidden space-y-4">
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">按钮文字</label>
-                            <input type="text" class="w-full px-3 py-2 border border-slate-300 rounded-md"
-                                   placeholder="例如：了解更多" value="开始探索">
+                            <h3 class="font-medium text-slate-700 mb-2">特性展示配置</h3>
+                            <p class="text-sm text-slate-500 mb-4">展示产品特性或服务优势</p>
                         </div>
+
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">按钮链接</label>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">主标题</label>
                             <input type="text" class="w-full px-3 py-2 border border-slate-300 rounded-md"
-                                   placeholder="输入URL" value="/products">
+                                placeholder="输入主标题" value="我们的核心优势">
                         </div>
-                    </div>
 
-                    <div class="pt-4">
-                        <button id="add-hero-btn"
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">描述</label>
+                            <textarea class="w-full px-3 py-2 border border-slate-300 rounded-md" placeholder="输入描述内容"
+                                rows="3">我们提供业界领先的解决方案，满足您的所有需求</textarea>
+                        </div>
+
+                        <div class="pt-4">
+                            <button id="add-feature-btn"
                                 class="w-full bg-primary hover:bg-indigo-600 text-white py-2 rounded-md font-medium">
-                            添加到页面
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 特性展示配置表单 (默认隐藏) -->
-                <div id="feature-config" class="hidden space-y-4">
-                    <div>
-                        <h3 class="font-medium text-slate-700 mb-2">特性展示配置</h3>
-                        <p class="text-sm text-slate-500 mb-4">展示产品特性或服务优势</p>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">主标题</label>
-                        <input type="text" class="w-full px-3 py-2 border border-slate-300 rounded-md"
-                               placeholder="输入主标题" value="我们的核心优势">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">描述</label>
-                        <textarea class="w-full px-3 py-2 border border-slate-300 rounded-md" placeholder="输入描述内容"
-                                  rows="3">我们提供业界领先的解决方案，满足您的所有需求</textarea>
-                    </div>
-
-                    <div class="pt-4">
-                        <button id="add-feature-btn"
-                                class="w-full bg-primary hover:bg-indigo-600 text-white py-2 rounded-md font-medium">
-                            添加到页面
-                        </button>
+                                添加到页面
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </aside>
-</main>
+        </aside>
+    </main>
 
-<!-- 模态框 -->
-<div id="preview-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
-    <div class="bg-white rounded-lg w-11/12 max-w-4xl h-5/6 overflow-hidden">
-        <div class="flex justify-between items-center px-6 py-4 border-b">
-            <h3 class="text-lg font-semibold">页面预览</h3>
-            <button id="close-preview" class="text-slate-500 hover:text-slate-700">
-                <i class="fas fa-times text-xl"></i>
-            </button>
-        </div>
-        <div class="h-full p-4 overflow-auto" id="preview-content">
-            <!-- 预览内容将在这里显示 -->
+    <!-- 模态框 -->
+    <div id="preview-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg w-11/12 max-w-4xl h-5/6 overflow-hidden">
+            <div class="flex justify-between items-center px-6 py-4 border-b">
+                <h3 class="text-lg font-semibold">页面预览</h3>
+                <button id="close-preview" class="text-slate-500 hover:text-slate-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="h-full p-4 overflow-auto" id="preview-content">
+                <!-- 预览内容将在这里显示 -->
+            </div>
         </div>
     </div>
-</div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/grapesjs/dist/grapes.min.js"></script>
-<script>
-    // 初始化GrapesJS编辑器
-    const editor = grapesjs.init({
-        container: '#editor-canvas',
-        fromElement: true,
-        height: '100%',
-        width: 'auto',
-        storageManager: false,
-        deviceManager: {
-            devices: [
-                {
-                    id: 'desktop',
-                    name: 'Desktop',
-                    width: '',
-                },
-                {
-                    id: 'tablet',
-                    name: 'Tablet',
-                    width: '768px',
-                    widthMedia: '992px',
-                },
-                {
-                    id: 'mobile',
-                    name: 'Mobile',
-                    width: '320px',
-                    widthMedia: '768px',
-                }
-            ]
-        },
-        panels: {defaults: []},
-        blockManager: {
-            blocks: [
-                {
-                    id: 'text',
-                    label: '文本',
-                    category: '基础',
-                    content: {
-                        type: 'text',
-                        content: '这里是文本内容，点击编辑...',
-                        style: {padding: '10px'}
+    <script src="https://cdn.jsdelivr.net/npm/grapesjs/dist/grapes.min.js"></script>
+    <script>
+        // 初始化GrapesJS编辑器
+        const editor = grapesjs.init({
+            container: '#editor-canvas',
+            fromElement: true,
+            height: '100%',
+            width: 'auto',
+            storageManager: false,
+            deviceManager: {
+                devices: [{
+                        id: 'desktop',
+                        name: 'Desktop',
+                        width: '',
+                    },
+                    {
+                        id: 'tablet',
+                        name: 'Tablet',
+                        width: '768px',
+                        widthMedia: '992px',
+                    },
+                    {
+                        id: 'mobile',
+                        name: 'Mobile',
+                        width: '320px',
+                        widthMedia: '768px',
                     }
-                },
-                {
-                    id: 'image',
-                    label: '图片',
-                    category: '基础',
-                    content: {
-                        type: 'image',
-                        attributes: {alt: '图片描述'},
-                        style: {maxWidth: '100%'}
+                ]
+            },
+            panels: {
+                defaults: []
+            },
+            blockManager: {
+                blocks: [{
+                        id: 'text',
+                        label: '文本',
+                        category: '基础',
+                        content: {
+                            type: 'text',
+                            content: '这里是文本内容，点击编辑...',
+                            style: {
+                                padding: '10px'
+                            }
+                        }
+                    },
+                    {
+                        id: 'image',
+                        label: '图片',
+                        category: '基础',
+                        content: {
+                            type: 'image',
+                            attributes: {
+                                alt: '图片描述'
+                            },
+                            style: {
+                                maxWidth: '100%'
+                            }
+                        }
                     }
-                }
-            ]
-        }
-    });
-
-    // ================ 拖放功能实现 ================
-    const dragOverlay = document.getElementById('drag-overlay');
-    let draggedComponent = null;
-
-    // 为组件卡片添加拖放事件
-    document.querySelectorAll('.component-card').forEach(card => {
-        // 拖动开始
-        card.addEventListener('dragstart', (e) => {
-            draggedComponent = card.dataset.type;
-            e.dataTransfer.setData('text/plain', card.dataset.type);
-            card.classList.add('opacity-50');
-
-            // 显示拖放覆盖层
-            dragOverlay.classList.add('visible');
+                ]
+            }
         });
 
-        // 拖动结束
-        card.addEventListener('dragend', () => {
-            document.querySelectorAll('.component-card').forEach(c => {
-                c.classList.remove('opacity-50');
+        editor.on('load', () => {
+            const iframe = editor.Canvas.getFrameEl();
+            const head = iframe.contentDocument.head;
+            const style = document.createElement('link');
+            style.rel = 'stylesheet';
+            style.href = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css';
+            head.appendChild(style);
+        });
+
+        // ================ 拖放功能实现 ================
+        const dragOverlay = document.getElementById('drag-overlay');
+        let draggedComponent = null;
+
+        // 为组件卡片添加拖放事件
+        document.querySelectorAll('.component-card').forEach(card => {
+            // 拖动开始
+            card.addEventListener('dragstart', (e) => {
+                draggedComponent = card.dataset.type;
+                e.dataTransfer.setData('text/plain', card.dataset.type);
+                card.classList.add('opacity-50');
+
+                // 显示拖放覆盖层
+                dragOverlay.classList.add('visible');
             });
-            dragOverlay.classList.remove('visible');
-            draggedComponent = null;
+
+            // 拖动结束
+            card.addEventListener('dragend', () => {
+                document.querySelectorAll('.component-card').forEach(c => {
+                    c.classList.remove('opacity-50');
+                });
+                dragOverlay.classList.remove('visible');
+                draggedComponent = null;
+            });
         });
-    });
 
-    // 编辑区域拖放事件
-    const editorCanvas = document.getElementById('editor-canvas');
+        // 编辑区域拖放事件
+        const editorCanvas = document.getElementById('editor-canvas');
 
-    // 拖拽进入编辑区域
-    editorCanvas.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        editorCanvas.classList.add('border-primary', 'bg-blue-50');
-    });
+        // 拖拽进入编辑区域
+        editorCanvas.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            editorCanvas.classList.add('border-primary', 'bg-blue-50');
+        });
 
-    // 拖拽离开编辑区域
-    editorCanvas.addEventListener('dragleave', () => {
-        editorCanvas.classList.remove('border-primary', 'bg-blue-50');
-    });
+        // 拖拽离开编辑区域
+        editorCanvas.addEventListener('dragleave', () => {
+            editorCanvas.classList.remove('border-primary', 'bg-blue-50');
+        });
 
-    // 在编辑区域放下组件
-    editorCanvas.addEventListener('drop', (e) => {
-        e.preventDefault();
-        editorCanvas.classList.remove('border-primary', 'bg-blue-50');
+        // 在编辑区域放下组件
+        editorCanvas.addEventListener('drop', (e) => {
+            e.preventDefault();
+            editorCanvas.classList.remove('border-primary', 'bg-blue-50');
 
-        if (draggedComponent) {
-            // 根据组件类型添加不同的内容
-            addComponentToEditor(draggedComponent);
-            draggedComponent = null;
-        }
-    });
+            if (draggedComponent) {
+                // 根据组件类型添加不同的内容
+                addComponentToEditor(draggedComponent);
+                draggedComponent = null;
+            }
+        });
 
-    // 添加组件到编辑器
-    function addComponentToEditor(type) {
-        let html = '';
+        // 添加组件到编辑器
+        function addComponentToEditor(type) {
+            let html = '';
 
-        switch (type) {
-            case 'hero':
-                html = `
+            switch (type) {
+                case 'hero':
+                    html = `
                         <div style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://via.placeholder.com/1200x400');
                                   background-size: cover;
                                   padding: 100px 20px;
@@ -508,10 +525,10 @@
                             <a href="#" style="display: inline-block; background: #6366f1; color: white; padding: 12px 30px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 1.1rem;">开始探索</a>
                         </div>
                     `;
-                break;
+                    break;
 
-            case 'feature':
-                html = `
+                case 'feature':
+                    html = `
                         <div style="padding: 60px 20px; background: #f8fafc;">
                             <h2 style="text-align: center; font-size: 2rem; font-weight: bold; margin-bottom: 40px;">我们的核心优势</h2>
                             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1200px; margin: 0 auto;">
@@ -530,20 +547,20 @@
                             </div>
                         </div>
                     `;
-                break;
+                    break;
 
-            case 'cta':
-                html = `
+                case 'cta':
+                    html = `
                         <div style="background: #6366f1; padding: 80px 20px; text-align: center; color: white;">
                             <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">准备好开始了吗？</h2>
                             <p style="font-size: 1.2rem; max-width: 600px; margin: 0 auto 30px;">立即注册，体验我们的服务</p>
                             <a href="#" style="display: inline-block; background: white; color: #6366f1; padding: 12px 30px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 1.1rem;">免费注册</a>
                         </div>
                     `;
-                break;
+                    break;
 
-            case 'footer':
-                html = `
+                case 'footer':
+                    html = `
                         <div style="background: #1e293b; color: #cbd5e1; padding: 60px 20px;">
                             <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px;">
                                 <div>
@@ -578,140 +595,141 @@
                             </div>
                         </div>
                     `;
-                break;
+                    break;
+            }
+
+            if (html) {
+                editor.addComponents(html);
+                showNotification(`已添加${getComponentName(type)}到页面`, true);
+            }
         }
 
-        if (html) {
-            editor.addComponents(html);
-            showNotification(`已添加${getComponentName(type)}到页面`, true);
+        // 获取组件名称
+        function getComponentName(type) {
+            const names = {
+                'hero': '主横幅',
+                'feature': '特性展示',
+                'testimonial': '客户评价',
+                'cta': '行动号召',
+                'footer': '网站页脚'
+            };
+            console.log(type);
+            return names[type] || '组件';
         }
-    }
 
-    // 获取组件名称
-    function getComponentName(type) {
-        const names = {
-            'hero': '主横幅',
-            'feature': '特性展示',
-            'testimonial': '客户评价',
-            'cta': '行动号召',
-            'footer': '网站页脚'
-        };
-        return names[type] || '组件';
-    }
+        // ================ 配置面板功能 ================
+        // 设备切换
+        document.querySelectorAll('.device-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // 移除所有按钮的active类
+                document.querySelectorAll('.device-btn').forEach(b => b.classList.remove('active'));
 
-    // ================ 配置面板功能 ================
-    // 设备切换
-    document.querySelectorAll('.device-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-            // 移除所有按钮的active类
-            document.querySelectorAll('.device-btn').forEach(b => b.classList.remove('active'));
+                // 添加active类到当前按钮
+                this.classList.add('active');
 
-            // 添加active类到当前按钮
-            this.classList.add('active');
-
-            // 设置设备
-            editor.setDevice(this.dataset.device);
+                // 设置设备
+                editor.setDevice(this.dataset.device);
+            });
         });
-    });
 
-    // 操作按钮功能
-    document.getElementById('undo-btn').addEventListener('click', () => {
-        editor.UndoManager.undo();
-    });
+        // 操作按钮功能
+        document.getElementById('undo-btn').addEventListener('click', () => {
+            editor.UndoManager.undo();
+        });
 
-    document.getElementById('redo-btn').addEventListener('click', () => {
-        editor.UndoManager.redo();
-    });
+        document.getElementById('redo-btn').addEventListener('click', () => {
+            editor.UndoManager.redo();
+        });
 
-    document.getElementById('save-btn').addEventListener('click', () => {
-        const projectData = editor.getProjectData();
-        console.log('保存项目数据:', projectData);
+        document.getElementById('save-btn').addEventListener('click', () => {
+            const projectData = editor.getProjectData();
+            console.log('保存项目数据:', projectData);
 
-        // 显示保存成功通知
-        showNotification('项目数据已成功保存！', true);
-    });
+            // 显示保存成功通知
+            showNotification('项目数据已成功保存！', true);
+        });
 
-    // 预览功能
-    const previewModal = document.getElementById('preview-modal');
-    const previewContent = document.getElementById('preview-content');
+        // 预览功能
+        const previewModal = document.getElementById('preview-modal');
+        const previewContent = document.getElementById('preview-content');
 
-    document.getElementById('preview-btn').addEventListener('click', () => {
-        const html = editor.getHtml();
-        const css = editor.getCss();
-        previewContent.innerHTML = `
+        document.getElementById('preview-btn').addEventListener('click', () => {
+            const html = editor.getHtml();
+            const css = editor.getCss();
+            previewContent.innerHTML = `
                 <style>${css}</style>
                 <div class="max-w-4xl mx-auto p-6">${html}</div>
             `;
-        previewModal.classList.remove('hidden');
-    });
-
-    document.getElementById('close-preview').addEventListener('click', () => {
-        previewModal.classList.add('hidden');
-    });
-
-    // 组件计数更新
-    editor.on('component:add', () => {
-        updateComponentCount();
-    });
-
-    editor.on('component:remove', () => {
-        updateComponentCount();
-    });
-
-    function updateComponentCount() {
-        const components = editor.getComponents();
-        document.getElementById('component-count').textContent = components.length;
-    }
-
-    // 初始组件计数
-    updateComponentCount();
-
-    // 选项卡切换
-    const componentsTab = document.getElementById('components-tab');
-    const configTab = document.getElementById('config-tab');
-    const componentsContent = document.getElementById('components-content');
-    const configContent = document.getElementById('config-content');
-
-    componentsTab.addEventListener('click', () => {
-        componentsTab.classList.add('active');
-        configTab.classList.remove('active');
-        componentsContent.classList.remove('hidden');
-        configContent.classList.add('hidden');
-    });
-
-    configTab.addEventListener('click', () => {
-        configTab.classList.add('active');
-        componentsTab.classList.remove('active');
-        configContent.classList.remove('hidden');
-        componentsContent.classList.add('hidden');
-    });
-
-    // 组件点击事件
-    document.querySelectorAll('.component-card').forEach(card => {
-        card.addEventListener('click', function () {
-            const type = this.dataset.type;
-
-            // 切换到配置面板
-            configTab.click();
-
-            // 隐藏所有配置表单
-            document.querySelectorAll('#config-form > div').forEach(form => {
-                form.classList.add('hidden');
-            });
-
-            // 显示对应的配置表单
-            document.getElementById(`${type}-config`).classList.remove('hidden');
+            previewModal.classList.remove('hidden');
         });
-    });
 
-    // 配置面板添加按钮
-    document.getElementById('add-hero-btn').addEventListener('click', () => {
-        const title = document.querySelector('#hero-config input[placeholder="输入主标题"]').value;
-        const subtitle = document.querySelector('#hero-config input[placeholder="输入副标题"]').value;
-        const buttonText = document.querySelector('#hero-config input[placeholder="例如：了解更多"]').value;
-        const buttonLink = document.querySelector('#hero-config input[placeholder="输入URL"]').value;
+        document.getElementById('close-preview').addEventListener('click', () => {
+            previewModal.classList.add('hidden');
+        });
 
-        const heroHtml = `
+        // 组件计数更新
+        editor.on('component:add', () => {
+            updateComponentCount();
+        });
+
+        editor.on('component:remove', () => {
+            updateComponentCount();
+        });
+
+        function updateComponentCount() {
+            const components = editor.getComponents();
+            document.getElementById('component-count').textContent = components.length;
+        }
+
+        // 初始组件计数
+        updateComponentCount();
+
+        // 选项卡切换
+        const componentsTab = document.getElementById('components-tab');
+        const configTab = document.getElementById('config-tab');
+        const componentsContent = document.getElementById('components-content');
+        const configContent = document.getElementById('config-content');
+
+        componentsTab.addEventListener('click', () => {
+            componentsTab.classList.add('active');
+            configTab.classList.remove('active');
+            componentsContent.classList.remove('hidden');
+            configContent.classList.add('hidden');
+        });
+
+        configTab.addEventListener('click', () => {
+            configTab.classList.add('active');
+            componentsTab.classList.remove('active');
+            configContent.classList.remove('hidden');
+            componentsContent.classList.add('hidden');
+        });
+
+        // 组件点击事件
+        document.querySelectorAll('.component-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const type = this.dataset.type;
+
+                // 切换到配置面板
+                configTab.click();
+
+                // 隐藏所有配置表单
+                document.querySelectorAll('#config-form > div').forEach(form => {
+                    form.classList.add('hidden');
+                });
+
+                // 显示对应的配置表单
+                document.getElementById(`${type}-config`).classList.remove('hidden');
+            });
+        });
+
+        // 配置面板添加按钮
+        document.getElementById('add-hero-btn').addEventListener('click', () => {
+            const title = document.querySelector('#hero-config input[placeholder="输入主标题"]').value;
+            const subtitle = document.querySelector('#hero-config input[placeholder="输入副标题"]').value;
+            const buttonText = document.querySelector('#hero-config input[placeholder="例如：了解更多"]').value;
+            const buttonLink = document.querySelector('#hero-config input[placeholder="输入URL"]').value;
+
+            const heroHtml = `
                 <div style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://via.placeholder.com/1200x400');
                           background-size: cover;
                           padding: 100px 20px;
@@ -723,15 +741,15 @@
                 </div>
             `;
 
-        editor.addComponents(heroHtml);
-        showNotification('主横幅已添加到页面', true);
-    });
+            editor.addComponents(heroHtml);
+            showNotification('主横幅已添加到页面', true);
+        });
 
-    document.getElementById('add-feature-btn').addEventListener('click', () => {
-        const title = document.querySelector('#feature-config input[placeholder="输入主标题"]').value;
-        const description = document.querySelector('#feature-config textarea').value;
+        document.getElementById('add-feature-btn').addEventListener('click', () => {
+            const title = document.querySelector('#feature-config input[placeholder="输入主标题"]').value;
+            const description = document.querySelector('#feature-config textarea').value;
 
-        const featureHtml = `
+            const featureHtml = `
                 <div style="padding: 60px 20px; background: #f8fafc;">
                     <h2 style="text-align: center; font-size: 2rem; font-weight: bold; margin-bottom: 40px;">${title}</h2>
                     <p style="text-align: center; max-width: 800px; margin: 0 auto 40px; font-size: 1.1rem;">${description}</p>
@@ -752,32 +770,32 @@
                 </div>
             `;
 
-        editor.addComponents(featureHtml);
-        showNotification('特性展示已添加到页面', true);
-    });
+            editor.addComponents(featureHtml);
+            showNotification('特性展示已添加到页面', true);
+        });
 
-    // 显示通知
-    function showNotification(message, isSuccess) {
-        const notification = document.createElement('div');
-        notification.textContent = message;
-        notification.className = `fixed top-20 right-4 px-4 py-2 rounded-md shadow-lg text-white font-medium z-50 ${
+        // 显示通知
+        function showNotification(message, isSuccess) {
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.className = `fixed top-20 right-4 px-4 py-2 rounded-md shadow-lg text-white font-medium z-50 ${
             isSuccess ? 'bg-green-500' : 'bg-red-500'
         }`;
-        document.body.appendChild(notification);
+            document.body.appendChild(notification);
 
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // 初始化编辑器内容
         setTimeout(() => {
-            notification.remove();
-        }, 3000);
-    }
-
-    // 初始化编辑器内容
-    setTimeout(() => {
-        editor.addComponents(`
-                <div class="p-10 text-center">
-                    <h1 class="text-3xl font-bold mb-4">Halo! Welcome to Page Builder</h1>
+            editor.addComponents(`
+                <div class="pt-50 text-center">
+                    <h1 class="">Halo! Welcome to Page Builder</h1>
                 </div>
             `);
-    }, 500);
-</script>
+        }, 500);
+    </script>
 </body>
 </html>
