@@ -65,6 +65,13 @@ class PageController extends AdminBaseController
                 $form->keyValue('structured_data', __t('Structured Data'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
                 $form->text('hreflang', __t('Hreflang'));
                 $form->text('language', __t('Language'));
+            })->tab(__t('Design'), function (Form $form) {
+                if ($form->getKey()) {
+                    $url = admin_url('pages/' . $form->getKey() . '/design');
+                    $form->html('<a href="' . $url . '" class="btn btn-primary" target="_blank">' . __t('Open Page Designer') . '</a>');
+                } else {
+                    $form->html('<div class="alert alert-info">' . __t('Please save the page first to access the designer.') . '</div>');
+                }
             });
             $form->disableViewButton();
             $form->disableViewCheck();
@@ -78,7 +85,7 @@ class PageController extends AdminBaseController
     {
         $page = $this->pageRepository->findOrFail($pageId);
 
-        return view('page-builder::index', [
+        return view('page-builder::grapes', [
             'page'   => $page,
             'pageId' => $pageId,
         ]);

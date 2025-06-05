@@ -50,62 +50,59 @@ class PageBuilderAdminApiController extends AdminBaseApiController
     {
         // For now, return a basic set of components
         // Later this will be dynamic from database/config
-        return $this->success([
-            'categories' => [
-                [
-                    'id'         => 'layout',
-                    'name'       => 'Layout',
-                    'components' => [
-                        [
-                            'id'            => 'vertical',
-                            'name'          => 'Vertical Layout',
-                            'icon'          => '',
-                            'preview'       => '/images/components/vertical.png',
-                            'config_schema' => [
-                                'background_color' => ['type' => 'color', 'default' => '#ffffff'],
-                                'padding'          => ['type' => 'spacing', 'default' => 'medium'],
-                            ],
-                        ],
-                        [
-                            'id'            => 'horizontal',
-                            'name'          => 'Horizontal Layout',
-                            'icon'          => '',
-                            'preview'       => '/images/components/horizontal.png',
-                            'config_schema' => [
-                                'columns' => ['type' => 'number', 'default' => 2, 'min' => 1, 'max' => 6],
-                                'gap'     => ['type' => 'spacing', 'default' => 'medium'],
-                            ],
-                        ],
+        $data = [
+            [
+                'name'       => '内容区域',
+                'icon'       => 'fas fa-align-left',
+                'sort'       => 1,
+                'components' => [
+                    [
+                        'type'    => 'feature',
+                        'label'   => '特性展示',
+                        'desc'    => '展示产品特性或服务优势',
+                        'sort'    => 1,
+                        'content' => '<section><h2>产品特性</h2><p>这里是特色介绍</p></section>',
+                        'style'   => ['background-color' => '#f9fafb', 'padding' => '20px'],
+                        'tagName' => 'section',
                     ],
-                ],
-                [
-                    'id'         => 'content',
-                    'name'       => 'Blocks',
-                    'components' => [
-                        [
-                            'id'            => 'heading',
-                            'name'          => 'Heading',
-                            'icon'          => 'type',
-                            'preview'       => '/images/components/heading.png',
-                            'config_schema' => [
-                                'text'      => ['type' => 'text', 'default' => 'Your Heading'],
-                                'level'     => ['type' => 'select', 'options' => ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'], 'default' => 'h2'],
-                                'alignment' => ['type' => 'select', 'options' => ['left', 'center', 'right'], 'default' => 'left'],
-                            ],
-                        ],
-                        [
-                            'id'            => 'text',
-                            'name'          => 'Text Block',
-                            'icon'          => 'file-text',
-                            'preview'       => '/images/components/text.png',
-                            'config_schema' => [
-                                'content'   => ['type' => 'textarea', 'default' => 'Your text content here...'],
-                                'alignment' => ['type' => 'select', 'options' => ['left', 'center', 'right'], 'default' => 'left'],
-                            ],
-                        ],
+                    [
+                        'type'    => 'testimonial',
+                        'label'   => '客户评价',
+                        'desc'    => '展示客户推荐和评价',
+                        'sort'    => 2,
+                        'content' => '<blockquote><p>客户非常满意！</p></blockquote>',
+                        'style'   => ['border-left' => '4px solid #ccc', 'padding' => '10px'],
+                        'tagName' => 'blockquote',
                     ],
                 ],
             ],
-        ]);
+            [
+                'name'       => '页眉页脚',
+                'icon'       => 'fas fa-heading',
+                'sort'       => 2,
+                'components' => [
+                    [
+                        'type'    => 'header',
+                        'label'   => '页眉',
+                        'desc'    => '网站顶部导航',
+                        'sort'    => 1,
+                        'content' => '<header><h1>品牌名</h1></header>',
+                        'style'   => ['background' => '#e0f2fe', 'padding' => '20px'],
+                        'tagName' => 'header',
+                    ],
+                    [
+                        'type'    => 'footer',
+                        'label'   => '页脚',
+                        'desc'    => '网站底部版权信息',
+                        'sort'    => 2,
+                        'content' => '<footer><p>© 2025 公司名</p></footer>',
+                        'style'   => ['background' => '#f3f4f6', 'padding' => '20px'],
+                        'tagName' => 'footer',
+                    ],
+                ],
+            ],
+        ];
+
+        return $this->success($data);
     }
 }

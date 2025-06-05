@@ -190,88 +190,7 @@
                 </div>
 
                 <!-- 组件分类 -->
-                <div class="space-y-6">
-                    <!-- Hero组件 -->
-                    <div class="component-category">
-                        <h3 class="font-medium text-slate-700 mb-3 flex items-center">
-                            <i class="fas fa-star mr-2 text-amber-500"></i>Hero
-                        </h3>
-                        <div class="grid grid-cols-1 gap-3">
-                            <div class="component-card bg-slate-50 rounded-lg p-4" draggable="true" data-type="hero">
-                                <div class="flex items-start">
-                                    <div class="bg-gray-200 border-2 border-dashed rounded-xl mr-3"></div>
-                                    <div class="flex-1">
-                                        <h4 class="font-semibold">主横幅区域</h4>
-                                        <p class="text-sm text-slate-500 mt-1">添加引人注目的顶部横幅区域</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 内容组件 -->
-                    <div class="component-category">
-                        <h3 class="font-medium text-slate-700 mb-3 flex items-center">
-                            <i class="fas fa-align-left mr-2 text-blue-500"></i>内容区域
-                        </h3>
-                        <div class="grid grid-cols-1 gap-3">
-                            <div class="component-card bg-slate-50 rounded-lg p-4" draggable="true" data-type="feature">
-                                <div class="flex items-start">
-                                    <div class="bg-gray-200 border-2 border-dashed rounded-xl mr-3"></div>
-                                    <div class="flex-1">
-                                        <h4 class="font-semibold">特性展示</h4>
-                                        <p class="text-sm text-slate-500 mt-1">展示产品特性或服务优势</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="component-card bg-slate-50 rounded-lg p-4" draggable="true" data-type="testimonial">
-                                <div class="flex items-start">
-                                    <div class="bg-gray-200 border-2 border-dashed rounded-xl mr-3"></div>
-                                    <div class="flex-1">
-                                        <h4 class="font-semibold">客户评价</h4>
-                                        <p class="text-sm text-slate-500 mt-1">展示客户推荐和评价</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 行动号召 -->
-                    <div class="component-category">
-                        <h3 class="font-medium text-slate-700 mb-3 flex items-center">
-                            <i class="fas fa-bullhorn mr-2 text-purple-500"></i>行动号召
-                        </h3>
-                        <div class="grid grid-cols-1 gap-3">
-                            <div class="component-card bg-slate-50 rounded-lg p-4" draggable="true" data-type="cta">
-                                <div class="flex items-start">
-                                    <div class="bg-gray-200 border-2 border-dashed rounded-xl mr-3"></div>
-                                    <div class="flex-1">
-                                        <h4 class="font-semibold">行动号召区域</h4>
-                                        <p class="text-sm text-slate-500 mt-1">引导用户采取下一步行动</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 页脚 -->
-                    <div class="component-category">
-                        <h3 class="font-medium text-slate-700 mb-3 flex items-center">
-                            <i class="fas fa-shoe-prints mr-2 text-gray-500"></i>页脚
-                        </h3>
-                        <div class="grid grid-cols-1 gap-3">
-                            <div class="component-card bg-slate-50 rounded-lg p-4" draggable="true" data-type="footer">
-                                <div class="flex items-start">
-                                    <div class="bg-gray-200 border-2 border-dashed rounded-xl mr-3"></div>
-                                    <div class="flex-1">
-                                        <h4 class="font-semibold">网站页脚</h4>
-                                        <p class="text-sm text-slate-500 mt-1">包含版权、链接等信息</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="space-y-6" id="component-wrapper">
                 </div>
             </div>
 
@@ -370,7 +289,7 @@
 
     <!-- 模态框 -->
     <div id="preview-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-lg w-11/12 max-w-4xl h-5/6 overflow-hidden">
+        <div class="bg-white rounded-lg w-11/12 max-w-7xl h-5/6 overflow-hidden">
             <div class="flex justify-between items-center px-6 py-4 border-b">
                 <h3 class="text-lg font-semibold">页面预览</h3>
                 <button id="close-preview" class="text-slate-500 hover:text-slate-700">
@@ -415,35 +334,6 @@
             },
             panels: {
                 defaults: []
-            },
-            blockManager: {
-                blocks: [{
-                        id: 'text',
-                        label: '文本',
-                        category: '基础',
-                        content: {
-                            type: 'text',
-                            content: '这里是文本内容，点击编辑...',
-                            style: {
-                                padding: '10px'
-                            }
-                        }
-                    },
-                    {
-                        id: 'image',
-                        label: '图片',
-                        category: '基础',
-                        content: {
-                            type: 'image',
-                            attributes: {
-                                alt: '图片描述'
-                            },
-                            style: {
-                                maxWidth: '100%'
-                            }
-                        }
-                    }
-                ]
             }
         });
 
@@ -456,183 +346,84 @@
             head.appendChild(style);
         });
 
-        // ================ 拖放功能实现 ================
-        const dragOverlay = document.getElementById('drag-overlay');
-        let draggedComponent = null;
 
-        // 为组件卡片添加拖放事件
-        document.querySelectorAll('.component-card').forEach(card => {
-            // 拖动开始
-            card.addEventListener('dragstart', (e) => {
-                draggedComponent = card.dataset.type;
-                e.dataTransfer.setData('text/plain', card.dataset.type);
-                card.classList.add('opacity-50');
-
-                // 显示拖放覆盖层
-                dragOverlay.classList.add('visible');
-            });
-
-            // 拖动结束
-            card.addEventListener('dragend', () => {
-                document.querySelectorAll('.component-card').forEach(c => {
-                    c.classList.remove('opacity-50');
+        fetch('/dash/api/pages/components/registry')
+            .then(res => res.json())
+            .then(result => {
+                const categories = result.data;
+                categories.forEach(cat => {
+                    cat.components.forEach(comp => {
+                        editor.DomComponents.addType(comp.type, {
+                            model: {
+                                defaults: {
+                                    tagName: comp.tagName || 'div',
+                                    content: comp.content,
+                                    style: comp.style || { padding: '20px', border: '1px dashed #ccc' }
+                                }
+                            }
+                        });
+                    });
                 });
-                dragOverlay.classList.remove('visible');
-                draggedComponent = null;
+                renderComponentSidebar(categories);
             });
-        });
 
-        // 编辑区域拖放事件
-        const editorCanvas = document.getElementById('editor-canvas');
+        function renderComponentCard(comp) {
+            return `
+      <div class="component-card bg-slate-50 rounded-lg p-4" draggable="true" data-type="${comp.type}">
+        <div class="flex items-start">
+          <div class="bg-gray-200 border-2 border-dashed rounded-xl w-10 h-10 mr-3"></div>
+          <div class="flex-1">
+            <h4 class="font-semibold">${comp.label}</h4>
+            <p class="text-sm text-slate-500 mt-1">${comp.desc || ''}</p>
+          </div>
+        </div>
+      </div>
+    `;
+        }
 
-        // 拖拽进入编辑区域
-        editorCanvas.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            editorCanvas.classList.add('border-primary', 'bg-blue-50');
-        });
+        function renderComponentSidebar(categories) {
+            const sidebar = document.getElementById('component-wrapper');
+            const sortedCategories = categories.sort((a, b) => a.sort - b.sort);
 
-        // 拖拽离开编辑区域
-        editorCanvas.addEventListener('dragleave', () => {
-            editorCanvas.classList.remove('border-primary', 'bg-blue-50');
-        });
-
-        // 在编辑区域放下组件
-        editorCanvas.addEventListener('drop', (e) => {
-            e.preventDefault();
-            editorCanvas.classList.remove('border-primary', 'bg-blue-50');
-
-            if (draggedComponent) {
-                // 根据组件类型添加不同的内容
-                addComponentToEditor(draggedComponent);
-                draggedComponent = null;
-            }
-        });
-
-        // 添加组件到编辑器
-        function addComponentToEditor(type) {
             let html = '';
+            sortedCategories.forEach(category => {
+                html += `
+        <div class="component-category mb-6">
+          <h3 class="font-medium text-slate-700 mb-3 flex items-center">
+            <i class="${category.icon} mr-2 text-blue-500"></i>${category.name}
+          </h3>
+          <div class="grid grid-cols-1 gap-3">
+            ${category.components
+                    .sort((a, b) => a.sort - b.sort)
+                    .map(comp => renderComponentCard(comp))
+                    .join('')}
+          </div>
+        </div>
+      `;
+            });
 
-            switch (type) {
-                case 'hero':
-                    html = `
-                        <div style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://via.placeholder.com/1200x400');
-                                  background-size: cover;
-                                  padding: 100px 20px;
-                                  text-align: center;
-                                  color: white;">
-                            <h1 style="font-size: 2.5rem; font-weight: bold; margin-bottom: 20px;">欢迎来到我们的平台</h1>
-                            <p style="font-size: 1.2rem; max-width: 600px; margin: 0 auto 30px;">发现我们的优质产品和服务，满足您的所有需求</p>
-                            <a href="#" style="display: inline-block; background: #6366f1; color: white; padding: 12px 30px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 1.1rem;">开始探索</a>
-                        </div>
-                    `;
-                    break;
+            sidebar.innerHTML = html;
 
-                case 'feature':
-                    html = `
-                        <div style="padding: 60px 20px; background: #f8fafc;">
-                            <h2 style="text-align: center; font-size: 2rem; font-weight: bold; margin-bottom: 40px;">我们的核心优势</h2>
-                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1200px; margin: 0 auto;">
-                                <div style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                                    <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 15px;">创新技术</h3>
-                                    <p style="color: #64748b;">采用最先进的技术解决方案，为您提供卓越体验。</p>
-                                </div>
-                                <div style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                                    <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 15px;">专业团队</h3>
-                                    <p style="color: #64748b;">由行业专家组成的团队，为您提供专业支持。</p>
-                                </div>
-                                <div style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                                    <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 15px;">卓越服务</h3>
-                                    <p style="color: #64748b;">7×24小时客户服务，随时解决您的问题。</p>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    break;
-
-                case 'cta':
-                    html = `
-                        <div style="background: #6366f1; padding: 80px 20px; text-align: center; color: white;">
-                            <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">准备好开始了吗？</h2>
-                            <p style="font-size: 1.2rem; max-width: 600px; margin: 0 auto 30px;">立即注册，体验我们的服务</p>
-                            <a href="#" style="display: inline-block; background: white; color: #6366f1; padding: 12px 30px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 1.1rem;">免费注册</a>
-                        </div>
-                    `;
-                    break;
-
-                case 'footer':
-                    html = `
-                        <div style="background: #1e293b; color: #cbd5e1; padding: 60px 20px;">
-                            <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px;">
-                                <div>
-                                    <h3 style="font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; color: white;">关于我们</h3>
-                                    <p>我们致力于提供最好的产品和服务，满足客户需求。</p>
-                                </div>
-                                <div>
-                                    <h3 style="font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; color: white;">产品服务</h3>
-                                    <ul style="list-style: none; padding: 0;">
-                                        <li style="margin-bottom: 10px;"><a href="#" style="color: #cbd5e1; text-decoration: none;">产品A</a></li>
-                                        <li style="margin-bottom: 10px;"><a href="#" style="color: #cbd5e1; text-decoration: none;">产品B</a></li>
-                                        <li style="margin-bottom: 10px;"><a href="#" style="color: #cbd5e1; text-decoration: none;">产品C</a></li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <h3 style="font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; color: white;">联系方式</h3>
-                                    <p>电话: 123-456-7890</p>
-                                    <p>邮箱: contact@example.com</p>
-                                    <p>地址: 北京市朝阳区</p>
-                                </div>
-                                <div>
-                                    <h3 style="font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; color: white;">关注我们</h3>
-                                    <div style="display: flex; gap: 15px;">
-                                        <a href="#" style="color: #cbd5e1;"><i class="fab fa-weixin fa-2x"></i></a>
-                                        <a href="#" style="color: #cbd5e1;"><i class="fab fa-weibo fa-2x"></i></a>
-                                        <a href="#" style="color: #cbd5e1;"><i class="fab fa-github fa-2x"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div style="max-width: 1200px; margin: 40px auto 0; padding-top: 20px; border-top: 1px solid #334155; text-align: center;">
-                                <p>&copy; 2023 公司名称. 保留所有权利.</p>
-                            </div>
-                        </div>
-                    `;
-                    break;
-            }
-
-            if (html) {
-                editor.addComponents(html);
-                showNotification(`已添加${getComponentName(type)}到页面`, true);
-            }
+            sidebar.querySelectorAll('.component-card').forEach(card => {
+                card.addEventListener('dragstart', e => {
+                    e.dataTransfer.setData('text/plain', card.dataset.type);
+                    card.classList.add('opacity-50');
+                });
+                card.addEventListener('dragend', e => {
+                    card.classList.remove('opacity-50');
+                });
+            });
         }
 
-        // 获取组件名称
-        function getComponentName(type) {
-            const names = {
-                'hero': '主横幅',
-                'feature': '特性展示',
-                'testimonial': '客户评价',
-                'cta': '行动号召',
-                'footer': '网站页脚'
-            };
-            console.log(type);
-            return names[type] || '组件';
-        }
-
-        // ================ 配置面板功能 ================
-        // 设备切换
+        // ================ Panel ================
         document.querySelectorAll('.device-btn').forEach(btn => {
             btn.addEventListener('click', function() {
-                // 移除所有按钮的active类
                 document.querySelectorAll('.device-btn').forEach(b => b.classList.remove('active'));
-
-                // 添加active类到当前按钮
                 this.classList.add('active');
-
-                // 设置设备
                 editor.setDevice(this.dataset.device);
             });
         });
 
-        // 操作按钮功能
         document.getElementById('undo-btn').addEventListener('click', () => {
             editor.UndoManager.undo();
         });
@@ -643,10 +434,10 @@
 
         document.getElementById('save-btn').addEventListener('click', () => {
             const projectData = editor.getProjectData();
-            console.log('保存项目数据:', projectData);
+            console.log('Data:', projectData);
 
             // 显示保存成功通知
-            showNotification('项目数据已成功保存！', true);
+            showNotification('Data saved', true);
         });
 
         // 预览功能
@@ -658,7 +449,7 @@
             const css = editor.getCss();
             previewContent.innerHTML = `
                 <style>${css}</style>
-                <div class="max-w-4xl mx-auto p-6">${html}</div>
+                <div class="max-w-7xl mx-auto p-3">${html}</div>
             `;
             previewModal.classList.remove('hidden');
         });
@@ -722,59 +513,6 @@
             });
         });
 
-        // 配置面板添加按钮
-        document.getElementById('add-hero-btn').addEventListener('click', () => {
-            const title = document.querySelector('#hero-config input[placeholder="输入主标题"]').value;
-            const subtitle = document.querySelector('#hero-config input[placeholder="输入副标题"]').value;
-            const buttonText = document.querySelector('#hero-config input[placeholder="例如：了解更多"]').value;
-            const buttonLink = document.querySelector('#hero-config input[placeholder="输入URL"]').value;
-
-            const heroHtml = `
-                <div style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://via.placeholder.com/1200x400');
-                          background-size: cover;
-                          padding: 100px 20px;
-                          text-align: center;
-                          color: white;">
-                    <h1 style="font-size: 2.5rem; font-weight: bold; margin-bottom: 20px;">${title}</h1>
-                    <p style="font-size: 1.2rem; max-width: 600px; margin: 0 auto 30px;">${subtitle}</p>
-                    <a href="${buttonLink}" style="display: inline-block; background: #6366f1; color: white; padding: 12px 30px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 1.1rem;">${buttonText}</a>
-                </div>
-            `;
-
-            editor.addComponents(heroHtml);
-            showNotification('主横幅已添加到页面', true);
-        });
-
-        document.getElementById('add-feature-btn').addEventListener('click', () => {
-            const title = document.querySelector('#feature-config input[placeholder="输入主标题"]').value;
-            const description = document.querySelector('#feature-config textarea').value;
-
-            const featureHtml = `
-                <div style="padding: 60px 20px; background: #f8fafc;">
-                    <h2 style="text-align: center; font-size: 2rem; font-weight: bold; margin-bottom: 40px;">${title}</h2>
-                    <p style="text-align: center; max-width: 800px; margin: 0 auto 40px; font-size: 1.1rem;">${description}</p>
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1200px; margin: 0 auto;">
-                        <div style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                            <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 15px;">创新技术</h3>
-                            <p style="color: #64748b;">采用最先进的技术解决方案，为您提供卓越体验。</p>
-                        </div>
-                        <div style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                            <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 15px;">专业团队</h3>
-                            <p style="color: #64748b;">由行业专家组成的团队，为您提供专业支持。</p>
-                        </div>
-                        <div style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                            <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 15px;">卓越服务</h3>
-                            <p style="color: #64748b;">7×24小时客户服务，随时解决您的问题。</p>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            editor.addComponents(featureHtml);
-            showNotification('特性展示已添加到页面', true);
-        });
-
-        // 显示通知
         function showNotification(message, isSuccess) {
             const notification = document.createElement('div');
             notification.textContent = message;
@@ -791,8 +529,8 @@
         // 初始化编辑器内容
         setTimeout(() => {
             editor.addComponents(`
-                <div class="pt-50 text-center">
-                    <h1 class="">Halo! Welcome to Page Builder</h1>
+                <div class="text-center">
+                    <h1 class="">Hello, welcome to Page Builder</h1>
                 </div>
             `);
         }, 500);
