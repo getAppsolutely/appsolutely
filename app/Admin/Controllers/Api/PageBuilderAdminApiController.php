@@ -18,8 +18,7 @@ class PageBuilderAdminApiController extends AdminBaseApiController
         $page = $this->pageRepository->findOrFail($pageId);
 
         return $this->success([
-            'page'   => $page,
-            'blocks' => $page->builder_data ?? [],
+            'page' => $page,
         ]);
     }
 
@@ -28,19 +27,15 @@ class PageBuilderAdminApiController extends AdminBaseApiController
      */
     public function savePageData(Request $request, int $pageId)
     {
+        $data = $request->get('data');
+        if (empty($data)) {
+            return $this->error('Page data cannot be empty.');
+        }
+
         $page = $this->pageRepository->findOrFail($pageId);
+        $page->update(['content' => $data]);
 
-        $validated = $request->validate([
-            'blocks'   => 'array',
-            'settings' => 'array',
-        ]);
-
-        $page->update([
-            'builder_data'     => $validated['blocks'] ?? [],
-            'builder_settings' => $validated['settings'] ?? [],
-        ]);
-
-        return $this->success(null, 'Page saved successfully');
+        return $this->success($data, 'Page saved successfully.');
     }
 
     /**
@@ -72,7 +67,7 @@ class PageBuilderAdminApiController extends AdminBaseApiController
                         'content'   => '<blockquote><p>客户非常满意！</p><h2>Kent</h2><p>Excellent!</p></blockquote>',
                         'style'     => ['border-left' => '4px solid #ccc', 'padding' => '10px'],
                         'tagName'   => 'blockquote',
-                        'droppable' => true,
+                        'droppable' => false,
                     ],
                 ],
             ],

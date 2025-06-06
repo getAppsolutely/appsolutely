@@ -64,9 +64,9 @@ Route::group([
         Route::get('attribute/groups', [AttributeGroupApiController::class, 'query'])->name('attribute.groups');
 
         // Page Builder Routes
-        Route::get('pages/{pageId}/data', [PageBuilderAdminApiController::class, 'getPageData'])->name('api.pages.data');
-        Route::post('pages/{pageId}/save', [PageBuilderAdminApiController::class, 'savePageData'])->name('api.pages.save');
-        Route::get('pages/blocks/registry', [PageBuilderAdminApiController::class, 'getBlocksRegistry'])->name('api.blocks.registry');
+        Route::get('pages/{pageId}/data', [PageBuilderAdminApiController::class, 'getPageData'])->name('pages.data');
+        Route::put('pages/{pageId}/save', [PageBuilderAdminApiController::class, 'savePageData'])->name('pages.save');
+        Route::get('pages/blocks/registry', [PageBuilderAdminApiController::class, 'getBlocksRegistry'])->name('blocks.registry');
     });
 
 });

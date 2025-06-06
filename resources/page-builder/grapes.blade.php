@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page Builder</title>
+    <title>Design your "{{ $page->name }}" Page - Page Builder</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://cdn.jsdelivr.net/npm/grapesjs/dist/css/grapes.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -17,7 +18,10 @@
                         secondary: '#8b5cf6',
                         dark: '#1e293b',
                         editor: '#f8fafc'
-                    }
+                    },
+                    height: {
+                        '11/12': '91.666667%',
+                    },
                 }
             }
         }
@@ -155,9 +159,9 @@
     </div>
 </header>
 
-<main class="pt-16 mx-auto flex grapes-editor">
+<main class="pt-20 mx-auto flex grapes-editor">
     <section class="flex-1 shadow-lg rounded-lg mr-4 px-6 editor-canvas-wrapper">
-        <div id="editor-canvas" class="border-slate-300 rounded-lg mb-4">
+        <div id="editor-canvas" class="!bg-none !bg-white  mb-4 px-8 pt-8 border-slate-300 rounded-lg">
         </div>
     </section>
     <aside class="w-80 bg-white shadow-lg rounded-lg p-4 overflow-y-auto">
@@ -275,8 +279,8 @@
 </main>
 
 <!-- 模态框 -->
-<div id="preview-modal" class="fixed inset-0 bg-black bg-opacity-75 items-center justify-center z-50 hidden">
-    <div class="bg-white rounded-lg max-w-full overflow-hidden">
+<div id="preview-modal" class="fixed inset-0 bg-black bg-opacity-75 items-center justify-center z-50 hidden pt-[10vh]">
+    <div class="bg-white rounded-lg w-11/12 mx-auto h-11/12 my-auto overflow-hidden">
         <div class="flex justify-between items-center px-6 py-4 border-b">
             <h3 class="text-lg font-semibold">Preview</h3>
             <button id="close-preview" class="text-slate-500 hover:text-slate-700">
@@ -292,7 +296,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/grapesjs/dist/grapes.min.js"></script>
 <script>
-    // 初始化GrapesJS编辑器
+    const data = @json($page['content']);
+    // init
     const editor = grapesjs.init({
         container: '#editor-canvas',
         fromElement: false,
@@ -332,7 +337,35 @@
         }
     });
 
+    const defaultHtml = `
+  <div class="text-center py-10">
+    <h1 class="text-3xl font-bold">Hello, welcome to Page Builder</h1>
+    <p class="text-gray-500">Start dragging components from the right!</p>
+  </div>
+`;
+
+    fetch('{{ admin_route('api.blocks.registry') }}')
+        .then(res => res.json())
+        .then(result => {
+            const categories = result.data;
+            registerBlocks(editor, categories);
+            start()
+        });
+
+    function start()
+    {
+        if (data) {
+            editor.loadProjectData(JSON.parse(data));
+            updateBlockCount();
+        } else {
+            editor.addComponents(defaultHtml);
+        }
+    }
+
     editor.on('load', () => {
+        editor.on('component:add', updateBlockCount);
+        editor.on('component:remove', updateBlockCount);
+
         const iframe = editor.Canvas.getFrameEl();
         const head = iframe.contentDocument.head;
         const style = document.createElement('link');
@@ -340,13 +373,6 @@
         style.href = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css';
         head.appendChild(style);
     });
-
-    fetch('/dash/api/pages/blocks/registry')
-        .then(res => res.json())
-        .then(result => {
-            const categories = result.data;
-            registerBlocks(editor, categories);
-        });
 
     function registerBlocks(editor, categories) {
         const blockManager = editor.BlockManager;
@@ -369,7 +395,6 @@
                         sort = 0,
                         droppable = false,
                     } = comp;
-                    console.log(comp)
 
                     // Register reusable component type (optional if you're using `type`)
                     domComponents.addType(type, {
@@ -398,7 +423,6 @@
                             label: `${categoryLabel}`,
                         },
                         content: {type, droppable},
-                        attributes: {class: 'gjs-block'},
                         order: sort,
                     });
                 });
@@ -424,44 +448,78 @@
 
     document.getElementById('save-btn').addEventListener('click', () => {
         const projectData = editor.getProjectData();
-        console.log('Data:', projectData);
 
-        showNotification('Data saved', true);
+        fetch(`{{ admin_route('api.pages.save',[$pageId]) }}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // if using Laravel
+            },
+            body: JSON.stringify({
+                data: projectData
+            })
+        })
+            .then(res => {
+                if (!res.ok) throw new Error('Failed to save');
+                return res.json();
+            })
+            .then(data => {
+                showNotification(data.message || 'Saved successfully ✅', true);
+            })
+            .catch(err => {
+                console.error('Save failed:', err);
+                showNotification('Save failed ❌', false);
+            });
     });
 
     // Preview
+    const previewBtn = document.getElementById('preview-btn');
+    const closeBtn = document.getElementById('close-preview');
     const previewModal = document.getElementById('preview-modal');
-    const previewContent = document.getElementById('preview-content');
+    const previewContent = document.getElementById('preview-content'); // 假设你有这个区域包住内容
 
-    document.getElementById('preview-btn').addEventListener('click', () => {
+    // preview
+    previewBtn.addEventListener('click', () => {
         const html = editor.getHtml();
         const css = editor.getCss();
+
         previewContent.innerHTML = `
-                <style>${css}</style>
-                <div class="max-w-full mx-auto p-5">${html}</div>
-            `;
+        <style>${css}</style>
+        <div class="max-w-full mx-auto p-5">${html}</div>
+    `;
+
         previewModal.classList.remove('hidden');
     });
 
-    document.getElementById('close-preview').addEventListener('click', () => {
+    // close
+    closeBtn.addEventListener('click', () => {
         previewModal.classList.add('hidden');
     });
 
-    // 组件计数更新
-    editor.on('component:add', () => {
-        updateBlockCount();
+    // close when clicking on background
+    previewModal.addEventListener('click', (e) => {
+        if (e.target === previewModal) {
+            previewModal.classList.add('hidden');
+        }
     });
 
-    editor.on('component:remove', () => {
-        updateBlockCount();
+    // esc to close
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !previewModal.classList.contains('hidden')) {
+            previewModal.classList.add('hidden');
+        }
     });
+
 
     function updateBlockCount() {
-        const block = editor.getComponents();
-        document.getElementById('block-count').textContent = block.length;
+        const wrapper = editor.getWrapper();
+        if (!wrapper || typeof wrapper.components !== 'function') {
+            //console.warn('Editor wrapper not ready or has no components()');
+            return;
+        }
+        const components = wrapper.components();
+        document.getElementById('block-count').textContent = components.length;
     }
-
-    updateBlockCount();
 
     // tab
     const blocksTab = document.getElementById('blocks-tab');
@@ -495,15 +553,6 @@
             notification.remove();
         }, 3000);
     }
-
-    // init
-    setTimeout(() => {
-        editor.addComponents(`
-                <div class="text-center">
-                    <h1 class="">Hello, welcome to Page Builder</h1>
-                </div>
-            `);
-    }, 500);
 </script>
 </body>
 </html>

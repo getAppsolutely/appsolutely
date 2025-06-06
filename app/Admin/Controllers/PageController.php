@@ -85,6 +85,10 @@ class PageController extends AdminBaseController
     {
         $page = $this->pageRepository->findOrFail($pageId);
 
+        if (empty($page)) {
+            abort(404);
+        }
+
         return view('page-builder::grapes', [
             'page'   => $page,
             'pageId' => $pageId,
