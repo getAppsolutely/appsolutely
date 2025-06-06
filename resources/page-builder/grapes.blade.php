@@ -48,6 +48,12 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
 
+        .gjs-editor, .gjs-title, .gjs-blocks-c {
+            background-color: #ffffff !important;
+            color: #1e293b !important;
+            font-weight: bold;
+        }
+
         .editor-canvas-wrapper {
             background-color: #444;
         }
@@ -136,8 +142,8 @@
 
         <!-- 右侧：操作按钮 -->
         <div class="flex space-x-2">
-            <div class="text-sm text-slate-500">
-                <i class="fas fa-cube mr-1 mt-1"></i><span id="block-count">0</span> blocks
+            <div class="text-sm text-slate-500 mr-5">
+                <i class="fas fa-cube mr-1 mt-2"></i><span id="block-count">0</span> blocks
             </div>
             <button id="undo-btn"
                     class="flex items-center bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-md text-sm">
@@ -175,18 +181,18 @@
                 <i class="fas fa-boxes mr-2 text-secondary"></i>Blocks
             </h2>
 
-            <div class="relative mb-4">
+            <div class="relative mb-4 hidden">
                 <input type="text" placeholder="Search blocks..."
                        class="w-full px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
                 <i class="fas fa-search absolute right-3 top-3 text-slate-400"></i>
             </div>
 
-            <div class="gjs-blocks-c space-y-6" id="blocks">
+            <div class="gjs-blocks-c space-y-6 !bg-white" id="blocks">
             </div>
         </div>
 
         <!-- 配置面板内容 -->
-        <div id="config-content" class="hidden config-panel">
+        <div id="config-content" class=" config-panel">
             <h2 class="text-lg font-semibold mb-4 text-slate-700">
                 <i class="fas fa-cog mr-2 text-primary"></i>Config Panel
             </h2>
@@ -352,8 +358,7 @@
             start()
         });
 
-    function start()
-    {
+    function start() {
         if (data) {
             editor.loadProjectData(JSON.parse(data));
             updateBlockCount();
