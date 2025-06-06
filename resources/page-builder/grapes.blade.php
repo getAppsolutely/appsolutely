@@ -344,35 +344,28 @@
             head.appendChild(style);
         });
 
-
         fetch('/dash/api/pages/components/registry')
             .then(res => res.json())
             .then(result => {
                 const categories = result.data;
-                registerGrapesComponentTypes(editor, categories);
+                setupComponentRegistry(editor, categories);
                 renderComponentSidebar(categories);
-                bindCanvasDrop(editor);
+                setupCanvasDragDrop(editor);
             });
 
-        function registerGrapesComponentTypes(editor, categories) {
-            window.COMPONENT_REGISTRY = {}; // 用于后面 lookup
+        function setupComponentRegistry(editor, categories) {
+            window.COMPONENT_REGISTRY = {};
 
-            categories.forEach(cat => {
-                cat.components.forEach(comp => {
-                    const safeContent = wrapContentInDiv(comp.content);
-                    console.log(safeContent)
-                    COMPONENT_REGISTRY[comp.type] = {
-                        content: safeContent,
-                        style: comp.style || {},
-                        tagName: comp.tagName || 'div'
-                    };
-
-                    editor.DomComponents.addType(comp.type, {
+            categories.forEach(category => {
+                category.components.forEach(comp => {
+                    const { type, tagName = 'div', style = {}, content = '<div></div>' } = comp;
+                    COMPONENT_REGISTRY[type] = { tagName, style, content };
+                    editor.DomComponents.addType(type, {
                         model: {
                             defaults: {
-                                tagName: comp.tagName || 'div',
-                                style: comp.style || {},
-                                // 👇 不设置 components，否则 parse 报错
+                                tagName,
+                                style,
+                                content
                             }
                         }
                     });
@@ -380,39 +373,30 @@
             });
         }
 
-        function wrapContentInDiv(html) {
-            if (!html) return '<div></div>';
-            return html.trim().startsWith('<') ? html : `<div>${html}</div>`;
-        }
         function renderComponentSidebar(categories) {
             const sidebar = document.getElementById('component-wrapper');
-            const sortedCategories = categories.sort((a, b) => a.sort - b.sort);
+            const sortedCategories = [...categories].sort((a, b) => a.sort - b.sort);
 
-            let html = '';
-            sortedCategories.forEach(category => {
-                html += `
-        <div class="component-category mb-6">
-          <h3 class="font-medium text-slate-700 mb-3 flex items-center">
-            <i class="${category.icon} mr-2 text-blue-500"></i>${category.name}
-          </h3>
-          <div class="grid grid-cols-1 gap-3">
-            ${category.components
-                    .sort((a, b) => a.sort - b.sort)
-                    .map(comp => renderComponentCard(comp))
-                    .join('')}
-          </div>
-        </div>
-      `;
-            });
-
-            sidebar.innerHTML = html;
+            sidebar.innerHTML = sortedCategories.map(category => `
+    <div class="component-category mb-6">
+      <h3 class="font-medium text-slate-700 mb-3 flex items-center">
+        <i class="${category.icon} mr-2 text-blue-500"></i>${category.name}
+      </h3>
+      <div class="grid grid-cols-1 gap-3">
+        ${category.components
+                .sort((a, b) => a.sort - b.sort)
+                .map(renderComponentCard)
+                .join('')}
+      </div>
+    </div>
+  `).join('');
 
             sidebar.querySelectorAll('.component-card').forEach(card => {
                 card.addEventListener('dragstart', e => {
                     e.dataTransfer.setData('text/plain', card.dataset.type);
                     card.classList.add('opacity-50');
                 });
-                card.addEventListener('dragend', e => {
+                card.addEventListener('dragend', () => {
                     card.classList.remove('opacity-50');
                 });
             });
@@ -420,32 +404,33 @@
 
         function renderComponentCard(comp) {
             return `
-      <div class="component-card bg-slate-50 rounded-lg p-4" draggable="true" data-type="${comp.type}">
-        <div class="flex items-start">
-          <div class="bg-gray-200 border-2 border-dashed rounded-xl w-10 h-10 mr-3"></div>
-          <div class="flex-1">
-            <h4 class="font-semibold">${comp.label}</h4>
-            <p class="text-sm text-slate-500 mt-1">${comp.desc || ''}</p>
-          </div>
+    <div class="component-card bg-slate-50 rounded-lg p-4" draggable="true" data-type="${comp.type}">
+      <div class="flex items-start">
+        <div class="bg-gray-200 border-2 border-dashed rounded-xl w-10 h-10 mr-3"></div>
+        <div class="flex-1">
+          <h4 class="font-semibold">${comp.label}</h4>
+          <p class="text-sm text-slate-500 mt-1">${comp.desc || ''}</p>
         </div>
       </div>
-    `;
+    </div>
+  `;
         }
+        
+        function setupCanvasDragDrop(editor) {
+            const canvasBody = editor.Canvas.getFrameEl().contentDocument.body;
 
-        function bindCanvasDrop(editor) {
-            const iframe = editor.Canvas.getFrameEl();
-            const iframeDoc = iframe.contentDocument;
-            const canvas = iframeDoc.body;
+            canvasBody.addEventListener('dragover', e => e.preventDefault());
 
-            canvas.addEventListener('dragover', e => e.preventDefault());
-            canvas.addEventListener('drop', e => {
+            canvasBody.addEventListener('drop', e => {
                 e.preventDefault();
-                console.log(COMPONENT_REGISTRY);
                 const type = e.dataTransfer.getData('text/plain');
                 const comp = COMPONENT_REGISTRY[type];
-                if (!comp) return;
+                if (!comp) {
+                    console.warn(`Component "${type}" is not existed`);
+                    return;
+                }
 
-                editor.getWrapper().append(comp.content);
+                editor.addComponents({ type });
             });
         }
 
