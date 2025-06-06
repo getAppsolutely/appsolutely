@@ -288,10 +288,10 @@
     </main>
 
     <!-- 模态框 -->
-    <div id="preview-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
+    <div id="preview-modal" class="fixed inset-0 bg-black bg-opacity-75 items-center justify-center z-50 hidden">
         <div class="bg-white rounded-lg w-11/12 max-w-7xl h-5/6 overflow-hidden">
             <div class="flex justify-between items-center px-6 py-4 border-b">
-                <h3 class="text-lg font-semibold">页面预览</h3>
+                <h3 class="text-lg font-semibold">Preview</h3>
                 <button id="close-preview" class="text-slate-500 hover:text-slate-700">
                     <i class="fas fa-times text-xl"></i>
                 </button>
@@ -308,10 +308,11 @@
         // 初始化GrapesJS编辑器
         const editor = grapesjs.init({
             container: '#editor-canvas',
-            fromElement: true,
+            fromElement: false,
             height: '100%',
             width: 'auto',
             storageManager: false,
+            panels: { defaults: [] },
             deviceManager: {
                 devices: [{
                         id: 'desktop',
@@ -331,9 +332,6 @@
                         widthMedia: '768px',
                     }
                 ]
-            },
-            panels: {
-                defaults: []
             }
         });
 
@@ -362,6 +360,7 @@
             categories.forEach(cat => {
                 cat.components.forEach(comp => {
                     const safeContent = wrapContentInDiv(comp.content);
+                    console.log(safeContent)
                     COMPONENT_REGISTRY[comp.type] = {
                         content: safeContent,
                         style: comp.style || {},
@@ -434,42 +433,23 @@
         }
 
         function bindCanvasDrop(editor) {
-            const canvas = editor.Canvas.getElement();
+            const iframe = editor.Canvas.getFrameEl();
+            const iframeDoc = iframe.contentDocument;
+            const canvas = iframeDoc.body;
 
             canvas.addEventListener('dragover', e => e.preventDefault());
-
             canvas.addEventListener('drop', e => {
                 e.preventDefault();
-
+                console.log(COMPONENT_REGISTRY);
                 const type = e.dataTransfer.getData('text/plain');
                 const comp = COMPONENT_REGISTRY[type];
                 if (!comp) return;
 
-                editor.addComponents({
-                    tagName: comp.tagName,
-                    components: comp.content,
-                    style: comp.style
-                });
-            });
-        }function bindCanvasDrop(editor) {
-            const canvas = editor.Canvas.getElement();
-
-            canvas.addEventListener('dragover', e => e.preventDefault());
-
-            canvas.addEventListener('drop', e => {
-                e.preventDefault();
-
-                const type = e.dataTransfer.getData('text/plain');
-                const comp = COMPONENT_REGISTRY[type];
-                if (!comp) return;
-
-                editor.addComponents({
-                    tagName: comp.tagName,
-                    components: comp.content,
-                    style: comp.style
-                });
+                editor.getWrapper().append(comp.content);
             });
         }
+
+
         // ================ Panel ================
         document.querySelectorAll('.device-btn').forEach(btn => {
             btn.addEventListener('click', function() {
