@@ -66,7 +66,7 @@ Route::group([
         // Page Builder Routes
         Route::get('pages/{pageId}/data', [PageBuilderAdminApiController::class, 'getPageData'])->name('api.pages.data');
         Route::post('pages/{pageId}/save', [PageBuilderAdminApiController::class, 'savePageData'])->name('api.pages.save');
-        Route::get('pages/components/registry', [PageBuilderAdminApiController::class, 'getComponentsRegistry'])->name('api.components.registry');
+        Route::get('pages/blocks/registry', [PageBuilderAdminApiController::class, 'getBlocksRegistry'])->name('api.blocks.registry');
     });
 
 });
