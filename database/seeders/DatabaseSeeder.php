@@ -15,14 +15,20 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->withPersonalTeam()->create();
 
+        /*
         User::factory()->withPersonalTeam()->create([
             'name'  => 'Test User',
             'email' => 'test@example.com',
         ]);
+        */
 
         $this->call([
+            CmsMenuSeeder::class,
+            ProductMenuSeeder::class,
+            OrderMenuSeeder::class,
+            ReleaseMenuSeeder::class,
+            ProductSettingsMenuSeeder::class,
             AdminMenuSeeder::class,
-            EcomSettingsMenuSeeder::class,
         ]);
     }
 }
