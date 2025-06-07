@@ -12,9 +12,9 @@ return new class() extends Migration
     public function up(): void
     {
         Schema::create('product_attribute_group_pivot', function (Blueprint $table) {
-            $table->foreignId('attribute_group_id')->constrained()->onDelete('cascade');
-            $table->foreignId('attribute_id')->constrained()->onDelete('cascade');
-            $table->primary(['attribute_group_id', 'attribute_id']);
+            $table->foreignId('product_attribute_group_id')->constrained()->onDelete('cascade');
+            $table->foreignId('product_attribute_id')->constrained()->onDelete('cascade');
+            $table->primary(['product_attribute_group_id', 'product_attribute_id']);
         });
     }
 
@@ -23,6 +23,6 @@ return new class() extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('attribute_group_pivot');
+        Schema::dropIfExists('product_attribute_group_pivot');
     }
 };

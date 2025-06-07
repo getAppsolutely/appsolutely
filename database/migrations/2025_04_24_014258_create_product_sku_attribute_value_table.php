@@ -13,8 +13,8 @@ return new class() extends Migration
     {
         Schema::create('product_sku_attribute_value', function (Blueprint $table) {
             $table->foreignId('product_sku_id')->constrained()->onDelete('cascade');
-            $table->foreignId('attribute_value_id')->constrained()->onDelete('cascade');
-            $table->primary(['product_sku_id', 'attribute_value_id']);
+            $table->foreignId('product_attribute_value_id')->constrained()->onDelete('cascade');
+            $table->primary(['product_sku_id', 'product_attribute_value_id']);
         });
     }
 

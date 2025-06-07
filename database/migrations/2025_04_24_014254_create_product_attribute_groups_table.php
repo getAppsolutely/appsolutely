@@ -25,6 +25,6 @@ return new class() extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('attribute_groups');
+        Schema::dropIfExists('product_attribute_groups');
     }
 };

@@ -9,7 +9,8 @@ return new class() extends Migration
     public function up(): void
     {
         Schema::create('pages', function (Blueprint $table) {
-            $table->ulid();
+            $table->id();
+            $table->ulid('reference');
             $table->string('name');
             $table->string('slug');
             $table->string('title')->nullable();

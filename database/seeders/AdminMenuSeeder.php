@@ -21,7 +21,7 @@ class AdminMenuSeeder extends Seeder
                 'order'      => 180,
                 'title'      => 'Files',
                 'icon'       => 'fa-file',
-                'uri'        => 'files',
+                'uri'        => 'file/manager',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

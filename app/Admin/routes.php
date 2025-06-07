@@ -9,6 +9,9 @@ use App\Admin\Controllers\ArticleController;
 use App\Admin\Controllers\FileController;
 use App\Admin\Controllers\HomeController;
 use App\Admin\Controllers\OrderController;
+use App\Admin\Controllers\PageBlockController;
+use App\Admin\Controllers\PageBlockGroupController;
+use App\Admin\Controllers\PageBlockSettingController;
 use App\Admin\Controllers\PageController;
 use App\Admin\Controllers\ProductAttributeController;
 use App\Admin\Controllers\ProductAttributeGroupController;
@@ -56,6 +59,11 @@ Route::group([
     // Application release
     Route::resource('release/builds', ReleaseBuildController::class)->names('app.builds');
     Route::resource('release/versions', ReleaseVersionController::class)->names('app.versions');
+
+    // Block Management Routes
+    Route::resource('page/block/groups', PageBlockGroupController::class)->names('page.block.groups');
+    Route::resource('page/blocks', PageBlockController::class)->names('page.blocks');
+    Route::resource('page/block/settings', PageBlockSettingController::class)->names('page.block.settings');
 
     // API Routes
     Route::prefix('api/')->name('api.')->group(function () {

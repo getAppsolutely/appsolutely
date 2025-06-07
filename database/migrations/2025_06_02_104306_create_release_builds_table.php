@@ -14,12 +14,12 @@ return new class() extends Migration
         Schema::create('release_builds', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('version_id');
-            $table->string('platform')->default('windows'); // darwin / windows / linux
+            $table->string('platform')->default('windows');
             $table->string('arch')->nullable();
             $table->tinyInteger('force_update')->default(0);
-            $table->json('gray_strategy')->nullable(); // e.g. {"percent": 20, "uuid_hash_range": [0, 2000]}
+            $table->json('gray_strategy')->nullable();
             $table->text('release_notes')->nullable();
-            $table->string('build_status')->nullable();    // pending, success, failed
+            $table->string('build_status')->nullable();
             $table->string('build_log')->nullable();
             $table->string('path')->nullable();
             $table->string('signature')->nullable();
@@ -27,7 +27,7 @@ return new class() extends Migration
             $table->timestamp('published_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('version_id')->references('id')->on('app_versions')->onDelete('cascade');
+            $table->foreign('version_id')->references('id')->on('release_versions')->onDelete('cascade');
         });
     }
 
@@ -36,6 +36,6 @@ return new class() extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('app_builds');
+        Schema::dropIfExists('release_builds');
     }
 };
