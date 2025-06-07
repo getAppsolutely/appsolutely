@@ -38,6 +38,10 @@ final class PageBlockController extends AdminBaseController
                 $filter->equal('status')->width(4);
                 $filter->between('created_at')->datetime()->width(4);
             });
+
+            $grid->actions(function (Grid\Displayers\Actions $actions) {
+                $actions->disableView();
+            });
         });
     }
 
@@ -52,8 +56,8 @@ final class PageBlockController extends AdminBaseController
             $form->text('class', __t('Class'))->required();
             $form->textarea('description', __t('Description'))->rows(2);
             $form->textarea('instruction', __t('Instruction'))->rows(2);
-            $form->json('parameters', __t('Parameters'));
-            $form->json('settings', __t('Settings'));
+            $form->keyValue('parameters', __t('Parameters'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
+            $form->keyValue('setting', __t('Setting'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
             $form->switch('status', __t('Status'));
             $form->text('remark', __t('Remark'));
             $form->disableViewButton();

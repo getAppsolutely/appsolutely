@@ -17,13 +17,13 @@ final class PageBlock extends Model
         'description',
         'instruction',
         'parameters',
-        'settings',
+        'setting',
         'status',
     ];
 
     protected $casts = [
         'parameters' => 'array',
-        'settings'   => 'array',
+        'setting'    => 'array',
         'status'     => 'integer',
     ];
 

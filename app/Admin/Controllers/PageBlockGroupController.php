@@ -33,6 +33,10 @@ final class PageBlockGroupController extends AdminBaseController
                 $filter->equal('status')->width(4);
                 $filter->between('created_at')->datetime()->width(4);
             });
+
+            $grid->actions(function (Grid\Displayers\Actions $actions) {
+                $actions->disableView();
+            });
         });
     }
 
