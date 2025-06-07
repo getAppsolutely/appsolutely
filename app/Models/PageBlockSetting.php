@@ -1,0 +1,39 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+final class PageBlockSetting extends Model
+{
+    protected $fillable = [
+        'page_id',
+        'block_id',
+        'type',
+        'template',
+        'scripts',
+        'stylesheets',
+        'styles',
+        'parameter_values',
+        'status',
+        'remark',
+    ];
+
+    protected $casts = [
+        'styles'           => 'array',
+        'parameter_values' => 'array',
+        'status'           => 'integer',
+    ];
+
+    public function block(): BelongsTo
+    {
+        return $this->belongsTo(PageBlock::class, 'block_id');
+    }
+
+    public function page(): BelongsTo
+    {
+        return $this->belongsTo(Page::class, 'page_id');
+    }
+}

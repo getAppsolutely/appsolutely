@@ -188,7 +188,7 @@ class ProductController extends AdminBaseController
                 $actions->append(new DeleteAction());
             });
 
-            $grid->setResource(admin_route('product.skus.index'));
+            $grid->setResource(admin_route('products.skus.index'));
         });
     }
 }

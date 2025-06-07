@@ -27,40 +27,40 @@ class ProductSettingsMenuSeeder extends Seeder
             $productSettingsId = $productSettingsMenu->id;
         }
 
-        $productAttributeGroupsMenu = DB::table('admin_menu')->where('parent_id', $productSettingsId)->where('title', 'Attribute Groups')->first();
-        if (! $productAttributeGroupsMenu) {
+        $attributeGroupsMenu = DB::table('admin_menu')->where('parent_id', $productSettingsId)->where('title', 'Attribute Groups')->first();
+        if (! $attributeGroupsMenu) {
             DB::table('admin_menu')->insert([
                 'parent_id'  => $productSettingsId,
                 'order'      => 1,
                 'title'      => 'Attribute Groups',
                 'icon'       => 'fa-tags',
-                'uri'        => 'product/attribute/groups',
+                'uri'        => 'products/attribute-groups',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
         }
 
-        $productAttributesMenu = DB::table('admin_menu')->where('parent_id', $productSettingsId)->where('title', 'Attributes')->first();
-        if (! $productAttributesMenu) {
+        $attributesMenu = DB::table('admin_menu')->where('parent_id', $productSettingsId)->where('title', 'Attributes')->first();
+        if (! $attributesMenu) {
             DB::table('admin_menu')->insert([
                 'parent_id'  => $productSettingsId,
                 'order'      => 2,
                 'title'      => 'Attributes',
                 'icon'       => 'fa-tags',
-                'uri'        => 'product/attributes',
+                'uri'        => 'products/attributes',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
         }
 
-        $productAttributeValuesMenu = DB::table('admin_menu')->where('parent_id', $productSettingsId)->where('title', 'Attribute Values')->first();
-        if (! $productAttributeValuesMenu) {
+        $attributeValuesMenu = DB::table('admin_menu')->where('parent_id', $productSettingsId)->where('title', 'Attribute Values')->first();
+        if (! $attributeValuesMenu) {
             DB::table('admin_menu')->insert([
                 'parent_id'  => $productSettingsId,
                 'order'      => 3,
                 'title'      => 'Attribute Values',
                 'icon'       => 'fa-tag',
-                'uri'        => 'product/attribute/values',
+                'uri'        => 'products/attribute-values',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

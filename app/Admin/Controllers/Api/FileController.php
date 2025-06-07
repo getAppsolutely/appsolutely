@@ -25,7 +25,7 @@ class FileController extends AdminBaseApiController
     public function upload(Request $request): Response|JsonResponse|Redirector|RedirectResponse|Application|ResponseFactory|\Dcat\Admin\Http\JsonResponse
     {
         if (request()->method() == 'GET') {
-            return admin_redirect('files/manager');
+            return admin_redirect('file-manager');
         }
         if ($this->isDeleteRequest()) {
             return $this->deleteFileAndResponse();
@@ -35,7 +35,7 @@ class FileController extends AdminBaseApiController
             if (! $uploadedFile) {
                 $uploadedFile       = $request->file('file');
                 if (! $uploadedFile) {
-                    return admin_redirect('files/manager');
+                    return admin_redirect('file-manager');
                 }
             }
 

@@ -33,48 +33,55 @@ Route::group([
 ], function () {
     Route::get('/', [HomeController::class, 'index']);
 
+    Route::resource('file/manager', FileController::class)->names('file-manager');
     Route::get('uploads/{path?}', [FileController::class, 'retrieve'])->where('path', '(.*)')->name('file.self');
 
     // Content Management Routes
-    Route::resource('articles', ArticleController::class)->names('articles');
-    Route::resource('article/categories', ArticleCategoryController::class)->names('article.categories');
-    Route::resource('pages', PageController::class)->names('pages');
-    Route::resource('files/manager', FileController::class)->names('files.manager');
+    Route::prefix('articles')->name('articles.')->group(function () {
+        Route::resource('/', ArticleController::class);
+        Route::resource('categories', ArticleCategoryController::class)->names('categories');
+    });
 
-    Route::get('pages/{pageId}/design', [PageController::class, 'design'])->name('pages.design');
+    Route::prefix('pages')->name('pages.')->group(function () {
+        Route::resource('/', PageController::class);
+        Route::get('{pageId}/design', [PageController::class, 'design'])->name('design');
+        Route::resource('block-settings', PageBlockSettingController::class)->names('block-settings');
+        Route::resource('blocks', PageBlockController::class)->names('blocks');
+        Route::resource('block-groups', PageBlockGroupController::class)->names('block-groups');
+    });
 
     // Product Management Routes
-    Route::resource('products', ProductController::class)->names('products');
-    Route::resource('product/categories', ProductCategoryController::class)->names('product.categories');
-    Route::resource('product/skus', ProductSkuController::class)->names('product.skus');
-
-    // Attribute Management Routes
-    Route::resource('product/attribute/groups', ProductAttributeGroupController::class)->names('attribute.groups');
-    Route::resource('product/attributes', ProductAttributeController::class)->names('attributes');
-    Route::resource('product/attribute/values', ProductAttributeValueController::class)->names('attribute.values');
+    Route::prefix('products')->name('products.')->group(function () {
+        Route::resource('/', ProductController::class);
+        Route::resource('categories', ProductCategoryController::class)->names('categories');
+        Route::resource('skus', ProductSkuController::class)->names('skus');
+        Route::resource('attribute-groups', ProductAttributeGroupController::class)->names('attribute-groups');
+        Route::resource('attributes', ProductAttributeController::class)->names('attributes');
+        Route::resource('attribute-values', ProductAttributeValueController::class)->names('attribute-values');
+    });
 
     // Order Management Routes
-    Route::resource('orders', OrderController::class)->names('orders');
+    Route::prefix('orders')->name('orders.')->group(function () {
+        Route::resource('/', OrderController::class);
+    });
 
-    // Application release
-    Route::resource('release/builds', ReleaseBuildController::class)->names('app.builds');
-    Route::resource('release/versions', ReleaseVersionController::class)->names('app.versions');
-
-    // Block Management Routes
-    Route::resource('page/block/groups', PageBlockGroupController::class)->names('page.block.groups');
-    Route::resource('page/blocks', PageBlockController::class)->names('page.blocks');
-    Route::resource('page/block/settings', PageBlockSettingController::class)->names('page.block.settings');
+    // Application releases
+    Route::prefix('releases')->name('releases.')->group(function () {
+        Route::resource('builds', ReleaseBuildController::class)->names('builds');
+        Route::resource('versions', ReleaseVersionController::class)->names('versions');
+    });
 
     // API Routes
     Route::prefix('api/')->name('api.')->group(function () {
-        Route::get('files/library', [FileApiController::class, 'library'])->name('files.library');
+        Route::get('file-library', [FileApiController::class, 'library'])->name('file-library');
         Route::post('common/quick-edit', [CommonController::class, 'quickEdit'])->name('common.quick-edit');
-        Route::get('attribute/groups', [AttributeGroupApiController::class, 'query'])->name('attribute.groups');
+        Route::get('products/attribute-groups', [AttributeGroupApiController::class, 'query'])->name('attribute-groups');
 
         // Page Builder Routes
-        Route::get('pages/{pageId}/data', [PageBuilderAdminApiController::class, 'getPageData'])->name('pages.data');
-        Route::put('pages/{pageId}/save', [PageBuilderAdminApiController::class, 'savePageData'])->name('pages.save');
-        Route::get('pages/blocks/registry', [PageBuilderAdminApiController::class, 'getBlocksRegistry'])->name('blocks.registry');
+        Route::prefix('pages')->name('pages.')->group(function () {
+            Route::get('{pageId}/data', [PageBuilderAdminApiController::class, 'getPageData'])->name('data');
+            Route::put('{pageId}/save', [PageBuilderAdminApiController::class, 'savePageData'])->name('save');
+            Route::get('blocks/registry', [PageBuilderAdminApiController::class, 'getBlocksRegistry'])->name('blocks.registry');
+        });
     });
-
 });

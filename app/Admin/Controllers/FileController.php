@@ -113,7 +113,7 @@ class FileController extends AdminBaseController
                 $form->disableResetButton();
 
                 $form->html('<div class="form-footer text-center">
-                <a href="' . admin_url('files/manager') . '" class="btn btn-primary">
+                <a href="' . admin_url('file-manager') . '" class="btn btn-primary">
                     <i class="feather icon-list"></i><span>&nbsp;Back to List</span>
                 </a></div>');
             }

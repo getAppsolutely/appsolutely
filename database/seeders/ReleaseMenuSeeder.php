@@ -36,7 +36,7 @@ class ReleaseMenuSeeder extends Seeder
                 'order'      => 1,
                 'title'      => 'Versions',
                 'icon'       => 'fa-list-ol',
-                'uri'        => 'release/versions',
+                'uri'        => 'releases/versions',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -49,7 +49,7 @@ class ReleaseMenuSeeder extends Seeder
                 'order'      => 2,
                 'title'      => 'Builds',
                 'icon'       => 'fa-list-ol',
-                'uri'        => 'release/builds',
+                'uri'        => 'releases/builds',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

@@ -75,7 +75,7 @@ class CmsMenuSeeder extends Seeder
                 'order'      => 2,
                 'title'      => 'Article Categories',
                 'icon'       => 'fa-folder',
-                'uri'        => 'article/categories',
+                'uri'        => 'articles/categories',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

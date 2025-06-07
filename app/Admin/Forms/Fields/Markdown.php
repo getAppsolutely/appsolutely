@@ -6,7 +6,7 @@ class Markdown
 {
     public static function script(): string
     {
-        $imageLibraryUrl = route('dcat.admin.api.files.library');
+        $imageLibraryUrl = route('dcat.admin.api.file-library');
         $uploadUrl       = route('dcat.admin.api.files.upload');
 
         return <<<JS

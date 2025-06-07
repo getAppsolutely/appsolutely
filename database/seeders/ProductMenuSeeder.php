@@ -49,7 +49,7 @@ class ProductMenuSeeder extends Seeder
                 'order'      => 2,
                 'title'      => 'Product Skus',
                 'icon'       => 'fa-list-ol',
-                'uri'        => 'product/skus',
+                'uri'        => 'products/skus',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -62,7 +62,7 @@ class ProductMenuSeeder extends Seeder
                 'order'      => 3,
                 'title'      => 'Product Categories',
                 'icon'       => 'fa-list-ol',
-                'uri'        => 'product/categories',
+                'uri'        => 'products/categories',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
