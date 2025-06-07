@@ -180,6 +180,13 @@ if (! function_exists('log_debug')) {
     }
 }
 
+if (! function_exists('log_warning')) {
+    function log_warning(string $message, array $context = []): void
+    {
+        Log::log('warning', string_concat($message), $context);
+    }
+}
+
 if (! function_exists('upload_to_api')) {
     function upload_to_api(?string $class = null, ?string $id = null, ?string $type = null, ?string $token = null): string
     {
@@ -537,5 +544,20 @@ if (! function_exists('user_timezone_to_utc')) {
         $standardTime = Carbon::createFromFormat(user_time_format(), $time, user_timezone());
 
         return $standardTime->copy()->setTimezone(config('app.timezone'));
+    }
+}
+
+if (! function_exists('themed_view')) {
+    function themed_view($view, $data = [], $mergeData = [])
+    {
+        $theme         = Qirolab\Theme\Theme::active();
+        $themeViewPath = theme_path($theme);
+
+        if (view()->exists($themeViewPath)) {
+            return view($themeViewPath, $data, $mergeData);
+        }
+        log_warning('Active theme: ' . $theme);
+
+        return view($view, $data, $mergeData);
     }
 }

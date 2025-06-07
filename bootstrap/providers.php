@@ -5,4 +5,5 @@ return [
     App\Providers\FortifyServiceProvider::class,
     App\Providers\JetstreamServiceProvider::class,
     App\Providers\TranslationServiceProvider::class,
+    App\Providers\ThemeServiceProvider::class,
 ];

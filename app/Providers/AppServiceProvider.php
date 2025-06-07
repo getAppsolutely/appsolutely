@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Livewire\HeaderLivewire;
 use App\Repositories\TranslationRepository;
 use App\Services\TranslationService;
 use Illuminate\Support\Facades\Blade;
@@ -19,6 +20,8 @@ class AppServiceProvider extends ServiceProvider
         // Register Translation Service and Repository
         $this->app->singleton(TranslationRepository::class);
         $this->app->singleton(TranslationService::class);
+
+        \Livewire::component('header-livewire', HeaderLivewire::class);
     }
 
     /**

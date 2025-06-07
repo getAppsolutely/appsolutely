@@ -25,6 +25,7 @@ class PageRepository extends BaseRepository
                 $query->where('expired_at', '>', $now)
                     ->orWhereNull('expired_at');
             })
+            /*
             ->with(['containers' => function ($query) use ($now) {
                 $query->where('status', 1)
                     ->where('published_at', '<=', $now)
@@ -40,6 +41,7 @@ class PageRepository extends BaseRepository
                             ->orWhereNull('expired_at');
                     });
             }])
+            */
             ->first();
     }
 }

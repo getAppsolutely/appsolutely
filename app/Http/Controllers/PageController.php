@@ -22,7 +22,7 @@ class PageController extends BaseController
             abort(404);
         }
 
-        return view('pages.show', [
+        return themed_view('pages.page', [
             'page'        => $page,
             'pageService' => $this->pageService,
         ]);

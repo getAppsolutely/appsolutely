@@ -9,7 +9,7 @@ return [
     | It will assign the default active theme to be used if one is not set during
     | runtime.
     */
-    'active' => 'default',
+    'active' => config('appsolutely.theme'),
 
     /*
     |--------------------------------------------------------------------------
@@ -30,5 +30,5 @@ return [
     |
     | The base path where all the themes are located.
     */
-    'base_path' => base_path('themes')
+    'base_path' => base_path('themes'),
 ];

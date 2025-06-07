@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\HasMany;
-
 class Page extends Model
 {
     protected $fillable = [
@@ -33,9 +31,4 @@ class Page extends Model
         'status'          => 'integer',
         'structured_data' => 'array',
     ];
-
-    public function containers(): HasMany
-    {
-        return $this->hasMany(PageContainer::class)->orderBy('sort');
-    }
 }
