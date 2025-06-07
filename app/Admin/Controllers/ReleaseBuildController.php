@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Admin\Controllers;
 
 use App\Enums\Status;
-use App\Models\AppBuild;
-use App\Models\AppVersion;
+use App\Models\ReleaseBuild;
+use App\Models\ReleaseVersion;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 
-final class AppBuildController extends AdminBaseController
+final class ReleaseBuildController extends AdminBaseController
 {
     private const PLATFORMS = [
         'windows' => 'Windows',
@@ -32,7 +32,7 @@ final class AppBuildController extends AdminBaseController
 
     public function grid(): Grid
     {
-        return Grid::make(AppBuild::with('version'), function (Grid $grid) {
+        return Grid::make(ReleaseBuild::with('version'), function (Grid $grid) {
             $grid->column('id', __t('ID'))->sortable();
             $grid->column('version.version', __t('Version'));
             $grid->column('platform', __t('Platform'));
@@ -46,7 +46,7 @@ final class AppBuildController extends AdminBaseController
 
             $grid->quickSearch('id', 'platform', 'arch');
             $grid->filter(function (Grid\Filter $filter) {
-                $filter->equal('version_id')->select(AppVersion::pluck('version', 'id'))->width(3);
+                $filter->equal('version_id')->select(ReleaseVersion::pluck('version', 'id'))->width(3);
                 $filter->equal('platform')->select(self::PLATFORMS)->width(3);
                 $filter->equal('status')->select(Status::toArray())->width(3);
             });
@@ -59,9 +59,9 @@ final class AppBuildController extends AdminBaseController
 
     public function form(): Form
     {
-        return Form::make(AppBuild::with('version'), function (Form $form) {
+        return Form::make(ReleaseBuild::with('version'), function (Form $form) {
             $form->display('id', __t('ID'));
-            $versionOptions = AppVersion::pluck('version', 'id')->toArray();
+            $versionOptions = ReleaseVersion::pluck('version', 'id')->toArray();
 
             $form->column(6, function (Form $form) use ($versionOptions) {
                 $form->select('version_id', __t('Version'))
@@ -95,7 +95,7 @@ final class AppBuildController extends AdminBaseController
                 $form->text('build_log', __t('Build Log'));
                 $form->file('path', __t('Build File'))
                     ->autoUpload()
-                    ->url(upload_to_api(AppBuild::class, $form->getKey()))
+                    ->url(upload_to_api(ReleaseBuild::class, $form->getKey()))
                     ->uniqueName()
                     ->help('Upload a build file. The path will be stored and used for download. You can also enter a path manually.');
 

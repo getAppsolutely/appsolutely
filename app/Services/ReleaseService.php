@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Models\AppBuild;
-use App\Models\AppVersion;
-use App\Repositories\AppBuildRepository;
-use App\Repositories\AppVersionRepository;
+use App\Models\ReleaseBuild;
+use App\Models\ReleaseVersion;
+use App\Repositories\ReleaseBuildRepository;
+use App\Repositories\ReleaseVersionRepository;
 use Illuminate\Support\Collection;
 
-final class AppService
+final class ReleaseService
 {
     public function __construct(
-        protected AppVersionRepository $versionRepository,
-        protected AppBuildRepository $buildRepository
+        protected ReleaseVersionRepository $versionRepository,
+        protected ReleaseBuildRepository $buildRepository
     ) {}
 
     public function getVersions(): Collection
@@ -27,12 +27,12 @@ final class AppService
         return $this->buildRepository->findWhere(['version_id' => $versionId]);
     }
 
-    public function createVersion(array $data): AppVersion
+    public function createVersion(array $data): ReleaseVersion
     {
         return $this->versionRepository->create($data);
     }
 
-    public function createBuild(array $data): AppBuild
+    public function createBuild(array $data): ReleaseBuild
     {
         return $this->buildRepository->create($data);
     }

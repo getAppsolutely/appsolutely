@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-final class AppVersion extends Model
+final class ReleaseVersion extends Model
 {
     use SoftDeletes;
 
@@ -24,6 +24,6 @@ final class AppVersion extends Model
 
     public function builds(): HasMany
     {
-        return $this->hasMany(AppBuild::class, 'version_id');
+        return $this->hasMany(ReleaseBuild::class, 'version_id');
     }
 }

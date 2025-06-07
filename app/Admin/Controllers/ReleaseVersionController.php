@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace App\Admin\Controllers;
 
 use App\Enums\Status;
-use App\Models\AppVersion;
+use App\Models\ReleaseVersion;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 
-final class AppVersionController extends AdminBaseController
+final class ReleaseVersionController extends AdminBaseController
 {
     public function grid(): Grid
     {
-        return Grid::make(AppVersion::query(), function (Grid $grid) {
+        return Grid::make(ReleaseVersion::query(), function (Grid $grid) {
             $grid->column('id', __t('ID'))->sortable();
             $grid->column('version', __t('Version'))->editable();
             $grid->column('remark', __t('Remark'))->editable();
@@ -38,7 +38,7 @@ final class AppVersionController extends AdminBaseController
 
     public function form(): Form
     {
-        return Form::make(AppVersion::query(), function (Form $form) {
+        return Form::make(ReleaseVersion::query(), function (Form $form) {
             $form->display('id', __t('ID'));
             $form->text('version', __t('Version'))->required();
             $form->text('remark', __t('Remark'));

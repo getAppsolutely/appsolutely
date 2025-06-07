@@ -4,9 +4,9 @@ namespace App\Services;
 
 use App\Helpers\FileHelper;
 use App\Models\AdminSetting;
-use App\Models\AppBuild;
 use App\Models\File;
 use App\Models\Model;
+use App\Models\ReleaseBuild;
 use App\Repositories\AdminSettingRepository;
 use App\Repositories\FileRepository;
 use Illuminate\Http\JsonResponse;
@@ -171,7 +171,7 @@ class StorageService
             if (! method_exists($object, 'filesOfType')) {
                 return false;
             }
-            if ($object instanceof AppBuild) {
+            if ($object instanceof ReleaseBuild) {
                 $pattern     = 'release/v%s/%s';
                 $build       = (new $class())::with(['version'])->find($key);
                 $subFolder   = $build?->version->version;

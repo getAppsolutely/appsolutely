@@ -6,7 +6,7 @@ use App\Models\Traits\HasFilesOfType;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-final class AppBuild extends Model
+final class ReleaseBuild extends Model
 {
     use HasFilesOfType;
     use SoftDeletes;
@@ -36,7 +36,7 @@ final class AppBuild extends Model
 
     public function version(): BelongsTo
     {
-        return $this->belongsTo(AppVersion::class, 'version_id');
+        return $this->belongsTo(ReleaseVersion::class, 'version_id');
     }
 
     public function assessable(): BelongsTo

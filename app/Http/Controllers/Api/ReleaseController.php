@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Services\AppService;
+use App\Services\ReleaseService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 final class ReleaseController extends BaseApiController
 {
     public function __construct(
-        protected AppService $appService
+        protected ReleaseService $appService
     ) {}
 
     public function latest(Request $request): JsonResponse

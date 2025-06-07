@@ -11,7 +11,7 @@ return new class() extends Migration
      */
     public function up(): void
     {
-        Schema::create('app_builds', function (Blueprint $table) {
+        Schema::create('release_builds', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('version_id');
             $table->string('platform')->default('windows'); // darwin / windows / linux
