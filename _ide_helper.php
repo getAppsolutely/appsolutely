@@ -1752,17 +1752,10 @@ namespace Illuminate\Support\Facades {
         }
 
         /**
-         * Finds an entry of the container by its identifier and returns it.
-         *
          * @template TClass of object
          *
          * @param  string|class-string<TClass>  $id
-         * @param  string  $id  Identifier of the entry to look for.
          * @return ($id is class-string<TClass> ? TClass : mixed)
-         * @return mixed Entry.
-         *
-         * @throws NotFoundExceptionInterface No entry was found for **this** identifier.
-         * @throws ContainerExceptionInterface Error while retrieving the entry.
          *
          * @static
          */
@@ -25010,6 +25003,15 @@ namespace Livewire {
         /**
          * @static
          */
+        public static function findSynth($keyOrTarget, $component)
+        {
+            /** @var \Livewire\LivewireManager $instance */
+            return $instance->findSynth($keyOrTarget, $component);
+        }
+
+        /**
+         * @static
+         */
         public static function update($snapshot, $diff, $calls)
         {
             /** @var \Livewire\LivewireManager $instance */
@@ -25882,27 +25884,6 @@ namespace Illuminate\Routing {
         public static function lazy($enabled = true)
         {
             return \Illuminate\Routing\Route::lazy($enabled);
-        }
-    }
-}
-
-namespace Illuminate\Database\Eloquent {
-    /**
-     * @template TKey of array-key
-     * @template TModel of \Illuminate\Database\Eloquent\Model
-     *
-     * @extends \Illuminate\Support\Collection<TKey, TModel>
-     */
-    class Collection
-    {
-        /**
-         * @see \Barryvdh\Debugbar\ServiceProvider::register()
-         *
-         * @static
-         */
-        public static function debug()
-        {
-            return \Illuminate\Database\Eloquent\Collection::debug();
         }
     }
 }
