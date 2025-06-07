@@ -110,6 +110,6 @@ class ProductSku extends Model implements Sortable
 
     public function attributeValues(): BelongsToMany
     {
-        return $this->belongsToMany(AttributeValue::class, 'product_sku_attribute_value');
+        return $this->belongsToMany(ProductAttributeValue::class, 'product_sku_attribute_value');
     }
 }

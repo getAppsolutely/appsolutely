@@ -3,14 +3,17 @@
 namespace App\Models;
 
 use App\Models\Traits\ScopeStatus;
+use App\Models\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class AttributeGroup extends Model
+class ProductAttribute extends Model
 {
     use HasFactory;
     use ScopeStatus;
+    use Sluggable;
     use SoftDeletes;
 
     public $timestamps = false;
@@ -22,6 +25,7 @@ class AttributeGroup extends Model
      */
     protected $fillable = [
         'title',
+        'slug',
         'remark',
         'status',
     ];
@@ -36,10 +40,18 @@ class AttributeGroup extends Model
     ];
 
     /**
-     * Get the attributes for the attribute group.
+     * Get the attribute groups for the attribute.
      */
-    public function attributes(): BelongsToMany
+    public function attributeGroups(): BelongsToMany
     {
-        return $this->belongsToMany(Attribute::class, 'attribute_group_pivot');
+        return $this->belongsToMany(ProductAttributeGroup::class, 'attribute_group_pivot');
+    }
+
+    /**
+     * Get the values for the attribute.
+     */
+    public function values(): HasMany
+    {
+        return $this->hasMany(ProductAttributeValue::class);
     }
 }

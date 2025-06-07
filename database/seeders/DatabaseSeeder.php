@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             AdminMenuSeeder::class,
-            AttributeMenuSeeder::class,
+            EcomSettingsMenuSeeder::class,
         ]);
     }
 }

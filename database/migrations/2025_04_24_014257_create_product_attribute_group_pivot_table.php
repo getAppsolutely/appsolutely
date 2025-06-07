@@ -11,7 +11,7 @@ return new class() extends Migration
      */
     public function up(): void
     {
-        Schema::create('attribute_group_pivot', function (Blueprint $table) {
+        Schema::create('product_attribute_group_pivot', function (Blueprint $table) {
             $table->foreignId('attribute_group_id')->constrained()->onDelete('cascade');
             $table->foreignId('attribute_id')->constrained()->onDelete('cascade');
             $table->primary(['attribute_group_id', 'attribute_id']);

@@ -2,14 +2,14 @@
 
 namespace App\Admin\Controllers\Api;
 
-use App\Services\AttributeService;
+use App\Services\ProductAttributeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AttributeGroupController extends AdminBaseApiController
 {
-    public function __construct(protected AttributeService $service) {}
+    public function __construct(protected ProductAttributeService $service) {}
 
     public function query(Request $request): JsonResponse
     {

@@ -2,16 +2,16 @@
 
 namespace App\Services;
 
-use App\Repositories\AttributeGroupRepository;
-use App\Repositories\AttributeRepository;
-use App\Repositories\AttributeValueRepository;
+use App\Repositories\ProductAttributeGroupRepository;
+use App\Repositories\ProductAttributeRepository;
+use App\Repositories\ProductAttributeValueRepository;
 
-class AttributeService
+class ProductAttributeService
 {
     public function __construct(
-        protected AttributeGroupRepository $attributeGroupRepository,
-        protected AttributeRepository $attributeRepository,
-        protected AttributeValueRepository $attributeValueRepository,
+        protected ProductAttributeGroupRepository $attributeGroupRepository,
+        protected ProductAttributeRepository      $attributeRepository,
+        protected ProductAttributeValueRepository $attributeValueRepository,
     ) {}
 
     public static function attributeCacheKey(string $groupId, string $key): string

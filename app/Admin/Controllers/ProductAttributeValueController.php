@@ -3,12 +3,12 @@
 namespace App\Admin\Controllers;
 
 use App\Enums\Status;
-use App\Models\Attribute;
-use App\Models\AttributeValue;
+use App\Models\ProductAttribute;
+use App\Models\ProductAttributeValue;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 
-class AttributeValueController extends AdminBaseController
+class ProductAttributeValueController extends AdminBaseController
 {
     /**
      * Make a grid builder.
@@ -17,7 +17,7 @@ class AttributeValueController extends AdminBaseController
      */
     protected function grid()
     {
-        return Grid::make(AttributeValue::with(['attribute']), function (Grid $grid) {
+        return Grid::make(ProductAttributeValue::with(['attribute']), function (Grid $grid) {
             $grid->column('id', __t('ID'))->sortable();
             $grid->column('attribute.title', __t('Attribute'));
             $grid->column('value', __t('Value'))->editable();
@@ -31,7 +31,7 @@ class AttributeValueController extends AdminBaseController
                 $filter->like('value', __t('Value'))->width(4);
                 $filter->like('slug', __t('Slug'))->width(4);
                 $filter->equal('attribute_id', __t('Attribute'))->select(
-                    Attribute::where('status', true)->pluck('title', 'id')
+                    ProductAttribute::where('status', true)->pluck('title', 'id')
                 )->width(4);
                 $filter->equal('status', __t('Status'))->select(Status::toArray())->width(4);
             });
@@ -49,11 +49,11 @@ class AttributeValueController extends AdminBaseController
      */
     protected function form()
     {
-        return Form::make(new AttributeValue(), function (Form $form) {
+        return Form::make(new ProductAttributeValue(), function (Form $form) {
             $form->disableViewButton();
             $form->display('id', __t('ID'));
             $form->select('attribute_id', 'Attribute')
-                ->options(Attribute::where('status', true)->pluck('title', 'id'))
+                ->options(ProductAttribute::where('status', true)->pluck('title', 'id'))
                 ->required();
             $form->text('value', __t('Value'))->required();
             $form->text('slug', __t('Slug'));

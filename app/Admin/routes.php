@@ -6,13 +6,13 @@ use App\Admin\Controllers\Api\FileController as FileApiController;
 use App\Admin\Controllers\Api\PageBuilderAdminApiController;
 use App\Admin\Controllers\ArticleCategoryController;
 use App\Admin\Controllers\ArticleController;
-use App\Admin\Controllers\AttributeController;
-use App\Admin\Controllers\AttributeGroupController;
-use App\Admin\Controllers\AttributeValueController;
 use App\Admin\Controllers\FileController;
 use App\Admin\Controllers\HomeController;
 use App\Admin\Controllers\OrderController;
 use App\Admin\Controllers\PageController;
+use App\Admin\Controllers\ProductAttributeController;
+use App\Admin\Controllers\ProductAttributeGroupController;
+use App\Admin\Controllers\ProductAttributeValueController;
 use App\Admin\Controllers\ProductCategoryController;
 use App\Admin\Controllers\ProductController;
 use App\Admin\Controllers\ProductSkuController;
@@ -45,15 +45,15 @@ Route::group([
     Route::resource('product/categories', ProductCategoryController::class)->names('product.categories');
     Route::resource('product/skus', ProductSkuController::class)->names('product.skus');
 
+    // Attribute Management Routes
+    Route::resource('product/attribute/groups', ProductAttributeGroupController::class)->names('attribute.groups');
+    Route::resource('product/attributes', ProductAttributeController::class)->names('attributes');
+    Route::resource('product/attribute/values', ProductAttributeValueController::class)->names('attribute.values');
+
     // Order Management Routes
     Route::resource('orders', OrderController::class)->names('orders');
 
-    // Attribute Management Routes
-    Route::resource('attribute/groups', AttributeGroupController::class)->names('attribute.groups');
-    Route::resource('attributes', AttributeController::class)->names('attributes');
-    Route::resource('attribute/values', AttributeValueController::class)->names('attribute.values');
-
-    // Application relates
+    // Application release
     Route::resource('release/builds', ReleaseBuildController::class)->names('app.builds');
     Route::resource('release/versions', ReleaseVersionController::class)->names('app.versions');
 

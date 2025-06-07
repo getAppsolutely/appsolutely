@@ -78,24 +78,24 @@ class AdminMenuSeeder extends Seeder
             'updated_at' => now(),
         ]);
 
-        // Add Releases menu item
+        // Add Release Builds menu item
         DB::table('admin_menu')->insert([
             'parent_id'  => 0,
             'order'      => 14,
-            'title'      => 'App Builds',
+            'title'      => 'Builds',
             'icon'       => 'fa-rocket',
-            'uri'        => 'builds',
+            'uri'        => 'release/builds',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
-        // Add App Versions menu item
+        // Add Release Versions menu item
         DB::table('admin_menu')->insert([
             'parent_id'  => 0,
             'order'      => 15,
-            'title'      => 'App Versions',
+            'title'      => 'Versions',
             'icon'       => 'fa-code-branch',
-            'uri'        => 'versions',
+            'uri'        => 'release/versions',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
