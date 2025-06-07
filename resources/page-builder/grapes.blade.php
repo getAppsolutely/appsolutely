@@ -37,10 +37,10 @@
         .gjs-block {
             border-radius: 8px;
             padding: 15px;
-            margin-bottom: 15px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
-            background: white;
+            background: #ffffff !important;
+            width: 100%;
         }
 
         .gjs-block:hover {
@@ -52,6 +52,10 @@
             background-color: #ffffff !important;
             color: #1e293b !important;
             font-weight: bold;
+        }
+
+        .gjs-block-category.gjs-open {
+            border-bottom: none;
         }
 
         .editor-canvas-wrapper {
@@ -145,6 +149,10 @@
             <div class="text-sm text-slate-500 mr-5">
                 <i class="fas fa-cube mr-1 mt-2"></i><span id="block-count">0</span> blocks
             </div>
+            <button id="save-config-btn"
+                    class="flex items-center bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-md text-sm">
+                <i class="fas fa-undo mr-2"></i>Config Save
+            </button>
             <button id="undo-btn"
                     class="flex items-center bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-md text-sm">
                 <i class="fas fa-undo mr-2"></i>Undo
@@ -322,11 +330,12 @@
             ],
         },
         deviceManager: {
-            devices: [{
-                id: 'desktop',
-                name: 'Desktop',
-                width: '',
-            },
+            devices: [
+                {
+                    id: 'desktop',
+                    name: 'Desktop',
+                    width: '',
+                },
                 {
                     id: 'tablet',
                     name: 'Tablet',
@@ -355,12 +364,12 @@
         .then(result => {
             const categories = result.data;
             registerBlocks(editor, categories);
-            start()
+            render(data)
         });
 
-    function start() {
-        if (data) {
-            editor.loadProjectData(JSON.parse(data));
+    function render(pageData) {
+        if (pageData) {
+            editor.loadProjectData(JSON.parse(pageData));
             updateBlockCount();
         } else {
             editor.addComponents(defaultHtml);
@@ -416,10 +425,10 @@
                     blockManager.add(type, {
                         label: `
                         <div class="flex items-start text-left">
-                            <div class="bg-gray-200 border-2 border-dashed rounded-xl w-10 h-10 mr-3"></div>
+                            <div class="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16 mr-3"></div>
                             <div class="flex-1">
-                                <strong>${label}</strong>
-                                <div class="text-xs text-gray-500">${desc}</div>
+                                <strong class="text-base">${label}</strong>
+                                <div class="text-sm text-gray-500">${desc}</div>
                             </div>
                         </div>
                     `,
@@ -449,6 +458,15 @@
 
     document.getElementById('redo-btn').addEventListener('click', () => {
         editor.UndoManager.redo();
+    });
+
+    document.getElementById('save-config-btn').addEventListener('click', () => {
+        fetch('{{ admin_route('api.pages.data',[$pageId]) }}')
+            .then(res => res.json())
+            .then(result => {
+                const content = result.data.page.content;
+                render(content)
+            });
     });
 
     document.getElementById('save-btn').addEventListener('click', () => {
