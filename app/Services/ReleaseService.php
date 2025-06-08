@@ -57,19 +57,8 @@ final class ReleaseService
         return (bool) $this->buildRepository->delete($id);
     }
 
-    public function getLatestBuild(?string $platform = null, ?string $arch = null)
+    public function getLatestBuild(?string $platform, ?string $arch)
     {
-        $query = $this->buildRepository->query()
-            ->where('status', 1)
-            ->orderByDesc('published_at');
-
-        if ($platform) {
-            $query->where('platform', $platform);
-        }
-        if ($arch) {
-            $query->where('arch', $arch);
-        }
-
-        return $query->with(['version', 'assessable.file'])->first();
+        return $this->buildRepository->getLatestBuild($platform, $arch);
     }
 }

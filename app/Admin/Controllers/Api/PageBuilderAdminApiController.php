@@ -3,19 +3,20 @@
 namespace App\Admin\Controllers\Api;
 
 use App\Models\Page;
-use App\Repositories\PageRepository;
+use App\Services\PageBlockService;
+use App\Services\PageService;
 use Illuminate\Http\Request;
 
 class PageBuilderAdminApiController extends AdminBaseApiController
 {
-    public function __construct(protected PageRepository $pageRepository) {}
+    public function __construct(protected PageService $pageService, protected PageBlockService $pageBlockService) {}
 
     /**
      * Get page data for the builder
      */
     public function getPageData(Request $request, int $pageId)
     {
-        $page = $this->pageRepository->findOrFail($pageId);
+        $page = $this->pageService->findOrFail($pageId);
 
         return $this->success([
             'page' => $page,
@@ -32,7 +33,7 @@ class PageBuilderAdminApiController extends AdminBaseApiController
             return $this->error('Page data cannot be empty.');
         }
 
-        $page = $this->pageRepository->findOrFail($pageId);
+        $page = $this->pageService->findOrFail($pageId);
         $page->update(['content' => $data]);
 
         return $this->success($data, 'Page saved successfully.');
@@ -41,7 +42,7 @@ class PageBuilderAdminApiController extends AdminBaseApiController
     /**
      * Get available blocks registry
      */
-    public function getBlocksRegistry()
+    public function getBlockRegistry()
     {
         $data = [
             [
@@ -135,128 +136,9 @@ class PageBuilderAdminApiController extends AdminBaseApiController
                     ],
                 ],
             ],
-            [
-                'name'   => '页眉页脚',
-                'icon'   => 'fas fa-heading',
-                'sort'   => 2,
-                'blocks' => [
-                    [
-                        'type'      => 'header',
-                        'label'     => '页眉',
-                        'desc'      => '网站顶部导航',
-                        'sort'      => 1,
-                        'content'   => '<header><h1>品牌名</h1></header>',
-                        'style'     => ['background' => '#e0f2fe', 'padding' => '20px'],
-                        'tagName'   => 'header',
-                        'droppable' => false,
-                        'traits'    => [
-                            [
-                                'type'        => 'text',
-                                'name'        => 'category',
-                                'label'       => 'Category',
-                                'placeholder' => 'news',
-                            ],
-                            [
-                                'type'        => 'number',
-                                'name'        => 'limit',
-                                'label'       => 'Limit',
-                                'placeholder' => '5',
-                                'min'         => 0,
-                                'max'         => 100,
-                                'step'        => 5,
-                            ],
-                            [
-                                'type'        => 'checkbox',
-                                'name'        => 'gender',
-                                'label'       => 'Gender',
-                                'placeholder' => 'n/a',
-                                'valueTrue'   => 'Yes',
-                                'no'          => 'No',
-                            ],
-                            [
-                                'type'        => 'select',
-                                'name'        => 'options',
-                                'label'       => 'Options',
-                                'placeholder' => 'news',
-                                'options'     => [
-                                    ['id' => 'opt1', 'label' => 'Option 1'],
-                                    ['id' => 'opt2', 'label' => 'Option 2'],
-                                ],
-                            ],
-                            [
-                                'type'        => 'color',
-                                'name'        => 'color',
-                                'label'       => 'Color',
-                                'placeholder' => 'color?',
-                            ],
-                            [
-                                'type'        => 'text',
-                                'name'        => 'category',
-                                'label'       => 'Category',
-                                'placeholder' => 'news',
-                            ],
-                        ],
-                    ],
-                    [
-                        'type'      => 'footer',
-                        'label'     => '页脚',
-                        'desc'      => '网站底部版权信息',
-                        'sort'      => 2,
-                        'content'   => '<footer><p>© 2025 公司名</p></footer>',
-                        'style'     => ['background' => '#f3f4f6', 'padding' => '20px'],
-                        'tagName'   => 'footer',
-                        'droppable' => false,
-                        'traits'    => [
-                            [
-                                'type'        => 'text',
-                                'name'        => 'category',
-                                'label'       => 'Category',
-                                'placeholder' => 'news',
-                            ],
-                            [
-                                'type'        => 'number',
-                                'name'        => 'limit',
-                                'label'       => 'Limit',
-                                'placeholder' => '5',
-                                'min'         => 0,
-                                'max'         => 100,
-                                'step'        => 5,
-                            ],
-                            [
-                                'type'        => 'checkbox',
-                                'name'        => 'gender',
-                                'label'       => 'Gender',
-                                'placeholder' => 'n/a',
-                                'valueTrue'   => 'Yes',
-                                'no'          => 'No',
-                            ],
-                            [
-                                'type'        => 'select',
-                                'name'        => 'options',
-                                'label'       => 'Options',
-                                'placeholder' => 'news',
-                                'options'     => [
-                                    ['id' => 'opt1', 'label' => 'Option 1'],
-                                    ['id' => 'opt2', 'label' => 'Option 2'],
-                                ],
-                            ],
-                            [
-                                'type'        => 'color',
-                                'name'        => 'color',
-                                'label'       => 'Color',
-                                'placeholder' => 'color?',
-                            ],
-                            [
-                                'type'        => 'text',
-                                'name'        => 'category',
-                                'label'       => 'Category',
-                                'placeholder' => 'news',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
         ];
+
+        $data = $this->pageBlockService->getCategorisedBlocks()->toArray();
 
         return $this->success($data);
     }

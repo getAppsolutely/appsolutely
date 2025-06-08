@@ -321,6 +321,7 @@
             category.blocks
                 .sort((a, b) => a.sort - b.sort)
                 .forEach(comp => {
+                    console.log(comp)
                     const {
                         type,
                         tagName = 'div',

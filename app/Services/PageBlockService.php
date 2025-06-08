@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Models\Model;
 use App\Models\PageBlock;
 use App\Models\PageBlockGroup;
 use App\Models\PageBlockSetting;
@@ -14,9 +15,9 @@ use App\Repositories\PageBlockSettingRepository;
 final class PageBlockService
 {
     public function __construct(
-        private PageBlockGroupRepository $groupRepository,
-        private PageBlockRepository $blockRepository,
-        private PageBlockSettingRepository $settingRepository
+        protected PageBlockGroupRepository $groupRepository,
+        protected PageBlockRepository $blockRepository,
+        protected PageBlockSettingRepository $settingRepository
     ) {}
 
     // PageBlockGroup CRUD
@@ -35,7 +36,7 @@ final class PageBlockService
         return $this->groupRepository->update($id, $data);
     }
 
-    public function deleteGroup(int $id): bool
+    public function deleteGroup(int $id): bool|int
     {
         return $this->groupRepository->delete($id);
     }
@@ -56,7 +57,7 @@ final class PageBlockService
         return $this->blockRepository->update($id, $data);
     }
 
-    public function deleteBlock(int $id): bool
+    public function deleteBlock(int $id): bool|int
     {
         return $this->blockRepository->delete($id);
     }
@@ -77,8 +78,18 @@ final class PageBlockService
         return $this->settingRepository->update($id, $data);
     }
 
-    public function deleteSetting(int $id): bool
+    public function deleteSetting(int $id): bool|int
     {
         return $this->settingRepository->delete($id);
+    }
+
+    public function getCategorisedBlocks()
+    {
+        /** @var Model $modelClass */
+        $modelClass = $this->groupRepository->model();
+
+        return $modelClass::with(['blocks' => function ($query) {
+            $query->orderBy('sort');
+        }])->status()->orderBy('sort')->get();
     }
 }

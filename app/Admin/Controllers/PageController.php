@@ -3,14 +3,13 @@
 namespace App\Admin\Controllers;
 
 use App\Models\Page;
-use App\Repositories\PageRepository;
 use App\Services\PageService;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 
 class PageController extends AdminBaseController
 {
-    public function __construct(protected PageRepository $pageRepository, protected PageService $pageService) {}
+    public function __construct(protected PageService $pageService) {}
 
     protected function grid(): Grid
     {
@@ -85,7 +84,7 @@ class PageController extends AdminBaseController
      */
     public function design(string $reference)
     {
-        $page = $this->pageRepository->findByReference($reference);
+        $page = $this->pageService->findByReference($reference);
 
         if (empty($page)) {
             abort(404);

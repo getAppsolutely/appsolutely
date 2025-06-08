@@ -2,8 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Traits\ScopeReference;
+use App\Models\Traits\ScopeStatus;
+
 class Page extends Model
 {
+    use ScopeReference;
+    use ScopeStatus;
+
     protected $fillable = [
         'name',
         'slug',

@@ -3,11 +3,16 @@
 namespace App\Repositories;
 
 use App\Models\Page;
+use App\Repositories\Traits\Reference;
+use App\Repositories\Traits\Status;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 
 class PageRepository extends BaseRepository
 {
+    use Reference;
+    use Status;
+
     public function model(): string
     {
         return Page::class;
@@ -19,7 +24,7 @@ class PageRepository extends BaseRepository
 
         return $this->model->newQuery()
             ->where('slug', $slug)
-            ->where('status', 1)
+            ->status()
             ->where('published_at', '<=', $now)
             ->where(function (Builder $query) use ($now) {
                 $query->where('expired_at', '>', $now)
@@ -27,14 +32,14 @@ class PageRepository extends BaseRepository
             })
             /*
             ->with(['containers' => function ($query) use ($now) {
-                $query->where('status', 1)
+                $query->status()
                     ->where('published_at', '<=', $now)
                     ->where(function ($q) use ($now) {
                         $q->where('expired_at', '>', $now)
                             ->orWhereNull('expired_at');
                     });
             }, 'containers.components' => function ($query) use ($now) {
-                $query->where('status', 1)
+                $query->status()
                     ->where('published_at', '<=', $now)
                     ->where(function ($q) use ($now) {
                         $q->where('expired_at', '>', $now)
@@ -43,10 +48,5 @@ class PageRepository extends BaseRepository
             }])
             */
             ->first();
-    }
-
-    public function findByReference(string $reference): ?Page
-    {
-        return $this->model->newQuery()->where('reference', $reference)->first();
     }
 }
