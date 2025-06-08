@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\ReleaseBuild;
-use App\Models\ReleaseVersion;
 use App\Repositories\ReleaseBuildRepository;
 use App\Repositories\ReleaseVersionRepository;
-use Illuminate\Support\Collection;
 
 final class ReleaseService
 {
@@ -17,47 +15,7 @@ final class ReleaseService
         protected ReleaseBuildRepository $buildRepository
     ) {}
 
-    public function getVersions(): Collection
-    {
-        return $this->versionRepository->all();
-    }
-
-    public function getBuildsByVersion(int $versionId): Collection
-    {
-        return $this->buildRepository->findWhere(['version_id' => $versionId]);
-    }
-
-    public function createVersion(array $data): ReleaseVersion
-    {
-        return $this->versionRepository->create($data);
-    }
-
-    public function createBuild(array $data): ReleaseBuild
-    {
-        return $this->buildRepository->create($data);
-    }
-
-    public function updateVersion(int $id, array $data): bool
-    {
-        return (bool) $this->versionRepository->update($data, $id);
-    }
-
-    public function updateBuild(int $id, array $data): bool
-    {
-        return (bool) $this->buildRepository->update($data, $id);
-    }
-
-    public function deleteVersion(int $id): bool
-    {
-        return (bool) $this->versionRepository->delete($id);
-    }
-
-    public function deleteBuild(int $id): bool
-    {
-        return (bool) $this->buildRepository->delete($id);
-    }
-
-    public function getLatestBuild(?string $platform, ?string $arch)
+    public function getLatestBuild(?string $platform, ?string $arch): ReleaseBuild
     {
         return $this->buildRepository->getLatestBuild($platform, $arch);
     }

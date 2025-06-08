@@ -15,24 +15,4 @@ class OrderService
         protected OrderPaymentRepository $orderPaymentRepository,
         protected OrderShipmentRepository $orderShipmentRepository,
     ) {}
-
-    public function getOrders()
-    {
-        return $this->orderRepository->all();
-    }
-
-    public function getOrderItems($orderId)
-    {
-        return $this->orderItemRepository->findWhere(['order_id' => $orderId]);
-    }
-
-    public function getOrderPayments($orderId)
-    {
-        return $this->orderPaymentRepository->findWhere(['order_id' => $orderId]);
-    }
-
-    public function getOrderShipments($orderId)
-    {
-        return $this->orderShipmentRepository->findWhere(['order_id' => $orderId]);
-    }
 }

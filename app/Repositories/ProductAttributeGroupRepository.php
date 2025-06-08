@@ -6,7 +6,7 @@ use App\Models\ProductAttributeGroup;
 
 class ProductAttributeGroupRepository extends BaseRepository
 {
-    public function model()
+    public function model(): string
     {
         return ProductAttributeGroup::class;
     }

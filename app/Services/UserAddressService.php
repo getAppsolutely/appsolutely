@@ -9,9 +9,4 @@ class UserAddressService
     public function __construct(
         protected UserAddressRepository $userAddressRepository,
     ) {}
-
-    public function getUserAddresses($userId)
-    {
-        return $this->userAddressRepository->findWhere(['user_id' => $userId]);
-    }
 }

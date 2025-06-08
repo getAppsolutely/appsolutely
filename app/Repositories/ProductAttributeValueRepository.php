@@ -6,7 +6,7 @@ use App\Models\ProductAttributeValue;
 
 class ProductAttributeValueRepository extends BaseRepository
 {
-    public function model()
+    public function model(): string
     {
         return ProductAttributeValue::class;
     }
