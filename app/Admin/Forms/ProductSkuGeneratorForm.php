@@ -80,7 +80,7 @@ class ProductSkuGeneratorForm extends Form implements LazyRenderable
 
         // Add attribute group selector
         $this->select('attribute_group_id', 'Attribute Group')
-            ->options(\App\Models\ProductAttributeGroup::where('status', true)->pluck('title', 'id'))
+            ->options(\App\Models\ProductAttributeGroup::status()->pluck('title', 'id'))
             ->load('attribute_combinations', admin_route('api.attribute-groups'), 'key', 'readable');
 
         // Add multiselect for attribute combinations

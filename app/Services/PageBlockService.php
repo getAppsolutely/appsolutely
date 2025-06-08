@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Models\Model;
 use App\Models\PageBlock;
 use App\Models\PageBlockGroup;
 use App\Models\PageBlockSetting;
@@ -85,11 +84,6 @@ final class PageBlockService
 
     public function getCategorisedBlocks()
     {
-        /** @var Model $modelClass */
-        $modelClass = $this->groupRepository->model();
-
-        return $modelClass::with(['blocks' => function ($query) {
-            $query->orderBy('sort');
-        }])->status()->orderBy('sort')->get();
+        return $this->groupRepository->getCategorisedBlocks();
     }
 }

@@ -31,7 +31,7 @@ class ProductAttributeValueController extends AdminBaseController
                 $filter->like('value', __t('Value'))->width(4);
                 $filter->like('slug', __t('Slug'))->width(4);
                 $filter->equal('attribute_id', __t('Attribute'))->select(
-                    ProductAttribute::where('status', true)->pluck('title', 'id')
+                    ProductAttribute::status()->pluck('title', 'id')
                 )->width(4);
                 $filter->equal('status', __t('Status'))->select(Status::toArray())->width(4);
             });
@@ -52,8 +52,8 @@ class ProductAttributeValueController extends AdminBaseController
         return Form::make(new ProductAttributeValue(), function (Form $form) {
             $form->disableViewButton();
             $form->display('id', __t('ID'));
-            $form->select('attribute_id', 'Attribute')
-                ->options(ProductAttribute::where('status', true)->pluck('title', 'id'))
+            $form->select('product_attribute_id', 'Attribute')
+                ->options(ProductAttribute::status()->pluck('title', 'id'))
                 ->required();
             $form->text('value', __t('Value'))->required();
             $form->text('slug', __t('Slug'));

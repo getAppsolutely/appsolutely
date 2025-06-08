@@ -21,7 +21,7 @@ class OrderMenuSeeder extends Seeder
                 'order'      => 30,
                 'title'      => 'Orders',
                 'icon'       => 'fa-shopping-cart',
-                'uri'        => 'orders',
+                'uri'        => 'orders/entry',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

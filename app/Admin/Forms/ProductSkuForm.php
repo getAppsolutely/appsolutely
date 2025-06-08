@@ -61,18 +61,18 @@ class ProductSkuForm extends Form implements LazyRenderable
             $form->number('sort')->default(99);
             $form->switch('status');
 
-        }, true, 'basic');
+        }, true, 'sku_basic');
 
         $this->tab('SEO', function (Form $form) {
             $form->textarea('keywords')->rows(2);
             $form->textarea('description')->rows(3);
             $form->markdown('content')->options(Markdown::options())->script(Markdown::script());
-        }, false, 'seo');
+        }, false, 'sku_seo');
 
         $this->tab('Optional', function (Form $form) {
-            $form->display('created_at');
-            $form->display('updated_at');
-        }, false, 'optional');
+            $form->display('_created_at');
+            $form->display('_updated_at');
+        }, false, 'sku_optional');
     }
 
     public function default()

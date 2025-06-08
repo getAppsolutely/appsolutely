@@ -34,7 +34,7 @@ class CmsMenuSeeder extends Seeder
                 'order'      => 10,
                 'title'      => 'Pages',
                 'icon'       => 'fa-file',
-                'uri'        => 'pages',
+                'uri'        => 'pages/entry',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -62,7 +62,7 @@ class CmsMenuSeeder extends Seeder
                 'order'      => 1,
                 'title'      => 'Articles',
                 'icon'       => 'fa-file-text',
-                'uri'        => 'articles',
+                'uri'        => 'articles/entry',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

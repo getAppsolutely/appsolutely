@@ -56,7 +56,7 @@ class ProductAttributeController extends AdminBaseController
             $form->switch('status', __t('Status'))->default(true);
 
             $form->multipleSelect('attributeGroups', __t('Attribute Groups'))
-                ->options(ProductAttributeGroup::where('status', true)->pluck('title', 'id'))
+                ->options(ProductAttributeGroup::status()->pluck('title', 'id'))
                 ->customFormat(extract_values());
         });
     }

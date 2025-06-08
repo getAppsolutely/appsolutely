@@ -12,4 +12,13 @@ final class PageBlockGroupRepository extends BaseRepository
     {
         return PageBlockGroup::class;
     }
+
+    public function getCategorisedBlocks()
+    {
+        $query = $this->model->newQuery();
+
+        return $query->with(['blocks' => function ($query) {
+            $query->orderBy('sort');
+        }])->status()->orderBy('sort')->get();
+    }
 }

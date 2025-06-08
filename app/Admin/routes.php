@@ -31,19 +31,19 @@ Route::group([
     'namespace'  => config('admin.route.namespace'),
     'middleware' => config('admin.route.middleware'),
 ], function () {
-    Route::get('/', [HomeController::class, 'index']);
+    Route::get('', [HomeController::class, 'index']);
 
     Route::resource('file/manager', FileController::class)->names('file-manager');
     Route::get('uploads/{path?}', [FileController::class, 'retrieve'])->where('path', '(.*)')->name('file.self');
 
     // Content Management Routes
     Route::prefix('articles')->name('articles.')->group(function () {
-        Route::resource('/', ArticleController::class);
+        Route::resource('entry', ArticleController::class);
         Route::resource('categories', ArticleCategoryController::class)->names('categories');
     });
 
     Route::prefix('pages')->name('pages.')->group(function () {
-        Route::resource('/', PageController::class);
+        Route::resource('entry', PageController::class);
         Route::get('{reference}/design', [PageController::class, 'design'])->name('design');
         Route::resource('block-settings', PageBlockSettingController::class)->names('block-settings');
         Route::resource('blocks', PageBlockController::class)->names('blocks');
@@ -52,7 +52,7 @@ Route::group([
 
     // Product Management Routes
     Route::prefix('products')->name('products.')->group(function () {
-        Route::resource('/', ProductController::class);
+        Route::resource('entry', ProductController::class);
         Route::resource('categories', ProductCategoryController::class)->names('categories');
         Route::resource('skus', ProductSkuController::class)->names('skus');
         Route::resource('attribute-groups', ProductAttributeGroupController::class)->names('attribute-groups');
@@ -62,7 +62,7 @@ Route::group([
 
     // Order Management Routes
     Route::prefix('orders')->name('orders.')->group(function () {
-        Route::resource('/', OrderController::class);
+        Route::resource('entry', OrderController::class);
     });
 
     // Application releases

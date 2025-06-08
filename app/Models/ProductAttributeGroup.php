@@ -40,6 +40,6 @@ class ProductAttributeGroup extends Model
      */
     public function attributes(): BelongsToMany
     {
-        return $this->belongsToMany(ProductAttribute::class, 'attribute_group_pivot');
+        return $this->belongsToMany(ProductAttribute::class, 'product_attribute_group_pivot');
     }
 }
