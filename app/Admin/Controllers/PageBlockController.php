@@ -23,12 +23,13 @@ final class PageBlockController extends AdminBaseController
     {
         return Grid::make(PageBlock::query()->with('group'), function (Grid $grid) {
             $grid->column('id', __t('ID'))->sortable();
-            $grid->column('title', __t('Title'));
-            $grid->column('class', __t('Class'));
+            $grid->column('title', __t('Title'))->editable();
+            $grid->column('remark', __t('Remark'))->editable();
             $grid->column('group.title', __t('Group'));
-            $grid->column('status', __t('Status'))->switch();
-            $grid->column('remark', __t('Remark'));
+            $grid->column('class', __t('Class'));
             $grid->column('created_at', __t('Created At'))->display(column_time_format());
+            $grid->column('sort', __t('Sort'))->editable();
+            $grid->column('status', __t('Status'))->switch();
             $grid->model()->orderByDesc('id');
             $grid->quickSearch('id', 'title', 'class');
             $grid->filter(function (Grid\Filter $filter) {
@@ -54,12 +55,13 @@ final class PageBlockController extends AdminBaseController
             )->required();
             $form->text('title', __t('Title'))->required();
             $form->text('class', __t('Class'))->required();
+            $form->text('remark', __t('Remark'));
             $form->textarea('description', __t('Description'))->rows(2);
             $form->textarea('instruction', __t('Instruction'))->rows(2);
             $form->keyValue('parameters', __t('Parameters'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
             $form->keyValue('setting', __t('Setting'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
+            $form->number('sort', __t('Sort'));
             $form->switch('status', __t('Status'));
-            $form->text('remark', __t('Remark'));
             $form->disableViewButton();
             $form->disableViewCheck();
         });

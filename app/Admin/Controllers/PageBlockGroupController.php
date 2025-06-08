@@ -21,10 +21,11 @@ final class PageBlockGroupController extends AdminBaseController
     {
         return Grid::make(PageBlockGroup::query(), function (Grid $grid) {
             $grid->column('id', __t('ID'))->sortable();
-            $grid->column('title', __t('Title'));
-            $grid->column('status', __t('Status'))->switch();
-            $grid->column('remark', __t('Remark'));
+            $grid->column('title', __t('Title'))->editable();
+            $grid->column('remark', __t('Remark'))->editable();
             $grid->column('created_at', __t('Created At'))->display(column_time_format());
+            $grid->column('sort', __t('Sort'))->editable();
+            $grid->column('status', __t('Status'))->switch();
             $grid->model()->orderByDesc('id');
             $grid->quickSearch('id', 'title');
             $grid->filter(function (Grid\Filter $filter) {
@@ -45,8 +46,9 @@ final class PageBlockGroupController extends AdminBaseController
         return Form::make(PageBlockGroup::query(), function (Form $form) {
             $form->display('id', __t('ID'));
             $form->text('title', __t('Title'))->required();
-            $form->switch('status', __t('Status'));
             $form->text('remark', __t('Remark'));
+            $form->number('sort', __t('Sort'));
+            $form->switch('status', __t('Status'));
             $form->disableViewButton();
             $form->disableViewCheck();
         });

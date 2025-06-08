@@ -37,7 +37,9 @@ class PageController extends AdminBaseController
 
             $grid->actions(function (Grid\Displayers\Actions $actions) {
                 $actions->disableView();
-                $actions->prepend(admin_link_action('Design', admin_url('pages/' . $actions->getKey() . '/design'), '_blank'));
+
+                $reference =  $actions?->row?->reference;
+                $actions->prepend(admin_link_action('Design', admin_route('pages.design', [$reference]), '_blank'));
             });
         });
     }
@@ -81,9 +83,9 @@ class PageController extends AdminBaseController
     /**
      * Show the page builder interface
      */
-    public function design(int $pageId)
+    public function design(string $reference)
     {
-        $page = $this->pageRepository->findOrFail($pageId);
+        $page = $this->pageRepository->findByReference($reference);
 
         if (empty($page)) {
             abort(404);
@@ -91,7 +93,7 @@ class PageController extends AdminBaseController
 
         return view('page-builder::grapes', [
             'page'   => $page,
-            'pageId' => $pageId,
+            'pageId' => $page->id,
         ]);
     }
 }

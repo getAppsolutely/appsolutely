@@ -10,8 +10,9 @@ final class PageBlockGroup extends Model
 {
     protected $fillable = [
         'title',
-        'status',
         'remark',
+        'sort',
+        'status',
     ];
 
     public function blocks(): HasMany

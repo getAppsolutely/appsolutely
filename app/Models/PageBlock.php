@@ -18,12 +18,14 @@ final class PageBlock extends Model
         'instruction',
         'parameters',
         'setting',
+        'sort',
         'status',
     ];
 
     protected $casts = [
         'parameters' => 'array',
         'setting'    => 'array',
+        'sort'       => 'integer',
         'status'     => 'integer',
     ];
 

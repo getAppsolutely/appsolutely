@@ -13,8 +13,9 @@ return new class() extends Migration
         Schema::create('page_block_groups', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->unsignedTinyInteger('status')->default(0);
             $table->string('remark')->nullable();
+            $table->unsignedTinyInteger('sort')->default(0);
+            $table->unsignedTinyInteger('status')->default(0);
             $table->timestamps();
         });
     }

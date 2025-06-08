@@ -20,6 +20,7 @@ return new class() extends Migration
             $table->text('instruction')->nullable();
             $table->json('parameters')->nullable();
             $table->json('setting')->nullable();
+            $table->unsignedTinyInteger('sort')->default(0);
             $table->unsignedTinyInteger('status')->default(0);
             $table->timestamps();
         });

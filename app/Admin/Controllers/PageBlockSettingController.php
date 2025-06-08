@@ -27,11 +27,10 @@ final class PageBlockSettingController extends AdminBaseController
             $grid->column('id', __t('ID'))->sortable();
             $grid->column('page.title', __t('Page'));
             $grid->column('block.title', __t('Block'));
-            $grid->column('type', __t('Type'));
-            $grid->column('template', __t('Template'));
-            $grid->column('status', __t('Status'))->switch();
-            $grid->column('remark', __t('Remark'));
+            $grid->column('remark', __t('Remark'))->editable();
             $grid->column('created_at', __t('Created At'))->display(column_time_format());
+            $grid->column('sort', __t('Sort'))->editable();
+            $grid->column('status', __t('Status'))->switch();
             $grid->model()->orderByDesc('id');
             $grid->quickSearch('id', 'type', 'template');
             $grid->filter(function (Grid\Filter $filter) {
@@ -59,14 +58,15 @@ final class PageBlockSettingController extends AdminBaseController
             $form->select('block_id', __t('Block'))->options(
                 $this->blockRepository->all()->pluck('title', 'id')->toArray()
             )->required();
-            $form->text('type', __t('Type'))->required();
-            $form->text('template', __t('Template'));
+            $form->text('type', __t('Type'));
+            $form->text('remark', __t('Remark'));
+            $form->textarea('template', __t('Template'))->rows(10);
             $form->textarea('scripts', __t('Scripts'))->rows(2);
             $form->textarea('stylesheets', __t('Stylesheets'))->rows(2);
             $form->keyValue('styles', __t('Styles'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
             $form->keyValue('parameter_values', __t('Parameter Values'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
+            $form->number('sort', __t('Sort'));
             $form->switch('status', __t('Status'));
-            $form->text('remark', __t('Remark'));
             $form->disableViewButton();
             $form->disableViewCheck();
         });

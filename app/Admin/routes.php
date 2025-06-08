@@ -44,7 +44,7 @@ Route::group([
 
     Route::prefix('pages')->name('pages.')->group(function () {
         Route::resource('/', PageController::class);
-        Route::get('{pageId}/design', [PageController::class, 'design'])->name('design');
+        Route::get('{reference}/design', [PageController::class, 'design'])->name('design');
         Route::resource('block-settings', PageBlockSettingController::class)->names('block-settings');
         Route::resource('blocks', PageBlockController::class)->names('blocks');
         Route::resource('block-groups', PageBlockGroupController::class)->names('block-groups');
@@ -81,7 +81,7 @@ Route::group([
         Route::prefix('pages')->name('pages.')->group(function () {
             Route::get('{pageId}/data', [PageBuilderAdminApiController::class, 'getPageData'])->name('data');
             Route::put('{pageId}/save', [PageBuilderAdminApiController::class, 'savePageData'])->name('save');
-            Route::get('blocks/registry', [PageBuilderAdminApiController::class, 'getBlocksRegistry'])->name('blocks.registry');
+            Route::get('block-registry', [PageBuilderAdminApiController::class, 'getBlocksRegistry'])->name('block-registry');
         });
     });
 });

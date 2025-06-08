@@ -35,7 +35,7 @@ class TranslationService
         $locale = $locale ?? app()->getLocale();
 
         // Don't translate if using default locale
-        if ($locale !== config('app.locale')) {
+        if ($locale == config('app.locale')) {
             return $text;
         }
 

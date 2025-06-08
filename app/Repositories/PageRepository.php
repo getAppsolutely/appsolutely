@@ -44,4 +44,9 @@ class PageRepository extends BaseRepository
             */
             ->first();
     }
+
+    public function findByReference(string $reference): ?Page
+    {
+        return $this->model->newQuery()->where('reference', $reference)->first();
+    }
 }

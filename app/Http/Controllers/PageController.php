@@ -14,15 +14,14 @@ class PageController extends BaseController
 
     public function show(Request $request, ?string $slug = null): View
     {
-        $slug = $slug ?: '/';
-        $page = $this->pageService->getPublishedPage($slug);
+        $page = $this->pageService->getPublishedPage($slug ?? '/');
 
         // If still no page found, return 404
-        if (! $page) {
+        if (! $page && ! empty($slug)) {
             abort(404);
         }
 
-        return themed_view('pages.page', [
+        return themed_view('pages.show', [
             'page'        => $page,
             'pageService' => $this->pageService,
         ]);

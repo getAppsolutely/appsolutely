@@ -14,14 +14,15 @@ return new class() extends Migration
             $table->id();
             $table->foreignId('page_id')->constrained('pages')->cascadeOnDelete();
             $table->foreignId('block_id')->constrained('page_blocks')->cascadeOnDelete();
-            $table->string('type');
-            $table->string('template')->nullable();
+            $table->string('type')->nullable();
+            $table->string('remark')->nullable();
+            $table->text('template')->nullable();
             $table->text('scripts')->nullable();
             $table->text('stylesheets')->nullable();
             $table->json('styles')->nullable();
             $table->json('parameter_values')->nullable();
+            $table->unsignedTinyInteger('sort')->default(0);
             $table->unsignedTinyInteger('status')->default(0);
-            $table->string('remark')->nullable();
             $table->timestamps();
         });
     }

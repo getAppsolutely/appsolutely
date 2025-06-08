@@ -12,13 +12,14 @@ final class PageBlockSetting extends Model
         'page_id',
         'block_id',
         'type',
+        'remark',
         'template',
         'scripts',
         'stylesheets',
         'styles',
         'parameter_values',
+        'sort',
         'status',
-        'remark',
     ];
 
     protected $casts = [

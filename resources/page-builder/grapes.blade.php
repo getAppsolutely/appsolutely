@@ -48,7 +48,7 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
 
-        .gjs-editor, .gjs-title, .gjs-blocks-c {
+        .gjs-editor, .gjs-title, .gjs-blocks-c, .gjs-cv-canvas-bg {
             background-color: #ffffff !important;
             color: #1e293b !important;
             font-weight: bold;
@@ -208,84 +208,7 @@
             <div id="config-form" class="space-y-6">
                 <div class="text-center py-10 text-slate-400">
                     <i class="fas fa-mouse-pointer text-4xl mb-3"></i>
-                    <p>请选择一个组件进行配置</p>
-                </div>
-
-                <!-- Hero配置表单 (默认隐藏) -->
-                <div id="hero-config" class="hidden space-y-4">
-                    <div>
-                        <h3 class="font-medium text-slate-700 mb-2">主横幅配置</h3>
-                        <p class="text-sm text-slate-500 mb-4">设置吸引人的顶部横幅区域</p>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">标题</label>
-                        <input type="text" class="w-full px-3 py-2 border border-slate-300 rounded-md"
-                               placeholder="输入主标题" value="欢迎来到我们的平台">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">副标题</label>
-                        <input type="text" class="w-full px-3 py-2 border border-slate-300 rounded-md"
-                               placeholder="输入副标题" value="发现我们的优质产品和服务">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">背景图片</label>
-                        <div class="flex items-center space-x-3">
-                            <div class="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16"></div>
-                            <button class="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded-md text-sm">
-                                上传图片
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">按钮文字</label>
-                            <input type="text" class="w-full px-3 py-2 border border-slate-300 rounded-md"
-                                   placeholder="例如：了解更多" value="开始探索">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">按钮链接</label>
-                            <input type="text" class="w-full px-3 py-2 border border-slate-300 rounded-md"
-                                   placeholder="输入URL" value="/products">
-                        </div>
-                    </div>
-
-                    <div class="pt-4">
-                        <button id="add-hero-btn"
-                                class="w-full bg-primary hover:bg-indigo-600 text-white py-2 rounded-md font-medium">
-                            添加到页面
-                        </button>
-                    </div>
-                </div>
-
-                <!-- 特性展示配置表单 (默认隐藏) -->
-                <div id="feature-config" class="hidden space-y-4">
-                    <div>
-                        <h3 class="font-medium text-slate-700 mb-2">特性展示配置</h3>
-                        <p class="text-sm text-slate-500 mb-4">展示产品特性或服务优势</p>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">主标题</label>
-                        <input type="text" class="w-full px-3 py-2 border border-slate-300 rounded-md"
-                               placeholder="输入主标题" value="我们的核心优势">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">描述</label>
-                        <textarea class="w-full px-3 py-2 border border-slate-300 rounded-md" placeholder="输入描述内容"
-                                  rows="3">我们提供业界领先的解决方案，满足您的所有需求</textarea>
-                    </div>
-
-                    <div class="pt-4">
-                        <button id="add-feature-btn"
-                                class="w-full bg-primary hover:bg-indigo-600 text-white py-2 rounded-md font-medium">
-                            添加到页面
-                        </button>
-                    </div>
+                    <p>Please select a block</p>
                 </div>
             </div>
         </div>
@@ -302,7 +225,6 @@
             </button>
         </div>
         <div class="h-full p-4 overflow-auto" id="preview-content">
-            <!-- 预览内容将在这里显示 -->
         </div>
     </div>
 </div>
@@ -359,7 +281,7 @@
   </div>
 `;
 
-    fetch('{{ admin_route('api.blocks.registry') }}')
+    fetch('{{ admin_route('api.pages.block-registry') }}')
         .then(res => res.json())
         .then(result => {
             const categories = result.data;
