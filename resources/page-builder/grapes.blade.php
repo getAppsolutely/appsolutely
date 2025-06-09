@@ -315,8 +315,8 @@
         const domComponents = editor.DomComponents;
 
         categories.forEach(category => {
-            const categoryId = category.name;
-            const categoryLabel = category.label || category.name;
+            const categoryId = category.title;
+            const categoryLabel = category.label || category.title;
 
             category.blocks
                 .sort((a, b) => a.sort - b.sort)
@@ -384,7 +384,7 @@
     });
 
     document.getElementById('save-config-btn').addEventListener('click', () => {
-        fetch('{{ admin_route('api.pages.data',[$pageId]) }}')
+        fetch('{{ admin_route('api.pages.data',[$reference]) }}')
             .then(res => res.json())
             .then(result => {
                 const content = result.data.page.content;
@@ -395,7 +395,7 @@
     document.getElementById('save-btn').addEventListener('click', () => {
         const projectData = editor.getProjectData();
 
-        fetch(`{{ admin_route('api.pages.save',[$pageId]) }}`, {
+        fetch(`{{ admin_route('api.pages.save',[$reference]) }}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

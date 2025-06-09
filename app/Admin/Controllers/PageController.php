@@ -91,8 +91,8 @@ class PageController extends AdminBaseController
         }
 
         return view('page-builder::grapes', [
-            'page'   => $page,
-            'pageId' => $page->id,
+            'page'      => $page,
+            'reference' => $reference,
         ]);
     }
 }

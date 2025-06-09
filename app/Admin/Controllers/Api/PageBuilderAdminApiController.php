@@ -14,9 +14,9 @@ class PageBuilderAdminApiController extends AdminBaseApiController
     /**
      * Get page data for the builder
      */
-    public function getPageData(Request $request, int $pageId)
+    public function getPageData(Request $request, string $reference)
     {
-        $page = $this->pageService->findOrFail($pageId);
+        $page = $this->pageService->findByReference($reference);
 
         return $this->success([
             'page' => $page,
@@ -26,14 +26,14 @@ class PageBuilderAdminApiController extends AdminBaseApiController
     /**
      * Save page builder data
      */
-    public function savePageData(Request $request, int $pageId)
+    public function savePageData(Request $request, string $reference)
     {
         $data = $request->get('data');
         if (empty($data)) {
             return $this->error('Page data cannot be empty.');
         }
 
-        $page = $this->pageService->findOrFail($pageId);
+        $page = $this->pageService->findByReference($reference);
         $page->update(['content' => $data]);
 
         return $this->success($data, 'Page saved successfully.');
@@ -55,7 +55,7 @@ class PageBuilderAdminApiController extends AdminBaseApiController
                         'label'     => '特性展示',
                         'desc'      => '展示产品特性或服务优势',
                         'sort'      => 1,
-                        'content'   => '<section><h2>产品特性</h2><p>这里是特色介绍</p><p>更多内容</p><p>更多内容</p><p>更多内容</p></section>',
+                        'content'   => '',
                         'style'     => ['background-color' => '#f9fafb', 'padding' => '20px'],
                         'tagName'   => 'section',
                         'droppable' => false,

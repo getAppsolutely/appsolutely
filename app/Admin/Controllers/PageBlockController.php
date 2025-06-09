@@ -23,6 +23,7 @@ final class PageBlockController extends AdminBaseController
     {
         return Grid::make(PageBlock::query()->with('group'), function (Grid $grid) {
             $grid->column('id', __t('ID'))->sortable();
+            $grid->column('reference', __t('reference'));
             $grid->column('title', __t('Title'))->editable();
             $grid->column('remark', __t('Remark'))->editable();
             $grid->column('group.title', __t('Group'));
@@ -57,6 +58,7 @@ final class PageBlockController extends AdminBaseController
             $form->text('class', __t('Class'))->required();
             $form->text('remark', __t('Remark'));
             $form->textarea('description', __t('Description'))->rows(2);
+            $form->textarea('template', __t('template'))->rows(3);
             $form->textarea('instruction', __t('Instruction'))->rows(2);
             $form->keyValue('parameters', __t('Parameters'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
             $form->keyValue('setting', __t('Setting'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();

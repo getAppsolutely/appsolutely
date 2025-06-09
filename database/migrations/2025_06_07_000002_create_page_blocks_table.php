@@ -13,10 +13,12 @@ return new class() extends Migration
         Schema::create('page_blocks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('block_group_id')->constrained('page_block_groups')->cascadeOnDelete();
+            $table->string('reference');
             $table->string('title');
             $table->string('class');
             $table->string('remark')->nullable();
             $table->text('description')->nullable();
+            $table->text('template')->nullable();
             $table->text('instruction')->nullable();
             $table->json('parameters')->nullable();
             $table->json('setting')->nullable();

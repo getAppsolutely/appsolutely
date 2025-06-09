@@ -79,8 +79,8 @@ Route::group([
 
         // Page Builder Routes
         Route::prefix('pages')->name('pages.')->group(function () {
-            Route::get('{pageId}/data', [PageBuilderAdminApiController::class, 'getPageData'])->name('data');
-            Route::put('{pageId}/save', [PageBuilderAdminApiController::class, 'savePageData'])->name('save');
+            Route::get('{reference}/data', [PageBuilderAdminApiController::class, 'getPageData'])->name('data');
+            Route::put('{reference}/save', [PageBuilderAdminApiController::class, 'savePageData'])->name('save');
             Route::get('block-registry', [PageBuilderAdminApiController::class, 'getBlockRegistry'])->name('block-registry');
         });
     });
