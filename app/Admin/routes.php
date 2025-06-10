@@ -81,6 +81,7 @@ Route::group([
         Route::prefix('pages')->name('pages.')->group(function () {
             Route::get('{reference}/data', [PageBuilderAdminApiController::class, 'getPageData'])->name('data');
             Route::put('{reference}/save', [PageBuilderAdminApiController::class, 'savePageData'])->name('save');
+            Route::put('{reference}/reset', [PageBuilderAdminApiController::class, 'resetPageData'])->name('reset');
             Route::get('block-registry', [PageBuilderAdminApiController::class, 'getBlockRegistry'])->name('block-registry');
         });
     });

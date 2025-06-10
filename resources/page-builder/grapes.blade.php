@@ -161,6 +161,10 @@
                     class="flex items-center bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-md text-sm">
                 <i class="fas fa-redo mr-2"></i>Redo
             </button>
+            <button id="reset-btn"
+                    class="flex items-center bg-slate-100 hover:bg-red-200 px-3 py-1 rounded-md text-sm">
+                <i class="fas fa-eraser mr-2"></i>Reset
+            </button>
             <button id="save-btn"
                     class="flex items-center bg-primary hover:bg-indigo-600 px-4 py-1 rounded-md text-sm text-white">
                 <i class="fas fa-save mr-2"></i>Save
@@ -240,6 +244,11 @@
         height: '100%',
         width: 'auto',
         storageManager: false,
+        canvas: {
+            styles: [
+                'https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css'
+            ]
+        },
         blockManager: {
             appendTo: '#blocks',
         },
@@ -301,13 +310,6 @@
     editor.on('load', () => {
         editor.on('component:add', updateBlockCount);
         editor.on('component:remove', updateBlockCount);
-
-        const iframe = editor.Canvas.getFrameEl();
-        const head = iframe.contentDocument.head;
-        const style = document.createElement('link');
-        style.rel = 'stylesheet';
-        style.href = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css';
-        head.appendChild(style);
     });
 
     function registerBlocks(editor, categories) {
@@ -321,19 +323,17 @@
             category.blocks
                 .sort((a, b) => a.sort - b.sort)
                 .forEach(comp => {
-                    console.log(comp)
                     const {
                         type,
                         tagName = 'div',
                         style = {},
                         content = '<div></div>',
                         label = type,
-                        desc = '',
+                        description = '',
                         sort = 0,
                         droppable = false,
                     } = comp;
 
-                    // Register reusable component type (optional if you're using `type`)
                     domComponents.addType(type, {
                         model: {
                             defaults: {
@@ -351,7 +351,7 @@
                             <div class="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16 mr-3"></div>
                             <div class="flex-1">
                                 <strong class="text-base">${label}</strong>
-                                <div class="text-sm text-gray-500">${desc}</div>
+                                <div class="text-sm text-gray-500">${description}</div>
                             </div>
                         </div>
                     `,
@@ -381,6 +381,32 @@
 
     document.getElementById('redo-btn').addEventListener('click', () => {
         editor.UndoManager.redo();
+    });
+
+    document.getElementById('reset-btn').addEventListener('click', () => {
+        if (confirm('Are you sure you want to reset the page content? This cannot be undone.')) {
+            editor.DomComponents.clear();
+            editor.addComponents(defaultHtml);
+            fetch(`{{ admin_route('api.pages.reset',[$reference]) }}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({})
+            })
+                .then(res => {
+                    if (!res.ok) throw new Error('Failed to reset');
+                    return res.json();
+                })
+                .then(data => {
+                    showNotification(data.message || 'Page content has been reset.', true);
+                })
+                .catch(err => {
+                    console.error('Reset failed:', err);
+                    showNotification('Reset failed ❌', false);
+                });
+        }
     });
 
     document.getElementById('save-config-btn').addEventListener('click', () => {

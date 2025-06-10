@@ -17,11 +17,25 @@ final class PageBlockGroupRepository extends BaseRepository
     {
         $query = $this->model->newQuery();
 
-        return $query
+        $data =  $query
             ->whereHas('blocks', function ($query) {
                 $query->status();
             })->with(['blocks' => function ($query) {
                 $query->orderBy('sort')->status();
             }])->status()->orderBy('sort')->get();
+
+        $data->each(function ($item) {
+            $item->blocks = $item->blocks->map(function ($block) {
+                $block->type      = $block->title;
+                $block->label     = $block->title;
+                $block->content   = $block->template;
+                $block->tagName   = $block->title == 'Header' ? 'section' : 'blockquote';
+                $block->droppable = false;
+
+                return $block;
+            });
+        });
+
+        return $data;
     }
 }

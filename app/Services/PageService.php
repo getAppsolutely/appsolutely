@@ -21,4 +21,12 @@ class PageService
     {
         return $this->pageRepository->findByReference($reference);
     }
+
+    public function resetPageContent(string $reference): Page
+    {
+        $page = $this->findByReference($reference);
+        $page->update(['content' => '']);
+
+        return $page;
+    }
 }

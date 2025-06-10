@@ -40,6 +40,16 @@ class PageBuilderAdminApiController extends AdminBaseApiController
     }
 
     /**
+     * Reset page builder data
+     */
+    public function resetPageData(Request $request, string $reference)
+    {
+        $page = $this->pageService->resetPageContent($reference);
+
+        return $this->success(['page' => $page], __t('Page content has been reset.'));
+    }
+
+    /**
      * Get available blocks registry
      */
     public function getBlockRegistry()
