@@ -26,11 +26,9 @@ final class PageBlockGroupRepository extends BaseRepository
 
         $data->each(function ($item) {
             $item->blocks = $item->blocks->map(function ($block) {
-                $block->type      = $block->title;
-                $block->label     = $block->title;
-                $block->content   = $block->template;
-                $block->tagName   = $block->title == 'Header' ? 'section' : 'blockquote';
-                $block->droppable = false;
+                $block->label   = $block->title;
+                $block->content = $block->template;
+                $block->tagName = 'section';
 
                 return $block;
             });

@@ -284,10 +284,7 @@
     });
 
     const defaultHtml = `
-  <div class="text-center py-10">
-    <h1 class="text-3xl font-bold">Hello, welcome to Page Builder</h1>
-    <p class="text-gray-500">Start dragging components from the right!</p>
-  </div>
+    <h1 class="text-3xl mt-5 text-center">Hello, welcome to Page Builder<br/>Start dragging components from the right!</h1>
 `;
 
     fetch('{{ admin_route('api.pages.block-registry') }}')
@@ -324,17 +321,16 @@
                 .sort((a, b) => a.sort - b.sort)
                 .forEach(comp => {
                     const {
-                        type,
                         tagName = 'div',
                         style = {},
                         content = '<div></div>',
-                        label = type,
+                        label,
                         description = '',
                         sort = 0,
                         droppable = false,
                     } = comp;
 
-                    domComponents.addType(type, {
+                    domComponents.addType(label, {
                         model: {
                             defaults: {
                                 tagName,
@@ -345,7 +341,7 @@
                     });
 
                     // Add block to block manager
-                    blockManager.add(type, {
+                    blockManager.add(label, {
                         label: `
                         <div class="flex items-start text-left">
                             <div class="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16 mr-3"></div>
@@ -359,7 +355,7 @@
                             id: categoryId,
                             label: `${categoryLabel}`,
                         },
-                        content: {type, droppable},
+                        content: {type: label, droppable},
                         order: sort,
                     });
                 });

@@ -7,7 +7,6 @@ namespace App\Models;
 use App\Models\Traits\ScopeStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Str;
 
 final class PageBlock extends Model
 {
@@ -15,7 +14,6 @@ final class PageBlock extends Model
 
     protected $fillable = [
         'block_group_id',
-        'reference',
         'title',
         'class',
         'remark',
@@ -23,6 +21,7 @@ final class PageBlock extends Model
         'template',
         'instruction',
         'parameters',
+        'droppable',
         'setting',
         'sort',
         'status',
@@ -31,16 +30,10 @@ final class PageBlock extends Model
     protected $casts = [
         'parameters' => 'array',
         'setting'    => 'array',
+        'droppable'  => 'integer',
         'sort'       => 'integer',
         'status'     => 'integer',
     ];
-
-    protected static function booted()
-    {
-        self::creating(function ($model) {
-            $model->reference = Str::lower($model->class);
-        });
-    }
 
     public function group(): BelongsTo
     {

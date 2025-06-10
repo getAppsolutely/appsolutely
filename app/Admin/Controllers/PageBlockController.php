@@ -23,12 +23,12 @@ final class PageBlockController extends AdminBaseController
     {
         return Grid::make(PageBlock::query()->with('group'), function (Grid $grid) {
             $grid->column('id', __t('ID'))->sortable();
-            $grid->column('reference', __t('reference'));
             $grid->column('title', __t('Title'))->editable();
             $grid->column('remark', __t('Remark'))->editable();
             $grid->column('group.title', __t('Group'));
             $grid->column('class', __t('Class'));
             $grid->column('created_at', __t('Created At'))->display(column_time_format());
+            $grid->column('droppable', __t('Droppable'))->switch();
             $grid->column('sort', __t('Sort'))->editable();
             $grid->column('status', __t('Status'))->switch();
             $grid->model()->orderByDesc('id');
@@ -61,6 +61,7 @@ final class PageBlockController extends AdminBaseController
             $form->textarea('template', __t('template'))->rows(3);
             $form->textarea('instruction', __t('Instruction'))->rows(2);
             $form->keyValue('parameters', __t('Parameters'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
+            $form->switch('droppable', __t('Droppable'));
             $form->keyValue('setting', __t('Setting'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
             $form->number('sort', __t('Sort'));
             $form->switch('status', __t('Status'));

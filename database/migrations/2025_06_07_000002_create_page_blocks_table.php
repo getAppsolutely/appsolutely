@@ -13,7 +13,6 @@ return new class() extends Migration
         Schema::create('page_blocks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('block_group_id')->constrained('page_block_groups')->cascadeOnDelete();
-            $table->string('reference');
             $table->string('title');
             $table->string('class');
             $table->string('remark')->nullable();
@@ -21,6 +20,7 @@ return new class() extends Migration
             $table->text('template')->nullable();
             $table->text('instruction')->nullable();
             $table->json('parameters')->nullable();
+            $table->unsignedTinyInteger('droppable')->nullable()->default(0);
             $table->json('setting')->nullable();
             $table->unsignedTinyInteger('sort')->default(0);
             $table->unsignedTinyInteger('status')->default(0);
