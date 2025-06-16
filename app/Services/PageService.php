@@ -42,18 +42,8 @@ class PageService
             $blockData = [];
         }
 
-        $originalIds = $page->blocks()->pluck('id')->toArray();
-        $updatedIds  = array_column($blockData, 'id');
-
-        $toAddIds = array_diff($updatedIds, $originalIds);
-        $toAdd    = array_filter($blockData, function ($block) use ($toAddIds) {
-            return in_array($block['id'], $toAddIds);
-        });
-
-        $toRemoveIds = array_diff($originalIds, $updatedIds);
-
-        $this->pageBlockSettingRepository->createInBatch($toAdd, $page->id);
-        $this->pageBlockSettingRepository->disableInBatch($toRemoveIds);
+        $this->pageBlockSettingRepository->resetSetting($page->id);
+        $this->pageBlockSettingRepository->syncSetting($blockData, $page->id);
 
         $page->update(['content' => $data]);
 

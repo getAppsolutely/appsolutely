@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\Status;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 final class PageBlockSetting extends Model
@@ -25,7 +26,7 @@ final class PageBlockSetting extends Model
     protected $casts = [
         'styles'           => 'array',
         'parameter_values' => 'array',
-        'status'           => 'integer',
+        'status'           => Status::class,
     ];
 
     public function block(): BelongsTo

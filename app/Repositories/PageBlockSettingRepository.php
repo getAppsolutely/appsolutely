@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
+use App\Enums\Status;
 use App\Models\PageBlockSetting;
 use DB;
 
@@ -14,26 +15,43 @@ final class PageBlockSettingRepository extends BaseRepository
         return PageBlockSetting::class;
     }
 
-    /**
-     * @throws \Throwable
-     */
-    public function createInBatch(array $data, int $pageId): array
+    public function syncSetting(array $data, int $pageId): array
     {
-        $result = [];
-        DB::transaction(function () use ($data, &$result, $pageId) {
-            foreach ($data as $setting) {
-                $setting['block_id'] = $setting['id'];
-                $setting['page_id']  = $pageId;
-                unset($setting['id'], $setting['type']);
-                $result[] = PageBlockSetting::create($setting);
-            }
-        });
+        try {
+            $result = [];
+            DB::transaction(function () use ($data, &$result, $pageId) {
+                foreach ($data as $index => $setting) {
+                    $sort  = $index + 1;
+                    $found = $this->model->newQuery()->where('page_id', $pageId)->where('block_id', $setting['id'])->first();
+                    if ($found) {
+                        $found->update(['status' => Status::ACTIVE, 'sort' => $sort]);
 
-        return $result;
+                        continue;
+                    }
+
+                    $data = [
+                        'block_id' => $setting['id'],
+                        'page_id'  => $pageId,
+                        'status'   => Status::ACTIVE,
+                        'sort'     => $sort,
+                    ];
+                    $result[] = PageBlockSetting::create($data);
+                }
+            });
+
+            return $result;
+        } catch (\Exception $exception) {
+            log_error(__CLASS__ . '::' . __METHOD__ . '(): ' . $exception->getMessage());
+        } finally {
+            return $result;
+        }
+
     }
 
-    public function disableInBatch(array $ids): void
+    public function resetSetting(int $pageId): int
     {
-        $this->model->newQuery()->whereIn('id', $ids)->update(['status' => false]);
+        return $this->model->newQuery()
+            ->where('page_id', $pageId)
+            ->update(['status' => Status::INACTIVE, 'sort' => 0]);
     }
 }
