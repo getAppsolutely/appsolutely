@@ -33,7 +33,7 @@ Route::group([
 ], function () {
     Route::get('', [HomeController::class, 'index']);
 
-    Route::resource('file/manager', FileController::class)->names('file-manager');
+    Route::resource('file-manager', FileController::class)->names('file-manager');
     Route::get('uploads/{path?}', [FileController::class, 'retrieve'])->where('path', '(.*)')->name('file.self');
 
     // Content Management Routes

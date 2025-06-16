@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Services\PageService;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 
 class PageController extends BaseController
 {
@@ -12,7 +11,7 @@ class PageController extends BaseController
         private PageService $pageService
     ) {}
 
-    public function show(Request $request, ?string $slug = null): View
+    public function show(Request $request, ?string $slug = null): object
     {
         $page = $this->pageService->getPublishedPage($slug ?? '/');
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\ScopeReference;
 use App\Models\Traits\ScopeStatus;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Page extends Model
 {
@@ -37,4 +38,9 @@ class Page extends Model
         'status'          => 'integer',
         'structured_data' => 'array',
     ];
+
+    public function blocks(): HasMany
+    {
+        return $this->hasMany(PageBlockSetting::class);
+    }
 }

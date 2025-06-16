@@ -5,6 +5,7 @@ namespace App\Admin\Controllers\Api;
 use App\Models\Page;
 use App\Services\PageBlockService;
 use App\Services\PageService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class PageBuilderAdminApiController extends AdminBaseApiController
@@ -14,7 +15,7 @@ class PageBuilderAdminApiController extends AdminBaseApiController
     /**
      * Get page data for the builder
      */
-    public function getPageData(Request $request, string $reference)
+    public function getPageData(Request $request, string $reference): JsonResponse
     {
         $page = $this->pageService->findByReference($reference);
 
@@ -26,15 +27,14 @@ class PageBuilderAdminApiController extends AdminBaseApiController
     /**
      * Save page builder data
      */
-    public function savePageData(Request $request, string $reference)
+    public function savePageData(Request $request, string $reference): JsonResponse
     {
         $data = $request->get('data');
         if (empty($data)) {
             return $this->error('Page data cannot be empty.');
         }
 
-        $page = $this->pageService->findByReference($reference);
-        $page->update(['content' => $data]);
+        $page = $this->pageService->savePageData($reference, $data);
 
         return $this->success($data, 'Page saved successfully.');
     }
@@ -42,7 +42,7 @@ class PageBuilderAdminApiController extends AdminBaseApiController
     /**
      * Reset page builder data
      */
-    public function resetPageData(Request $request, string $reference)
+    public function resetPageData(Request $request, string $reference): JsonResponse
     {
         $page = $this->pageService->resetPageContent($reference);
 

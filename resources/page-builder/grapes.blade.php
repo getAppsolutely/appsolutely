@@ -321,8 +321,8 @@
                 .sort((a, b) => a.sort - b.sort)
                 .forEach(comp => {
                     const {
+                        id,
                         tagName = 'div',
-                        style = {},
                         content = '<div></div>',
                         label,
                         description = '',
@@ -334,7 +334,6 @@
                         model: {
                             defaults: {
                                 tagName,
-                                style,
                                 content,
                             },
                         },
@@ -355,7 +354,7 @@
                             id: categoryId,
                             label: `${categoryLabel}`,
                         },
-                        content: {type: label, droppable},
+                        content: {type: label, droppable, id},
                         order: sort,
                     });
                 });
