@@ -28,6 +28,7 @@ class PageService
     {
         $page = $this->findByReference($reference);
         $page->update(['content' => '']);
+        $this->pageBlockSettingRepository->resetSetting($page->id);
 
         return $page;
     }

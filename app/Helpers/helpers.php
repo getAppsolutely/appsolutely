@@ -187,6 +187,13 @@ if (! function_exists('log_warning')) {
     }
 }
 
+if (! function_exists('log_message')) {
+    function log_message($class, $function, $message, $data): string
+    {
+        return sprintf('%s::%s - %s : %s', $class, $function, $message, json_encode($data));
+    }
+}
+
 if (! function_exists('upload_to_api')) {
     function upload_to_api(?string $class = null, ?string $id = null, ?string $type = null, ?string $token = null): string
     {
@@ -559,5 +566,12 @@ if (! function_exists('themed_view')) {
         log_warning('Active theme: ' . $theme);
 
         return view($view, $data, $mergeData);
+    }
+}
+
+if (! function_exists('theme_styles')) {
+    function theme_styles(): array
+    {
+        return config('appsolutely.theme_assets.styles') ?? [];
     }
 }

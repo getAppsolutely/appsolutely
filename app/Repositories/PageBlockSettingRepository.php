@@ -21,8 +21,22 @@ final class PageBlockSettingRepository extends BaseRepository
             $result = [];
             DB::transaction(function () use ($data, &$result, $pageId) {
                 foreach ($data as $index => $setting) {
-                    $sort  = $index + 1;
-                    $found = $this->model->newQuery()->where('page_id', $pageId)->where('block_id', $setting['id'])->first();
+                    $sort      = $index + 1;
+                    $blockId   = $setting['block_id'];
+                    $reference = $setting['reference'];
+                    if (empty($blockId) || empty($reference)) {
+                        log_warning(log_message(__CLASS__, __FUNCTION__, 'Invalid block id and reference', [
+                            'block_id'  => $blockId,
+                            'reference' => $reference,
+                        ]));
+
+                        continue;
+                    }
+                    $found = $this->model->newQuery()
+                        ->where('page_id', $pageId)
+                        ->where('block_id', $blockId)
+                        ->where('reference', $reference)
+                        ->first();
                     if ($found) {
                         $found->update(['status' => Status::ACTIVE, 'sort' => $sort]);
 
@@ -30,10 +44,11 @@ final class PageBlockSettingRepository extends BaseRepository
                     }
 
                     $data = [
-                        'block_id' => $setting['id'],
-                        'page_id'  => $pageId,
-                        'status'   => Status::ACTIVE,
-                        'sort'     => $sort,
+                        'block_id'  => $blockId,
+                        'page_id'   => $pageId,
+                        'reference' => $reference,
+                        'status'    => Status::ACTIVE,
+                        'sort'      => $sort,
                     ];
                     $result[] = PageBlockSetting::create($data);
                 }

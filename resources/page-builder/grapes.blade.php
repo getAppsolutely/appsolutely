@@ -245,9 +245,7 @@
         width: 'auto',
         storageManager: false,
         canvas: {
-            styles: [
-                'https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css'
-            ]
+            styles: @json(theme_styles())
         },
         blockManager: {
             appendTo: '#blocks',
@@ -354,11 +352,16 @@
                             id: categoryId,
                             label: `${categoryLabel}`,
                         },
-                        content: {type: label, droppable, id},
+                        content: {type: label, droppable, reference: generateRandomId(label), block_id: id},
                         order: sort,
                     });
                 });
         });
+    }
+
+    function generateRandomId(type) {
+        const rand = crypto.getRandomValues(new Uint32Array(1))[0].toString(36);
+        return `${type}-${rand}`;
     }
 
     // ================ Panel ================

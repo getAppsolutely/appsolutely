@@ -12,6 +12,7 @@ final class PageBlockSetting extends Model
     protected $fillable = [
         'page_id',
         'block_id',
+        'reference',
         'type',
         'remark',
         'template',

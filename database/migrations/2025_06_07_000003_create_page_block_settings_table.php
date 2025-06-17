@@ -14,6 +14,7 @@ return new class() extends Migration
             $table->id();
             $table->foreignId('page_id')->constrained('pages')->cascadeOnDelete();
             $table->foreignId('block_id')->constrained('page_blocks')->cascadeOnDelete();
+            $table->string('reference')->nullable();
             $table->string('type')->nullable();
             $table->string('remark')->nullable();
             $table->text('template')->nullable();
