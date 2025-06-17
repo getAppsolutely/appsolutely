@@ -153,44 +153,54 @@ if (! function_exists('string_concat')) {
 }
 
 if (! function_exists('app_log')) {
-    function app_log(string $message, array $context = [], string $type = 'info'): void
+    function app_log(string $message, array $context = [], string $type = 'info', $class = null, $function = null): void
     {
+        $message = log_message($message, $class, $function);
         Log::log($type, string_concat($message), $context);
     }
 }
 
 if (! function_exists('log_error')) {
-    function log_error(string $message, array $context = []): void
+    function log_error(string $message, array $context = [], $class = null, $function = null): void
     {
+        $message = log_message($message, $class, $function);
         Log::log('error', string_concat($message), $context);
     }
 }
 
 if (! function_exists('log_info')) {
-    function log_info(string $message, array $context = []): void
+    function log_info(string $message, array $context = [], $class = null, $function = null): void
     {
+        $message = log_message($message, $class, $function);
         Log::log('info', string_concat($message), $context);
     }
 }
 
 if (! function_exists('log_debug')) {
-    function log_debug(string $message, array $context = []): void
+    function log_debug(string $message, array $context = [], $class = null, $function = null): void
     {
+        $message = log_message($message, $class, $function);
         Log::log('debug', string_concat($message), $context);
     }
 }
 
 if (! function_exists('log_warning')) {
-    function log_warning(string $message, array $context = []): void
+    function log_warning(string $message, array $context = [], $class = null, $function = null): void
     {
+        $message = log_message($message, $class, $function);
         Log::log('warning', string_concat($message), $context);
     }
 }
 
 if (! function_exists('log_message')) {
-    function log_message($class, $function, $message, $data): string
+    function log_message($message, $class, $function): string
     {
-        return sprintf('%s::%s - %s : %s', $class, $function, $message, json_encode($data));
+        $classAndFunction = '';
+        if (! empty($class) && ! empty($function)) {
+            $classAndFunction = sprintf('%s::%s', $class, $function);
+        }
+
+        return sprintf('%s - %s: ', $classAndFunction, $message);
     }
 }
 

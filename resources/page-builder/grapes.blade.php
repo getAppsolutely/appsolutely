@@ -303,8 +303,18 @@
     }
 
     editor.on('load', () => {
-        editor.on('component:add', updateBlockCount);
         editor.on('component:remove', updateBlockCount);
+
+        // Add event listener for component add to generate unique references
+        editor.on('component:add', (component) => {
+            ensureComponentReference(component);
+            updateBlockCount();
+        });
+
+        // Add event listener for component update to ensure reference exists
+        editor.on('component:update', (component) => {
+            ensureComponentReference(component);
+        });
     });
 
     function registerBlocks(editor, categories) {
@@ -352,7 +362,11 @@
                             id: categoryId,
                             label: `${categoryLabel}`,
                         },
-                        content: {type: label, droppable, reference: generateRandomId(label), block_id: id},
+                        content: {
+                            type: label,
+                            block_id: id,
+                            droppable
+                        },
                         order: sort,
                     });
                 });
@@ -361,7 +375,13 @@
 
     function generateRandomId(type) {
         const rand = crypto.getRandomValues(new Uint32Array(1))[0].toString(36);
-        return `${type}-${rand}`;
+        return `${type.toLowerCase()}-${rand}`;
+    }
+
+    function ensureComponentReference(component) {
+        if (!component.get('reference')) {
+            component.set('reference', generateRandomId(component.get('type')));
+        }
     }
 
     // ================ Panel ================
@@ -418,6 +438,12 @@
 
     document.getElementById('save-btn').addEventListener('click', () => {
         const projectData = editor.getProjectData();
+
+        // Ensure all components have unique references
+        const components = editor.getComponents();
+        components.forEach(component => {
+            ensureComponentReference(component);
+        });
 
         fetch(`{{ admin_route('api.pages.save',[$reference]) }}`, {
             method: 'PUT',

@@ -25,10 +25,10 @@ final class PageBlockSettingRepository extends BaseRepository
                     $blockId   = $setting['block_id'];
                     $reference = $setting['reference'];
                     if (empty($blockId) || empty($reference)) {
-                        log_warning(log_message(__CLASS__, __FUNCTION__, 'Invalid block id and reference', [
+                        log_warning('Invalid block id and reference', [
                             'block_id'  => $blockId,
                             'reference' => $reference,
-                        ]));
+                        ]);
 
                         continue;
                     }
