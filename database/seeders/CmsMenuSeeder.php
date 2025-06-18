@@ -81,27 +81,27 @@ class CmsMenuSeeder extends Seeder
             ]);
         }
 
-        $menuGroupsMenu = DB::table('admin_menu')->where('parent_id', $cmsMenuId)->where('title', 'Menu Groups')->first();
-        if (! $menuGroupsMenu) {
+        $menusMenu = DB::table('admin_menu')->where('parent_id', $cmsMenuId)->where('title', 'Menu')->first();
+        if (! $menusMenu) {
             DB::table('admin_menu')->insert([
                 'parent_id'  => $cmsMenuId,
                 'order'      => 3,
-                'title'      => 'Menu Groups',
+                'title'      => 'Menu',
                 'icon'       => 'fa-list',
-                'uri'        => 'menus/groups',
+                'uri'        => 'menus/entry',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
         }
 
-        $menusMenu = DB::table('admin_menu')->where('parent_id', $cmsMenuId)->where('title', 'Menus')->first();
-        if (! $menusMenu) {
+        $menuItemsMenu = DB::table('admin_menu')->where('parent_id', $cmsMenuId)->where('title', 'Menu Items')->first();
+        if (! $menuItemsMenu) {
             DB::table('admin_menu')->insert([
                 'parent_id'  => $cmsMenuId,
                 'order'      => 4,
-                'title'      => 'Menus',
+                'title'      => 'Menu Items',
                 'icon'       => 'fa-bars',
-                'uri'        => 'menus/entry',
+                'uri'        => 'menus/items',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

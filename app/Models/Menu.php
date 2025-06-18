@@ -4,64 +4,53 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Enums\MenuTarget;
-use App\Enums\MenuType;
-use App\Models\Traits\ScopePublished;
 use App\Models\Traits\ScopeStatus;
-use Dcat\Admin\Traits\ModelTree;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
-final class Menu extends NestedSetModel
+final class Menu extends Model
 {
-    use ModelTree;
-    use ScopePublished;
     use ScopeStatus;
 
     protected $fillable = [
-        'parent_id',
-        'menu_group_id',
         'title',
+        'reference',
         'remark',
-        'route',
-        'type',
-        'icon',
-        'permission_key',
-        'target',
-        'is_external',
-        'published_at',
-        'expired_at',
         'status',
     ];
 
     protected $casts = [
-        'parent_id'     => 'integer',
-        'menu_group_id' => 'integer',
-        'is_external'   => 'boolean',
-        'type'          => MenuType::class,
-        'target'        => MenuTarget::class,
-        'published_at'  => 'datetime',
-        'expired_at'    => 'datetime',
-        'status'        => 'integer',
+        'status' => 'integer',
     ];
 
-    public function children(): HasMany
+    protected static function boot()
     {
-        return $this->hasMany(Menu::class, 'parent_id')->orderBy('left');
+        parent::boot();
+
+        self::creating(function ($menu) {
+            if (empty($menu->reference)) {
+                $menu->reference = self::generateReference($menu->title);
+            }
+        });
     }
 
-    public function parent(): BelongsTo
+    public function menuItems(): HasMany
     {
-        return $this->belongsTo(Menu::class, 'parent_id');
+        return $this->hasMany(MenuItem::class)->orderBy('left');
     }
 
-    public function menuGroup(): BelongsTo
+    private static function generateReference(string $title): string
     {
-        return $this->belongsTo(MenuGroup::class);
-    }
+        $baseReference = Str::slug($title);
+        $reference     = $baseReference;
+        $counter       = 1;
 
-    public function scopeByGroup($query, int $groupId)
-    {
-        return $query->where('menu_group_id', $groupId);
+        // Check if reference already exists and append number if needed
+        while (self::where('reference', $reference)->exists()) {
+            $reference = $baseReference . '-' . $counter;
+            $counter++;
+        }
+
+        return $reference;
     }
 }

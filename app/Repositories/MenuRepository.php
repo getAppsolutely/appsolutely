@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Repositories;
 
 use App\Models\Menu;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
 
 final class MenuRepository extends BaseRepository
 {
@@ -15,27 +13,29 @@ final class MenuRepository extends BaseRepository
         return Menu::class;
     }
 
-    public function getActiveMenus(int $groupId, ?Carbon $datetime): Collection
+    public function getActiveGroups()
+    {
+        return $this->model->status()->orderBy('title')->get();
+    }
+
+    public function getActiveList(): array
     {
         return $this->model->status()
-            ->published($datetime)
-            ->byGroup($groupId)
-            ->orderBy('left')
-            ->get();
+            ->orderBy('title')
+            ->pluck('title', 'id')
+            ->toArray();
     }
 
-    public function getActiveMenuTree(int $groupId, ?Carbon $datetime): \Kalnoy\Nestedset\Collection
+    public function findByReference(string $reference): ?Menu
     {
-        /** @var \Kalnoy\Nestedset\Collection $activeMenus */
-        $activeMenus = $this->getActiveMenus($groupId, $datetime);
-
-        return $activeMenus->toTree();
+        return $this->model->where('reference', $reference)->first();
     }
 
-    public function getActiveList(int $groupId, ?Carbon $datetime): \Kalnoy\Nestedset\Collection
+    public function getActiveListByReference(): array
     {
-        $tree = $this->getActiveMenuTree($groupId, $datetime);
-
-        return Menu::formatTreeArray($tree);
+        return $this->model->status()
+            ->orderBy('title')
+            ->pluck('title', 'reference')
+            ->toArray();
     }
 }

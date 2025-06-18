@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Models\MenuGroup;
-use App\Repositories\MenuGroupRepository;
+use App\Models\Menu;
+use App\Repositories\MenuItemRepository;
 use App\Repositories\MenuRepository;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
@@ -13,42 +13,22 @@ use Illuminate\Database\Eloquent\Collection;
 final class MenuService
 {
     public function __construct(
-        protected MenuRepository $menuRepository,
-        protected MenuGroupRepository $menuGroupRepository
+        protected MenuItemRepository $menuItemRepository,
+        protected MenuRepository $menuRepository
     ) {}
 
-    public function getActiveMenuTree($groupId, ?Carbon $datetime = null): Collection
+    public function getActiveMenuTree($menuId, ?Carbon $datetime = null): Collection
     {
-        return $this->menuRepository->getActiveMenuTree($groupId, $datetime);
+        return $this->menuItemRepository->getActiveMenuTree($menuId, $datetime);
     }
 
-    public function getActiveMenus($groupId, ?Carbon $datetime = null): Collection
+    public function getActiveMenus($menuId, ?Carbon $datetime = null): Collection
     {
-        return $this->menuRepository->getActiveMenus($groupId, $datetime);
+        return $this->menuItemRepository->getActiveMenus($menuId, $datetime);
     }
 
-    public function getMenuGroupByReference(string $reference): ?MenuGroup
+    public function getMenuByReference(string $reference): ?Menu
     {
-        return $this->menuGroupRepository->findByReference($reference);
-    }
-
-    public function getActiveMenuTreeByReference(string $reference, ?Carbon $datetime = null): Collection
-    {
-        $group = $this->getMenuGroupByReference($reference);
-        if (! $group) {
-            return collect();
-        }
-
-        return $this->getActiveMenuTree($group->id, $datetime);
-    }
-
-    public function getActiveMenusByReference(string $reference, ?Carbon $datetime = null): Collection
-    {
-        $group = $this->getMenuGroupByReference($reference);
-        if (! $group) {
-            return collect();
-        }
-
-        return $this->getActiveMenus($group->id, $datetime);
+        return $this->menuRepository->findByReference($reference);
     }
 }

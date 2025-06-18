@@ -8,12 +8,12 @@ return new class() extends Migration
 {
     public function up(): void
     {
-        Schema::create('menus', function (Blueprint $table) {
+        Schema::create('menu_items', function (Blueprint $table) {
             $table->id();
             $table->integer('left');
             $table->integer('right');
-            $table->foreignId('parent_id')->nullable()->constrained('menus')->nullOnDelete();
-            $table->foreignId('menu_group_id')->constrained('menu_groups')->cascadeOnDelete();
+            $table->foreignId('parent_id')->nullable()->constrained('menu_items')->nullOnDelete();
+            $table->foreignId('menu_id')->constrained('menus')->cascadeOnDelete();
             $table->string('title');
             $table->string('remark')->nullable();
             $table->string('route')->nullable();
@@ -31,6 +31,6 @@ return new class() extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('menus');
+        Schema::dropIfExists('menu_items');
     }
 };

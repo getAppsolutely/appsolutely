@@ -9,7 +9,7 @@ use App\Admin\Controllers\ArticleController;
 use App\Admin\Controllers\FileController;
 use App\Admin\Controllers\HomeController;
 use App\Admin\Controllers\MenuController;
-use App\Admin\Controllers\MenuGroupController;
+use App\Admin\Controllers\MenuItemController;
 use App\Admin\Controllers\OrderController;
 use App\Admin\Controllers\PageBlockController;
 use App\Admin\Controllers\PageBlockGroupController;
@@ -54,8 +54,8 @@ Route::group([
 
     // Menu Management Routes
     Route::prefix('menus')->name('menus.')->group(function () {
-        Route::resource('entry', MenuController::class);
-        Route::resource('groups', MenuGroupController::class)->names('groups');
+        Route::resource('entry', MenuController::class)->names('entry');
+        Route::resource('items', MenuItemController::class)->names('items');
     });
 
     // Product Management Routes
