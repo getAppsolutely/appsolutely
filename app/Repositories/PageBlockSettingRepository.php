@@ -44,11 +44,12 @@ final class PageBlockSettingRepository extends BaseRepository
                     }
 
                     $data = [
-                        'block_id'  => $blockId,
-                        'page_id'   => $pageId,
-                        'reference' => $reference,
-                        'status'    => Status::ACTIVE,
-                        'sort'      => $sort,
+                        'block_id'     => $blockId,
+                        'page_id'      => $pageId,
+                        'reference'    => $reference,
+                        'status'       => Status::ACTIVE,
+                        'sort'         => $sort,
+                        'published_at' => now(),
                     ];
                     $result[] = PageBlockSetting::create($data);
                 }
@@ -68,5 +69,34 @@ final class PageBlockSettingRepository extends BaseRepository
         return $this->model->newQuery()
             ->where('page_id', $pageId)
             ->update(['status' => Status::INACTIVE, 'sort' => 0]);
+    }
+
+    public function getActivePublishedSettings(int $pageId, ?\Carbon\Carbon $datetime = null): \Illuminate\Database\Eloquent\Collection
+    {
+        $datetime = $datetime ?? now();
+
+        return $this->model->newQuery()
+            ->where('page_id', $pageId)
+            ->status()
+            ->published($datetime)
+            ->orderBy('sort')
+            ->get();
+    }
+
+    public function updatePublishStatus(int $id, ?string $publishedAt = null, ?string $expiredAt = null): bool
+    {
+        $data = [];
+
+        if ($publishedAt !== null) {
+            $data['published_at'] = $publishedAt;
+        }
+
+        if ($expiredAt !== null) {
+            $data['expired_at'] = $expiredAt;
+        }
+
+        return $this->model->newQuery()
+            ->where('id', $id)
+            ->update($data);
     }
 }

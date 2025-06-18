@@ -20,4 +20,14 @@ final class PageBlockService
     {
         return $this->groupRepository->getCategorisedBlocks();
     }
+
+    public function getPublishedBlockSettings(int $pageId): \Illuminate\Database\Eloquent\Collection
+    {
+        return $this->settingRepository->getActivePublishedSettings($pageId);
+    }
+
+    public function updateBlockSettingPublishStatus(int $settingId, ?string $publishedAt = null, ?string $expiredAt = null): bool
+    {
+        return $this->settingRepository->updatePublishStatus($settingId, $publishedAt, $expiredAt);
+    }
 }

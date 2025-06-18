@@ -24,6 +24,8 @@ return new class() extends Migration
             $table->json('parameter_values')->nullable();
             $table->unsignedTinyInteger('sort')->default(0);
             $table->unsignedTinyInteger('status')->default(0);
+            $table->dateTimeTz('published_at')->useCurrent();
+            $table->dateTimeTz('expired_at')->nullable();
             $table->timestamps();
         });
     }
