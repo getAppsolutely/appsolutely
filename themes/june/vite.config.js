@@ -1,9 +1,6 @@
-import { defineConfig } from "vite";
+import {defineConfig} from "vite";
 import laravel from "laravel-vite-plugin";
 import path from "path";
-
-
-
 
 export default defineConfig({
     plugins: [
@@ -14,11 +11,9 @@ export default defineConfig({
             ],
             buildDirectory: "build/theme/june",
         }),
-
-
         {
             name: "blade",
-            handleHotUpdate({ file, server }) {
+            handleHotUpdate({file, server}) {
                 if (file.endsWith(".blade.php")) {
                     server.ws.send({
                         type: "full-reload",
@@ -48,5 +43,17 @@ export default defineConfig({
             methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
             credentials: true
         }
+    },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                silenceDeprecations: [
+                    'import',
+                    'mixed-decls',
+                    'color-functions',
+                    'global-builtin',
+                ],
+            },
+        },
     },
 });
