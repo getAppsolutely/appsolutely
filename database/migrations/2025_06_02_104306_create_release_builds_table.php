@@ -24,7 +24,7 @@ return new class() extends Migration
             $table->string('path')->nullable();
             $table->string('signature')->nullable();
             $table->tinyInteger('status')->default(0);
-            $table->timestamp('published_at')->nullable();
+            $table->dateTimeTz('published_at')->useCurrent();
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('version_id')->references('id')->on('release_versions')->onDelete('cascade');

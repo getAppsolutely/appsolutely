@@ -17,7 +17,7 @@ return new class() extends Migration
             $table->string('remark')->nullable();
             $table->string('release_channel')->nullable(); // stable, beta, dev
             $table->tinyInteger('status');
-            $table->timestamp('published_at');
+            $table->dateTimeTz('published_at')->useCurrent();
             $table->timestamps();
             $table->softDeletes();
         });
