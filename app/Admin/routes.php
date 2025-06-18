@@ -8,6 +8,8 @@ use App\Admin\Controllers\ArticleCategoryController;
 use App\Admin\Controllers\ArticleController;
 use App\Admin\Controllers\FileController;
 use App\Admin\Controllers\HomeController;
+use App\Admin\Controllers\MenuController;
+use App\Admin\Controllers\MenuGroupController;
 use App\Admin\Controllers\OrderController;
 use App\Admin\Controllers\PageBlockController;
 use App\Admin\Controllers\PageBlockGroupController;
@@ -48,6 +50,12 @@ Route::group([
         Route::resource('block-settings', PageBlockSettingController::class)->names('block-settings');
         Route::resource('blocks', PageBlockController::class)->names('blocks');
         Route::resource('block-groups', PageBlockGroupController::class)->names('block-groups');
+    });
+
+    // Menu Management Routes
+    Route::prefix('menus')->name('menus.')->group(function () {
+        Route::resource('entry', MenuController::class);
+        Route::resource('groups', MenuGroupController::class)->names('groups');
     });
 
     // Product Management Routes

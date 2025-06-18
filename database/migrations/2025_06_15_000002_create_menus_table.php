@@ -17,7 +17,7 @@ return new class() extends Migration
             $table->string('title');
             $table->string('remark')->nullable();
             $table->string('route')->nullable();
-            $table->enum('type', ['link', 'dropdown', 'divider'])->default('link');
+            $table->enum('type', ['link', 'dropdown', 'divider', 'label', 'custom'])->default('link');
             $table->string('icon')->nullable();
             $table->string('permission_key')->nullable();
             $table->enum('target', ['_self', '_blank', '_parent', '_top', 'modal', 'iframe'])->default('_self');

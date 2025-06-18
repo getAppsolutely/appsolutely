@@ -25,4 +25,17 @@ final class MenuGroupRepository extends BaseRepository
             ->pluck('title', 'id')
             ->toArray();
     }
+
+    public function findByReference(string $reference): ?MenuGroup
+    {
+        return $this->model->where('reference', $reference)->first();
+    }
+
+    public function getActiveListByReference(): array
+    {
+        return $this->model->status()
+            ->orderBy('title')
+            ->pluck('title', 'reference')
+            ->toArray();
+    }
 }

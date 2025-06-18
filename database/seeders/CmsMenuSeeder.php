@@ -80,5 +80,31 @@ class CmsMenuSeeder extends Seeder
                 'updated_at' => now(),
             ]);
         }
+
+        $menuGroupsMenu = DB::table('admin_menu')->where('parent_id', $cmsMenuId)->where('title', 'Menu Groups')->first();
+        if (! $menuGroupsMenu) {
+            DB::table('admin_menu')->insert([
+                'parent_id'  => $cmsMenuId,
+                'order'      => 3,
+                'title'      => 'Menu Groups',
+                'icon'       => 'fa-list',
+                'uri'        => 'menus/groups',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        $menusMenu = DB::table('admin_menu')->where('parent_id', $cmsMenuId)->where('title', 'Menus')->first();
+        if (! $menusMenu) {
+            DB::table('admin_menu')->insert([
+                'parent_id'  => $cmsMenuId,
+                'order'      => 4,
+                'title'      => 'Menus',
+                'icon'       => 'fa-bars',
+                'uri'        => 'menus/entry',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }

@@ -11,6 +11,7 @@ return new class() extends Migration
         Schema::create('menu_groups', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('reference')->unique();
             $table->string('remark')->nullable();
             $table->tinyInteger('status')->default(0);
             $table->timestamps();

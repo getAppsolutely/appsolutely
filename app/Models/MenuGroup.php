@@ -13,6 +13,7 @@ final class MenuGroup extends Model
 
     protected $fillable = [
         'title',
+        'reference',
         'remark',
         'status',
     ];
