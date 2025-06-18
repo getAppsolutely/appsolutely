@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\HasFilesOfType;
 use App\Models\Traits\HasMarkdownContent;
+use App\Models\Traits\ScopePublished;
 use App\Models\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -17,6 +18,7 @@ class Article extends Model
 
     use HasFilesOfType;
     use HasMarkdownContent;
+    use ScopePublished;
     use Sluggable;
     use SoftDeletes;
 

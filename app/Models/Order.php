@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\Traits\HasMonetaryFields;
+use App\Models\Traits\ScopeReference;
+use App\Models\Traits\ScopeStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,6 +12,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Order extends Model
 {
     use HasMonetaryFields;
+    use ScopeReference;
+    use ScopeStatus;
     use SoftDeletes;
 
     protected $fillable = [

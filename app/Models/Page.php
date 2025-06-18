@@ -2,14 +2,18 @@
 
 namespace App\Models;
 
+use App\Models\Traits\ScopePublished;
 use App\Models\Traits\ScopeReference;
 use App\Models\Traits\ScopeStatus;
+use App\Models\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Page extends Model
 {
+    use ScopePublished;
     use ScopeReference;
     use ScopeStatus;
+    use Sluggable;
 
     protected $fillable = [
         'name',

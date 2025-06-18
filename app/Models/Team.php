@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\ScopeReference;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Jetstream\Events\TeamCreated;
@@ -14,6 +15,7 @@ class Team extends JetstreamTeam
     /** @use HasFactory<\Database\Factories\TeamFactory> */
     use HasFactory;
 
+    use ScopeReference;
     use SoftDeletes;
 
     /**

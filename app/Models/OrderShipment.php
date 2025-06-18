@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\ScopeStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class OrderShipment extends Model
 {
+    use ScopeStatus;
     use SoftDeletes;
 
     protected $fillable = [

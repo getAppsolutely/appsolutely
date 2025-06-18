@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\HasFilesOfType;
+use App\Models\Traits\ScopePublished;
 use App\Models\Traits\ScopeStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 final class ReleaseBuild extends Model
 {
     use HasFilesOfType;
+    use ScopePublished;
     use ScopeStatus;
     use SoftDeletes;
 

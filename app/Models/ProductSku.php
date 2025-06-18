@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Models\Traits\HasFilesOfType;
 use App\Models\Traits\HasMarkdownContent;
 use App\Models\Traits\HasMonetaryFields;
+use App\Models\Traits\ScopePublished;
+use App\Models\Traits\ScopeStatus;
 use App\Models\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -17,6 +19,8 @@ class ProductSku extends Model implements Sortable
     use HasFilesOfType;
     use HasMarkdownContent;
     use hasMonetaryFields;
+    use ScopePublished;
+    use ScopeStatus;
     use Sluggable;
     use SoftDeletes;
     use SortableTrait;

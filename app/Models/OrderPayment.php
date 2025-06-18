@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Traits\ScopeReference;
+use App\Models\Traits\ScopeStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class OrderPayment extends Model
 {
+    use ScopeReference;
+    use ScopeStatus;
     use SoftDeletes;
 
     protected $fillable = [

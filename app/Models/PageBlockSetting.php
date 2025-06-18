@@ -6,12 +6,13 @@ namespace App\Models;
 
 use App\Enums\Status;
 use App\Models\Traits\ScopePublished;
+use App\Models\Traits\ScopeReference;
 use App\Models\Traits\ScopeStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 final class PageBlockSetting extends Model
 {
-    use ScopePublished, ScopeStatus;
+    use ScopePublished, ScopeReference, ScopeStatus;
 
     protected $fillable = [
         'page_id',

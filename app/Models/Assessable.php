@@ -2,10 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Traits\ScopePublished;
+use App\Models\Traits\ScopeStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Assessable extends Model
 {
+    use ScopePublished;
+    use ScopeStatus;
+
     /**
      * The attributes that are mass assignable.
      *

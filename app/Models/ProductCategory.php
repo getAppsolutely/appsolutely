@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\HasFilesOfType;
+use App\Models\Traits\ScopePublished;
 use App\Models\Traits\ScopeStatus;
 use App\Models\Traits\Sluggable;
 use Dcat\Admin\Traits\ModelTree;
@@ -13,6 +14,7 @@ class ProductCategory extends NestedSetModel
 {
     use HasFilesOfType;
     use ModelTree;
+    use ScopePublished;
     use ScopeStatus;
     use Sluggable;
     use SoftDeletes;

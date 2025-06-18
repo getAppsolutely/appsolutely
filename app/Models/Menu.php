@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\Traits\ScopeReference;
 use App\Models\Traits\ScopeStatus;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 final class Menu extends Model
 {
+    use ScopeReference;
     use ScopeStatus;
 
     protected $fillable = [
