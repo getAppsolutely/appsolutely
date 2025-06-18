@@ -34,5 +34,19 @@ export default defineConfig({
             '~bootstrap': path.resolve('node_modules/bootstrap'),
         }
     },
-
+    server: {
+        host: '0.0.0.0', // Docker-safe
+        port: 5177,
+        strictPort: true,
+        hmr: {
+            host: 'localhost', // or your Docker host domain
+            protocol: 'ws',
+            clientPort: 5177,
+        },
+        cors: {
+            origin: true,
+            methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+            credentials: true
+        }
+    },
 });
