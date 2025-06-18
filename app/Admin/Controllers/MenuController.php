@@ -17,26 +17,24 @@ final class MenuController extends AdminBaseController
 
     protected function grid(): Grid
     {
-        return Grid::make(Menu::query(), function (Grid $grid) {
+        return Grid::make(Menu::with(['menuGroup']), function (Grid $grid) {
             $grid->column('id', __t('ID'))->width('50px');
             $grid->column('title', __t('Title'))->tree(true)->width('300px');
-            $grid->column('menu_group_id', __t('Menu Group'))->display(function ($menuGroupId) {
-                $group = MenuGroup::find($menuGroupId);
-
-                return $group ? $group->title . ' (' . $group->reference . ')' : '';
-            });
+            $grid->column('menuGroup.title', __t('Menu Group'));
+            $grid->column('children', __t('Children'))->display(function () {
+                return $this->children()->count();
+            })->width('80px')->setAttributes(children_attributes());
             $grid->column('type', __t('Type'))->display(function ($type) {
-                return MenuType::from($type)->toArray();
+                return $type->toArray();
             });
             $grid->column('route', __t('Route'))->width('200px');
             $grid->column('target', __t('Target'))->display(function ($target) {
-                return MenuTarget::from($target)->toArray();
+                return $target->toArray();
             });
             $grid->column('is_external', __t('External'))->bool();
             $grid->column('published_at', __t('Published At'))->display(column_time_format())->sortable();
             $grid->column('expired_at', __t('Expired At'))->display(column_time_format())->sortable();
             $grid->column('status', __t('Status'))->switch();
-            $grid->column('sort', __t('Sort'))->editable();
             $grid->model()->orderBy('left', 'ASC');
 
             $grid->quickSearch('id', 'title', 'route');
@@ -44,9 +42,8 @@ final class MenuController extends AdminBaseController
                 $filter->equal('id')->width(3);
                 $filter->like('title')->width(3);
                 $filter->equal('menu_group_id', __t('Menu Group'))->select(MenuGroup::pluck('title', 'id'))->width(3);
-                $filter->equal('type', __t('Type'))->select(collect(MenuType::cases())->pluck('value', 'value'))->width(3);
+                $filter->equal('type', __t('Type'))->select(enum_options(MenuType::class))->width(3);
                 $filter->equal('status')->width(3);
-                $filter->between('created_at')->datetime()->width(3);
             });
 
             $grid->actions(function (Grid\Displayers\Actions $actions) {
@@ -57,15 +54,11 @@ final class MenuController extends AdminBaseController
 
     protected function form(): Form
     {
-        return Form::make(Menu::query(), function (Form $form) {
+        return Form::make(Menu::with(['menuGroup']), function (Form $form) {
             $form->display('id', __t('ID'));
 
             $form->select('menu_group_id', __t('Menu Group'))
-                ->options(MenuGroup::pluck('title', 'id')->map(function ($title, $id) {
-                    $group = MenuGroup::find($id);
-
-                    return $title . ' (' . $group->reference . ')';
-                }))
+                ->options(MenuGroup::pluck('title', 'id'))
                 ->required();
 
             $form->select('parent_id', __t('Parent Menu'))
@@ -76,16 +69,16 @@ final class MenuController extends AdminBaseController
             $form->text('remark', __t('Remark'));
             $form->text('route', __t('Route'));
 
-            $form->select('type', __t('Type'))
-                ->options(collect(MenuType::cases())->pluck('toArray', 'value'))
+            $form->radio('type', __t('Type'))
+                ->options(enum_options(MenuType::class))
                 ->default(MenuType::Link->value)
                 ->required();
 
             $form->text('icon', __t('Icon'))->help(__t('CSS class or icon name'));
             $form->text('permission_key', __t('Permission Key'));
 
-            $form->select('target', __t('Target'))
-                ->options(collect(MenuTarget::cases())->pluck('toArray', 'value'))
+            $form->radio('target', __t('Target'))
+                ->options(enum_options(MenuTarget::class))
                 ->default(MenuTarget::Self->value);
 
             $form->switch('is_external', __t('External Link'))->default(false);
@@ -94,7 +87,6 @@ final class MenuController extends AdminBaseController
             $form->datetime('expired_at', __t('Expired At (%s)', [app_local_timezone()]));
 
             $form->switch('status', __t('Status'))->default(1);
-            $form->number('sort', __t('Sort'))->default(0);
 
             $form->saving(function (Form $form) {
                 /** @var Menu $model */

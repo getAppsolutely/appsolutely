@@ -585,3 +585,36 @@ if (! function_exists('theme_styles')) {
         return config('appsolutely.theme_assets.styles') ?? [];
     }
 }
+
+if (! function_exists('enum_options')) {
+    /**
+     * Get options array for select fields from an enum.
+     *
+     * @param  string  $enumClass  The enum class name
+     * @param  string  $labelMethod  The method to use for labels (default: 'toArray', fallback: 'name')
+     * @return array Array with enum values as keys and labels as values
+     */
+    function enum_options(string $enumClass, string $labelMethod = 'toArray'): array
+    {
+        if (! class_exists($enumClass) || ! enum_exists($enumClass)) {
+            return [];
+        }
+
+        return collect($enumClass::cases())->mapWithKeys(function ($case) use ($labelMethod) {
+            // Try to use the specified label method if it exists
+            if (method_exists($case, $labelMethod)) {
+                return [$case->value => $case->$labelMethod()];
+            }
+
+            // Fallback to enum name if the method doesn't exist
+            return [$case->value => $case->name];
+        })->toArray();
+    }
+}
+
+if (! function_exists('children_attributes')) {
+    function children_attributes(): array
+    {
+        return ['data-column' => 'children'];
+    }
+}

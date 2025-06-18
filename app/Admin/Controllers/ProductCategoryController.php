@@ -36,6 +36,9 @@ class ProductCategoryController extends AdminBaseController
 
             $grid->column('id', __t('ID'))->width('50px');
             $grid->column('title', __t('Title'))->tree(true)->width('400px');
+            $grid->column('children', __t('Children'))->display(function () {
+                return $this->children()->count();
+            })->width('80px')->setAttributes(children_attributes());
             $grid->column('status', __t('Status'))->switch();
             $grid->column('slug', __t('Slug'))->textarea()->width('240px');
             $grid->order->orderable();

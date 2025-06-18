@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\MenuTarget;
 use App\Enums\MenuType;
 use App\Models\Traits\ScopePublished;
 use App\Models\Traits\ScopeStatus;
+use Dcat\Admin\Traits\ModelTree;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 final class Menu extends NestedSetModel
 {
+    use ModelTree;
     use ScopePublished;
     use ScopeStatus;
 
@@ -36,6 +39,7 @@ final class Menu extends NestedSetModel
         'menu_group_id' => 'integer',
         'is_external'   => 'boolean',
         'type'          => MenuType::class,
+        'target'        => MenuTarget::class,
         'published_at'  => 'datetime',
         'expired_at'    => 'datetime',
         'status'        => 'integer',

@@ -67,9 +67,24 @@ Grid::resolving(function (Grid $grid) {
 
     Admin::script('
     $(document).ready(function() {
-        if ($("table.table.data-table tr td i.fa.fa-angle-right").length > 0) {
-            $("table.table.data-table tr td i.fa.fa-angle-right").click();
-        }
+        // Auto-expand rows that have children (children count > 0)
+        $("table.table.data-table tbody tr").each(function(index) {
+            var $row = $(this);
+            var $expandLink = $row.find("td a.grid-table-grid-load-children");
+            
+            if ($expandLink.length > 0) {
+                // Find the children count cell directly using data-column attribute
+                var $childrenCell = $row.find("td[data-column=\'children\']");
+                var childrenText = $childrenCell.text().trim();
+                var childrenCount = parseInt(childrenText);
+                
+                // If children count > 0, expand the row
+                if (!isNaN(childrenCount) && childrenCount > 0) {
+                    // Click the i tag inside the a tag
+                    $expandLink.find("i.fa.fa-angle-right").click();
+                }
+            }
+        });
     });
 ');
 

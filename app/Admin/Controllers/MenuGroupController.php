@@ -19,8 +19,7 @@ final class MenuGroupController extends AdminBaseController
             $grid->column('reference', __t('Reference'))->copyable();
             $grid->column('remark', __t('Remark'));
             $grid->column('status', __t('Status'))->switch();
-            $grid->column('created_at', __t('Created At'))->display(column_time_format());
-            $grid->column('updated_at', __t('Updated At'))->display(column_time_format());
+
             $grid->model()->orderByDesc('id');
 
             $grid->quickSearch('id', 'title', 'reference', 'remark');
@@ -44,9 +43,7 @@ final class MenuGroupController extends AdminBaseController
         return Form::make(MenuGroup::query(), function (Form $form) {
             $form->display('id', __t('ID'));
             $form->text('title', __t('Title'))->required();
-            $form->text('reference', __t('Reference'))
-                ->required()
-                ->help(__t('Unique identifier for the menu group (e.g., main-nav, footer-menu)'));
+            $form->display('reference', __t('Reference'));
             $form->text('remark', __t('Remark'));
             $form->switch('status', __t('Status'))->default(1);
         });
