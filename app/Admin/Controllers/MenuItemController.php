@@ -35,6 +35,7 @@ final class MenuItemController extends AdminBaseController
             $grid->column('published_at', __t('Published At'))->display(column_time_format())->sortable();
             $grid->column('expired_at', __t('Expired At'))->display(column_time_format())->sortable();
             $grid->column('status', __t('Status'))->switch();
+            $grid->order->orderable();
             $grid->model()->orderBy('left', 'ASC');
 
             $grid->quickSearch('id', 'title', 'route');
@@ -61,8 +62,9 @@ final class MenuItemController extends AdminBaseController
                 ->options(Menu::pluck('title', 'id'))
                 ->required();
 
+            $menuItems = $this->menuItemRepository->getActiveList();
             $form->select('parent_id', __t('Parent Menu'))
-                ->options(MenuItem::pluck('title', 'id'))
+                ->options($menuItems)
                 ->help(__t('Leave empty for root menu'));
 
             $form->text('title', __t('Title'))->required();
