@@ -10,6 +10,15 @@ use Illuminate\Support\Facades\Schema;
 
 trait ScopePublished
 {
+    protected static function bootScopePublished(): void
+    {
+        static::saving(function ($model) {
+            if (empty($model->published_at)) {
+                $model->published_at = now();
+            }
+        });
+    }
+
     public function scopePublished(Builder $query, ?Carbon $datetime = null): void
     {
         $datetime = $datetime ?? now();
