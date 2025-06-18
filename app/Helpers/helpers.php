@@ -153,7 +153,7 @@ if (! function_exists('string_concat')) {
 }
 
 if (! function_exists('app_log')) {
-    function app_log(string $message, array $context = [], string $type = 'info', $class = null, $function = null): void
+    function app_log(string $message, ?array $context = [], string $type = 'info', $class = null, $function = null): void
     {
         $message = log_message($message, $class, $function);
         Log::log($type, string_concat($message), $context);
@@ -161,7 +161,7 @@ if (! function_exists('app_log')) {
 }
 
 if (! function_exists('log_error')) {
-    function log_error(string $message, array $context = [], $class = null, $function = null): void
+    function log_error(string $message, ?array $context = [], $class = null, $function = null): void
     {
         $message = log_message($message, $class, $function);
         Log::log('error', string_concat($message), $context);
@@ -169,7 +169,7 @@ if (! function_exists('log_error')) {
 }
 
 if (! function_exists('log_info')) {
-    function log_info(string $message, array $context = [], $class = null, $function = null): void
+    function log_info(string $message, ?array $context = [], $class = null, $function = null): void
     {
         $message = log_message($message, $class, $function);
         Log::log('info', string_concat($message), $context);
@@ -177,7 +177,7 @@ if (! function_exists('log_info')) {
 }
 
 if (! function_exists('log_debug')) {
-    function log_debug(string $message, array $context = [], $class = null, $function = null): void
+    function log_debug(string $message, ?array $context = [], $class = null, $function = null): void
     {
         $message = log_message($message, $class, $function);
         Log::log('debug', string_concat($message), $context);
@@ -185,7 +185,7 @@ if (! function_exists('log_debug')) {
 }
 
 if (! function_exists('log_warning')) {
-    function log_warning(string $message, array $context = [], $class = null, $function = null): void
+    function log_warning(string $message, ?array $context = [], $class = null, $function = null): void
     {
         $message = log_message($message, $class, $function);
         Log::log('warning', string_concat($message), $context);
@@ -373,45 +373,48 @@ if (! function_exists('admin_delete_action')) {
 }
 
 if (! function_exists('parse_markdown_images')) {
-    /**
-     * @throws \League\CommonMark\Exception\CommonMarkException
-     */
     function parse_markdown_images(?string $markdown): array
     {
-        if (empty($markdown)) {
+        try {
+            if (empty($markdown)) {
+                return [];
+            }
+            // Create a new environment
+            $environment = new Environment([
+                'html_input'         => 'allow',
+                'allow_unsafe_links' => false,
+            ]);
+            $environment->addExtension(new CommonMarkCoreExtension());
+
+            // Create the converter
+            $converter = new \League\CommonMark\MarkdownConverter($environment);
+
+            // Convert markdown to HTML
+            $html = $converter->convert($markdown)->getContent();
+
+            // Use DOMDocument to parse the HTML and extract image attributes
+            $dom = new \DOMDocument();
+            @$dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+            $images = [];
+            foreach ($dom->getElementsByTagName('img') as $img) {
+                $attributes = [];
+                foreach ($img->attributes as $attr) {
+                    $attributes[$attr->nodeName] = $attr->nodeValue;
+                }
+                $images[] = [
+                    'url'   => $attributes['src'] ?? '',
+                    'alt'   => $attributes['alt'] ?? '',
+                    'title' => $attributes['title'] ?? '',
+                ];
+            }
+
+            return $images;
+        } catch (\Exception $e) {
+            log_error($e->getMessage(), null, __CLASS__, __FUNCTION__);
+
             return [];
         }
-        // Create a new environment
-        $environment = new Environment([
-            'html_input'         => 'allow',
-            'allow_unsafe_links' => false,
-        ]);
-        $environment->addExtension(new CommonMarkCoreExtension());
-
-        // Create the converter
-        $converter = new \League\CommonMark\MarkdownConverter($environment);
-
-        // Convert markdown to HTML
-        $html = $converter->convert($markdown)->getContent();
-
-        // Use DOMDocument to parse the HTML and extract image attributes
-        $dom = new \DOMDocument();
-        @$dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-
-        $images = [];
-        foreach ($dom->getElementsByTagName('img') as $img) {
-            $attributes = [];
-            foreach ($img->attributes as $attr) {
-                $attributes[$attr->nodeName] = $attr->nodeValue;
-            }
-            $images[] = [
-                'url'   => $attributes['src'] ?? '',
-                'alt'   => $attributes['alt'] ?? '',
-                'title' => $attributes['title'] ?? '',
-            ];
-        }
-
-        return $images;
     }
 }
 
