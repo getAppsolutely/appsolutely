@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
-use App\Http\Livewire\HeaderLivewire;
+use App\Http\Livewire\Feature;
+use App\Http\Livewire\Footer;
+use App\Http\Livewire\Header;
+use App\Http\Livewire\Testimonial;
 use App\Repositories\TranslationRepository;
 use App\Services\TranslationService;
 use Illuminate\Support\Facades\Blade;
@@ -21,7 +24,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(TranslationRepository::class);
         $this->app->singleton(TranslationService::class);
 
-        \Livewire::component('header-livewire', HeaderLivewire::class);
+        \Livewire::component('header', Header::class);
+        \Livewire::component('footer', Footer::class);
+        \Livewire::component('feature', Feature::class);
+        \Livewire::component('testimonial', Testimonial::class);
     }
 
     /**

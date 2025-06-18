@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\Status;
+use App\Models\Traits\ScopeStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 final class PageBlockSetting extends Model
 {
+    use ScopeStatus;
+
     protected $fillable = [
         'page_id',
         'block_id',

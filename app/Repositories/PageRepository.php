@@ -30,23 +30,10 @@ class PageRepository extends BaseRepository
                 $query->where('expired_at', '>', $now)
                     ->orWhereNull('expired_at');
             })
-            /*
-            ->with(['containers' => function ($query) use ($now) {
-                $query->status()
-                    ->where('published_at', '<=', $now)
-                    ->where(function ($q) use ($now) {
-                        $q->where('expired_at', '>', $now)
-                            ->orWhereNull('expired_at');
-                    });
-            }, 'containers.components' => function ($query) use ($now) {
-                $query->status()
-                    ->where('published_at', '<=', $now)
-                    ->where(function ($q) use ($now) {
-                        $q->where('expired_at', '>', $now)
-                            ->orWhereNull('expired_at');
-                    });
-            }])
-            */
+            ->with(['blocks' => function ($query) {
+                $query->status()->whereNotNull('sort')->orderBy('sort');
+            }, 'blocks.block'])
+
             ->first();
     }
 }

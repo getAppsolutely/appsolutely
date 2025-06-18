@@ -15,14 +15,14 @@ class PageController extends BaseController
     {
         $page = $this->pageService->getPublishedPage($slug ?? '/');
 
+        // dd($page->toArray());
         // If still no page found, return 404
         if (! $page && ! empty($slug)) {
             abort(404);
         }
 
         return themed_view('pages.show', [
-            'page'        => $page,
-            'pageService' => $this->pageService,
+            'page' => $page,
         ]);
     }
 }
