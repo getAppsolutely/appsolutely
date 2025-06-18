@@ -16,12 +16,6 @@
     @vite(['themes/june/sass/app.scss', 'themes/june/js/app.js'], 'june')
 </head>
 <body>
-    <div id="app">
-        @include('layouts.navigation')
-
-        <main class="py-4">
-            {{ $slot }}
-        </main>
-    </div>
+    @yield('content')
 </body>
 </html>

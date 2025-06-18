@@ -12,7 +12,7 @@ export default defineConfig({
                 "themes/june/sass/app.scss",
                 "themes/june/js/app.js"
             ],
-            buildDirectory: "june",
+            buildDirectory: "build/theme/june",
         }),
 
 
