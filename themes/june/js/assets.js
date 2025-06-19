@@ -12,8 +12,8 @@ import '../images/logo-dark.webp';
 // Export asset paths for use in components if needed
 export const assets = {
     images: {
-        logo: '/themes/june/images/logo.webp',
-        logoDark: '/themes/june/images/logo-dark.webp',
+        logo: '../images/logo.webp',
+        logoDark: '../images/logo-dark.webp',
     },
 };
 

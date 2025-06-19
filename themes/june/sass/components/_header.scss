@@ -7,7 +7,6 @@
     background: black;
     transition: all 0.3s ease;
     z-index: 1000;
-    padding: 0 2rem 0;
 
     &.scrolled,
     &:hover {
@@ -31,6 +30,17 @@
 
             .navbar-toggler-icon {
                 background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+            }
+        }
+
+        .test-drive-btn {
+            background: #3490dc;
+            border-color: #3490dc;
+            color: white;
+
+            &:hover {
+                background: #2779bd;
+                border-color: #2779bd;
             }
         }
     }
@@ -112,14 +122,117 @@
                 background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
             }
         }
+
+        .header-actions {
+            .test-drive-btn {
+                background: transparent;
+                border: 2px solid white;
+                color: white;
+                font-weight: 600;
+                padding: 0.5rem 1.5rem;
+                border-radius: 2rem;
+                transition: all 0.3s ease;
+                text-decoration: none;
+
+                &:hover {
+                    background: white;
+                    color: black;
+                    transform: translateY(-2px);
+                    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
+                }
+
+                i {
+                    font-size: 0.875rem;
+                }
+            }
+        }
     }
 }
 
-// Mobile and Tablet Styles
+// Responsive container class for large screens
+.container-responsive {
+    @media (min-width: 1400px) {
+        max-width: 94vw;
+        padding: 0 3vw 0;
+    }
+    @media (min-width: 1200px) and (max-width: 1400px) {
+        max-width: 96vw;
+        padding: 0 2vw 0;
+    }
+}
+
+// Large screens (≥1200px) - Center navigation
+@media (min-width: 1200px) {
+    .header {
+        .navbar {
+            .navbar-collapse {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                width: auto;
+                justify-content: center;
+            }
+
+            .navbar-nav {
+                .nav-item {
+                    &.dropdown {
+                        .dropdown-menu {
+                            position: fixed;
+                            top: 70px;
+                            left: 0;
+                            right: 0;
+                            width: 100%;
+                            background: white;
+                            border-radius: 0;
+                            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                            padding: 2rem 0;
+                            transform: translateY(-100%);
+                            opacity: 0;
+                            visibility: hidden;
+                            transition: all 0.3s ease;
+
+                            .dropdown-item {
+                                text-align: center;
+                                padding: 1rem 2rem;
+                                font-size: 1.1rem;
+
+                                &:hover {
+                                    background: #f8f9fa;
+                                    color: #3490dc;
+                                }
+                            }
+                        }
+
+                        &:hover .dropdown-menu {
+                            transform: translateY(0);
+                            opacity: 1;
+                            visibility: visible;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Medium screens (≥992px but <1200px) - Center navigation (since Test Drive button is on right)
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .header {
+        .navbar {
+            .navbar-collapse {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                width: auto;
+                justify-content: center;
+            }
+        }
+    }
+}
+
+// Small screens (<992px) - Hamburger menu
 @media (max-width: 991.98px) {
     .header {
-        padding: 20px 1rem 0;
-
         .navbar {
             .navbar-collapse {
                 position: absolute;
@@ -157,52 +270,6 @@
                                     padding: 0.5rem 1rem;
                                 }
                             }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-// Curtain Effect for Desktop
-@media (min-width: 992px) {
-    .header {
-        .navbar {
-            .navbar-nav {
-                .nav-item {
-                    &.dropdown {
-                        .dropdown-menu {
-                            position: fixed;
-                            top: 70px;
-                            left: 0;
-                            right: 0;
-                            width: 100%;
-                            background: white;
-                            border-radius: 0;
-                            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-                            padding: 2rem 0;
-                            transform: translateY(-100%);
-                            opacity: 0;
-                            visibility: hidden;
-                            transition: all 0.3s ease;
-
-                            .dropdown-item {
-                                text-align: center;
-                                padding: 1rem 2rem;
-                                font-size: 1.1rem;
-
-                                &:hover {
-                                    background: #f8f9fa;
-                                    color: #3490dc;
-                                }
-                            }
-                        }
-
-                        &:hover .dropdown-menu {
-                            transform: translateY(0);
-                            opacity: 1;
-                            visibility: visible;
                         }
                     }
                 }

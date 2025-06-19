@@ -1,6 +1,6 @@
 <header class="header">
     <nav class="navbar navbar-expand-lg">
-        <div class="container">
+        <div class="container container-responsive">
             <!-- Logo - Always on the left -->
             <a href="{{ route('home') }}" class="navbar-brand">
                 @if($logo)
@@ -17,8 +17,8 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- Navigation - Centered on desktop -->
-            <div class="collapse navbar-collapse justify-content-center" id="navbarMain">
+            <!-- Navigation - Position controlled by CSS -->
+            <div class="collapse navbar-collapse" id="navbarMain">
                 @if($mainNavigation->isNotEmpty())
                     <ul class="navbar-nav">
                         @foreach($mainNavigation as $item)
@@ -54,6 +54,14 @@
                         @endforeach
                     </ul>
                 @endif
+            </div>
+
+            <!-- Test Drive Button - Right side for desktop -->
+            <div class="header-actions d-none d-lg-block">
+                <a href="{{ route('book') }}" class="btn btn-primary test-drive-btn">
+                    <i class="fas fa-play me-2"></i>
+                    Test Drive
+                </a>
             </div>
         </div>
     </nav>
