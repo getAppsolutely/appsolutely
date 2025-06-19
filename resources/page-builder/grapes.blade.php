@@ -236,7 +236,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/grapesjs/dist/grapes.min.js"></script>
 <script>
-    const data = @json($page['content']);
+    const data = @json(json_encode($page['setting']));
     // init
     const editor = grapesjs.init({
         container: '#editor-canvas',

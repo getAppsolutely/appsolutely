@@ -25,6 +25,7 @@ class Page extends Model
         'description',
         'keywords',
         'content',
+        'setting',
         'canonical_url',
         'meta_robots',
         'og_title',
@@ -40,6 +41,7 @@ class Page extends Model
         'published_at'    => 'datetime',
         'expired_at'      => 'datetime',
         'status'          => 'integer',
+        'setting'         => 'array',
         'structured_data' => 'array',
     ];
 

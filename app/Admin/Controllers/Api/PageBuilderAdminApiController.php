@@ -34,7 +34,7 @@ class PageBuilderAdminApiController extends AdminBaseApiController
             return $this->error('Page data cannot be empty.');
         }
 
-        $page = $this->pageService->savePageData($reference, $data);
+        $page = $this->pageService->saveSetting($reference, $data);
 
         return $this->success($data, 'Page saved successfully.');
     }
@@ -44,9 +44,9 @@ class PageBuilderAdminApiController extends AdminBaseApiController
      */
     public function resetPageData(Request $request, string $reference): JsonResponse
     {
-        $page = $this->pageService->resetPageContent($reference);
+        $page = $this->pageService->resetSetting($reference);
 
-        return $this->success(['page' => $page], __t('Page content has been reset.'));
+        return $this->success(['page' => $page], __t('Page setting has been reset.'));
     }
 
     /**

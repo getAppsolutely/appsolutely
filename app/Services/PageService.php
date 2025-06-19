@@ -24,16 +24,16 @@ class PageService
         return $this->pageRepository->with(['blocks'])->reference($reference)->firstOrFail();
     }
 
-    public function resetPageContent(string $reference): Model
+    public function resetSetting(string $reference): Model
     {
         $page = $this->findByReference($reference);
-        $page->update(['content' => '']);
+        $page->update(['setting' => []]);
         $this->pageBlockSettingRepository->resetSetting($page->id);
 
         return $page;
     }
 
-    public function savePageData($reference, $data): Model
+    public function saveSetting($reference, $data): Model
     {
         $page = $this->findByReference($reference);
 
@@ -46,7 +46,7 @@ class PageService
         $this->pageBlockSettingRepository->resetSetting($page->id);
         $this->pageBlockSettingRepository->syncSetting($blockData, $page->id);
 
-        $page->update(['content' => $data]);
+        $page->update(['setting' => $data]);
 
         return $page;
     }

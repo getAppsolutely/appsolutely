@@ -16,7 +16,8 @@ return new class() extends Migration
             $table->string('title')->nullable();
             $table->string('keywords')->nullable();
             $table->text('description')->nullable();
-            $table->text('content')->nullable();
+            $table->mediumText('content')->nullable();
+            $table->json('setting')->nullable();
             $table->string('canonical_url')->nullable();
             $table->string('meta_robots')->nullable();
             $table->string('og_title')->nullable();
