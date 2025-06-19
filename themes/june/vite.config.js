@@ -9,7 +9,7 @@ export default defineConfig({
                 "themes/june/sass/app.scss",
                 "themes/june/js/app.js"
             ],
-            buildDirectory: "build/theme/june",
+            buildDirectory: "build/themes/june",
         }),
         {
             name: "blade",
@@ -62,7 +62,7 @@ export default defineConfig({
             output: {
                 assetFileNames: (assetInfo) => {
                     const ext = assetInfo.name.split('.').pop();
-                    if (['png', 'jpg', 'jpeg', 'gif', 'svg'].includes(ext)) {
+                    if (['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp'].includes(ext)) {
                         return 'images/[name].[hash][extname]';
                     }
                     if (['woff2', 'woff', 'ttf'].includes(ext)) {

@@ -4,8 +4,8 @@
         <a href="{{ route('home') }}" class="navbar-brand d-flex align-items-center">
             @if($logo)
                 <img src="{{ $logo }}" alt="{{ config('appsolutely.general.site_name') }}" height="40" class="me-2">
-            @elseif(themed_asset('images/logo.webp'))
-                <img src="{{ themed_asset('images/logo.webp') }}" alt="{{ config('appsolutely.general.site_name') }}" height="40" class="me-2">
+            @elseif(themed_assets('images/logo.webp'))
+                <img src="{{ themed_assets('images/logo.webp') }}" alt="{{ config('appsolutely.general.site_name') }}" height="40" class="me-2">
             @endif
 
         </a>

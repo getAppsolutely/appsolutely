@@ -582,19 +582,28 @@ if (! function_exists('themed_view')) {
     }
 }
 
-if (! function_exists('themed_asset')) {
-    function themed_asset($path): ?string
+if (! function_exists('themed_assets')) {
+    function themed_assets(string $path, ?string $theme = null): string
     {
-        $theme     = config('appsolutely.theme');
-        $assetPath = "themes/{$theme}/{$path}";
+        static $manifest = null;
+        $theme           = $theme ?? config('appsolutely.theme');
+        $buildPath       = "build/themes/{$theme}/";
+        $manifestPath    = public_path($buildPath . 'manifest.json');
 
-        // Check if the asset file exists in the theme directory
-        $themeAssetPath = base_path($assetPath);
-        if (! file_exists($themeAssetPath)) {
-            return null;
+        if ($manifest === null) {
+            if (! file_exists($manifestPath)) {
+                throw new \Exception('Vite manifest file not found. Please run npm run build.');
+            }
+            $manifest = json_decode(file_get_contents($manifestPath), true);
         }
 
-        return Vite::asset($assetPath);
+        $key = "themes/{$theme}/" . ltrim($path, '/');
+
+        if (! isset($manifest[$key])) {
+            throw new \Exception("Image [{$key}] not found in Vite manifest.");
+        }
+
+        return asset($buildPath . $manifest[$key]['file']);
     }
 }
 
