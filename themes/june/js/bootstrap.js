@@ -1,8 +1,7 @@
 /**
- * June Theme Bootstrap Configuration
- * 
+ * Bootstrap Configuration
+ *
  * This file configures Bootstrap 5.3.0 and other JavaScript dependencies
- * for the June theme. Bootstrap 5 no longer requires jQuery.
  */
 
 // Import Lodash for utility functions
@@ -11,7 +10,7 @@ window._ = _;
 
 /**
  * Bootstrap 5.3.0 JavaScript
- * 
+ *
  * Bootstrap 5 is built on vanilla JavaScript and no longer requires jQuery.
  * All Bootstrap components are available through the bootstrap namespace.
  */
@@ -22,7 +21,7 @@ window.bootstrap = bootstrap;
 
 /**
  * Axios HTTP Client
- * 
+ *
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
  * CSRF token as a header based on the value of the "XSRF" token cookie.
@@ -35,7 +34,7 @@ window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
 /**
  * CSRF Token Configuration
- * 
+ *
  * Laravel automatically generates a CSRF "token" for each active user session
  * managed by the application. This token is used to verify that the authenticated
  * user is the one actually making the requests to the application.
@@ -50,7 +49,7 @@ if (token) {
 
 /**
  * Echo Configuration (Commented out)
- * 
+ *
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
  * allows your team to easily build robust real-time web applications.
@@ -72,7 +71,7 @@ if (token) {
 
 /**
  * Bootstrap Component Initialization
- * 
+ *
  * Initialize Bootstrap components that require JavaScript.
  * Bootstrap 5 components are auto-initialized, but you can manually
  * initialize them here if needed.

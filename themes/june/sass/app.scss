@@ -1,5 +1,4 @@
-// June Theme - Bootstrap 5.3.0
-// Main SCSS file for the June theme
+// Main SCSS file
 
 // 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
 @import '~bootstrap/scss/functions';
@@ -50,37 +49,20 @@
 // 5. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
 @import '~bootstrap/scss/utilities/api';
 
-// 6. Custom theme styles
-// Add any custom styles for the June theme below
-
 // Google Fonts
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 
-// Custom styles for June theme
+// Custom styles
 body {
     font-family: $font-family-sans-serif;
     background-color: $body-bg;
     color: $body-color;
 }
 
-// Custom utility classes
+// 6. Custom theme styles
 .text-nunito {
     font-family: 'Nunito', sans-serif;
 }
 
-// Custom component styles
-.june-card {
-    border: none;
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-    transition: box-shadow 0.15s ease-in-out;
-    
-    &:hover {
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-    }
-}
-
-.june-navbar {
-    background-color: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
+// 7. Component imports
+@import 'components/header';

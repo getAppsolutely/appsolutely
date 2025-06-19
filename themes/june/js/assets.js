@@ -1,6 +1,6 @@
 /**
- * Asset Imports for June Theme
- * 
+ * Asset Imports for Theme
+ *
  * This file imports all assets (images, fonts, etc.) from the theme folders to ensure
  * they are included in the Vite build output and available via Vite::asset()
  */
@@ -19,5 +19,5 @@ export const assets = {
 
 // Make assets available globally for debugging
 if (typeof window !== 'undefined') {
-    window.juneAssets = assets;
-} 
+    window.assets = assets;
+}

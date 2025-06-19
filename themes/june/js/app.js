@@ -6,3 +6,6 @@
 
 import "./bootstrap";
 import "./assets";
+
+// Import component JavaScript
+import './components/header.js';

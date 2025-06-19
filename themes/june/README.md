@@ -1,25 +1,31 @@
-# June Theme Documentation
+# Theme Documentation
 
 ## Overview
 
-June is a modern Laravel theme built on **Bootstrap 5.3.0** with a clean, minimalist design approach. It uses **Vite** for asset compilation and follows Laravel's component-based architecture.
+This is a modern Laravel theme built on **Bootstrap 5.3.0** with a clean, minimalist design approach. It uses **Vite** for asset compilation and follows Laravel's component-based architecture. This documentation serves as a template for any theme implementation.
 
 ## 🏗️ Architecture
 
 ### Theme Structure
 ```
-themes/june/
+themes/{theme-name}/
 ├── sass/
 │   ├── app.scss          # Main SCSS entry point
-│   └── _variables.scss   # Bootstrap variable overrides
+│   ├── _variables.scss   # Bootstrap variable overrides
+│   └── components/       # Component-specific styles
+│       └── _header.scss  # Header component styles
 ├── js/
 │   ├── app.js           # Main JS entry point
-│   └── bootstrap.js     # Bootstrap 5 + dependencies setup
+│   ├── bootstrap.js     # Bootstrap 5 + dependencies setup
+│   ├── assets.js        # Asset imports for Vite
+│   └── components/      # Component-specific JavaScript
+│       └── header.js    # Header component functionality
 ├── views/
 │   ├── layouts/         # Blade layout templates
 │   ├── auth/           # Authentication views
 │   ├── pages/          # Page-specific views
 │   └── livewire/       # Livewire components
+├── images/             # Theme-specific images
 └── vite.config.js      # Vite configuration
 ```
 
@@ -56,15 +62,15 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
-                "themes/june/sass/app.scss",
-                "themes/june/js/app.js"
+                "themes/{theme-name}/sass/app.scss",
+                "themes/{theme-name}/js/app.js"
             ],
-            buildDirectory: "build/theme/june",
+            buildDirectory: "build/themes/{theme-name}",
         }),
     ],
     resolve: {
         alias: {
-            '@': '/themes/june/js',
+            '@': '/themes/{theme-name}/js',
             '~bootstrap': path.resolve('node_modules/bootstrap'),
         }
     }
@@ -99,7 +105,7 @@ export default defineConfig({
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <!-- Meta tags and CSRF token -->
-    @vite(['themes/june/sass/app.scss', 'themes/june/js/app.js'], 'june')
+    @vite(['themes/' . app_theme() . '/sass/app.scss', 'themes/' . app_theme() . '/js/app.js'], app_theme())
 </head>
 <body>
     @yield('content')
@@ -132,23 +138,6 @@ Located in `views/livewire/`:
 .text-nunito {
     font-family: 'Nunito', sans-serif;
 }
-
-// Custom component styles
-.june-card {
-    border: none;
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-    transition: box-shadow 0.15s ease-in-out;
-    
-    &:hover {
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-    }
-}
-
-.june-navbar {
-    background-color: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
 ```
 
 #### Bootstrap Integration
@@ -161,17 +150,17 @@ Located in `views/livewire/`:
 ### Adding New Styles
 1. **Variables**: Add to `sass/_variables.scss`
 2. **Custom Styles**: Add to `sass/app.scss` after Bootstrap imports
-3. **Component Styles**: Create new SCSS files and import in `app.scss`
+3. **Component Styles**: Create new SCSS files in `sass/components/` and import in `app.scss`
 
 ### Adding New JavaScript
 1. **Dependencies**: Install via npm and import in `js/bootstrap.js`
-2. **Custom Logic**: Add to `js/app.js` or create new modules
+2. **Custom Logic**: Add to `js/app.js` or create new modules in `js/components/`
 3. **Bootstrap Components**: Initialize in `js/bootstrap.js` DOMContentLoaded event
 
 ### Creating New Views
 1. **Layout**: Choose appropriate layout (`app` or `guest`)
 2. **Components**: Use existing Blade components or create new ones
-3. **Styling**: Use Bootstrap classes and custom June classes
+3. **Styling**: Use Bootstrap classes and custom theme classes
 
 ### Adding New Pages
 1. **Route**: Define in appropriate route file
@@ -294,6 +283,57 @@ $container-max-widths: (
 - Implement proper cache busting
 - Use Laravel Mix for additional processing if needed
 
+## ⚠️ Important Guidelines
+
+### Avoid Hard-Coded Theme Names
+**❌ Don't do this:**
+```php
+// Hard-coded theme name
+$theme = 'june';
+$path = "themes/{$theme}/assets";
+```
+
+**✅ Do this instead:**
+```php
+// Use configuration or helper functions
+$theme = config('appsolutely.theme.name');
+$theme = app_theme();
+$path = "themes/{$theme}/assets";
+```
+
+### Use Generic File Names
+**❌ Don't do this:**
+```scss
+// Theme-specific class names
+.june-header { }
+.june-navbar { }
+```
+
+**✅ Do this instead:**
+```scss
+// Generic, reusable class names
+.header { }
+.navbar { }
+```
+
+### Component Organization
+- **Create separate files** for different functionalities
+- **Use generic naming** that works across themes
+- **Follow consistent patterns** for file organization
+- **Document component dependencies** clearly
+
+### Asset Management
+- **Use `themed_assets()` helper** for asset resolution
+- **Import assets in `assets.js`** for Vite processing
+- **Use relative paths** in component files
+- **Avoid absolute theme paths** in code
+
+### Configuration
+- **Use `app_theme()` helper** for theme name
+- **Access theme config** via `config('appsolutely.theme.*')`
+- **Use environment variables** for theme-specific settings
+- **Keep theme logic** in configuration files
+
 ---
 
-This documentation serves as a comprehensive guide for developing with the June theme. Follow these patterns and conventions to maintain consistency and ensure the theme remains maintainable and scalable. 
+This documentation serves as a comprehensive guide for developing with any theme. Follow these patterns and conventions to maintain consistency and ensure the theme remains maintainable and scalable across different implementations. 

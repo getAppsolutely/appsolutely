@@ -326,6 +326,13 @@ if (! function_exists('app_currency_symbol')) {
     }
 }
 
+if (! function_exists('app_theme')) {
+    function app_theme(): string
+    {
+        return config('appsolutely.theme.name');
+    }
+}
+
 if (! function_exists('admin_button')) {
     function admin_button(?string $text = 'Create', ?string $icon = 'icon-plus', ?string $button = 'primary'): string
     {
@@ -585,7 +592,7 @@ if (! function_exists('themed_view')) {
 if (! function_exists('themed_assets')) {
     function themed_assets(string $path, ?string $theme = null): string
     {
-        $theme           = $theme ?? config('appsolutely.theme');
+        $theme           = $theme ?? config('appsolutely.theme.name');
         $buildPath       = "build/themes/{$theme}/";
 
         if (app()->environment('production')) {
@@ -621,7 +628,7 @@ if (! function_exists('load_vite_manifest')) {
 if (! function_exists('themed_styles')) {
     function themed_styles(): array
     {
-        return config('appsolutely.theme_assets.styles') ?? [];
+        return config('appsolutely.theme.styles') ?? [];
     }
 }
 

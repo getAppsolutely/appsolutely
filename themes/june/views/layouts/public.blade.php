@@ -13,7 +13,7 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
-    @vite(['themes/june/sass/app.scss', 'themes/june/js/app.js'], 'june')
+    @vite(['themes/' . app_theme(). '/sass/app.scss', 'themes/'. app_theme().'/js/app.js'], app_theme())
 </head>
 <body>
     @yield('content')
