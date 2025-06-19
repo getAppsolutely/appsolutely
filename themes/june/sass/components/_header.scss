@@ -135,11 +135,23 @@
   color: $body-color !important;
 }
 
-.header-mobile-overlay .nav-link:hover,
-.header-mobile-overlay .dropdown-item:hover {
-  color: $primary !important;
+.header-mobile-nav .navbar-nav .nav-link,
+.header-mobile-nav .navbar-nav .dropdown-item {
+  min-height: 44px;
+  min-width: 44px;
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
 }
 
-.header-mobile-nav .navbar-nav .nav-link {
-  margin: 1.1rem 0;
+.header-mobile-close,
+.navbar-toggler,
+.header-mobile-testdrive .btn {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+body:has(#header-mobile-toggle:checked) {
+  overflow: hidden;
+  position: fixed;
+  width: 100vw;
 }
