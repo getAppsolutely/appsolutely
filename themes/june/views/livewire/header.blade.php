@@ -1,5 +1,5 @@
 <header class="header">
-    <nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand-xl">
         <div class="container container-responsive">
             <!-- Logo - Always on the left -->
             <a href="{{ route('home') }}" class="navbar-brand">
@@ -24,7 +24,7 @@
                         @foreach($mainNavigation as $item)
                             <li class="nav-item {{ $item->children->isNotEmpty() ? 'dropdown' : '' }}">
                                 @if($item->children->isNotEmpty())
-                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <a class="nav-link dropdown-toggle text-uppercase" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         @if($item->icon)
                                             <i class="{{ $item->icon }} me-1"></i>
                                         @endif
@@ -43,7 +43,7 @@
                                         @endforeach
                                     </ul>
                                 @else
-                                    <a class="nav-link {{ request()->routeIs($item->route) ? 'active' : '' }}" href="{{ $item->route }}" target="{{ $item->target->value }}">
+                                    <a class="nav-link text-uppercase {{ request()->routeIs($item->route) ? 'active' : '' }}" href="{{ $item->route }}" target="{{ $item->target->value }}">
                                         @if($item->icon)
                                             <i class="{{ $item->icon }} me-1"></i>
                                         @endif
@@ -57,7 +57,7 @@
             </div>
 
             <!-- Test Drive Button - Right side for desktop -->
-            <div class="header-actions d-none d-lg-block">
+            <div class="header-actions d-none d-xl-block">
                 <a href="{{ route('book') }}" class="btn btn-primary test-drive-btn">
                     <i class="fas fa-play me-2"></i>
                     Test Drive

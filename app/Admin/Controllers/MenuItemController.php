@@ -36,7 +36,7 @@ final class MenuItemController extends AdminBaseController
             $grid->column('expired_at', __t('Expired At'))->display(column_time_format())->sortable();
             $grid->column('status', __t('Status'))->switch();
             $grid->order->orderable();
-            $grid->model()->orderBy('left', 'ASC');
+            $grid->model()->orderBy('menu_id', 'ASC')->orderBy('left', 'ASC');
 
             $grid->quickSearch('id', 'title', 'route');
             $grid->filter(function (Grid\Filter $filter) {
@@ -56,6 +56,8 @@ final class MenuItemController extends AdminBaseController
     protected function form(): Form
     {
         return Form::make(MenuItem::with(['menu']), function (Form $form) {
+            $form->disableViewButton();
+            $form->disableViewCheck();
             $form->display('id', __t('ID'));
 
             $form->select('menu_id', __t('Menu'))
