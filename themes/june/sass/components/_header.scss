@@ -8,6 +8,7 @@
 #mainHeader .navbar-brand,
 #mainHeader .btn {
   color: $light;
+  font-size: 1rem;
 }
 
 .logo-dark {
@@ -22,7 +23,7 @@
   left: 0 !important;
   right: 0 !important;
   width: 100vw !important;
-  top: 70px !important;
+  top: 54px !important;
   min-height: 300px;
   background: $body-bg !important;
   z-index: 1050;
@@ -31,6 +32,10 @@
   transform: translateY(16px);
   transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.35s cubic-bezier(0.4,0,0.2,1);
   display: none;
+
+  li{
+    margin-top: 50px;
+  }
 }
 
 .header-center .navbar-nav .nav-item:hover > .submenu {
@@ -40,10 +45,6 @@
   transform: translateY(0);
 }
 
-.header-left a:hover,
-.header-center .navbar-nav .nav-item:hover {
-  /* No direct styles, just triggers for parent */
-}
 
 #mainHeader:has(.header-left a:hover),
 #mainHeader:has(.header-center .navbar-nav .nav-item:hover) {
@@ -62,6 +63,10 @@
   }
   .logo-light {
     display: inline-block;
+  }
+
+  .header-center .navbar-nav .nav-link {
+    font-weight: 600;
   }
 }
 
