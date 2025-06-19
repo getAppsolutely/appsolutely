@@ -16,7 +16,7 @@
                                                 <li class="mb-2">
                                                     <a href="{{ $child->route }}"
                                                        target="{{ $child->target->value }}"
-                                                       class="text-white text-decoration-none">
+                                                       class="text-white text-decoration-none footer-link">
                                                         {{ $child->title }}
                                                     </a>
                                                 </li>
@@ -53,7 +53,7 @@
                         @foreach($socialMediaItems as $socialItem)
                             <a href="{{ $socialItem->route }}"
                                target="{{ $socialItem->target->value }}"
-                               class="text-white text-decoration-none me-3">
+                               class="text-white text-decoration-none me-3 footer-link">
                                 @if($socialItem->icon)
                                     <i class="{{ $socialItem->icon }} fs-5"></i>
                                 @else
@@ -82,7 +82,7 @@
                         @foreach($policyMenuItems as $policyItem)
                             <a href="{{ $policyItem->route }}"
                                target="{{ $policyItem->target->value }}"
-                               class="text-white text-decoration-none me-3">
+                               class="text-white text-decoration-none me-3 footer-link">
                                 {{ $policyItem->title }}
                             </a>
                         @endforeach

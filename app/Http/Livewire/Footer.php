@@ -30,7 +30,7 @@ final class Footer extends Component
     ): void {
         $this->footerMenu  = $footerMenu ?? 'main-nav';
         $this->socialMedia = $socialMedia ?? 'social-media';
-        $this->policyMenu  = $policyMenu ?? 'footer-menu';
+        $this->policyMenu  = $policyMenu ?? 'policy-menu';
 
         $this->loadMenus();
     }

@@ -22,14 +22,19 @@ class MenuSeeder extends Seeder
 
         // Then create menu items
         $mainGroup   = Menu::where('title', 'Main Navigation')->first();
-        $footerGroup = Menu::where('title', 'Footer Menu')->first();
+        $policyGroup = Menu::where('title', 'Policy menu')->first();
+        $socialGroup = Menu::where('title', 'Social Media')->first();
 
         if ($mainGroup) {
             $this->createMainNavigation($mainGroup);
         }
 
-        if ($footerGroup) {
-            $this->createFooterMenu($footerGroup);
+        if ($policyGroup) {
+            $this->createPolicyMenu($policyGroup);
+        }
+
+        if ($socialGroup) {
+            $this->createSocialMediaMenu($socialGroup);
         }
     }
 
@@ -58,6 +63,12 @@ class MenuSeeder extends Seeder
                 'title'     => 'Social Media',
                 'reference' => 'social-media',
                 'remark'    => 'Social media navigation links',
+                'status'    => 1,
+            ],
+            [
+                'title'     => 'Policy menu',
+                'reference' => 'policy-menu',
+                'remark'    => 'Policy links',
                 'status'    => 1,
             ],
         ];
@@ -158,22 +169,8 @@ class MenuSeeder extends Seeder
         );
     }
 
-    private function createFooterMenu(Menu $group): void
+    private function createPolicyMenu(Menu $group): void
     {
-        // Privacy Policy
-        MenuItem::firstOrCreate(
-            ['title' => 'Privacy Policy', 'menu_id' => $group->id],
-            [
-                'title'       => 'Privacy Policy',
-                'menu_id'     => $group->id,
-                'route'       => '/privacy-policy',
-                'type'        => MenuType::Link->value,
-                'target'      => MenuTarget::Self->value,
-                'is_external' => false,
-                'status'      => 1,
-            ]
-        );
-
         // Terms of Service
         MenuItem::firstOrCreate(
             ['title' => 'Terms of Service', 'menu_id' => $group->id],
@@ -188,26 +185,92 @@ class MenuSeeder extends Seeder
             ]
         );
 
-        // Divider
+        // Privacy Policy
         MenuItem::firstOrCreate(
-            ['title' => 'Footer Divider', 'menu_id' => $group->id],
+            ['title' => 'Privacy Policy', 'menu_id' => $group->id],
             [
-                'title'   => 'Footer Divider',
-                'menu_id' => $group->id,
-                'type'    => MenuType::Divider->value,
-                'status'  => 1,
+                'title'       => 'Privacy Policy',
+                'menu_id'     => $group->id,
+                'route'       => '/privacy-policy',
+                'type'        => MenuType::Link->value,
+                'target'      => MenuTarget::Self->value,
+                'is_external' => false,
+                'status'      => 1,
             ]
         );
 
-        // External Link Example
+        // Cookie Policy
         MenuItem::firstOrCreate(
-            ['title' => 'Documentation', 'menu_id' => $group->id],
+            ['title' => 'Cookie Policy', 'menu_id' => $group->id],
             [
-                'title'       => 'Documentation',
+                'title'       => 'Cookie Policy',
                 'menu_id'     => $group->id,
-                'route'       => 'https://docs.example.com',
+                'route'       => '/cookie-policy',
+                'type'        => MenuType::Link->value,
+                'target'      => MenuTarget::Self->value,
+                'is_external' => false,
+                'status'      => 1,
+            ]
+        );
+    }
+
+    private function createSocialMediaMenu(Menu $group): void
+    {
+        // TikTok
+        MenuItem::firstOrCreate(
+            ['title' => 'TikTok', 'menu_id' => $group->id],
+            [
+                'title'       => 'TikTok',
+                'menu_id'     => $group->id,
+                'route'       => 'https://www.tiktok.com/@yourcompany',
                 'type'        => MenuType::Link->value,
                 'target'      => MenuTarget::Blank->value,
+                'icon'        => 'bi bi-tiktok',
+                'is_external' => true,
+                'status'      => 1,
+            ]
+        );
+
+        // Facebook
+        MenuItem::firstOrCreate(
+            ['title' => 'Facebook', 'menu_id' => $group->id],
+            [
+                'title'       => 'Facebook',
+                'menu_id'     => $group->id,
+                'route'       => 'https://www.facebook.com/yourcompany',
+                'type'        => MenuType::Link->value,
+                'target'      => MenuTarget::Blank->value,
+                'icon'        => 'bi bi-facebook',
+                'is_external' => true,
+                'status'      => 1,
+            ]
+        );
+
+        // Twitter
+        MenuItem::firstOrCreate(
+            ['title' => 'Twitter', 'menu_id' => $group->id],
+            [
+                'title'       => 'Twitter',
+                'menu_id'     => $group->id,
+                'route'       => 'https://twitter.com/yourcompany',
+                'type'        => MenuType::Link->value,
+                'target'      => MenuTarget::Blank->value,
+                'icon'        => 'bi bi-twitter-x',
+                'is_external' => true,
+                'status'      => 1,
+            ]
+        );
+
+        // YouTube
+        MenuItem::firstOrCreate(
+            ['title' => 'YouTube', 'menu_id' => $group->id],
+            [
+                'title'       => 'YouTube',
+                'menu_id'     => $group->id,
+                'route'       => 'https://www.youtube.com/@yourcompany',
+                'type'        => MenuType::Link->value,
+                'target'      => MenuTarget::Blank->value,
+                'icon'        => 'bi bi-youtube',
                 'is_external' => true,
                 'status'      => 1,
             ]
