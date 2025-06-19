@@ -1,0 +1,10 @@
+.container-responsive {
+    @media (min-width: 1400px) {
+        max-width: 94vw;
+        padding: 0 3vw 0;
+    }
+    @media (min-width: 1200px) and (max-width: 1400px) {
+        max-width: 96vw;
+        padding: 0 2vw 0;
+    }
+}
