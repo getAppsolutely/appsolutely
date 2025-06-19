@@ -17,8 +17,27 @@
   display: none;
 }
 
-.submenu {
+.header-center .navbar-nav .nav-item > .submenu {
+  position: fixed !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100vw !important;
+  top: 70px !important;
+  min-height: 300px;
+  background: $body-bg !important;
+  z-index: 1050;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(16px);
+  transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.35s cubic-bezier(0.4,0,0.2,1);
   display: none;
+}
+
+.header-center .navbar-nav .nav-item:hover > .submenu {
+  display: block !important;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 
 .header-left a:hover,
