@@ -2,17 +2,17 @@
   transition: color 0.2s;
   &:hover,
   &:focus {
-    color: #adb5bd !important;
+    color: $secondary !important;
   }
   .bi {
     transition: color 0.2s;
   }
   &:hover .bi,
   &:focus .bi {
-    color: #adb5bd;
+    color: $secondary;
   }
   &:not(:has(.bi)):hover,
   &:not(:has(.bi)):focus {
     text-decoration: underline;
   }
-} 
+}
