@@ -1,0 +1,47 @@
+#mainHeader {
+  background: rgba($teal, 0.3);
+  color: $light;
+}
+
+#mainHeader .navbar,
+#mainHeader .navbar-nav .nav-link,
+#mainHeader .navbar-brand,
+#mainHeader .btn {
+  color: $light;
+}
+
+.logo-dark {
+  display: inline-block;
+}
+.logo-light {
+  display: none;
+}
+
+.submenu {
+  display: none;
+}
+
+.header-left a:hover,
+.header-center .navbar-nav .nav-item:hover {
+  /* No direct styles, just triggers for parent */
+}
+
+#mainHeader:has(.header-left a:hover),
+#mainHeader:has(.header-center .navbar-nav .nav-item:hover) {
+  background: $body-bg;
+  color: $body-color;
+
+  .navbar,
+  .navbar-nav .nav-link,
+  .navbar-brand,
+  .btn {
+    color: $body-color;
+  }
+
+  .logo-dark {
+    display: none;
+  }
+  .logo-light {
+    display: inline-block;
+  }
+}

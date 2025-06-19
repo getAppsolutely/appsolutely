@@ -1,42 +1,38 @@
 <header id="mainHeader">
     <nav class="navbar navbar-expand-xl">
-        <div class="container container-responsive">
-            <!-- Logo - Always on the left -->
-            <a href="{{ route('home') }}" class="navbar-brand">
-                @if($logo)
-                    <img src="{{ $logo }}" alt="{{ config('appsolutely.general.site_name') }}" height="40">
-                @elseif(themed_assets('images/logo.webp'))
-                    <img src="{{ themed_assets('images/logo-dark.webp') }}"
-                         alt="{{ config('appsolutely.general.site_name') }}" height="40">
-                    <img src="{{ themed_assets('images/logo.webp') }}"
-                         alt="{{ config('appsolutely.general.site_name') }}" height="40">
-                @else
-                    <span>{{ config('appsolutely.general.site_name') }}</span>
-                @endif
-            </a>
+        <div class="container container-responsive d-flex align-items-center justify-content-between">
+            <!-- Left: Logo -->
+            <div class="header-left d-flex align-items-center flex-shrink-0">
+                <a href="{{ route('home') }}" class="navbar-brand m-0">
+                    @if($logo)
+                        <img src="{{ $logo }}" alt="{{ config('appsolutely.general.site_name') }}" height="40">
+                    @elseif(themed_assets('images/logo.webp'))
+                        <img src="{{ themed_assets('images/logo-dark.webp') }}"
+                             alt="{{ config('appsolutely.general.site_name') }}" height="40" class="logo-dark">
+                        <img src="{{ themed_assets('images/logo.webp') }}"
+                             alt="{{ config('appsolutely.general.site_name') }}" height="40" class="logo-light">
+                    @else
+                        <span>{{ config('appsolutely.general.site_name') }}</span>
+                    @endif
+                </a>
+            </div>
 
-            <!-- Mobile Toggle -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"
-                    aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <!-- Navigation - Position controlled by CSS -->
-            <div class="collapse navbar-collapse" id="navbarMain">
+            <!-- Center: Main Navigation -->
+            <div class="header-center flex-grow-1 d-flex justify-content-center">
                 @if($mainNavigation->isNotEmpty())
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav flex-row align-items-center">
                         @foreach($mainNavigation as $item)
-                            <li class="nav-item {{ $item->children->isNotEmpty() ? 'dropdown' : '' }}">
+                            <li class="nav-item position-relative {{ $item->children->isNotEmpty() ? 'has-submenu' : '' }}">
                                 @if($item->children->isNotEmpty())
-                                    <a class="nav-link dropdown-toggle text-uppercase" href="#" role="button"
-                                       data-bs-toggle="dropdown" aria-expanded="false">
+                                    <a class="nav-link text-uppercase" href="#" role="button">
                                         @if($item->icon)
                                             <i class="{{ $item->icon }} me-1"></i>
                                         @endif
                                         {{ $item->title }}
                                     </a>
-                                    <ul class="dropdown-menu p-0 border-0 shadow-none">
-                                        <li class="d-flex flex-row w-100 justify-content-center">
+                                    <!-- Submenu markup -->
+                                    <ul class="submenu list-unstyled m-0 p-0 position-absolute w-100 start-0 top-100">
+                                        <li class="d-flex flex-row justify-content-center w-100">
                                             @foreach($item->children as $child)
                                                 <a class="dropdown-item text-center flex-fill"
                                                    href="{{ $child->route }}" target="{{ $child->target->value }}">
@@ -63,8 +59,8 @@
                 @endif
             </div>
 
-            <!-- Test Drive Button - Right side for desktop -->
-            <div class="d-none d-xl-block">
+            <!-- Right: Test Drive Button -->
+            <div class="header-right d-none d-xl-block flex-shrink-0">
                 <a href="{{ route('book') }}" class="btn btn-primary">
                     <i class="fas fa-play me-2"></i>
                     Test Drive
