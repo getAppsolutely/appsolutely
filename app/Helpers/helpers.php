@@ -585,16 +585,15 @@ if (! function_exists('themed_view')) {
 if (! function_exists('themed_assets')) {
     function themed_assets(string $path, ?string $theme = null): string
     {
-        static $manifest = null;
         $theme           = $theme ?? config('appsolutely.theme');
         $buildPath       = "build/themes/{$theme}/";
-        $manifestPath    = public_path($buildPath . 'manifest.json');
 
-        if ($manifest === null) {
-            if (! file_exists($manifestPath)) {
-                throw new \Exception('Vite manifest file not found. Please run npm run build.');
-            }
-            $manifest = json_decode(file_get_contents($manifestPath), true);
+        if (app()->environment('production')) {
+            $manifest = cache()->rememberForever("vite_manifest_{$theme}", function () use ($buildPath) {
+                return load_vite_manifest($buildPath);
+            });
+        } else {
+            $manifest = load_vite_manifest($buildPath);
         }
 
         $key = "themes/{$theme}/" . ltrim($path, '/');
@@ -604,6 +603,18 @@ if (! function_exists('themed_assets')) {
         }
 
         return asset($buildPath . $manifest[$key]['file']);
+    }
+}
+
+if (! function_exists('load_vite_manifest')) {
+    function load_vite_manifest(string $path): array
+    {
+        $manifestPath    = public_path($path . 'manifest.json');
+        if (! file_exists($manifestPath)) {
+            throw new \Exception('Vite manifest.json not found.');
+        }
+
+        return json_decode(file_get_contents($manifestPath), true);
     }
 }
 
