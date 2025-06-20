@@ -38,7 +38,7 @@ final class PageBlockSettingRepository extends BaseRepository
                         ->where('reference', $reference)
                         ->first();
                     if ($found) {
-                        $found->update(['status' => Status::ACTIVE, 'sort' => $sort]);
+                        $found->update(['status' => Status::ACTIVE->value, 'sort' => $sort]);
 
                         continue;
                     }
@@ -47,7 +47,7 @@ final class PageBlockSettingRepository extends BaseRepository
                         'block_id'     => $blockId,
                         'page_id'      => $pageId,
                         'reference'    => $reference,
-                        'status'       => Status::ACTIVE,
+                        'status'       => Status::ACTIVE->value,
                         'sort'         => $sort,
                         'published_at' => now(),
                     ];

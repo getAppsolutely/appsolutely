@@ -27,6 +27,7 @@ final class PageBlockGroupRepository extends BaseRepository
         $data->each(function ($item) {
             $item->blocks = $item->blocks->map(function ($block) {
                 $block->label   = $block->title;
+                $block->type    = $block->reference;
                 $block->content = $block->template;
                 $block->tagName = 'section';
 

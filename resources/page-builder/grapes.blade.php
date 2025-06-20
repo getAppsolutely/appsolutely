@@ -330,15 +330,16 @@
                 .forEach(comp => {
                     const {
                         id,
-                        tagName = 'div',
-                        content = '<div></div>',
                         label,
+                        type,
+                        content = '<div></div>',
+                        tagName = 'div',
                         description = '',
                         sort = 0,
                         droppable = false,
                     } = comp;
 
-                    domComponents.addType(label, {
+                    domComponents.addType(type, {
                         model: {
                             defaults: {
                                 tagName,
@@ -348,7 +349,7 @@
                     });
 
                     // Add block to block manager
-                    blockManager.add(label, {
+                    blockManager.add(type, {
                         label: `
                         <div class="flex items-start text-left">
                             <div class="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16 mr-3"></div>
@@ -363,8 +364,8 @@
                             label: `${categoryLabel}`,
                         },
                         content: {
-                            type: label,
                             block_id: id,
+                            type,
                             droppable
                         },
                         order: sort,
