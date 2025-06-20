@@ -63,8 +63,8 @@ final class PageBlockSettingController extends AdminBaseController
 
             $form->text('type', __t('Type'));
             $form->text('remark', __t('Remark'));
-            $form->textarea('schema_values', __t('Schema Values'))->rows(5);
-            $form->textarea('template', __t('Template'))->rows(5);
+            $form->textarea('schema_values', __t('Schema Values'))->rows(10);
+            $form->textarea('template', __t('Template'))->rows(3);
             $form->textarea('scripts', __t('Scripts'))->rows(2);
             $form->textarea('stylesheets', __t('Stylesheets'))->rows(2);
             $form->keyValue('styles', __t('Styles'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();

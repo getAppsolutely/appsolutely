@@ -28,7 +28,7 @@ final class Footer extends Component
         ?string $socialMedia = null,
         ?string $policyMenu = null
     ): void {
-        $this->footerMenu  = $footerMenu ?? 'main-nav';
+        $this->footerMenu  = $footerMenu ?? 'footer-menu';
         $this->socialMedia = $socialMedia ?? 'social-media';
         $this->policyMenu  = $policyMenu ?? 'policy-menu';
 
