@@ -22,7 +22,17 @@ class DatabaseSeeder extends Seeder
         ]);
         */
 
-        $this->call([
+        $this->call(
+            array_merge(
+                $this->publicSeeders(),
+                $this->dashboardSeeders()
+            )
+        );
+    }
+
+    private function dashboardSeeders(): array
+    {
+        return [
             CmsMenuSeeder::class,
             ProductMenuSeeder::class,
             OrderMenuSeeder::class,
@@ -30,7 +40,14 @@ class DatabaseSeeder extends Seeder
             CmsSettingsMenuSeeder::class,
             ProductSettingsMenuSeeder::class,
             AdminMenuSeeder::class,
+        ];
+    }
+
+    private function publicSeeders(): array
+    {
+        return [
             MenuSeeder::class,
-        ]);
+            PageBlockSeeder::class,
+        ];
     }
 }
