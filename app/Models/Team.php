@@ -55,11 +55,7 @@ class Team extends JetstreamTeam
     public static function boot(): void
     {
         parent::boot();
-        static::creating(function (Team $team) {
-            if (empty($team->reference)) {
-                $team->reference = uniqid();
-            }
-        });
+        static::bootScopeReference();
     }
 
     public function findOrFail($id)

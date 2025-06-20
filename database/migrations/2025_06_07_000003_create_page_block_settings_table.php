@@ -21,7 +21,7 @@ return new class() extends Migration
             $table->text('scripts')->nullable();
             $table->text('stylesheets')->nullable();
             $table->json('styles')->nullable();
-            $table->json('parameter_values')->nullable();
+            $table->json('schema_values')->nullable();
             $table->unsignedTinyInteger('sort')->default(0);
             $table->unsignedTinyInteger('status')->default(0);
             $table->dateTimeTz('published_at')->useCurrent();

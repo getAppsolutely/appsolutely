@@ -60,7 +60,7 @@ final class PageBlockController extends AdminBaseController
             $form->textarea('description', __t('Description'))->rows(2);
             $form->textarea('template', __t('template'))->rows(3);
             $form->textarea('instruction', __t('Instruction'))->rows(2);
-            $form->keyValue('parameters', __t('Parameters'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
+            $form->keyValue('schema', __t('Schema'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
             $form->switch('droppable', __t('Droppable'));
             $form->keyValue('setting', __t('Setting'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
             $form->number('sort', __t('Sort'));

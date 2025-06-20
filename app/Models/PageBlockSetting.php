@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Enums\Status;
 use App\Models\Traits\ScopePublished;
 use App\Models\Traits\ScopeReference;
 use App\Models\Traits\ScopeStatus;
@@ -24,7 +23,7 @@ final class PageBlockSetting extends Model
         'scripts',
         'stylesheets',
         'styles',
-        'parameter_values',
+        'values',
         'sort',
         'status',
         'published_at',
@@ -32,11 +31,11 @@ final class PageBlockSetting extends Model
     ];
 
     protected $casts = [
-        'styles'           => 'array',
-        'parameter_values' => 'array',
-        'status'           => Status::class,
-        'published_at'     => 'datetime',
-        'expired_at'       => 'datetime',
+        'styles'       => 'array',
+        'values'       => 'array',
+        'status'       => 'integer',
+        'published_at' => 'datetime',
+        'expired_at'   => 'datetime',
     ];
 
     public function block(): BelongsTo

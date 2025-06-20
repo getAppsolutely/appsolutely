@@ -148,7 +148,7 @@ if (! function_exists('__tv')) {
 if (! function_exists('string_concat')) {
     function string_concat(string $string, $prefix = null): string
     {
-        return ($prefix ?? appsolutely()) . ': ' . $string;
+        return ($prefix ?? appsolutely()) . ' - ' . $string;
     }
 }
 
@@ -195,12 +195,14 @@ if (! function_exists('log_warning')) {
 if (! function_exists('log_message')) {
     function log_message($message, $class, $function): string
     {
-        $classAndFunction = '';
+        $string = $classAndFunction = '';
         if (! empty($class) && ! empty($function)) {
             $classAndFunction = sprintf('%s::%s', $class, $function);
         }
+        $string .= $classAndFunction ? $classAndFunction . ' - ' : '';
+        $string .= $message ?? '';
 
-        return sprintf('%s - %s: ', $classAndFunction, $message);
+        return $string;
     }
 }
 
@@ -577,13 +579,9 @@ if (! function_exists('user_timezone_to_utc')) {
 if (! function_exists('themed_view')) {
     function themed_view($view, $data = [], $mergeData = [])
     {
-        $theme         = Qirolab\Theme\Theme::active();
-        $themeViewPath = theme_path($theme);
-
-        if (view()->exists($themeViewPath)) {
-            return view($themeViewPath, $data, $mergeData);
+        if (! view()->exists($view)) {
+            throw new Exception(sprintf('View %s in %s theme not found.', $view, Qirolab\Theme\Theme::active()));
         }
-        log_warning('Active theme: ' . $theme);
 
         return view($view, $data, $mergeData);
     }

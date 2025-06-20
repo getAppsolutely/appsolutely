@@ -4,23 +4,26 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\Traits\ScopeReference;
 use App\Models\Traits\ScopeStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 final class PageBlock extends Model
 {
+    use ScopeReference;
     use ScopeStatus;
 
     protected $fillable = [
         'block_group_id',
         'title',
+        'reference',
         'class',
         'remark',
         'description',
         'template',
         'instruction',
-        'parameters',
+        'schema',
         'droppable',
         'setting',
         'sort',
@@ -28,11 +31,11 @@ final class PageBlock extends Model
     ];
 
     protected $casts = [
-        'parameters' => 'array',
-        'setting'    => 'array',
-        'droppable'  => 'integer',
-        'sort'       => 'integer',
-        'status'     => 'integer',
+        'schema'    => 'array',
+        'setting'   => 'array',
+        'droppable' => 'integer',
+        'sort'      => 'integer',
+        'status'    => 'integer',
     ];
 
     public function group(): BelongsTo

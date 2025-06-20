@@ -64,7 +64,7 @@ final class PageBlockSettingController extends AdminBaseController
             $form->textarea('scripts', __t('Scripts'))->rows(2);
             $form->textarea('stylesheets', __t('Stylesheets'))->rows(2);
             $form->keyValue('styles', __t('Styles'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
-            $form->keyValue('parameter_values', __t('Parameter Values'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
+            $form->keyValue('schema_values', __t('Schema Values'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
             $form->number('sort', __t('Sort'));
             $form->switch('status', __t('Status'));
             $form->disableViewButton();

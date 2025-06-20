@@ -14,12 +14,13 @@ return new class() extends Migration
             $table->id();
             $table->foreignId('block_group_id')->constrained('page_block_groups')->cascadeOnDelete();
             $table->string('title');
+            $table->string('reference')->nullable();
             $table->string('class');
             $table->string('remark')->nullable();
             $table->text('description')->nullable();
             $table->text('template')->nullable();
             $table->text('instruction')->nullable();
-            $table->json('parameters')->nullable();
+            $table->json('schema')->nullable();
             $table->unsignedTinyInteger('droppable')->nullable()->default(0);
             $table->json('setting')->nullable();
             $table->unsignedTinyInteger('sort')->default(0);

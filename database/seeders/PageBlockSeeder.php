@@ -325,7 +325,7 @@ final class PageBlockSeeder extends Seeder
     {
         return [
             'instruction' => null,
-            'parameters'  => '{"_def_": null}',
+            'schema'      => '{"_def_": null}',
             'setting'     => '{"_def_": null}',
             'droppable'   => 0,
             'status'      => 1,
