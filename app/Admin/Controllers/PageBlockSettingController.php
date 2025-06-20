@@ -8,6 +8,7 @@ use App\Models\PageBlockSetting;
 use App\Repositories\PageBlockRepository;
 use App\Repositories\PageBlockSettingRepository;
 use App\Repositories\PageRepository;
+use App\Services\PageBlockSchemaService;
 use App\Services\PageBlockService;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
@@ -18,7 +19,8 @@ final class PageBlockSettingController extends AdminBaseController
         protected PageBlockSettingRepository $settingRepository,
         protected PageBlockRepository $blockRepository,
         protected PageRepository $pageRepository,
-        protected PageBlockService $blockService
+        protected PageBlockService $blockService,
+        protected PageBlockSchemaService $schemaService
     ) {}
 
     protected function grid(): Grid
@@ -57,14 +59,15 @@ final class PageBlockSettingController extends AdminBaseController
             )->required();
             $form->select('block_id', __t('Block'))->options(
                 $this->blockRepository->all()->pluck('title', 'id')->toArray()
-            )->required();
+            )->required()->load('schema_fields', admin_route('api.pages.block.schema-fields'));
+
             $form->text('type', __t('Type'));
             $form->text('remark', __t('Remark'));
-            $form->textarea('template', __t('Template'))->rows(10);
+            $form->textarea('schema_values', __t('Schema Values'))->rows(5);
+            $form->textarea('template', __t('Template'))->rows(5);
             $form->textarea('scripts', __t('Scripts'))->rows(2);
             $form->textarea('stylesheets', __t('Stylesheets'))->rows(2);
             $form->keyValue('styles', __t('Styles'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
-            $form->keyValue('schema_values', __t('Schema Values'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
             $form->number('sort', __t('Sort'));
             $form->switch('status', __t('Status'));
             $form->disableViewButton();

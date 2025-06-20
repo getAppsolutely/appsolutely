@@ -91,6 +91,7 @@ Route::group([
             Route::put('{reference}/save', [PageBuilderAdminApiController::class, 'savePageData'])->name('save');
             Route::put('{reference}/reset', [PageBuilderAdminApiController::class, 'resetPageData'])->name('reset');
             Route::get('block-registry', [PageBuilderAdminApiController::class, 'getBlockRegistry'])->name('block-registry');
+            Route::get('block/schema-fields', [PageBuilderAdminApiController::class, 'getSchemaFields'])->name('block.schema-fields');
         });
     });
 });

@@ -23,7 +23,7 @@ final class PageBlockSetting extends Model
         'scripts',
         'stylesheets',
         'styles',
-        'values',
+        'schema_values',
         'sort',
         'status',
         'published_at',
@@ -31,11 +31,11 @@ final class PageBlockSetting extends Model
     ];
 
     protected $casts = [
-        'styles'       => 'array',
-        'values'       => 'array',
-        'status'       => 'integer',
-        'published_at' => 'datetime',
-        'expired_at'   => 'datetime',
+        'styles'        => 'array',
+        'schema_values' => 'array',
+        'status'        => 'integer',
+        'published_at'  => 'datetime',
+        'expired_at'    => 'datetime',
     ];
 
     public function block(): BelongsTo

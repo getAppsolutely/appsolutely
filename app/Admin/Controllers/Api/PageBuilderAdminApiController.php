@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers\Api;
 
 use App\Models\Page;
+use App\Services\PageBlockSchemaService;
 use App\Services\PageBlockService;
 use App\Services\PageService;
 use Illuminate\Http\JsonResponse;
@@ -10,7 +11,10 @@ use Illuminate\Http\Request;
 
 class PageBuilderAdminApiController extends AdminBaseApiController
 {
-    public function __construct(protected PageService $pageService, protected PageBlockService $pageBlockService) {}
+    public function __construct(protected PageService $pageService,
+        protected PageBlockService $pageBlockService,
+        protected PageBlockSchemaService $pageBlockSchemaService
+    ) {}
 
     /**
      * Get page data for the builder
@@ -151,5 +155,20 @@ class PageBuilderAdminApiController extends AdminBaseApiController
         $data = $this->pageBlockService->getCategorisedBlocks()->toArray();
 
         return $this->success($data);
+    }
+
+    /**
+     * Get schema fields for a block
+     */
+    public function getSchemaFields(Request $request): JsonResponse
+    {
+        $blockId    = $request->get('q');
+        $formConfig = $this->pageBlockService->getSchemaFields($blockId);
+
+        if (empty($formConfig)) {
+            return $this->error('Page block not found.');
+        }
+
+        return $this->success($formConfig);
     }
 }
