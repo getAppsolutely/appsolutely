@@ -69,4 +69,34 @@ trait Sluggable
             'parent_field' => null,         // Field to check uniqueness against (e.g., product_id)
         ];
     }
+
+    /**
+     * Scope to find models by slug with flexible matching.
+     * Uses getPossibleSlugs() to match various slug formats.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSlug($query, string $slug)
+    {
+        $slugConfig = $this->getSlugConfig();
+        $slugField  = $slugConfig['slug_field'] ?? 'slug';
+
+        $possibleSlugs = $this->getPossibleSlugs($slug);
+
+        return $query->whereIn($slugField, $possibleSlugs);
+    }
+
+    public function getPossibleSlugs(string $slug): array
+    {
+        $slug    = trim($slug);
+        $trimmed = trim($slug, '/');
+
+        return array_unique([
+            $slug,
+            '/' . ltrim($slug, '/'),
+            rtrim($slug, '/') . '/',
+            '/' . $trimmed . '/',
+        ]);
+    }
 }

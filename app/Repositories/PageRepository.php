@@ -17,10 +17,10 @@ class PageRepository extends BaseRepository
         return Page::class;
     }
 
-    public function findPublishedBySlug(array $slugs, Carbon $datetime): ?Page
+    public function findPageBySlug(string $slug, Carbon $datetime): ?Page
     {
         return $this->model->newQuery()
-            ->whereIn('slug', $slugs)
+            ->slug($slug)
             ->status()
             ->published($datetime)
             ->with(['blocks' => function ($query) {

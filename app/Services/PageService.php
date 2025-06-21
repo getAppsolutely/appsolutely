@@ -16,22 +16,7 @@ class PageService
 
     public function getPublishedPage(string $slug): ?Page
     {
-        $possibleSlugs = $this->getPossibleSlugs($slug);
-
-        return $this->pageRepository->findPublishedBySlug($possibleSlugs, now());
-    }
-
-    public function getPossibleSlugs(string $slug): array
-    {
-        $slug    = trim($slug);
-        $trimmed = trim($slug, '/');
-
-        return array_unique([
-            $slug,
-            '/' . ltrim($slug, '/'),
-            rtrim($slug, '/') . '/',
-            '/' . $trimmed . '/',
-        ]);
+        return $this->pageRepository->findPageBySlug($slug, now());
     }
 
     public function findByReference(string $reference): Model
