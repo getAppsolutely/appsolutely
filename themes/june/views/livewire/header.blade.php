@@ -7,11 +7,9 @@
             <div class="header-left d-flex align-items-center flex-shrink-0">
                 <a href="{{ route('home') }}" class="navbar-brand m-0">
                     @if($logo)
-                        <img src="{{ $logo }}" alt="{{ config('appsolutely.general.site_name') }}" height="40">
-                    @elseif(themed_assets('images/logo.webp'))
-                        <img src="{{ themed_assets('images/logo-dark.webp') }}"
+                        <img src="{{ asset_server('assets/images/logo-dark.webp') }}"
                              alt="{{ config('appsolutely.general.site_name') }}" height="40" class="logo-dark">
-                        <img src="{{ themed_assets('images/logo.webp') }}"
+                        <img src="{{ asset_server('assets/images/logo.webp') }}"
                              alt="{{ config('appsolutely.general.site_name') }}" height="40" class="logo-light">
                     @else
                         <span>{{ config('appsolutely.general.site_name') }}</span>

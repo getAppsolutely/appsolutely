@@ -1,6 +1,11 @@
 #mainHeader {
-  background: rgba($teal, 0.3);
+  background: transparent;
   color: $light;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
 }
 
 #mainHeader .navbar,
@@ -44,7 +49,6 @@
   pointer-events: auto;
   transform: translateY(0);
 }
-
 
 #mainHeader:has(.header-left a:hover),
 #mainHeader:has(.header-center .navbar-nav .nav-item:hover) {

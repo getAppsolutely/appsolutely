@@ -1,4 +1,4 @@
-.container-responsive {
+.container.container-responsive {
     @media (min-width: 1400px) {
         max-width: 94vw;
         padding: 0 3vw 0;
@@ -7,4 +7,14 @@
         max-width: 96vw;
         padding: 0 2vw 0;
     }
+}
+
+.section-full {
+    height: 100vh;
+    overflow: hidden;
+}
+
+.section-full img {
+    height: 100vh;
+    object-fit: cover;
 }
