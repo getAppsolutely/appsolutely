@@ -582,8 +582,24 @@ if (! function_exists('themed_view')) {
     }
 }
 
-if (! function_exists('theme_styles')) {
-    function theme_styles(): array
+if (! function_exists('themed_asset')) {
+    function themed_asset($path): ?string
+    {
+        $theme     = config('appsolutely.theme');
+        $assetPath = "themes/{$theme}/{$path}";
+
+        // Check if the asset file exists in the theme directory
+        $themeAssetPath = base_path($assetPath);
+        if (! file_exists($themeAssetPath)) {
+            return null;
+        }
+
+        return Vite::asset($assetPath);
+    }
+}
+
+if (! function_exists('themed_styles')) {
+    function themed_styles(): array
     {
         return config('appsolutely.theme_assets.styles') ?? [];
     }

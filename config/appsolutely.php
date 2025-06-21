@@ -6,7 +6,12 @@ return [
     'theme'          => env('APPSOLUTELY_THEME', 'default'),
     'local_timezone' => env('LOCAL_TIMEZONE', 'UTC'),
     'time_format'    => env('TIME_FORMAT', 'Y-m-d H:i:s T'),
-    'currency'       => [
+    'general'        => [
+        'logo'             => env('APPSOLUTELY_LOGO', ''),
+        'site_name'        => env('APPSOLUTELY_SITE_NAME', config('app.name')),
+        'site_description' => env('APPSOLUTELY_SITE_DESCRIPTION', ''),
+    ],
+    'currency' => [
         'symbol' => 'USD',
     ],
     'storage' => [

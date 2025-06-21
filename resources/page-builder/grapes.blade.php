@@ -245,7 +245,7 @@
         width: 'auto',
         storageManager: false,
         canvas: {
-            styles: @json(theme_styles())
+            styles: @json(themed_styles())
         },
         blockManager: {
             appendTo: '#blocks',
