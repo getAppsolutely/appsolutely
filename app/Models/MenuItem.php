@@ -11,12 +11,15 @@ use App\Models\Traits\ScopeStatus;
 use Dcat\Admin\Traits\ModelTree;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 
-final class MenuItem extends NestedSetModel
+final class MenuItem extends NestedSetModel implements Sortable
 {
     use ModelTree;
     use ScopePublished;
     use ScopeStatus;
+    // use SortableTrait;
 
     protected $fillable = [
         'parent_id',

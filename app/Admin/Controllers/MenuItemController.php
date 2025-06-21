@@ -32,7 +32,7 @@ final class MenuItemController extends AdminBaseController
             $grid->column('expired_at', __t('Expired At'))->display(column_time_format())->sortable();
             $grid->column('status', __t('Status'))->switch();
             $grid->order->orderable();
-            $grid->model()->orderBy('menu_id', 'ASC')->orderBy('left', 'ASC');
+            $grid->model()->orderBy('left', 'ASC');
 
             $grid->quickSearch('id', 'title', 'route');
             $grid->filter(function (Grid\Filter $filter) {
@@ -99,29 +99,21 @@ final class MenuItemController extends AdminBaseController
                 $parentId = $form->input('parent_id');
                 $menuId   = $form->input('menu_id');
 
-                if ($parentId) {
-                    // Child item - get menu_id from parent
-                    $parent = MenuItem::find($parentId);
-                    if ($parent) {
-                        $form->input('menu_id', $parent->menu_id);
-                        $model->appendToNode($parent)->save();
-                    } else {
-                        // Invalid parent, save as root
-                        if (! $menuId) {
-                            $form->error(__t('Menu is required for root menu items.'));
+                $isChildItem = $parentId && MenuItem::find($parentId);
 
-                            return false;
-                        }
-                        $model->saveAsRoot();
-                    }
+                if ($isChildItem) {
+                    // Child item - get menu_id from parent and append to tree
+                    $parent = MenuItem::find($parentId);
+                    $form->input('menu_id', $parent->menu_id);
+                    $model->appendToNode($parent)->save();
                 } else {
-                    // Root item - menu_id is required
+                    // Root item (either no parent specified or invalid parent)
                     if (! $menuId) {
                         $form->error(__t('Menu is required for root menu items.'));
 
                         return false;
                     }
-                    // Ensure the model has the menu_id set before saving as root
+
                     $model->menu_id = $menuId;
                     $model->saveAsRoot();
                 }

@@ -18,6 +18,10 @@ class AdminBaseController extends AdminController
      */
     public function update($id)
     {
+        if (! request()->get('_inline_edit_')) {
+            return $this->form()->update($id);
+        }
+
         $data       = request()->all();
         $controller = Str::before(class_basename($this), 'Controller');
         $model      = (new \ReflectionClass(Model::class))->getNamespaceName() . '\\' . $controller;
