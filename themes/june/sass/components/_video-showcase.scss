@@ -1,0 +1,123 @@
+/* Bootstrap 5.3 Video Showcase Component Styles */
+.video-showcase {
+    video {
+        min-width: 100%;
+        min-height: 100%;
+    }
+
+    /* Object-fit utilities for Bootstrap 5.3 */
+    .object-fit-cover {
+        object-fit: cover !important;
+    }
+
+    /* Hide video controls completely if controls are disabled */
+    video::-webkit-media-controls {
+        display: none !important;
+    }
+
+    video::-webkit-media-controls-panel {
+        display: none !important;
+    }
+
+    video::-webkit-media-controls-play-button {
+        display: none !important;
+    }
+
+    video::-webkit-media-controls-start-playback-button {
+        display: none !important;
+    }
+
+    video::-webkit-media-controls-enclosure {
+        display: none !important;
+    }
+
+    /* Enhanced button hover effects */
+    .btn-primary {
+        transition: all 0.3s ease;
+        transform: translateY(0);
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+    }
+
+    /* Smooth animations */
+    .content-overlay > * {
+        animation: fadeInUp 1s ease-out;
+    }
+
+    /* Stagger animation delays */
+    h1 {
+        animation-delay: 0.2s;
+    }
+
+    h2 {
+        animation-delay: 0.4s;
+    }
+
+    p {
+        animation-delay: 0.6s;
+    }
+
+    .btn {
+        animation-delay: 0.8s;
+    }
+}
+
+/* Keyframe animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+    .video-showcase {
+        min-height: 70vh !important;
+
+        .content-overlay {
+            min-height: 70vh !important;
+        }
+
+        .display-1 {
+            font-size: 3rem !important;
+        }
+
+        .display-5 {
+            font-size: 1.75rem !important;
+        }
+
+        .lead {
+            font-size: 1.1rem !important;
+        }
+
+        .btn-lg {
+            padding: 0.75rem 2rem !important;
+            font-size: 1.1rem !important;
+        }
+    }
+}
+
+@media (max-width: 576px) {
+    .video-showcase {
+        .display-1 {
+            font-size: 2.5rem !important;
+        }
+
+        .display-5 {
+            font-size: 1.5rem !important;
+        }
+
+        .container-fluid {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+    }
+} 

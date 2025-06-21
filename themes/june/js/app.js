@@ -10,3 +10,4 @@ import "./assets";
 // Import component JavaScript
 import './components/header.js';
 import './components/hero-banner.js';
+import './components/video-showcase.js';

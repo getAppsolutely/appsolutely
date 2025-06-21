@@ -100,8 +100,6 @@ final class PageBlockService
             return ''; // Return empty string in production
         }
 
-        return '<div class="alert alert-warning">
-            <strong>Block Error:</strong> ' . htmlspecialchars($message) . '
-        </div>';
+        throw new \Exception($message);
     }
 }
