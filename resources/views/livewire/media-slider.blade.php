@@ -14,8 +14,8 @@
                     @if(!empty($slide['title']))
                         <h2 class="display-4 fw-bold">{{ $slide['title'] }}</h2>
                     @endif
-                    @if(!empty($slide['subTitle']))
-                        <p class="lead">{{ $slide['subTitle'] }}</p>
+                    @if(!empty($slide['subtitle']))
+                        <p class="lead">{{ $slide['subtitle'] }}</p>
                     @endif
                     @if(!empty($slide['link']))
                         <a href="{{ $slide['link'] }}" class="btn btn-primary media-slider-btn">

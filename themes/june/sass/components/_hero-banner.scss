@@ -1,12 +1,12 @@
-.media-slider-caption {
-    position: absolute;
+.hero-banner-caption {
+    position: relative;
     top: 40%;
     left: 50%;
     transform: translate(-50%, -40%);
     text-align: center;
     width: 100%;
     color: $light;
-    z-index: 10;
+    z-index: 20;
     h2 {
         font-size: 3rem;
         font-weight: 700;
@@ -19,7 +19,7 @@
     }
 }
 
-.media-slider-btn {
+.hero-banner-btn {
     @extend .btn-outline-light-primary;
     margin-top: 1.5rem;
 }

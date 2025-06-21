@@ -16,6 +16,7 @@
     @vite(['themes/' . app_theme(). '/sass/app.scss', 'themes/'. app_theme().'/js/app.js'], app_theme())
 </head>
 <body>
+<div id="scrollTrigger" class="position-absolute top-0 w-100" style="height: 1px;"></div>
     @yield('content')
 </body>
 </html>
