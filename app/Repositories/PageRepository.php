@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Models\Page;
 use App\Repositories\Traits\Reference;
 use App\Repositories\Traits\Status;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 
 class PageRepository extends BaseRepository
@@ -18,18 +17,12 @@ class PageRepository extends BaseRepository
         return Page::class;
     }
 
-    public function findPublishedBySlug(string $slug): ?Page
+    public function findPublishedBySlug(array $slugs, Carbon $datetime): ?Page
     {
-        $now = Carbon::now();
-
         return $this->model->newQuery()
-            ->where('slug', $slug)
+            ->whereIn('slug', $slugs)
             ->status()
-            ->where('published_at', '<=', $now)
-            ->where(function (Builder $query) use ($now) {
-                $query->where('expired_at', '>', $now)
-                    ->orWhereNull('expired_at');
-            })
+            ->published($datetime)
             ->with(['blocks' => function ($query) {
                 $query->status()->whereNotNull('sort')->orderBy('sort');
             }, 'blocks.block'])
