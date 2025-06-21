@@ -19,6 +19,8 @@ return new class() extends Migration
             $table->string('route')->nullable();
             $table->enum('type', ['link', 'dropdown', 'divider', 'label', 'custom'])->default('link');
             $table->string('icon')->nullable();
+            $table->string('thumbnail')->nullable();
+            $table->json('setting')->nullable();
             $table->string('permission_key')->nullable();
             $table->enum('target', ['_self', '_blank', '_parent', '_top', 'modal', 'iframe'])->default('_self');
             $table->boolean('is_external')->default(false);

@@ -6,10 +6,20 @@
             <div class="col-lg-8">
                 @if($footerMenuItems->isNotEmpty())
                     <div class="row">
-                        @foreach($footerMenuItems->take(3) as $menuItem)
-                            <div class="col-md-4">
+                        @foreach($footerMenuItems->take(4) as $menuItem)
+                            <div class="col-md-3">
                                 <div class="footer-menu-section">
-                                    <h5 class="text-white fw-semibold text-uppercase mb-3">{{ $menuItem->title }}</h5>
+                                    <h5 class="text-white fw-semibold text-uppercase mb-3">
+                                        @if($menuItem->route)
+                                            <a href="{{ $menuItem->route }}"
+                                               target="{{ $menuItem->target->value }}"
+                                               class="text-white text-decoration-none">
+                                                {{ $menuItem->title }}
+                                            </a>
+                                        @else
+                                            {{ $menuItem->title }}
+                                        @endif
+                                    </h5>
                                     @if($menuItem->children->isNotEmpty())
                                         <ul class="list-unstyled">
                                             @foreach($menuItem->children as $child)
@@ -21,6 +31,17 @@
                                                     </a>
                                                 </li>
                                             @endforeach
+                                        </ul>
+                                    @elseif($menuItem->route)
+                                        <!-- Show menu item as a link if it has no children but has a route -->
+                                        <ul class="list-unstyled">
+                                            <li class="mb-2">
+                                                <a href="{{ $menuItem->route }}"
+                                                   target="{{ $menuItem->target->value }}"
+                                                   class="text-white text-decoration-none footer-link">
+                                                    {{ $menuItem->title }}
+                                                </a>
+                                            </li>
                                         </ul>
                                     @endif
                                 </div>

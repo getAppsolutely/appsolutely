@@ -2,12 +2,16 @@
 @foreach($heros as $hero)
     <div class="hero-banner section-full">
         @if(($hero['type'] ?? 'image') === 'video')
-            <video class="d-block w-100" controls>
+            <video class="d-block w-100" controls loading="lazy">
                 <source src="{{ asset_server($hero['url']) }}" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
         @else
-            <img src="{{ asset_server($hero['url']) }}" class="d-block w-100" alt="{{ $hero['title'] ?? '' }}">
+            <img src="{{ asset_server($hero['url']) }}" 
+                 class="d-block w-100" 
+                 alt="{{ $hero['title'] ?? '' }}"
+                 loading="lazy"
+                 decoding="async">
         @endif
         <div class="hero-banner-caption">
             @if(!empty($hero['title']))
