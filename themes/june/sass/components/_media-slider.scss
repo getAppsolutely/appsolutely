@@ -1,25 +1,7 @@
 .media-slider-caption {
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -40%);
-    text-align: center;
-    width: 100%;
-    color: $light;
-    z-index: 10;
-    h2 {
-        font-size: 3rem;
-        font-weight: 700;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.4);
-    }
-    p.lead {
-        font-size: 1.5rem;
-        font-weight: 400;
-        text-shadow: 0 1px 4px rgba(0,0,0,0.3);
-    }
+    @extend .overlay-caption;
 }
 
 .media-slider-btn {
-    @extend .btn-outline-light-primary;
-    margin-top: 1.5rem;
+    @extend .overlay-btn;
 }
