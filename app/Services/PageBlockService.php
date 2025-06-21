@@ -7,6 +7,8 @@ namespace App\Services;
 use App\Repositories\PageBlockGroupRepository;
 use App\Repositories\PageBlockRepository;
 use App\Repositories\PageBlockSettingRepository;
+use Livewire\Component;
+use Livewire\Livewire;
 
 final class PageBlockService
 {
@@ -47,5 +49,59 @@ final class PageBlockService
         $formConfig = $this->schemaService->generateFormConfig($schema);
 
         return $formConfig;
+    }
+
+    /**
+     * Validate and render a block safely
+     * Returns the rendered HTML or error message
+     */
+    public function renderBlockSafely($block): string
+    {
+        // Validate block structure
+        if (! isset($block['block']['class']) || ! isset($block['reference'])) {
+            return $this->getBlockErrorHtml('Invalid block structure');
+        }
+
+        $className = $block['block']['class'];
+        $reference = $block['reference'];
+
+        // Validate class exists
+        if (! class_exists($className)) {
+            return $this->getBlockErrorHtml("Class '{$className}' not found");
+        }
+
+        // Validate reference is not empty
+        if (empty($reference)) {
+            return $this->getBlockErrorHtml('Reference is empty');
+        }
+
+        // Validate it's a Livewire component
+        if (! is_subclass_of($className, Component::class)) {
+            return $this->getBlockErrorHtml("Class '{$className}' is not a Livewire component");
+        }
+
+        // Get parameters safely
+        $parameters = $block->parameters ?? [];
+
+        // Render the Livewire component
+        try {
+            return Livewire::mount($className, $parameters, $reference);
+        } catch (\Exception $e) {
+            return $this->getBlockErrorHtml('Error rendering block: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Get HTML for block errors (only in debug mode)
+     */
+    private function getBlockErrorHtml(string $message): string
+    {
+        if (! config('app.debug')) {
+            return ''; // Return empty string in production
+        }
+
+        return '<div class="alert alert-warning">
+            <strong>Block Error:</strong> ' . htmlspecialchars($message) . '
+        </div>';
     }
 }

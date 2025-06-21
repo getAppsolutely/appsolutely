@@ -7,6 +7,7 @@ use App\Http\Livewire\Footer;
 use App\Http\Livewire\Header;
 use App\Http\Livewire\Testimonial;
 use App\Repositories\TranslationRepository;
+use App\Services\PageBlockService;
 use App\Services\TranslationService;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
@@ -48,11 +49,15 @@ class AppServiceProvider extends ServiceProvider
             return "<?php echo __tv($expression); ?>";
         });
 
+        // Register Blade directive for safe block rendering
+        Blade::directive('renderBlock', function ($expression) {
+            return "<?php echo app('" . PageBlockService::class . "')->renderBlockSafely($expression); ?>";
+        });
+
         /** @var \Illuminate\Routing\Route $matched */
         $matched = collect(Route::getRoutes())->filter(function (\Illuminate\Routing\Route $route) {
             return $route->uri() === config('admin.route.prefix') . '/files';
         })->first();
         $matched?->uses('App\Admin\Controllers\Api\FileController@upload')->name('api.files.upload');
-
     }
 }

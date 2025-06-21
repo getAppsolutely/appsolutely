@@ -24,6 +24,8 @@ final class PageBlock extends Model
         'template',
         'instruction',
         'schema',
+        'scope',
+        'schema_values',
         'droppable',
         'setting',
         'sort',
@@ -31,11 +33,12 @@ final class PageBlock extends Model
     ];
 
     protected $casts = [
-        'schema'    => 'array',
-        'setting'   => 'array',
-        'droppable' => 'integer',
-        'sort'      => 'integer',
-        'status'    => 'integer',
+        'schema'        => 'array',
+        'schema_values' => 'array',
+        'setting'       => 'array',
+        'droppable'     => 'integer',
+        'sort'          => 'integer',
+        'status'        => 'integer',
     ];
 
     public function group(): BelongsTo

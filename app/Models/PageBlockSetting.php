@@ -38,6 +38,10 @@ final class PageBlockSetting extends Model
         'expired_at'    => 'datetime',
     ];
 
+    protected $appends = [
+        'parameters',
+    ];
+
     public function block(): BelongsTo
     {
         return $this->belongsTo(PageBlock::class, 'block_id');
@@ -46,5 +50,35 @@ final class PageBlockSetting extends Model
     public function page(): BelongsTo
     {
         return $this->belongsTo(Page::class, 'page_id');
+    }
+
+    /**
+     * Get the parameters for this block setting.
+     * Returns schema_values if block scope is 'page', otherwise returns block's schema_values.
+     */
+    public function getParametersAttribute(): array
+    {
+        // Load the block relationship if not already loaded
+        if (! $this->relationLoaded('block')) {
+            $this->load('block');
+        }
+
+        // If block scope is 'page', return this setting's schema_values
+        if ($this->block && $this->block->scope === 'page') {
+            $schemaValues = $this->schema_values;
+            if (is_string($schemaValues)) {
+                return json_decode($schemaValues, true) ?? [];
+            }
+
+            return $schemaValues ?? [];
+        }
+
+        // Otherwise, return the block's schema_values (for global scope)
+        $blockSchemaValues = $this->block?->schema_values;
+        if (is_string($blockSchemaValues)) {
+            return json_decode($blockSchemaValues, true) ?? [];
+        }
+
+        return $blockSchemaValues ?? [];
     }
 }
