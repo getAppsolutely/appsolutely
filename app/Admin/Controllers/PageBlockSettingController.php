@@ -54,7 +54,44 @@ final class PageBlockSettingController extends AdminBaseController
             $grid->actions(function (Grid\Displayers\Actions $actions) {
                 $actions->disableView();
             });
+
+            // Add quick links for global blocks
+            $grid->header(function () {
+                return $this->renderGlobalBlocksQuickLinks();
+            });
         });
+    }
+
+    /**
+     * Render global blocks quick links section
+     * Can be reused in other controllers or views
+     */
+    public function renderGlobalBlocksQuickLinks(): string
+    {
+        $globalBlocks = $this->blockRepository->getGlobalBlocks();
+
+        if ($globalBlocks->isEmpty()) {
+            return '';
+        }
+
+        $links = $globalBlocks->map(function ($block) {
+            $url = admin_route('pages.blocks.edit', ['block' => $block->id]);
+
+            return "<a href='{$url}' class='btn btn-sm btn-primary mr-2' target='_blank' style='text-decoration: none;'>
+                <i class='fa fa-cog mr-1'></i>{$block->title}
+            </a>";
+        })->join('');
+
+        return "<div class='alert alert-info border-0 mt-1'>
+            <div class='d-flex align-items-center mb-1'>
+                <i class='fa fa-globe text-info mr-2'></i>
+                <strong>Global Blocks Available</strong>
+            </div>
+            <p class='text-dark mb-1'>Click on any block below to quickly edit its global settings:</p>
+            <div class='d-flex flex-wrap'>
+                {$links}
+            </div>
+        </div>";
     }
 
     protected function form(): Form
