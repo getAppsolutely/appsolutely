@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin\Controllers;
 
+use App\Enums\BlockScope;
 use App\Models\PageBlockSetting;
 use App\Repositories\PageBlockRepository;
 use App\Repositories\PageBlockSettingRepository;
@@ -33,6 +34,12 @@ final class PageBlockSettingController extends AdminBaseController
             $grid->column('created_at', __t('Created At'))->display(column_time_format());
             $grid->column('sort', __t('Sort'))->editable();
             $grid->column('status', __t('Status'))->switch();
+
+            // Filter to show only page-scoped blocks by default
+            $grid->model()->whereHas('block', function ($query) {
+                $query->where('scope', BlockScope::Page->value);
+            });
+
             $grid->model()->orderByDesc('id');
             $grid->quickSearch('id', 'type', 'template');
             $grid->filter(function (Grid\Filter $filter) {
@@ -63,7 +70,9 @@ final class PageBlockSettingController extends AdminBaseController
 
             $form->text('type', __t('Type'));
             $form->text('remark', __t('Remark'));
-            $form->textarea('schema_values', __t('Schema Values'))->rows(10);
+
+            $this->addSchemaValuesField($form);
+
             $form->textarea('template', __t('Template'))->rows(3);
             $form->textarea('scripts', __t('Scripts'))->rows(2);
             $form->textarea('stylesheets', __t('Stylesheets'))->rows(2);
@@ -73,5 +82,44 @@ final class PageBlockSettingController extends AdminBaseController
             $form->disableViewButton();
             $form->disableViewCheck();
         });
+    }
+
+    /**
+     * Add schema values field based on block scope
+     */
+    private function addSchemaValuesField(Form $form): void
+    {
+        // Show schema_values field for new records or page-scoped blocks
+        if (! $form->isEditing() ||
+            ! $form->model()->block ||
+            $form->model()->block->scope === BlockScope::Page->value) {
+            $form->textarea('schema_values', __t('Schema Values'))->rows(10);
+
+            return;
+        }
+
+        // Show global block info for global-scoped blocks
+        $this->addGlobalBlockInfo($form, $form->model()->block);
+    }
+
+    /**
+     * Add global block information with edit link
+     */
+    private function addGlobalBlockInfo(Form $form, $block): void
+    {
+        $blockEditUrl = admin_route('pages.blocks.edit', ['block' => $block->id]);
+
+        $form->html(sprintf(
+            '<div class="alert alert-info">
+                <strong>%s</strong> %s
+                <a href="%s" class="btn btn-primary btn-sm ml-2" target="_blank">
+                    %s
+                </a>
+            </div>',
+            __('Global Block:'),
+            __('This block uses global settings.'),
+            $blockEditUrl,
+            __('Edit Block Settings')
+        ));
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin\Controllers;
 
+use App\Enums\BlockScope;
 use App\Models\PageBlock;
 use App\Repositories\PageBlockGroupRepository;
 use App\Repositories\PageBlockRepository;
@@ -60,7 +61,24 @@ final class PageBlockController extends AdminBaseController
             $form->textarea('description', __t('Description'))->rows(2);
             $form->textarea('template', __t('template'))->rows(3);
             $form->textarea('instruction', __t('Instruction'))->rows(2);
-            $form->keyValue('schema', __t('Schema'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
+            $form->textarea('schema', __t('Schema'))
+                ->rows(10)
+                ->help(__t('Enter JSON format for block schema'));
+
+            // Add scope field with radio buttons
+            $form->radio('scope', __t('Scope'))
+                ->options([
+                    BlockScope::Page->value   => BlockScope::Page->toArray(),
+                    BlockScope::Global->value => BlockScope::Global->toArray(),
+                ])
+                ->default(BlockScope::Page->value)
+                ->required();
+
+            // Add schema_values field as textarea
+            $form->textarea('schema_values', __t('Schema Values'))
+                ->rows(10)
+                ->help(__t('Enter JSON format for schema values'));
+
             $form->switch('droppable', __t('Droppable'));
             $form->keyValue('setting', __t('Setting'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
             $form->number('sort', __t('Sort'));
