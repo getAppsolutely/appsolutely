@@ -23,15 +23,11 @@ final class MenuItemController extends AdminBaseController
             $grid->column('menu.title', __t('Menu'));
             $grid->column('children', __t('Children'))->display(function () {
                 return $this->children()->count();
-            })->width('80px')->setAttributes(children_attributes());
-            $grid->column('type', __t('Type'))->display(function ($type) {
-                return $type->toArray();
-            });
+            })->width('50px')->setAttributes(children_attributes());
             $grid->column('route', __t('Route'))->width('200px');
             $grid->column('target', __t('Target'))->display(function ($target) {
                 return $target->toArray();
             });
-            $grid->column('is_external', __t('External'))->bool();
             $grid->column('published_at', __t('Published At'))->display(column_time_format())->sortable();
             $grid->column('expired_at', __t('Expired At'))->display(column_time_format())->sortable();
             $grid->column('status', __t('Status'))->switch();
@@ -60,14 +56,15 @@ final class MenuItemController extends AdminBaseController
             $form->disableViewCheck();
             $form->display('id', __t('ID'));
 
-            $form->select('menu_id', __t('Menu'))
-                ->options(Menu::pluck('title', 'id'))
-                ->required();
-
             $menuItems = $this->menuItemRepository->getActiveList();
-            $form->select('parent_id', __t('Parent Menu'))
+            $form->select('parent_id', __t('Parent Item'))
                 ->options($menuItems)
                 ->help(__t('Leave empty for root menu'));
+
+            $form->select('menu_id', __t('Menu'))
+                ->options(Menu::pluck('title', 'id'))
+                ->help(__t('Required for root menu items. Will be set from parent for child items.'))
+                ->rules('required_if:parent_id,null');
 
             $form->text('title', __t('Title'))->required();
             $form->text('remark', __t('Remark'));
@@ -98,19 +95,39 @@ final class MenuItemController extends AdminBaseController
                 /** @var MenuItem $model */
                 $model = $form->model();
 
-                if (Request::has('parent_id')) {
-                    $parentId = $form->input('parent_id');
-                    if ($parentId) {
-                        $parent = $model->find($parentId);
-                        if ($parent) {
-                            $model->appendToNode($parent)->save();
-                        } else {
-                            $model->saveAsRoot();
-                        }
+                // Handle parent_id and menu_id logic
+                $parentId = $form->input('parent_id');
+                $menuId   = $form->input('menu_id');
+
+                if ($parentId) {
+                    // Child item - get menu_id from parent
+                    $parent = MenuItem::find($parentId);
+                    if ($parent) {
+                        $form->input('menu_id', $parent->menu_id);
+                        $model->appendToNode($parent)->save();
                     } else {
+                        // Invalid parent, save as root
+                        if (! $menuId) {
+                            $form->error(__t('Menu is required for root menu items.'));
+
+                            return false;
+                        }
                         $model->saveAsRoot();
                     }
-                } elseif (Request::has('_orderable')) {
+                } else {
+                    // Root item - menu_id is required
+                    if (! $menuId) {
+                        $form->error(__t('Menu is required for root menu items.'));
+
+                        return false;
+                    }
+                    // Ensure the model has the menu_id set before saving as root
+                    $model->menu_id = $menuId;
+                    $model->saveAsRoot();
+                }
+
+                // Handle orderable operations
+                if (Request::has('_orderable')) {
                     $moveUp = $form->input('_orderable') == 1;
                     $node   = $model->find($form->getKey());
                     if ($moveUp) {
@@ -118,8 +135,6 @@ final class MenuItemController extends AdminBaseController
                     } else {
                         $node->down();
                     }
-                } else {
-                    $model->save();
                 }
 
                 return $model;

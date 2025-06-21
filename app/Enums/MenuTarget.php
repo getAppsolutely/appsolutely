@@ -14,10 +14,10 @@ enum MenuTarget: string
     public function toArray(): string
     {
         return match ($this) {
-            self::Self   => 'Same Tab (_self)',
-            self::Blank  => 'New Tab (_blank)',
-            self::Parent => 'Parent Frame (_parent)',
-            self::Top    => 'Top Frame (_top)',
+            self::Self   => 'Same Tab',
+            self::Blank  => 'New Tab',
+            self::Parent => 'Parent Frame ',
+            self::Top    => 'Top Frame',
             self::Modal  => 'Open in Modal',
             self::Iframe => 'Load in Iframe',
         };
