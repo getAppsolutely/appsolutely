@@ -15,9 +15,9 @@ class PageController extends AdminBaseController
     {
         return Grid::make(Page::query(), function (Grid $grid) {
             $grid->column('id', __t('ID'))->sortable();
-            $grid->column('name', __t('Name'));
-            $grid->column('slug', __t('Slug'));
             $grid->column('title', __t('Title'));
+            $grid->column('name', __t('Name (Internal use)'))->help(__t('form_help.internal_reference'));
+            $grid->column('slug', __t('Slug'));
             $grid->column('published_at', __t('Published At'))->display(column_time_format())->sortable();
             $grid->column('expired_at', __t('Expired At'))->display(column_time_format())->sortable();
             $grid->column('status', __t('Status'))->switch();
@@ -48,9 +48,9 @@ class PageController extends AdminBaseController
         return Form::make(Page::query(), function (Form $form) {
             $form->tab(__t('Basic'), function (Form $form) {
                 $form->display('id', __t('ID'));
-                $form->text('name', __t('Name'))->required();
                 $form->text('title', __t('Title'))->required();
-                $form->text('slug', __t('Slug'))->required();
+                $form->text('name', __t('Name (Internal use)'))->help(__t('form_help.name_fallback_title'));
+                $form->text('slug', __t('Slug'));
                 $form->text('keywords', __t('Keywords'));
                 $form->textarea('description', __t('Description'))->rows(3);
                 $form->editor('content', __t('Content'));
@@ -74,6 +74,14 @@ class PageController extends AdminBaseController
                     $form->html('<div class="alert alert-info">' . __t('Please save the page first to access the designer.') . '</div>');
                 }
             });
+
+            $form->saving(function (Form $form) {
+                // If name is empty, use title value
+                if (empty($form->input('name'))) {
+                    $form->input('name', $form->input('title'));
+                }
+            });
+
             $form->disableViewButton();
             $form->disableViewCheck();
         });

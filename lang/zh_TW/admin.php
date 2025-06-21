@@ -226,4 +226,15 @@ return [
         'minlength' => ':attribute 長度不能少於 :min。',
         'maxlength' => ':attribute 長度不能超過 :max。',
     ],
+
+    // Form help messages
+    'form_help' => [
+        'expired_at_timezone'   => '過期時間 (%s)',
+        'internal_reference'    => '系統內部使用的參考名稱（不會顯示給用戶）',
+        'name_fallback_title'   => '系統內部使用的參考名稱（不會顯示給用戶）。如果為空，將使用標題值。',
+        'optional_field'        => '此欄位為可選項',
+        'published_at_timezone' => '發布時間 (%s)',
+        'required_field'        => '此欄位為必填項',
+        'slug_auto_generate'    => 'URL友好格式。如果為空，將自動生成。',
+    ],
 ];

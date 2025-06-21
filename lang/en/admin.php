@@ -196,8 +196,19 @@ return [
         'confirm_delete_file'    => 'Are you sure delete this file from server?',
         'dimensions'             => 'The image dimensions is invalid.',
     ],
-    'import_extension_confirm'  => 'Are you sure import the extension?',
-    'quick_create'              => 'Quick create',
+    'import_extension_confirm' => 'Are you sure import the extension?',
+    'quick_create'             => 'Quick create',
+
+    // Form help messages
+    'form_help' => [
+        'expired_at_timezone'   => 'Expired At (%s)',
+        'internal_reference'    => 'Internal use for system reference (not displayed to users)',
+        'name_fallback_title'   => 'Internal use for system reference (not displayed to users). If empty, will use title value.',
+        'optional_field'        => 'This field is optional',
+        'published_at_timezone' => 'Published At (%s)',
+        'required_field'        => 'This field is required',
+        'slug_auto_generate'    => 'URL-friendly version. Will be auto-generated if empty.',
+    ],
     'grid_items_selected'       => '{n} items selected',
     'nothing_updated'           => 'Nothing has been updated.',
     'welcome_back'              => 'Welcome back, please login to your account.',

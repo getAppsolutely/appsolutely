@@ -226,4 +226,15 @@ return [
         'minlength' => ':attribute 字符长度不能少于 :min。',
         'maxlength' => ':attribute 字符长度不能超出 :max。',
     ],
+
+    // Form help messages
+    'form_help' => [
+        'expired_at_timezone'   => '过期时间 (%s)',
+        'internal_reference'    => '系统内部使用的引用名称（不会显示给用户）',
+        'name_fallback_title'   => '系统内部使用的引用名称（不会显示给用户）。如果为空，将使用标题值。',
+        'optional_field'        => '此字段为可选项',
+        'published_at_timezone' => '发布时间 (%s)',
+        'required_field'        => '此字段为必填项',
+        'slug_auto_generate'    => 'URL友好格式。如果为空，将自动生成。',
+    ],
 ];

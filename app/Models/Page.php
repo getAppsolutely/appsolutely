@@ -16,12 +16,9 @@ class Page extends Model
     use Sluggable;
 
     protected $fillable = [
+        'title',
         'name',
         'slug',
-        'published_at',
-        'expired_at',
-        'status',
-        'title',
         'description',
         'keywords',
         'content',
@@ -35,6 +32,9 @@ class Page extends Model
         'hreflang',
         'language',
         'parent_id',
+        'published_at',
+        'expired_at',
+        'status',
     ];
 
     protected $casts = [
