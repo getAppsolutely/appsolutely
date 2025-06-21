@@ -10,15 +10,18 @@
                 @else
                     <img src="{{ asset_server($slide['url']) }}" class="d-block w-100" alt="{{ $slide['title'] ?? '' }}">
                 @endif
-                <div class="carousel-caption d-none d-md-block">
+                <div class="carousel-caption d-none d-md-block media-slider-caption">
                     @if(!empty($slide['title']))
-                        <h5>{{ $slide['title'] }}</h5>
+                        <h2 class="display-4 fw-bold">{{ $slide['title'] }}</h2>
                     @endif
                     @if(!empty($slide['subTitle']))
-                        <p>{{ $slide['subTitle'] }}</p>
+                        <p class="lead">{{ $slide['subTitle'] }}</p>
                     @endif
                     @if(!empty($slide['link']))
-                        <a href="{{ $slide['link'] }}" class="btn btn-primary">Learn More</a>
+                        <a href="{{ $slide['link'] }}" class="btn btn-primary media-slider-btn">
+                            <i class="fas fa-play me-2"></i>
+                            Learn More
+                        </a>
                     @endif
                 </div>
             </div>

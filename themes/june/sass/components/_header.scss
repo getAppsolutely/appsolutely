@@ -54,7 +54,6 @@
 #mainHeader:has(.header-center .navbar-nav .nav-item:hover) {
   background: $body-bg;
   color: $body-color;
-
   .navbar,
   .navbar-nav .nav-link,
   .navbar-brand,
@@ -72,22 +71,6 @@
   .header-center .navbar-nav .nav-link {
     font-weight: 600;
   }
-}
-
-.header-right .btn-primary {
-  color: $light;
-  background: transparent;
-  border: 2px solid $light;
-  font-weight: 600;
-  transition: color 0.3s, border-color 0.3s, background 0.3s;
-}
-
-.header-right .btn-primary:hover,
-#mainHeader:has(.header-left a:hover) .header-right .btn-primary,
-#mainHeader:has(.header-center .navbar-nav .nav-item:hover) .header-right .btn-primary {
-  color: $body-color !important;
-  border-color: $body-color;
-  background: transparent;
 }
 
 .header-mobile-overlay {

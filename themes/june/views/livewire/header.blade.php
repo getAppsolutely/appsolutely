@@ -65,7 +65,7 @@
 
             <!-- Right: Test Drive Button (hidden below 1200px) -->
             <div class="header-right d-none d-xl-block flex-shrink-0">
-                <a href="{{ route('book') }}" class="btn btn-primary">
+                <a href="{{ route('book') }}" class="btn btn-outline-light-primary">
                     <i class="fas fa-play me-2"></i>
                     Test Drive
                 </a>
@@ -107,7 +107,7 @@
                 </ul>
             @endif
             <div class="header-mobile-testdrive mt-4">
-                <a href="{{ route('book') }}" class="btn btn-primary w-100">
+                <a href="{{ route('book') }}" class="btn btn-outline-light-primary w-100">
                     <i class="fas fa-play me-2"></i>
                     Test Drive
                 </a>
