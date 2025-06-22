@@ -316,6 +316,19 @@ final class PageBlockSeeder extends Seeder
                 'reference'   => 'location-map',
             ], $this->getBasicFields())
         );
+
+        // Store Locations
+        PageBlock::firstOrCreate(
+            ['class' => 'App\\Http\\Livewire\\StoreLocations', 'block_group_id' => $group->id],
+            array_merge([
+                'title'       => 'Store Locations',
+                'class'       => 'App\\Http\\Livewire\\StoreLocations',
+                'template'    => $this->getTemplate('store-locations'),
+                'description' => 'Display store locations with multiple layout options (grid, list, table) and optional map integration.',
+                'sort'        => 18,
+                'reference'   => 'store-locations',
+            ], $this->getBasicFields())
+        );
     }
 
     /**

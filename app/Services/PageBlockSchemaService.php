@@ -16,6 +16,10 @@ final class PageBlockSchemaService
      */
     public function getBlockSchema(PageBlock $block): array
     {
+        if (! is_array($block->schema)) {
+            return json_decode($block->schema, true) ?? [];
+        }
+
         return $block->schema ?? [];
     }
 
