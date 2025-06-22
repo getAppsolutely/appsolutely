@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Repositories\PageBlockGroupRepository;
 use App\Repositories\PageBlockRepository;
 use App\Repositories\PageBlockSettingRepository;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\Livewire;
 
@@ -80,8 +81,8 @@ final class PageBlockService
             return $this->getBlockErrorHtml("Class '{$className}' is not a Livewire component");
         }
 
-        // Get parameters safely
-        $parameters = $block->parameters ?? [];
+        // Get parameters safely and normalize keys
+        $parameters = $this->normalizeParameterKeys($block->parameters ?? []);
 
         // Render the Livewire component
         try {
@@ -89,6 +90,16 @@ final class PageBlockService
         } catch (\Exception $e) {
             return $this->getBlockErrorHtml('Error rendering block: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Normalize parameter keys to camelCase (first layer only)
+     */
+    private function normalizeParameterKeys(array $parameters): array
+    {
+        return collect($parameters)
+            ->mapWithKeys(fn ($value, $key) => [Str::camel($key) => $value])
+            ->toArray();
     }
 
     /**
