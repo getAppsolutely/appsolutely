@@ -11,24 +11,31 @@ use Livewire\Component;
 
 final class Header extends Component
 {
-    public string $logo;
-
-    public string $mainNav;
-
-    public string $authMenu;
+    /**
+     * @var array<string, mixed>
+     */
+    public array $config;
 
     public Collection $mainNavigation;
 
     public Collection $authMenuItems;
 
-    public function mount(
-        ?string $logo = null,
-        ?string $mainNav = null,
-        ?string $authMenu = null
-    ): void {
-        $this->logo     = $logo ?? config('appsolutely.general.logo');
-        $this->mainNav  = $mainNav ?? 'main-nav';
-        $this->authMenu = $authMenu ?? 'auth-menu';
+    /**
+     * Mount the component with configuration array.
+     *
+     * @param  array<string, mixed>  $config
+     */
+    public function mount(array $config = []): void
+    {
+        $this->config = array_merge([
+            'logo'      => true,
+            'main_nav'  => 'main-nav',
+            'auth_menu' => 'auth-menu',
+            'booking'   => [
+                'text' => 'Book A Test Drive',
+                'url'  => '/test-drive',
+            ],
+        ], $config);
 
         $this->loadMenus();
     }
@@ -39,13 +46,13 @@ final class Header extends Component
         $menuItemRepository = app(MenuItemRepository::class);
 
         // Load main navigation
-        $mainMenu             = $menuRepository->findByReference($this->mainNav);
+        $mainMenu             = $menuRepository->findByReference($this->config['main_nav']);
         $this->mainNavigation = $mainMenu
             ? $menuItemRepository->getActiveMenuTree($mainMenu->id, now())
             : collect();
 
         // Load auth menu
-        $authMenu            = $menuRepository->findByReference($this->authMenu);
+        $authMenu            = $menuRepository->findByReference($this->config['auth_menu']);
         $this->authMenuItems = $authMenu
             ? $menuItemRepository->getActiveMenuTree($authMenu->id, now())
             : collect();

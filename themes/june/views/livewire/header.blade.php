@@ -6,7 +6,7 @@
             <!-- Left: Logo -->
             <div class="header-left d-flex align-items-center flex-shrink-0">
                 <a href="{{ route('home') }}" class="navbar-brand m-0">
-                    @if($logo)
+                    @if($config['logo'])
                         <img src="{{ asset_server('assets/images/logo-dark.webp') }}"
                              alt="{{ config('appsolutely.general.site_name') }}" height="40" class="logo-dark">
                         <img src="{{ asset_server('assets/images/logo.webp') }}"
@@ -66,13 +66,16 @@
                 @endif
             </div>
 
-            <!-- Right: Test Drive Button (hidden below 1200px) -->
-            <div class="header-right d-none d-xl-block flex-shrink-0">
-                <a href="{{ route('book') }}" class="btn btn-outline-light-primary">
-                    <i class="fas fa-play me-2"></i>
-                    Book A Test Drive
-                </a>
-            </div>
+            <!-- Right: Booking Button (hidden below 1200px) -->
+            @if(($config['booking']['text'] ?? null) && ($config['booking']['url'] ?? null))
+                <div class="header-right d-none d-xl-block flex-shrink-0">
+                    <a href="{{ $config['booking']['url'] }}" 
+                       class="btn btn-outline-light-primary">
+                        <i class="fas fa-play me-2"></i>
+                        {{ $config['booking']['text'] }}
+                    </a>
+                </div>
+            @endif
         </div>
 
     <!-- Hamburger Menu Overlay/Layer (for mobile/tablet, pure CSS toggle) -->
@@ -112,12 +115,17 @@
                     @endforeach
                 </ul>
             @endif
-            <div class="header-mobile-testdrive mt-4">
-                <a href="{{ route('book') }}" class="btn btn-outline-light-primary w-100">
-                    <i class="fas fa-play me-2"></i>
-                    Book A Test Drive
-                </a>
-            </div>
+            
+            <!-- Mobile Booking Button -->
+            @if(($config['booking']['text'] ?? null) && ($config['booking']['url'] ?? null))
+                <div class="header-mobile-testdrive mt-4">
+                    <a href="{{ $config['booking']['url'] }}" 
+                       class="btn btn-outline-light-primary w-100">
+                        <i class="fas fa-play me-2"></i>
+                        {{ $config['booking']['text'] }}
+                    </a>
+                </div>
+            @endif
         </nav>
     </div>
     </nav>
