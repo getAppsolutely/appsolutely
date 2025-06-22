@@ -329,6 +329,19 @@ final class PageBlockSeeder extends Seeder
                 'reference'   => 'store-locations',
             ], $this->getBasicFields())
         );
+
+        // Dynamic Form
+        PageBlock::firstOrCreate(
+            ['class' => 'App\\Http\\Livewire\\DynamicForm', 'block_group_id' => $group->id],
+            array_merge([
+                'title'       => 'Dynamic Form',
+                'class'       => 'App\\Http\\Livewire\\DynamicForm',
+                'template'    => $this->getTemplate('dynamic-form'),
+                'description' => 'Configurable form component for contact forms, test drive bookings, and other data collection needs.',
+                'sort'        => 19,
+                'reference'   => 'dynamic-form',
+            ], $this->getBasicFields())
+        );
     }
 
     /**
