@@ -29,7 +29,15 @@ final class Header extends Component
     {
         $this->config = array_merge($this->defaultConfig(), $config);
 
-        $this->loadMenus();
+        // Initialize empty collections
+        $this->mainNavigation = collect();
+        $this->authMenuItems  = collect();
+
+        // Try to load menus if database is available
+        try {
+            $this->loadMenus();
+        } catch (\Exception $e) {
+        }
     }
 
     /**

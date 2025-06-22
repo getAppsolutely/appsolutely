@@ -54,19 +54,21 @@
             <!-- Right Side - Logo and Social Media -->
             <div class="col-lg-4 text-lg-end">
                 <!-- Logo -->
-                <div class="mb-4">
-                    @if(config('appsolutely.general.logo'))
-                        <img src="{{ config('appsolutely.general.logo') }}"
-                             alt="{{ config('appsolutely.general.site_name') }}"
-                             height="40">
-                    @elseif(themed_assets('images/logo.webp'))
-                        <img src="{{ themed_assets('images/logo-dark.webp') }}"
-                             alt="{{ config('appsolutely.general.site_name') }}"
-                             height="40">
-                    @else
-                        <span class="h4 text-white">{{ config('appsolutely.general.site_name') }}</span>
-                    @endif
-                </div>
+                @if(($config['logo'] ?? false))
+                    <div class="mb-4">
+                        @if(config('appsolutely.general.logo'))
+                            <img src="{{ config('appsolutely.general.logo') }}"
+                                 alt="{{ config('appsolutely.general.site_name') }}"
+                                 height="40">
+                        @elseif(themed_assets('images/logo.webp'))
+                            <img src="{{ themed_assets('images/logo-dark.webp') }}"
+                                 alt="{{ config('appsolutely.general.site_name') }}"
+                                 height="40">
+                        @else
+                            <span class="h4 text-white">{{ config('appsolutely.general.site_name') }}</span>
+                        @endif
+                    </div>
+                @endif
 
                 <!-- Social Media Menu -->
                 @if($socialMediaItems->isNotEmpty())
@@ -92,7 +94,7 @@
             <!-- Left Side - Copyright -->
             <div class="col-lg-6">
                 <p class="text-white mb-0">
-                    &copy; {{ date('Y') }} {{ config('appsolutely.general.site_name') }}. All rights reserved.
+                    {{ $config['copyright']['text'] ?? '© ' . date('Y') . ' ' . config('appsolutely.general.site_name') . '. All rights reserved.' }}
                 </p>
             </div>
 

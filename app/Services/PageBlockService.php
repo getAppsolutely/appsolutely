@@ -103,20 +103,33 @@ final class PageBlockService
             ->toArray();
     }
 
-    private function getPossibleParameters(array $originalParameters, array $parameters, string $className): array
+    private function getPossibleParameters(array $originalParameters, array $normalisedParameters, string $className): array
     {
-        $propertyKeys = array_unique(array_keys(get_object_vars(new $className())));
+        // Assuming final parameters
+        $parameters = $normalisedParameters;
 
-        $originalKeys = array_unique(array_keys($originalParameters));
-        $keys         = array_unique(array_keys($parameters));
+        // Get all properties from Livewire
+        $propertyKeys = array_unique(array_keys(get_class_vars($className)));
 
-        if ($propertyKeys != array_intersect($originalKeys, $propertyKeys) && $propertyKeys != array_intersect($keys, $propertyKeys)) {
-            local_debug('Not able to match property keys', [
-                'className'          => $className,
-                'propertyKeys'       => $propertyKeys,
-                'originalParameters' => $originalParameters,
-                'parameters'         => $parameters]);
-            $key        = \Arr::first($propertyKeys);
+        // try to match normalised parameters
+        $normalisedKeys         = array_unique(array_keys($normalisedParameters));
+        $normalisedIntersection = array_intersect($normalisedKeys, $propertyKeys);
+        if (empty($normalisedIntersection)) {
+            $log                  = "{$className} properties are not in normalized parameters, trying to check if it is in original parameters. ";
+            $originalKeys         = array_unique(array_keys($originalParameters));
+            $originalIntersection = array_intersect($originalKeys, $propertyKeys);
+            $possibleKeys         = $originalIntersection;
+
+            if (empty($originalIntersection)) {
+                $log .= "Not in original parameters either. guessing the key would be the first property of $className";
+                $possibleKeys = $propertyKeys;
+            }
+            local_debug($log, [
+                'className'            => $className,
+                'propertyKeys'         => $propertyKeys,
+                'originalParameters'   => $originalParameters,
+                'normalisedParameters' => $normalisedParameters]);
+            $key        = \Arr::first($possibleKeys);
             $parameters = [$key => $originalParameters];
         }
 
