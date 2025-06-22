@@ -31,7 +31,20 @@ final class DynamicForm extends Component
      */
     public function mount(array $formConfig = []): void
     {
-        $this->formConfig = array_merge([
+        $this->formConfig = array_merge($this->defaultConfig(), $formConfig);
+
+        // Initialize form data with empty values
+        $this->initializeFormData();
+    }
+
+    /**
+     * Get default form configuration.
+     *
+     * @return array<string, mixed>
+     */
+    private function defaultConfig(): array
+    {
+        return [
             'title'           => 'Test Drive Booking',
             'subtitle'        => 'Book your test drive today',
             'description'     => 'Fill out the form below and we\'ll get back to you within 24 hours.',
@@ -121,10 +134,7 @@ final class DynamicForm extends Component
             'send_email'            => true, // Whether to send email notifications
             'email_to'              => 'sales@company.com',
             'redirect_after_submit' => '', // URL to redirect after successful submission
-        ], $formConfig);
-
-        // Initialize form data with empty values
-        $this->initializeFormData();
+        ];
     }
 
     /**

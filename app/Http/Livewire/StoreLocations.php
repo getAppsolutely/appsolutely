@@ -20,7 +20,17 @@ final class StoreLocations extends Component
      */
     public function mount(array $storeLocations = []): void
     {
-        $this->storeLocations = array_merge([
+        $this->storeLocations = array_merge($this->defaultConfig(), $storeLocations);
+    }
+
+    /**
+     * Get default store locations configuration.
+     *
+     * @return array<string, mixed>
+     */
+    private function defaultConfig(): array
+    {
+        return [
             'title'       => '',
             'subtitle'    => '',
             'description' => '',
@@ -51,7 +61,7 @@ final class StoreLocations extends Component
                 //     'featured'    => false, // Whether this is a featured location
                 // ]
             ],
-        ], $storeLocations);
+        ];
     }
 
     public function render(): object

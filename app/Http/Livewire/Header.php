@@ -27,17 +27,28 @@ final class Header extends Component
      */
     public function mount(array $config = []): void
     {
-        $this->config = array_merge([
-            'logo'      => true,
-            'main_nav'  => 'main-nav',
-            'auth_menu' => 'auth-menu',
-            'booking'   => [
-                'text' => 'Book A Test Drive',
-                'url'  => '/test-drive',
-            ],
-        ], $config);
+        $this->config = array_merge($this->defaultConfig(), $config);
 
         $this->loadMenus();
+    }
+
+    /**
+     * Get default configuration.
+     *
+     * @return array<string, mixed>
+     */
+    private function defaultConfig(): array
+    {
+        return [
+            'logo'        => config('appsolutely.general.logo'),
+            'main_nav'    => 'main-nav',
+            'auth_menu'   => 'auth-menu',
+            'footer_menu' => 'footer-menu',
+            'booking'     => [
+                'text' => 'Book A Test Drive',
+                'url'  => '/book',
+            ],
+        ];
     }
 
     private function loadMenus(): void

@@ -20,7 +20,17 @@ final class VideoShowcase extends Component
      */
     public function mount(array $videoShowcase = []): void
     {
-        $this->videoShowcase = array_merge([
+        $this->videoShowcase = array_merge($this->defaultConfig(), $videoShowcase);
+    }
+
+    /**
+     * Get default video showcase configuration.
+     *
+     * @return array<string, mixed>
+     */
+    private function defaultConfig(): array
+    {
+        return [
             'video_url'             => '',
             'poster_image'          => '',
             'title'                 => '',
@@ -38,7 +48,7 @@ final class VideoShowcase extends Component
             'text_position'         => 'center', // center, left, right
             'video_format'          => 'mp4', // mp4, webm, mov
             'fallback_videos'       => [], // Array of alternative video formats
-        ], $videoShowcase);
+        ];
     }
 
     public function render(): object

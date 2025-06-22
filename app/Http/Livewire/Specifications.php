@@ -20,7 +20,17 @@ final class Specifications extends Component
      */
     public function mount(array $specifications = []): void
     {
-        $this->specifications = array_merge([
+        $this->specifications = array_merge($this->defaultConfig(), $specifications);
+    }
+
+    /**
+     * Get default specifications configuration.
+     *
+     * @return array<string, mixed>
+     */
+    private function defaultConfig(): array
+    {
+        return [
             'title'          => '',
             'subtitle'       => '',
             'description'    => '',
@@ -36,7 +46,7 @@ final class Specifications extends Component
                 //     'unit'  => '', // Optional unit (e.g., 'kg', 'cm', '%')
                 // ]
             ],
-        ], $specifications);
+        ];
     }
 
     public function render(): object
