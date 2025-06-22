@@ -1,0 +1,15 @@
+// TransitionSection Component Styles
+.transition-section {
+    display: block;
+    overflow: hidden;
+
+    // Responsive adjustments
+    @media (max-width: 768px) {
+        &[data-hide-mobile="true"] {
+            display: none;
+        }
+        
+        // Use CSS custom property for dynamic mobile height
+        height: var(--mobile-height, 200px) !important;
+    }
+} 

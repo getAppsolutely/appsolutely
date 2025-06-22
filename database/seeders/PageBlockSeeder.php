@@ -342,6 +342,19 @@ final class PageBlockSeeder extends Seeder
                 'reference'   => 'dynamic-form',
             ], $this->getBasicFields())
         );
+
+        // Transition Section
+        PageBlock::firstOrCreate(
+            ['class' => 'App\\Http\\Livewire\\TransitionSection', 'block_group_id' => $group->id],
+            array_merge([
+                'title'       => 'Transition Section',
+                'class'       => 'App\\Http\\Livewire\\TransitionSection',
+                'template'    => $this->getTemplate('transition-section'),
+                'description' => 'Visual transition section with full-width background image, perfect for bridging between different content sections.',
+                'sort'        => 20,
+                'reference'   => 'transition-section',
+            ], $this->getBasicFields())
+        );
     }
 
     /**

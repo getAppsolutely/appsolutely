@@ -40,13 +40,13 @@ final class Header extends Component
     private function defaultConfig(): array
     {
         return [
-            'logo'        => config('appsolutely.general.logo'),
+            'logo'        => true,
             'main_nav'    => 'main-nav',
             'auth_menu'   => 'auth-menu',
             'footer_menu' => 'footer-menu',
             'booking'     => [
                 'text' => 'Book A Test Drive',
-                'url'  => '/book',
+                'url'  => '/test-drive',
             ],
         ];
     }

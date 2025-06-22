@@ -69,9 +69,8 @@
             <!-- Right: Booking Button (hidden below 1200px) -->
             @if(($config['booking']['text'] ?? null) && ($config['booking']['url'] ?? null))
                 <div class="header-right d-none d-xl-block flex-shrink-0">
-                    <a href="{{ $config['booking']['url'] }}" 
+                    <a href="{{ $config['booking']['url'] }}"
                        class="btn btn-outline-light-primary">
-                        <i class="fas fa-play me-2"></i>
                         {{ $config['booking']['text'] }}
                     </a>
                 </div>
@@ -115,11 +114,11 @@
                     @endforeach
                 </ul>
             @endif
-            
+
             <!-- Mobile Booking Button -->
             @if(($config['booking']['text'] ?? null) && ($config['booking']['url'] ?? null))
                 <div class="header-mobile-testdrive mt-4">
-                    <a href="{{ $config['booking']['url'] }}" 
+                    <a href="{{ $config['booking']['url'] }}"
                        class="btn btn-outline-light-primary w-100">
                         <i class="fas fa-play me-2"></i>
                         {{ $config['booking']['text'] }}

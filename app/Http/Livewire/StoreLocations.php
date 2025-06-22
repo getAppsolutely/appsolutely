@@ -35,7 +35,7 @@ final class StoreLocations extends Component
             'subtitle'    => '',
             'description' => '',
             'layout'      => 'grid', // grid, list, table, map
-            'columns'     => 3, // Number of columns for grid layout
+            'columns'     => 2, // Number of columns for grid layout
             'show_map'    => false, // Whether to show map integration
             'map_api_key' => '', // Google Maps API key
             'locations'   => [
