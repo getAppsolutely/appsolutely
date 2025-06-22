@@ -35,15 +35,18 @@
                                         {{ $item->title }}
                                     </a>
                                     <!-- Submenu markup -->
-                                    <ul class="submenu list-unstyled m-0 p-0 position-absolute w-100 start-0 top-100">
-                                        <li class="d-flex flex-row justify-content-center w-100">
+                                    <ul class="submenu list-unstyled m-0 p-0 position-absolute w-80 start-0 top-100">
+                                        <li class="d-flex flex-row justify-content-center w-80">
                                             @foreach($item->children as $child)
                                                 <a class="dropdown-item text-center flex-fill"
                                                    href="{{ $child->route }}" target="{{ $child->target->value }}">
                                                     @if($child->icon)
                                                         <i class="{{ $child->icon }} me-2"></i>
                                                     @endif
-                                                    {{ $child->title }}
+                                                    @if($child->thumbnail)
+                                                        <img class="w-100 h-80" src="{{ asset_server($child->thumbnail) }}" alt="{{ $child->title }}">
+                                                    @endif
+                                                    <span>{{ $child->title }}</span>
                                                 </a>
                                             @endforeach
                                         </li>
@@ -95,6 +98,9 @@
                                                href="{{ $child->route }}" target="{{ $child->target->value }}">
                                                 @if($child->icon)
                                                     <i class="{{ $child->icon }} me-2"></i>
+                                                @endif
+                                                @if($child->thumbnail)
+                                                    <img class="" src="{{ asset_server($child->thumbnail) }}" alt="{{ $child->title }}">
                                                 @endif
                                                 {{ $child->title }}
                                             </a>

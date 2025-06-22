@@ -76,7 +76,7 @@ final class MenuItemController extends AdminBaseController
                 ->required();
 
             $form->text('icon', __t('Icon'))->help(__t('CSS class or icon name'));
-            $form->image('thumbnail', __t('Thumbnail'))->help(__t('Menu item thumbnail image'));
+            $form->text('thumbnail', __t('Thumbnail'))->help(__t('Menu item thumbnail image'));
             $form->keyValue('setting', __t('Settings'))->help(__t('Additional settings in key-value format'));
             $form->text('permission_key', __t('Permission Key'));
 
