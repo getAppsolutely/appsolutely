@@ -206,6 +206,15 @@ if (! function_exists('log_message')) {
     }
 }
 
+if (! function_exists('local_debug')) {
+    function local_debug(string $message, ?array $context = []): void
+    {
+        if (app()->environment() !== 'production') {
+            log_debug($message, $context);
+        }
+    }
+}
+
 if (! function_exists('upload_to_api')) {
     function upload_to_api(?string $class = null, ?string $id = null, ?string $type = null, ?string $token = null): string
     {

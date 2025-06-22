@@ -82,7 +82,8 @@ final class PageBlockService
         }
 
         // Get parameters safely and normalize keys
-        $parameters = $this->normalizeParameterKeys($block->parameters ?? []);
+        $parameters = $this->normalizeParameterKeys($block->parameters);
+        $parameters = $this->getPossibleParameters($block->parameters, $parameters, $className);
 
         // Render the Livewire component
         try {
@@ -100,6 +101,26 @@ final class PageBlockService
         return collect($parameters)
             ->mapWithKeys(fn ($value, $key) => [Str::camel($key) => $value])
             ->toArray();
+    }
+
+    private function getPossibleParameters(array $originalParameters, array $parameters, string $className): array
+    {
+        $propertyKeys = array_unique(array_keys(get_object_vars(new $className())));
+
+        $originalKeys = array_unique(array_keys($originalParameters));
+        $keys         = array_unique(array_keys($parameters));
+
+        if ($propertyKeys != array_intersect($originalKeys, $propertyKeys) && $propertyKeys != array_intersect($keys, $propertyKeys)) {
+            local_debug('Not able to match property keys', [
+                'className'          => $className,
+                'propertyKeys'       => $propertyKeys,
+                'originalParameters' => $originalParameters,
+                'parameters'         => $parameters]);
+            $key        = \Arr::first($propertyKeys);
+            $parameters = [$key => $originalParameters];
+        }
+
+        return $parameters;
     }
 
     /**

@@ -40,7 +40,7 @@
         </div>
 
         <!-- Optional Overlay for better text readability -->
-        <div class="hero-overlay position-absolute top-0 start-0 w-100 h-100 bg-dark"
+        <div class="hero-overlay position-absolute top-0 start-0 w-100 h-100"
              style="opacity: 0.3; z-index: 1;"></div>
     </div>
 @endforeach
