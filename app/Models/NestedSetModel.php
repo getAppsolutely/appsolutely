@@ -38,4 +38,14 @@ class NestedSetModel extends Model
 
         return $data;
     }
+
+    public static function restoring($callback)
+    {
+        static::registerModelEvent('restoring', $callback);
+    }
+
+    public static function restored($callback)
+    {
+        static::registerModelEvent('restored', $callback);
+    }
 }

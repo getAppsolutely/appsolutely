@@ -6,7 +6,7 @@ use Exception;
 
 class BusinessException extends Exception
 {
-    public int $code;
+    public $code;
 
     public array $errors;
 
