@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
     private function dashboardSeeders(): array
     {
         return [
+            AdminCoreSeeder::class,
             CmsMenuSeeder::class,
             ProductMenuSeeder::class,
             OrderMenuSeeder::class,

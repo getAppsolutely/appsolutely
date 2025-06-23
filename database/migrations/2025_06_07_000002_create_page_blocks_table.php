@@ -20,7 +20,9 @@ return new class() extends Migration
             $table->text('description')->nullable();
             $table->text('template')->nullable();
             $table->text('instruction')->nullable();
+            $table->enum('scope', ['page', 'global'])->default('page');
             $table->json('schema')->nullable();
+            $table->json('schema_values')->nullable();
             $table->unsignedTinyInteger('droppable')->nullable()->default(0);
             $table->json('setting')->nullable();
             $table->unsignedTinyInteger('sort')->default(0);

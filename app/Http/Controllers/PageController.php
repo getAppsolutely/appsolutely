@@ -15,8 +15,7 @@ class PageController extends BaseController
     {
         $page = $this->pageService->getPublishedPage($slug ?? '/');
 
-        // If still no page found, return 404
-        if (! $page && ! empty($slug)) {
+        if (! $page) {
             abort(404);
         }
 
