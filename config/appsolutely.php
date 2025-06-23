@@ -3,9 +3,9 @@
 return [
     'prefix'         => env('APPSOLUTELY_APP_PREFIX', 'appsolutely'),
     'url'            => env('APPSOLUTELY_URL', config('app.url')),
-    'asset'          => env('APPSOLUTELY_ASSET_SERVER', config('app.url')),
-    'local_timezone' => env('LOCAL_TIMEZONE', 'UTC'),
-    'time_format'    => env('TIME_FORMAT', 'Y-m-d H:i:s T'),
+    'local_timezone' => env('APPSOLUTELY_LOCAL_TIMEZONE', 'UTC'),
+    'time_format'    => env('APPSOLUTELY_TIME_FORMAT', 'Y-m-d H:i:s T'),
+    'asset'          => config('app.asset_url') ?? config('app.url'),
     'theme'          => [
         'name'   => env('APPSOLUTELY_THEME', 'default'),
         'styles' => [
@@ -27,6 +27,7 @@ return [
         'public'     => 'storage/',
     ],
     'features' => [
-        'disabled' => env('DISABLED_FEATURES', ''),
+        'enabled'  => env('APPSOLUTELY_ENABLED_FEATURES', ''), // Will check enabled first
+        'disabled' => env('APPSOLUTELY_DISABLED_FEATURES', ''),
     ],
 ];
