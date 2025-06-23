@@ -2,8 +2,9 @@
 
 @section('content')
     <div>
-        @foreach($page->blocks as $block)
+        @forelse ($page->blocks as $block)
             @renderBlock($block)
-        @endforeach
+        @empty
+        @endforelse
     </div>
 @endsection

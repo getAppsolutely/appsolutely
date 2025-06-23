@@ -10,6 +10,7 @@ export default defineConfig({
                 'themes/default/js/app.js'
             ],
             refresh: true,
+            publicDirectory: 'public/build/themes'
         }),
         vue()
     ],
