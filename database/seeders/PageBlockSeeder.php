@@ -70,12 +70,15 @@ final class PageBlockSeeder extends Seeder
             array_merge(
                 $this->getBasicFields(),
                 [
-                    'title'       => 'Header',
-                    'class'       => 'App\\Http\\Livewire\\Header',
-                    'template'    => $this->getTemplate('header'),
-                    'description' => 'Main site header with navigation and logo',
-                    'sort'        => 1,
-                    'reference'   => 'header',
+                    'title'         => 'Header',
+                    'class'         => 'App\\Http\\Livewire\\Header',
+                    'template'      => $this->getTemplate('header'),
+                    'description'   => 'Main site header with navigation and logo',
+                    'sort'          => 1,
+                    'reference'     => 'global',
+                    'schema_values' => [
+                        'main_menu' => 'main-nav',
+                    ],
                 ]
             )
         );
@@ -86,12 +89,16 @@ final class PageBlockSeeder extends Seeder
             array_merge(
                 $this->getBasicFields(),
                 [
-                    'title'       => 'Footer',
-                    'class'       => 'App\\Http\\Livewire\\Footer',
-                    'template'    => $this->getTemplate('footer'),
-                    'description' => 'Site footer with links, social media, and company information',
-                    'sort'        => 2,
-                    'reference'   => 'footer',
+                    'title'         => 'Footer',
+                    'class'         => 'App\\Http\\Livewire\\Footer',
+                    'template'      => $this->getTemplate('footer'),
+                    'description'   => 'Site footer with links, social media, and company information',
+                    'sort'          => 2,
+                    'reference'     => 'footer',
+                    'scope'         => 'global',
+                    'schema_values' => [
+                        'footer_menu' => 'main-nav',
+                    ],
                 ]
             )
         );

@@ -1,35 +1,35 @@
 <section class="specifications-section py-5">
     <div class="container">
         <!-- Section Header -->
-        @if($specifications['title'] || $specifications['subtitle'] || $specifications['description'])
+        @if($config['title'] || $config['subtitle'] || $config['description'])
             <div class="text-center mb-5">
-                @if($specifications['title'])
+                @if($config['title'])
                     <h2 class="display-5 fw-bold mb-3">
-                        {{ $specifications['title'] }}
+                        {{ $config['title'] }}
                     </h2>
                 @endif
 
-                @if($specifications['subtitle'])
+                @if($config['subtitle'])
                     <h3 class="h4 mb-4">
-                        {{ $specifications['subtitle'] }}
+                        {{ $config['subtitle'] }}
                     </h3>
                 @endif
 
-                @if($specifications['description'])
+                @if($config['description'])
                     <p class="lead">
-                        {{ $specifications['description'] }}
+                        {{ $config['description'] }}
                     </p>
                 @endif
             </div>
         @endif
 
         <!-- Specifications Content -->
-        @if(!empty($specifications['specifications']))
-            @if($specifications['layout'] === 'grid')
+        @if(!empty($config['specifications']))
+            @if($config['layout'] === 'grid')
                 <!-- Grid Layout -->
                 <div class="row g-4">
-                    @foreach($specifications['specifications'] as $spec)
-                        <div class="col-md-{{ 12 / $specifications['columns'] }}">
+                    @foreach($config['specifications'] as $spec)
+                        <div class="col-md-{{ 12 / $config['columns'] }}">
                             <div class="specification-item p-4 h-100 border rounded-3 shadow-sm">
                                 <div class="specification-content">
                                     <h5 class="specification-label fw-semibold mb-2">
@@ -51,10 +51,10 @@
                     @endforeach
                 </div>
 
-            @elseif($specifications['layout'] === 'list')
+            @elseif($config['layout'] === 'list')
                 <!-- List Layout -->
                 <div class="specification-list">
-                    @foreach($specifications['specifications'] as $spec)
+                    @foreach($config['specifications'] as $spec)
                         <div class="specification-item d-flex align-items-center py-3 border-bottom">
                             <div class="specification-content flex-grow-1">
                                 <h6 class="specification-label fw-semibold mb-1">
@@ -88,7 +88,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($specifications['specifications'] as $spec)
+                                @foreach($config['specifications'] as $spec)
                                     <tr>
                                         <td>
                                             @if($spec['icon'] ?? false)

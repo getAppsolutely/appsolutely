@@ -11,16 +11,16 @@ final class Specifications extends Component
     /**
      * @var array<string, mixed>
      */
-    public array $specifications = [];
+    public array $config = [];
 
     /**
-     * Mount the component with specifications data.
+     * Mount the component with config data.
      *
-     * @param  array<string, mixed>  $specifications
+     * @param  array<string, mixed>  $config
      */
-    public function mount(array $specifications = []): void
+    public function mount(array $config = []): void
     {
-        $this->specifications = array_merge($this->defaultConfig(), $specifications);
+        $this->config = array_merge($this->defaultConfig(), $config);
     }
 
     /**
