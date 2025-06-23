@@ -2,7 +2,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "vite build",
+        "build": "vite build && npm run build:themes",
         "dev": "vite --port 5177",
         "build:themes": "tsx themes.ts build",
         "dev:themes": "tsx themes.ts dev",

@@ -12,7 +12,7 @@ export default defineConfig({
                 "themes/tailwind/css/app.css",
                 "themes/tailwind/js/app.js"
             ],
-            buildDirectory: "tailwind",
+            buildDirectory: "build/themes/tailwind",
         }),
         vue({
             template: {
@@ -22,7 +22,7 @@ export default defineConfig({
                 },
             },
         }),
-        
+
         {
             name: "blade",
             handleHotUpdate({ file, server }) {
@@ -38,7 +38,7 @@ export default defineConfig({
     resolve: {
         alias: {
             '@': '/themes/tailwind/js',
-            
+
         }
     },
     css: {
