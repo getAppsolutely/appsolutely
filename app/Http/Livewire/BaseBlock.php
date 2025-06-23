@@ -25,8 +25,13 @@ abstract class BaseBlock extends Component
      */
     public function mount(array $data = []): void
     {
-        $this->data = $data;
+        $this->data = array_merge($this->defaultConfig(), $data);
         $this->initializeComponent();
+    }
+
+    protected function defaultConfig(): array
+    {
+        return [];
     }
 
     /**

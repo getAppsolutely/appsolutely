@@ -4,31 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Livewire;
 
-use Livewire\Component;
-
-final class StoreLocations extends Component
+final class StoreLocations extends BaseBlock
 {
-    /**
-     * @var array<string, mixed>
-     */
-    public array $storeLocations = [];
-
-    /**
-     * Mount the component with store locations data.
-     *
-     * @param  array<string, mixed>  $storeLocations
-     */
-    public function mount(array $storeLocations = []): void
-    {
-        $this->storeLocations = array_merge($this->defaultConfig(), $storeLocations);
-    }
-
-    /**
-     * Get default store locations configuration.
-     *
-     * @return array<string, mixed>
-     */
-    private function defaultConfig(): array
+    protected function defaultConfig(): array
     {
         return [
             'title'       => '',
@@ -62,10 +40,5 @@ final class StoreLocations extends Component
                 // ]
             ],
         ];
-    }
-
-    public function render(): object
-    {
-        return themed_view('livewire.store-locations');
     }
 }

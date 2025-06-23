@@ -1,38 +1,38 @@
 <section class="store-locations-section py-5">
     <div class="container">
         <!-- Section Header -->
-        @if($storeLocations['title'] || $storeLocations['subtitle'] || $storeLocations['description'])
+        @if($data['title'] || $data['subtitle'] || $data['description'])
             <div class="text-center mb-5">
-                @if($storeLocations['title'])
+                @if($data['title'])
                     <h2 class="display-5 fw-bold mb-3">
-                        {{ $storeLocations['title'] }}
+                        {{ $data['title'] }}
                     </h2>
                 @endif
 
-                @if($storeLocations['subtitle'])
+                @if($data['subtitle'])
                     <h3 class="h4 mb-4">
-                        {{ $storeLocations['subtitle'] }}
+                        {{ $data['subtitle'] }}
                     </h3>
                 @endif
 
-                @if($storeLocations['description'])
+                @if($data['description'])
                     <p class="lead">
-                        {{ $storeLocations['description'] }}
+                        {{ $data['description'] }}
                     </p>
                 @endif
             </div>
         @endif
 
         <!-- Store Locations Content -->
-        @if(!empty($storeLocations['locations']))
-            @if($storeLocations['layout'] === 'grid')
+        @if(!empty($data['locations']))
+            @if($data['layout'] === 'grid')
                 <!-- Grid Layout -->
                 <div class="row g-4">
-                    @foreach($storeLocations['locations'] as $location)
-                        <div class="col-lg-{{ 12 / $storeLocations['columns'] }} col-md-6 mb-4">
+                    @foreach($data['locations'] as $location)
+                        <div class="col-lg-{{ 12 / $data['columns'] }} col-md-6 mb-4">
                             <div class="store-card h-100 card border-0 shadow-lg position-relative
                                 {{ ($location['featured'] ?? false) ? 'border-2 border-dark' : '' }}">
-                                
+
                                 @if($location['featured'] ?? false)
                                     <div class="position-absolute top-0 end-0 m-3">
                                         <span class="badge bg-dark text-white fs-6 px-3 py-2">
@@ -93,13 +93,13 @@
                     @endforeach
                 </div>
 
-            @elseif($storeLocations['layout'] === 'list')
+            @elseif($data['layout'] === 'list')
                 <!-- List Layout -->
                 <div class="store-list">
-                    @foreach($storeLocations['locations'] as $location)
+                    @foreach($data['locations'] as $location)
                         <div class="store-item card border-0 shadow-sm mb-4 position-relative
                             {{ ($location['featured'] ?? false) ? 'border-2 border-dark' : '' }}">
-                            
+
                             @if($location['featured'] ?? false)
                                 <div class="position-absolute top-0 end-0 m-3">
                                     <span class="badge bg-dark text-white fs-6 px-3 py-2">
@@ -186,7 +186,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($storeLocations['locations'] as $location)
+                                @foreach($data['locations'] as $location)
                                     <tr class="{{ ($location['featured'] ?? false) ? 'table-dark text-white' : '' }}">
                                         <td>
                                             <div class="fw-semibold">{{ $location['name'] }}</div>
@@ -226,7 +226,7 @@
         @endif
 
         <!-- Optional Map Integration -->
-        @if($storeLocations['show_map'] && !empty($storeLocations['locations']) && $storeLocations['map_api_key'])
+        @if($data['show_map'] && !empty($data['locations']) && $data['map_api_key'])
             <div class="mt-5">
                 <h4 class="mb-3">Store Locations Map</h4>
                 <div id="store-locations-map" style="height: 400px; border-radius: 8px;" class="border"></div>
@@ -236,11 +236,11 @@
                 function initStoreMap() {
                     const map = new google.maps.Map(document.getElementById('store-locations-map'), {
                         zoom: 10,
-                        center: { lat: {{ $storeLocations['locations'][0]['latitude'] ?? 0 }}, lng: {{ $storeLocations['locations'][0]['longitude'] ?? 0 }} }
+                        center: { lat: {{ $data['locations'][0]['latitude'] ?? 0 }}, lng: {{ $data['locations'][0]['longitude'] ?? 0 }} }
                     });
 
-                    const locations = @json($storeLocations['locations']);
-                    
+                    const locations = @json($data['locations']);
+
                     locations.forEach(location => {
                         if (location.latitude && location.longitude) {
                             const marker = new google.maps.Marker({
@@ -266,7 +266,7 @@
                     });
                 }
             </script>
-            <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ $storeLocations['map_api_key'] }}&callback=initStoreMap"></script>
+            <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ $data['map_api_key'] }}&callback=initStoreMap"></script>
         @endif
     </div>
-</section> 
+</section>

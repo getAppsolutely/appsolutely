@@ -1,6 +1,6 @@
 <div id="mediaSliderCarousel" class="carousel slide section-full" data-bs-ride="carousel">
     <div class="carousel-inner">
-        @foreach($slides as $index => $slide)
+        @foreach($data['slides'] as $index => $slide)
             <div class="carousel-item @if($index === 0) active @endif">
                 @if(($slide['type'] ?? 'image') === 'video')
                     <video class="d-block w-100" controls>
@@ -28,7 +28,7 @@
         @endforeach
     </div>
     <div class="carousel-indicators">
-        @foreach($slides as $index => $slide)
+        @foreach($data['slides'] as $index => $slide)
             <button type="button" data-bs-target="#mediaSliderCarousel" data-bs-slide-to="{{ $index }}" @if($index === 0) class="active" aria-current="true" @endif aria-label="Slide {{ $index + 1 }}"></button>
         @endforeach
     </div>

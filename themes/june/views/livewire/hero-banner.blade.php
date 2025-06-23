@@ -1,5 +1,5 @@
 <div>
-@foreach($heros as $hero)
+@foreach($data['heros'] as $hero)
     <div class="hero-banner position-relative section-full">
         @if(($hero['type'] ?? 'image') === 'video')
             <div class="hero-video-container position-absolute top-0 start-0 w-100 h-100">
