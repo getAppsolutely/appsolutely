@@ -2,6 +2,6 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
 final class MediaSlider extends BaseBlock {}

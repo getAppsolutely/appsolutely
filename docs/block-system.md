@@ -21,7 +21,7 @@ declare(strict_types=1);
 
 namespace App\Http\Livewire;
 
-final class MyComponent extends BaseBlock
+use App\Livewire\BaseBlock;final class MyComponent extends BaseBlock
 {
     // That's it! The BaseBlock handles everything automatically
 }

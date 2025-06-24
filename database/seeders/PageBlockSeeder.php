@@ -66,12 +66,12 @@ final class PageBlockSeeder extends Seeder
     {
         // Header
         PageBlock::firstOrCreate(
-            ['class' => 'App\\Http\\Livewire\\Header', 'block_group_id' => $group->id],
+            ['class' => 'App\\Livewire\\Header', 'block_group_id' => $group->id],
             array_merge(
                 $this->getBasicFields(),
                 [
                     'title'         => 'Header',
-                    'class'         => 'App\\Http\\Livewire\\Header',
+                    'class'         => 'App\\Livewire\\Header',
                     'template'      => $this->getTemplate('header'),
                     'description'   => 'Main site header with navigation and logo',
                     'sort'          => 1,
@@ -85,12 +85,12 @@ final class PageBlockSeeder extends Seeder
 
         // Footer
         PageBlock::firstOrCreate(
-            ['class' => 'App\\Http\\Livewire\\Footer', 'block_group_id' => $group->id],
+            ['class' => 'App\\Livewire\\Footer', 'block_group_id' => $group->id],
             array_merge(
                 $this->getBasicFields(),
                 [
                     'title'         => 'Footer',
-                    'class'         => 'App\\Http\\Livewire\\Footer',
+                    'class'         => 'App\\Livewire\\Footer',
                     'template'      => $this->getTemplate('footer'),
                     'description'   => 'Site footer with links, social media, and company information',
                     'sort'          => 2,
@@ -111,12 +111,12 @@ final class PageBlockSeeder extends Seeder
     {
         // Hero Banner (most commonly used)
         PageBlock::firstOrCreate(
-            ['class' => 'App\\Http\\Livewire\\HeroBanner', 'block_group_id' => $group->id],
+            ['class' => 'App\\Livewire\\HeroBanner', 'block_group_id' => $group->id],
             array_merge(
                 $this->getBasicFields(),
                 [
                     'title'       => 'Hero Banner',
-                    'class'       => 'App\\Http\\Livewire\\HeroBanner',
+                    'class'       => 'App\\Livewire\\HeroBanner',
                     'template'    => $this->getTemplate('hero-banner'),
                     'description' => 'A prominent hero banner with headline, description, and call-to-action.',
                     'sort'        => 1,
@@ -127,12 +127,12 @@ final class PageBlockSeeder extends Seeder
 
         // Media Slider (supports both images and videos)
         PageBlock::firstOrCreate(
-            ['class' => 'App\\Http\\Livewire\\MediaSlider', 'block_group_id' => $group->id],
+            ['class' => 'App\\Livewire\\MediaSlider', 'block_group_id' => $group->id],
             array_merge(
                 $this->getBasicFields(),
                 [
                     'title'       => 'Media Slider',
-                    'class'       => 'App\\Http\\Livewire\\MediaSlider',
+                    'class'       => 'App\\Livewire\\MediaSlider',
                     'template'    => $this->getTemplate('media-slider'),
                     'description' => 'A responsive slider that supports both images and videos with navigation controls.',
                     'sort'        => 2,
@@ -159,12 +159,12 @@ final class PageBlockSeeder extends Seeder
 
         // Specifications
         PageBlock::firstOrCreate(
-            ['class' => 'App\\Http\\Livewire\\Specifications', 'block_group_id' => $group->id],
+            ['class' => 'App\\Livewire\\Specifications', 'block_group_id' => $group->id],
             array_merge(
                 $this->getBasicFields(),
                 [
                     'title'       => 'Specifications',
-                    'class'       => 'App\\Http\\Livewire\\Specifications',
+                    'class'       => 'App\\Livewire\\Specifications',
                     'template'    => $this->getTemplate('specifications'),
                     'description' => 'Display specifications, technical details, or structured information in a table or list format.',
                     'sort'        => 4,
@@ -175,12 +175,12 @@ final class PageBlockSeeder extends Seeder
 
         // Video Showcase
         PageBlock::firstOrCreate(
-            ['class' => 'App\\Http\\Livewire\\VideoShowcase', 'block_group_id' => $group->id],
+            ['class' => 'App\\Livewire\\VideoShowcase', 'block_group_id' => $group->id],
             array_merge(
                 $this->getBasicFields(),
                 [
                     'title'       => 'Video Showcase',
-                    'class'       => 'App\\Http\\Livewire\\VideoShowcase',
+                    'class'       => 'App\\Livewire\\VideoShowcase',
                     'template'    => $this->getTemplate('video-showcase'),
                     'description' => 'Showcase a featured video with supporting content.',
                     'sort'        => 5,
@@ -383,12 +383,12 @@ final class PageBlockSeeder extends Seeder
 
         // Store Locations
         PageBlock::firstOrCreate(
-            ['class' => 'App\\Http\\Livewire\\StoreLocations', 'block_group_id' => $group->id],
+            ['class' => 'App\\Livewire\\StoreLocations', 'block_group_id' => $group->id],
             array_merge(
                 $this->getBasicFields(),
                 [
                     'title'       => 'Store Locations',
-                    'class'       => 'App\\Http\\Livewire\\StoreLocations',
+                    'class'       => 'App\\Livewire\\StoreLocations',
                     'template'    => $this->getTemplate('store-locations'),
                     'description' => 'Display store locations with multiple layout options (grid, list, table) and optional map integration.',
                     'sort'        => 18,
@@ -399,12 +399,12 @@ final class PageBlockSeeder extends Seeder
 
         // Dynamic Form
         PageBlock::firstOrCreate(
-            ['class' => 'App\\Http\\Livewire\\DynamicForm', 'block_group_id' => $group->id],
+            ['class' => 'App\\Livewire\\DynamicForm', 'block_group_id' => $group->id],
             array_merge(
                 $this->getBasicFields(),
                 [
                     'title'       => 'Dynamic Form',
-                    'class'       => 'App\\Http\\Livewire\\DynamicForm',
+                    'class'       => 'App\\Livewire\\DynamicForm',
                     'template'    => $this->getTemplate('dynamic-form'),
                     'description' => 'Configurable form component for contact forms, test drive bookings, and other data collection needs.',
                     'sort'        => 19,
@@ -415,12 +415,12 @@ final class PageBlockSeeder extends Seeder
 
         // Transition Section
         PageBlock::firstOrCreate(
-            ['class' => 'App\\Http\\Livewire\\TransitionSection', 'block_group_id' => $group->id],
+            ['class' => 'App\\Livewire\\TransitionSection', 'block_group_id' => $group->id],
             array_merge(
                 $this->getBasicFields(),
                 [
                     'title'       => 'Transition Section',
-                    'class'       => 'App\\Http\\Livewire\\TransitionSection',
+                    'class'       => 'App\\Livewire\\TransitionSection',
                     'template'    => $this->getTemplate('transition-section'),
                     'description' => 'Visual transition section with full-width background image, perfect for bridging between different content sections.',
                     'sort'        => 20,
