@@ -109,7 +109,7 @@ final class PageBlockService
         $parameters = $normalisedParameters;
 
         // Get all properties from Livewire
-        $propertyKeys = array_unique(array_keys(get_class_vars($className)));
+        $propertyKeys = $this->getArrayClassVars($className);
 
         // try to match normalised parameters
         $normalisedKeys         = array_unique(array_keys($normalisedParameters));
@@ -134,6 +134,15 @@ final class PageBlockService
         }
 
         return $parameters;
+    }
+
+    private function getArrayClassVars(string $className): array
+    {
+        $vars = get_class_vars($className);
+
+        return array_unique(array_keys(array_filter($vars, function ($value) {
+            return is_array($value);
+        })));
     }
 
     /**

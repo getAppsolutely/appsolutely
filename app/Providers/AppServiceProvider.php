@@ -2,10 +2,6 @@
 
 namespace App\Providers;
 
-use App\Http\Livewire\Feature;
-use App\Http\Livewire\Footer;
-use App\Http\Livewire\Header;
-use App\Http\Livewire\Testimonial;
 use App\Repositories\TranslationRepository;
 use App\Services\PageBlockService;
 use App\Services\TranslationService;
@@ -25,10 +21,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(TranslationRepository::class);
         $this->app->singleton(TranslationService::class);
 
-        \Livewire::component('header', Header::class);
-        \Livewire::component('footer', Footer::class);
-        \Livewire::component('feature', Feature::class);
-        \Livewire::component('testimonial', Testimonial::class);
     }
 
     /**
@@ -52,6 +44,19 @@ class AppServiceProvider extends ServiceProvider
         // Register Blade directive for safe block rendering
         Blade::directive('renderBlock', function ($expression) {
             return "<?php echo app('" . PageBlockService::class . "')->renderBlockSafely($expression); ?>";
+        });
+
+        // Page meta
+        Blade::directive('title', function ($expression) {
+            return "<?php echo page_meta($expression, 'title'); ?>";
+        });
+
+        Blade::directive('keywords', function ($expression) {
+            return "<?php echo page_meta($expression, 'keywords'); ?>";
+        });
+
+        Blade::directive('description', function ($expression) {
+            return "<?php echo page_meta($expression, 'description'); ?>";
         });
 
         /** @var \Illuminate\Routing\Route $matched */

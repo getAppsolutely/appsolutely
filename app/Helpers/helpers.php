@@ -678,3 +678,10 @@ if (! function_exists('children_attributes')) {
         return ['data-column' => 'children'];
     }
 }
+
+if (! function_exists('page_meta')) {
+    function page_meta($page, $key): string
+    {
+        return $page->$key ?? $page[$key] ?? '';
+    }
+}

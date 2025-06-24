@@ -7,29 +7,18 @@ namespace App\Http\Livewire;
 use App\Repositories\MenuItemRepository;
 use App\Repositories\MenuRepository;
 use Illuminate\Support\Collection;
-use Livewire\Component;
 
-final class Footer extends Component
+final class Footer extends BaseBlock
 {
-    /**
-     * @var array<string, mixed>
-     */
-    public array $config;
-
     public Collection $footerMenuItems;
 
     public Collection $socialMediaItems;
 
     public Collection $policyMenuItems;
 
-    /**
-     * Mount the component with configuration array.
-     *
-     * @param  array<string, mixed>  $config
-     */
-    public function mount(array $config = []): void
+    public function initializeComponent(): void
     {
-        $this->config = array_merge($this->defaultConfig(), $config);
+        $this->data = array_merge($this->defaultConfig(), $this->data);
 
         // Initialize empty collections
         $this->footerMenuItems  = collect();
@@ -43,12 +32,7 @@ final class Footer extends Component
         }
     }
 
-    /**
-     * Get default configuration.
-     *
-     * @return array<string, mixed>
-     */
-    private function defaultConfig(): array
+    protected function defaultConfig(): array
     {
         return [
             'logo'         => true,
@@ -78,26 +62,21 @@ final class Footer extends Component
         $menuItemRepository = app(MenuItemRepository::class);
 
         // Load footer menu
-        $footerMenu            = $menuRepository->findByReference($this->config['footer_menu']);
+        $footerMenu            = $menuRepository->findByReference($this->data['footer_menu']);
         $this->footerMenuItems = $footerMenu
             ? $menuItemRepository->getActiveMenuTree($footerMenu->id, now())
             : collect();
 
         // Load social media menu
-        $socialMenu             = $menuRepository->findByReference($this->config['social_media']);
+        $socialMenu             = $menuRepository->findByReference($this->data['social_media']);
         $this->socialMediaItems = $socialMenu
             ? $menuItemRepository->getActiveMenuTree($socialMenu->id, now())
             : collect();
 
         // Load policy menu
-        $policyMenu            = $menuRepository->findByReference($this->config['policy_menu']);
+        $policyMenu            = $menuRepository->findByReference($this->data['policy_menu']);
         $this->policyMenuItems = $policyMenu
             ? $menuItemRepository->getActiveMenuTree($policyMenu->id, now())
             : collect();
-    }
-
-    public function render(): object
-    {
-        return themed_view('livewire.footer');
     }
 }
