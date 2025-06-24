@@ -5,7 +5,7 @@ return [
     'url'            => env('APPSOLUTELY_URL', config('app.url')),
     'local_timezone' => env('APPSOLUTELY_LOCAL_TIMEZONE', 'UTC'),
     'time_format'    => env('APPSOLUTELY_TIME_FORMAT', 'Y-m-d H:i:s T'),
-    'asset'          => config('app.asset_url') ?? config('app.url'),
+    'asset_url'      => env('APPSOLUTELY_ASSET_URL', config('app.asset_url') ?? config('app.url')),
     'theme'          => [
         'name'   => env('APPSOLUTELY_THEME', 'default'),
         'styles' => [

@@ -623,7 +623,7 @@ if (! function_exists('themed_assets')) {
 if (! function_exists('asset_server')) {
     function asset_server(string $path): string
     {
-        return rtrim(config('appsolutely.asset'), '/') . '/' . ltrim($path, '/');
+        return rtrim(config('appsolutely.asset_url'), '/') . '/' . ltrim($path, '/');
     }
 }
 
