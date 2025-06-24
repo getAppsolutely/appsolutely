@@ -16,7 +16,7 @@ final class Footer extends BaseBlock
 
     public Collection $policyMenuItems;
 
-    public function initializeComponent(): void
+    protected function initializeComponent(): void
     {
         $this->data = array_merge($this->defaultConfig(), $this->data);
 

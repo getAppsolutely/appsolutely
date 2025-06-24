@@ -1,14 +1,14 @@
 <form wire:submit.prevent="submit" novalidate>
     @csrf
-    
+
     <!-- Form Fields -->
     <div class="row g-4">
-        @foreach($formConfig['fields'] as $fieldName => $fieldConfig)
+        @foreach($data['fields'] as $fieldName => $fieldConfig)
             @php
-                $colClass = $formConfig['columns'] == 2 ? 'col-md-6' : 'col-12';
+                $colClass = $data['columns'] == 2 ? 'col-md-6' : 'col-12';
                 $errorName = "formData.{$fieldName}";
             @endphp
-            
+
             <div class="{{ $colClass }}">
                 <!-- Text Input -->
                 @if(in_array($fieldConfig['type'], ['text', 'email', 'tel', 'url']))
@@ -160,11 +160,11 @@
     <div class="mt-5 text-center">
         <button type="submit" class="btn btn-dark btn-lg px-5 py-3" wire:loading.attr="disabled">
             <span wire:loading.remove wire:target="submit">
-                <i class="fas fa-calendar-check me-2"></i>{{ $formConfig['submit_text'] }}
+                <i class="fas fa-calendar-check me-2"></i>{{ $data['submit_text'] }}
             </span>
             <span wire:loading wire:target="submit">
                 <i class="fas fa-spinner fa-spin me-2"></i>Processing...
             </span>
         </button>
     </div>
-</form> 
+</form>

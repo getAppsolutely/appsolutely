@@ -6,7 +6,7 @@
             <!-- Left: Logo -->
             <div class="header-left d-flex align-items-center flex-shrink-0">
                 <a href="{{ route('home') }}" class="navbar-brand m-0">
-                    @if($config['logo'])
+                    @if($data['logo'])
                         <img src="{{ asset_server('assets/images/logo-dark.webp') }}"
                              alt="{{ config('appsolutely.general.site_name') }}" height="40" class="logo-dark">
                         <img src="{{ asset_server('assets/images/logo.webp') }}"
@@ -67,11 +67,11 @@
             </div>
 
             <!-- Right: Booking Button (hidden below 1200px) -->
-            @if(($config['booking']['text'] ?? null) && ($config['booking']['url'] ?? null))
+            @if(($data['booking']['text'] ?? null) && ($data['booking']['url'] ?? null))
                 <div class="header-right d-none d-xl-block flex-shrink-0">
-                    <a href="{{ $config['booking']['url'] }}"
+                    <a href="{{ $data['booking']['url'] }}"
                        class="btn btn-outline-light-primary">
-                        {{ $config['booking']['text'] }}
+                        {{ $data['booking']['text'] }}
                     </a>
                 </div>
             @endif
@@ -116,12 +116,12 @@
             @endif
 
             <!-- Mobile Booking Button -->
-            @if(($config['booking']['text'] ?? null) && ($config['booking']['url'] ?? null))
+            @if(($data['booking']['text'] ?? null) && ($data['booking']['url'] ?? null))
                 <div class="header-mobile-testdrive mt-4">
-                    <a href="{{ $config['booking']['url'] }}"
+                    <a href="{{ $data['booking']['url'] }}"
                        class="btn btn-outline-light-primary w-100">
                         <i class="fas fa-play me-2"></i>
-                        {{ $config['booking']['text'] }}
+                        {{ $data['booking']['text'] }}
                     </a>
                 </div>
             @endif

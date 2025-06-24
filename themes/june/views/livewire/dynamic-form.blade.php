@@ -2,18 +2,18 @@
     <div class="container">
         @if(!$submitted)
             <!-- Form Header -->
-            @if($formConfig['title'] || $formConfig['subtitle'] || $formConfig['description'])
+            @if($data['title'] || $data['subtitle'] || $data['description'])
                 <div class="text-center mb-5">
-                    @if($formConfig['title'])
-                        <h2 class="display-6 fw-bold mb-3">{{ $formConfig['title'] }}</h2>
+                    @if($data['title'])
+                        <h2 class="display-6 fw-bold mb-3">{{ $data['title'] }}</h2>
                     @endif
 
-                    @if($formConfig['subtitle'])
-                        <h3 class="h5 text-muted mb-4">{{ $formConfig['subtitle'] }}</h3>
+                    @if($data['subtitle'])
+                        <h3 class="h5 text-muted mb-4">{{ $data['subtitle'] }}</h3>
                     @endif
 
-                    @if($formConfig['description'])
-                        <p class="lead text-muted">{{ $formConfig['description'] }}</p>
+                    @if($data['description'])
+                        <p class="lead text-muted">{{ $data['description'] }}</p>
                     @endif
                 </div>
             @endif
@@ -21,7 +21,7 @@
             <!-- Form Container -->
             <div class="row justify-content-center">
                 <div class="col-lg-8 col-xl-6">
-                    @if($formConfig['theme'] === 'card')
+                    @if($data['theme'] === 'card')
                         <div class="card border-0 shadow-lg">
                             <div class="card-body p-5">
                                 @include('livewire.dynamic-form-content')
@@ -43,13 +43,13 @@
                             <div class="mb-4">
                                 <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
                             </div>
-                            
-                            @if($formConfig['success_title'])
-                                <h3 class="h2 fw-bold text-dark mb-3">{{ $formConfig['success_title'] }}</h3>
+
+                            @if($data['success_title'])
+                                <h3 class="h2 fw-bold text-dark mb-3">{{ $data['success_title'] }}</h3>
                             @endif
-                            
+
                             <p class="lead text-muted mb-4">{{ $successMessage }}</p>
-                            
+
                             <button wire:click="resetForm" class="btn btn-outline-dark btn-lg px-4">
                                 <i class="fas fa-plus me-2"></i>Submit Another Request
                             </button>
@@ -72,4 +72,4 @@
             </div>
         @endif
     </div>
-</section> 
+</section>
