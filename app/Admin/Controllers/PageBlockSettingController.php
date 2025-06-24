@@ -96,24 +96,20 @@ final class PageBlockSettingController extends AdminBaseController
 
     protected function form(): Form
     {
-        return Form::make(PageBlockSetting::query(), function (Form $form) {
+        return Form::make(PageBlockSetting::query()->with(['value']), function (Form $form) {
             $form->display('id', __t('ID'));
             $form->select('page_id', __t('Page'))->options(
                 $this->pageRepository->all()->pluck('title', 'id')->toArray()
             )->required();
             $form->select('block_id', __t('Block'))->options(
                 $this->blockRepository->all()->pluck('title', 'id')->toArray()
-            )->required()->load('schema_fields', admin_route('api.pages.block.schema-fields'));
+            )->required();
 
             $form->text('type', __t('Type'));
             $form->text('remark', __t('Remark'));
 
             $this->addSchemaValuesField($form);
 
-            $form->textarea('template', __t('Template'))->rows(3);
-            $form->textarea('scripts', __t('Scripts'))->rows(2);
-            $form->textarea('stylesheets', __t('Stylesheets'))->rows(2);
-            $form->keyValue('styles', __t('Styles'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
             $form->number('sort', __t('Sort'));
             $form->switch('status', __t('Status'));
             $form->disableViewButton();
@@ -130,7 +126,7 @@ final class PageBlockSettingController extends AdminBaseController
         if (! $form->isEditing() ||
             ! $form->model()->block ||
             $form->model()->block->scope === BlockScope::Page->value) {
-            $form->textarea('schema_values', __t('Schema Values'))->rows(10);
+            $form->textarea('value.schema_values', __t('Schema Values'))->rows(10);
 
             return;
         }

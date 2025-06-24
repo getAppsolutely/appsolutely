@@ -8,6 +8,7 @@ use App\Models\Traits\ScopeReference;
 use App\Models\Traits\ScopeStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 final class PageBlock extends Model
 {
@@ -49,5 +50,10 @@ final class PageBlock extends Model
     public function settings(): HasMany
     {
         return $this->hasMany(PageBlockSetting::class, 'block_id');
+    }
+
+    public function settingValue(): HasOne
+    {
+        return $this->hasOne(PageBlockValue::class, 'block_id');
     }
 }

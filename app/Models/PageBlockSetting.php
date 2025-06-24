@@ -16,14 +16,10 @@ final class PageBlockSetting extends Model
     protected $fillable = [
         'page_id',
         'block_id',
+        'block_value_id',
         'reference',
         'type',
         'remark',
-        'template',
-        'scripts',
-        'stylesheets',
-        'styles',
-        'schema_values',
         'sort',
         'status',
         'published_at',
@@ -45,6 +41,11 @@ final class PageBlockSetting extends Model
     public function block(): BelongsTo
     {
         return $this->belongsTo(PageBlock::class, 'block_id');
+    }
+
+    public function value(): BelongsTo
+    {
+        return $this->belongsTo(PageBlockValue::class, 'block_value_id');
     }
 
     public function page(): BelongsTo
