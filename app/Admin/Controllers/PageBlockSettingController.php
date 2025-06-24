@@ -40,7 +40,7 @@ final class PageBlockSettingController extends AdminBaseController
                 $query->where('scope', BlockScope::Page->value);
             });
 
-            $grid->model()->orderByDesc('id');
+            $grid->model()->orderByDesc('page_id')->orderBy('sort');
             $grid->quickSearch('id', 'type', 'template');
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id')->width(4);

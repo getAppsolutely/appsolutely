@@ -4,31 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Livewire;
 
-use Livewire\Component;
-
-final class VideoShowcase extends Component
+final class VideoShowcase extends BaseBlock
 {
-    /**
-     * @var array<string, mixed>
-     */
-    public array $videoShowcase = [];
-
-    /**
-     * Mount the component with video showcase data.
-     *
-     * @param  array<string, mixed>  $videoShowcase
-     */
-    public function mount(array $videoShowcase = []): void
-    {
-        $this->videoShowcase = array_merge($this->defaultConfig(), $videoShowcase);
-    }
-
-    /**
-     * Get default video showcase configuration.
-     *
-     * @return array<string, mixed>
-     */
-    private function defaultConfig(): array
+    protected function defaultConfig(): array
     {
         return [
             'video_url'             => '',
@@ -49,10 +27,5 @@ final class VideoShowcase extends Component
             'video_format'          => 'mp4', // mp4, webm, mov
             'fallback_videos'       => [], // Array of alternative video formats
         ];
-    }
-
-    public function render(): object
-    {
-        return themed_view('livewire.video-showcase');
     }
 }

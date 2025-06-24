@@ -25,13 +25,8 @@ abstract class BaseBlock extends Component
      */
     public function mount(array $data = []): void
     {
-        $this->data = array_merge($this->defaultConfig(), $data);
+        $this->data = $data;
         $this->initializeComponent();
-    }
-
-    protected function defaultConfig(): array
-    {
-        return [];
     }
 
     /**
@@ -41,6 +36,12 @@ abstract class BaseBlock extends Component
     protected function initializeComponent(): void
     {
         // Override in child classes if needed
+        $this->data = array_merge($this->defaultConfig(), $this->data);
+    }
+
+    protected function defaultConfig(): array
+    {
+        return [];
     }
 
     /**

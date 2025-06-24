@@ -4,26 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Livewire;
 
-use Livewire\Component;
-
-final class TransitionSection extends Component
+final class TransitionSection extends BaseBlock
 {
-    /**
-     * @var array<string, mixed>
-     */
-    public array $transitionSection = [];
-
-    /**
-     * Mount the component with transition section data.
-     *
-     * @param  array<string, mixed>  $transitionSection
-     */
-    public function mount(array $transitionSection = []): void
+    protected function initializeComponent(): void
     {
-        $default = $this->defaultConfig();
+        $transitionSection = $this->data;
+        $default           = $this->defaultConfig();
 
-        // Manually merge nested arrays to ensure all keys exist
-        $this->transitionSection = [
+        $this->data = [
             'image'               => $transitionSection['image'] ?? $default['image'],
             'height'              => $transitionSection['height'] ?? $default['height'],
             'background_position' => $transitionSection['background_position'] ?? $default['background_position'],
@@ -33,12 +21,7 @@ final class TransitionSection extends Component
         ];
     }
 
-    /**
-     * Get default transition section configuration.
-     *
-     * @return array<string, mixed>
-     */
-    private function defaultConfig(): array
+    protected function defaultConfig(): array
     {
         return [
             'image'               => '', // Background image URL (required)
@@ -58,12 +41,12 @@ final class TransitionSection extends Component
     }
 
     /**
-     * Get computed background style.
+     * Use it in blade file
      */
     public function getBackgroundStyle(): string
     {
         $styles = [];
-        $config = $this->transitionSection;
+        $config = $this->data;
 
         // Height
         $styles[] = 'height: ' . $config['height'];
@@ -80,10 +63,5 @@ final class TransitionSection extends Component
         }
 
         return implode('; ', $styles);
-    }
-
-    public function render(): object
-    {
-        return themed_view('livewire.transition-section');
     }
 }
