@@ -4,12 +4,12 @@
     overflow: hidden;
 
     // Responsive adjustments
-    @media (max-width: 768px) {
+    @include media-breakpoint-down(md) {
         &[data-hide-mobile="true"] {
             display: none;
         }
-        
+
         // Use CSS custom property for dynamic mobile height
         height: var(--mobile-height, 200px) !important;
     }
-} 
+}
