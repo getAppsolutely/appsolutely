@@ -6,15 +6,9 @@ namespace App\Livewire;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
-use Livewire\Component;
 
-final class DynamicForm extends Component
+final class DynamicForm extends BaseBlock
 {
-    /**
-     * @var array<string, mixed>
-     */
-    public array $formConfig = [];
-
     /**
      * @var array<string, mixed>
      */
@@ -24,25 +18,15 @@ final class DynamicForm extends Component
 
     public string $successMessage = '';
 
-    /**
-     * Mount the component with form configuration.
-     *
-     * @param  array<string, mixed>  $formConfig
-     */
-    public function mount(array $formConfig = []): void
+    protected function initializeComponent(): void
     {
-        $this->formConfig = array_merge($this->defaultConfig(), $formConfig);
-
+        $this->data           = array_merge($this->defaultConfig(), $this->data);
+        $this->data['layout'] = 'modal';
         // Initialize form data with empty values
         $this->initializeFormData();
     }
 
-    /**
-     * Get default form configuration.
-     *
-     * @return array<string, mixed>
-     */
-    private function defaultConfig(): array
+    protected function defaultConfig(): array
     {
         return [
             'title'           => 'Test Drive Booking',
@@ -142,7 +126,7 @@ final class DynamicForm extends Component
      */
     private function initializeFormData(): void
     {
-        foreach ($this->formConfig['fields'] as $fieldName => $fieldConfig) {
+        foreach ($this->data['fields'] as $fieldName => $fieldConfig) {
             $this->formData[$fieldName] = match ($fieldConfig['type']) {
                 'checkbox'    => false,
                 'multiselect' => [],
@@ -158,7 +142,7 @@ final class DynamicForm extends Component
     {
         $rules = [];
 
-        foreach ($this->formConfig['fields'] as $fieldName => $fieldConfig) {
+        foreach ($this->data['fields'] as $fieldName => $fieldConfig) {
             if (isset($fieldConfig['validation'])) {
                 $rules["formData.{$fieldName}"] = $fieldConfig['validation'];
             }
@@ -174,7 +158,7 @@ final class DynamicForm extends Component
     {
         $messages = [];
 
-        foreach ($this->formConfig['fields'] as $fieldName => $fieldConfig) {
+        foreach ($this->data['fields'] as $fieldName => $fieldConfig) {
             $label = $fieldConfig['label'] ?? ucfirst(str_replace('_', ' ', $fieldName));
 
             $messages["formData.{$fieldName}.required"] = "The {$label} field is required.";
@@ -207,22 +191,22 @@ final class DynamicForm extends Component
             $validatedData = $validator->validated()['formData'];
 
             // Save to database if configured
-            if ($this->formConfig['save_to_db']) {
+            if ($this->data['save_to_db']) {
                 $this->saveToDatabase($validatedData);
             }
 
             // Send email if configured
-            if ($this->formConfig['send_email']) {
+            if ($this->data['send_email']) {
                 $this->sendEmailNotification($validatedData);
             }
 
             // Set success state
             $this->submitted      = true;
-            $this->successMessage = $this->formConfig['success_message'];
+            $this->successMessage = $this->data['success_message'];
 
             // Redirect if configured
-            if (! empty($this->formConfig['redirect_after_submit'])) {
-                $this->redirect($this->formConfig['redirect_after_submit']);
+            if (! empty($this->data['redirect_after_submit'])) {
+                $this->redirect($this->data['redirect_after_submit']);
             }
 
         } catch (ValidationException $e) {
@@ -268,7 +252,7 @@ final class DynamicForm extends Component
         $message = "New test drive booking request:\n\n";
 
         foreach ($data as $field => $value) {
-            $fieldConfig = $this->formConfig['fields'][$field] ?? [];
+            $fieldConfig = $this->data['fields'][$field] ?? [];
             $label       = $fieldConfig['label'] ?? ucfirst(str_replace('_', ' ', $field));
 
             if (is_bool($value)) {
@@ -286,7 +270,7 @@ final class DynamicForm extends Component
         // Send email (you can implement proper mail class here)
         try {
             \Mail::raw($message, function ($mail) use ($subject, $data) {
-                $mail->to($this->formConfig['email_to'])
+                $mail->to($this->data['email_to'])
                     ->subject($subject)
                     ->replyTo($data['email'] ?? 'noreply@company.com', $data['name'] ?? 'Test Drive Inquiry');
             });
@@ -304,10 +288,5 @@ final class DynamicForm extends Component
         $this->successMessage = '';
         $this->initializeFormData();
         $this->resetValidation();
-    }
-
-    public function render(): object
-    {
-        return themed_view('livewire.dynamic-form');
     }
 }
