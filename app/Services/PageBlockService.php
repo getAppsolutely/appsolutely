@@ -30,7 +30,7 @@ final class PageBlockService
         return $this->settingRepository->getActivePublishedSettings($pageId);
     }
 
-    public function updateBlockSettingPublishStatus(int $settingId, ?string $publishedAt = null, ?string $expiredAt = null): bool
+    public function updateBlockSettingPublishStatus(int $settingId, ?string $publishedAt = null, ?string $expiredAt = null): int
     {
         return $this->settingRepository->updatePublishStatus($settingId, $publishedAt, $expiredAt);
     }

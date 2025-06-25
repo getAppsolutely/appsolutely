@@ -6,7 +6,6 @@ namespace App\Repositories;
 
 use App\Enums\Status;
 use App\Models\PageBlockSetting;
-use DB;
 
 final class PageBlockSettingRepository extends BaseRepository
 {
@@ -15,53 +14,27 @@ final class PageBlockSettingRepository extends BaseRepository
         return PageBlockSetting::class;
     }
 
-    public function syncSetting(array $data, int $pageId): array
+    public function findBy(?int $pageId, ?int $blockId, ?string $reference): ?PageBlockSetting
     {
-        try {
-            $result = [];
-            DB::transaction(function () use ($data, &$result, $pageId) {
-                foreach ($data as $index => $setting) {
-                    $sort      = $index + 1;
-                    $blockId   = $setting['block_id'];
-                    $reference = $setting['reference'];
-                    if (empty($blockId) || empty($reference)) {
-                        log_warning('Invalid block id and reference', [
-                            'block_id'  => $blockId,
-                            'reference' => $reference,
-                        ]);
-
-                        continue;
-                    }
-                    $found = $this->model->newQuery()
-                        ->where('page_id', $pageId)
-                        ->where('block_id', $blockId)
-                        ->where('reference', $reference)
-                        ->first();
-                    if ($found) {
-                        $found->update(['status' => Status::ACTIVE->value, 'sort' => $sort]);
-
-                        continue;
-                    }
-
-                    $data = [
-                        'block_id'     => $blockId,
-                        'page_id'      => $pageId,
-                        'reference'    => $reference,
-                        'status'       => Status::ACTIVE->value,
-                        'sort'         => $sort,
-                        'published_at' => now(),
-                    ];
-                    $result[] = PageBlockSetting::create($data);
-                }
-            });
-
-            return $result;
-        } catch (\Exception $exception) {
-            log_error(__CLASS__ . '::' . __METHOD__ . '(): ' . $exception->getMessage());
-        } finally {
-            return $result;
+        $query = $this->model->newQuery();
+        if (! empty($pageId)) {
+            $query->where('page_id', $pageId);
         }
 
+        if (! empty($blockId)) {
+            $query->where('block_id', $blockId);
+        }
+
+        if (! empty($reference)) {
+            $query->where('reference', $reference);
+        }
+
+        return $query->first();
+    }
+
+    public function findByBlockId(int $blockId): ?PageBlockSetting
+    {
+        return $this->model->newQuery()->where('block_id', $blockId)->status()->first();
     }
 
     public function resetSetting(int $pageId): int
@@ -83,7 +56,7 @@ final class PageBlockSettingRepository extends BaseRepository
             ->get();
     }
 
-    public function updatePublishStatus(int $id, ?string $publishedAt = null, ?string $expiredAt = null): bool
+    public function updatePublishStatus(int $id, ?string $publishedAt = null, ?string $expiredAt = null): int
     {
         $data = [];
 

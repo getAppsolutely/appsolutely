@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Constants\BasicConstant;
 use App\Enums\BlockScope;
 use App\Models\Traits\ScopePublished;
 use App\Models\Traits\ScopeReference;
@@ -63,7 +64,7 @@ class Page extends Model
     {
         $structure  = self::getStructure();
         $components = self::attachGlobalBlocks();
-        Arr::set($structure, 'pages.0.frames.0.component.components', $components);
+        Arr::set($structure, BasicConstant::PAGE_GRAPESJS_KEY, $components);
 
         return $structure;
     }
@@ -131,7 +132,6 @@ class Page extends Model
             ->whereIn('id', $blockIds)
             ->status()
             ->orderBy('sort')
-            ->distinct()
             ->get();
 
         return $globalBlocks->map(function ($block) {

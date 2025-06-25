@@ -22,4 +22,6 @@ class BasicConstant
     const PAGE_SIZE = 2;
 
     const CONTENT_SUMMARY_LENGTH = 200;
+
+    const PAGE_GRAPESJS_KEY = 'pages.0.frames.0.component.components';
 }
