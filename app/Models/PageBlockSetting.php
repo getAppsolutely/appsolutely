@@ -38,6 +38,37 @@ final class PageBlockSetting extends Model
         'parameters',
     ];
 
+    /**
+     * Check if block value's schema_values is dirty and create new block value if needed
+     */
+    public function checkAndCreateNewBlockValue(): void
+    {
+        // Only proceed if we have a block value and it's dirty
+        if (! $this->blockValue || ! $this->blockValue->isDirty('schema_values')) {
+            return;
+        }
+
+        $data = self::where('block_value_id', $this->block_value_id)->whereNot('id', $this->id)->first();
+        if (! $data) {
+            $this->blockValue->save();
+
+            return;
+        }
+
+        // Create a new block value with the updated schema_values
+        $newBlockValue = PageBlockValue::create([
+            'block_id'      => $this->block_id,
+            'template'      => $this->blockValue->template,
+            'scripts'       => $this->blockValue->scripts,
+            'stylesheets'   => $this->blockValue->stylesheets,
+            'styles'        => $this->blockValue->styles,
+            'schema_values' => $this->blockValue->schema_values,
+        ]);
+
+        // Update this setting to use the new block value
+        $this->block_value_id = $newBlockValue->id;
+    }
+
     public function block(): BelongsTo
     {
         return $this->belongsTo(PageBlock::class, 'block_id');

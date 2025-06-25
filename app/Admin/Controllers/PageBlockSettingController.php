@@ -108,31 +108,43 @@ final class PageBlockSettingController extends AdminBaseController
             $form->text('type', __t('Type'));
             $form->text('remark', __t('Remark'));
 
-            $this->addSchemaValuesField($form);
+            $form->textarea('_schema_values', __t('Schema Values'))
+                ->value(($form->model()->blockValue?->schema_values))
+                ->rows(10);
+
+            if ($this->ifGlobalBlock($form)) {
+                $this->addGlobalBlockInfo($form, $form->model()->block);
+            }
 
             $form->number('sort', __t('Sort'));
             $form->switch('status', __t('Status'));
             $form->disableViewButton();
             $form->disableViewCheck();
+
+            $form->saving(function (Form $form) {
+                $model        = $form->model();
+                $schemaValues =  $form->_schema_values;
+
+                if (! empty($schemaValues)) {
+                    $model->blockValue->schema_values = $schemaValues;
+                    $model->checkAndCreateNewBlockValue();
+                }
+            });
+            // $form->ignore(['_schema_values']);
         });
     }
 
-    /**
-     * Add schema values field based on block scope
-     */
-    private function addSchemaValuesField(Form $form): void
+    private function ifGlobalBlock(Form $form)
     {
         // Show schema_values field for new records or page-scoped blocks
         if (! $form->isEditing() ||
             ! $form->model()->block ||
             $form->model()->block->scope === BlockScope::Page->value) {
-            $form->textarea('blockValue.schema_values', __t('Schema Values'))->rows(10);
 
-            return;
+            return false;
         }
 
-        // Show global block info for global-scoped blocks
-        $this->addGlobalBlockInfo($form, $form->model()->block);
+        return true;
     }
 
     /**
