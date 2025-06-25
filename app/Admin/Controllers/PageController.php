@@ -15,9 +15,14 @@ class PageController extends AdminBaseController
     {
         return Grid::make(Page::query(), function (Grid $grid) {
             $grid->column('id', __t('ID'))->sortable();
-            $grid->column('title', __t('Title'));
+            $grid->column('title', __t('Title'))->editable();
+            $grid->column('slug', __t('Slug'))->editable();
+            $grid->column('link', __t('Link'))->display(function () {
+                $url = app_url($this->slug);
+
+                return '<a href="' . $url . '" target="_blank">View</a>';
+            });
             $grid->column('name', __t('Name (Internal use)'))->help(__t('form_help.internal_reference'));
-            $grid->column('slug', __t('Slug'));
             $grid->column('published_at', __t('Published At'))->display(column_time_format())->sortable();
             $grid->column('expired_at', __t('Expired At'))->display(column_time_format())->sortable();
             $grid->column('status', __t('Status'))->switch();
@@ -53,7 +58,7 @@ class PageController extends AdminBaseController
                 $form->text('slug', __t('Slug'));
                 $form->text('keywords', __t('Keywords'));
                 $form->textarea('description', __t('Description'))->rows(3);
-                $form->editor('content', __t('Content'));
+                // $form->editor('content', __t('Content'));
                 $form->datetime('published_at', __t('Published At (%s)', [app_local_timezone()]));
                 $form->datetime('expired_at', __t('Expired At (%s)', [app_local_timezone()]));
                 $form->switch('status', __t('Status'));
