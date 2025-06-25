@@ -40,7 +40,7 @@ final class PageBlockSettingController extends AdminBaseController
                 $query->where('scope', BlockScope::Page->value);
             });
 
-            $grid->model()->orderByDesc('page_id')->orderBy('sort');
+            $grid->model()->orderByDesc('page_id');
             $grid->quickSearch('id', 'type', 'template');
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id')->width(4);
@@ -96,7 +96,7 @@ final class PageBlockSettingController extends AdminBaseController
 
     protected function form(): Form
     {
-        return Form::make(PageBlockSetting::query()->with(['value']), function (Form $form) {
+        return Form::make(PageBlockSetting::query()->with(['blockValue']), function (Form $form) {
             $form->display('id', __t('ID'));
             $form->select('page_id', __t('Page'))->options(
                 $this->pageRepository->all()->pluck('title', 'id')->toArray()
@@ -126,7 +126,7 @@ final class PageBlockSettingController extends AdminBaseController
         if (! $form->isEditing() ||
             ! $form->model()->block ||
             $form->model()->block->scope === BlockScope::Page->value) {
-            $form->textarea('value.schema_values', __t('Schema Values'))->rows(10);
+            $form->textarea('blockValue.schema_values', __t('Schema Values'))->rows(10);
 
             return;
         }

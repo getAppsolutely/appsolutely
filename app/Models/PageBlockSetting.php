@@ -43,7 +43,7 @@ final class PageBlockSetting extends Model
         return $this->belongsTo(PageBlock::class, 'block_id');
     }
 
-    public function value(): BelongsTo
+    public function blockValue(): BelongsTo
     {
         return $this->belongsTo(PageBlockValue::class, 'block_value_id');
     }
@@ -66,7 +66,7 @@ final class PageBlockSetting extends Model
 
         // If block scope is 'page', return this setting's schema_values
         if ($this->block && $this->block->scope === 'page') {
-            $schemaValues = $this->schema_values;
+            $schemaValues = $this->blockValue?->schema_values;
             if (is_string($schemaValues)) {
                 return json_decode($schemaValues, true) ?? [];
             }
