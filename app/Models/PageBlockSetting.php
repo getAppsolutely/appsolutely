@@ -56,7 +56,7 @@ final class PageBlockSetting extends Model
         }
 
         // Create a new block value with the updated schema_values
-        $newBlockValue = PageBlockValue::insert([
+        $newBlockValue = PageBlockValue::create([
             'id'            => PageBlockValue::getFirstMissingId(),
             'block_id'      => $this->block_id,
             'template'      => $this->blockValue->template,

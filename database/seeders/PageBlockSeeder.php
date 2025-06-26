@@ -444,6 +444,22 @@ final class PageBlockSeeder extends Seeder
                 ]
             )
         );
+
+        // Article List Block
+        PageBlock::firstOrCreate(
+            ['class' => 'App\\Livewire\\ArticleList', 'block_group_id' => $group->id],
+            array_merge(
+                $this->getBasicFields(),
+                [
+                    'title'       => 'Article List',
+                    'class'       => 'App\\Livewire\\ArticleList',
+                    'template'    => $this->getTemplate('article-list'),
+                    'description' => 'Display a list of articles with customizable layout and filtering options.',
+                    'sort'        => 22,
+                    'reference'   => 'article-list',
+                ]
+            )
+        );
     }
 
     /**

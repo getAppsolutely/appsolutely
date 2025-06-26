@@ -74,9 +74,8 @@ class PageService
 
             return $result;
         } catch (\Exception $exception) {
-            log_error(__CLASS__ . '::' . __METHOD__ . '(): ' . $exception->getMessage());
-        } finally {
-            return $result;
+            log_error($exception->getMessage(), ['pageId' => $pageId, 'data' => $data], __CLASS__, __METHOD__);
+            throw new \Exception($exception);
         }
     }
 
@@ -122,7 +121,7 @@ class PageService
         }
 
         // create if not used on all active pages
-        $block = $this->pageBlockRepository->first($blockId);
+        $block = $this->pageBlockRepository->find($blockId);
 
         $value = [
             'block_id'      => $blockId,

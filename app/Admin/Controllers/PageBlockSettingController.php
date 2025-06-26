@@ -109,7 +109,7 @@ final class PageBlockSettingController extends AdminBaseController
             $form->text('remark', __t('Remark'));
 
             $form->textarea('_schema_values', __t('Schema Values'))
-                ->value(($form->model()->blockValue?->schema_values))
+                ->value($form->model()->blockValue?->schema_values ?? '')
                 ->rows(10);
 
             if ($this->ifGlobalBlock($form)) {
