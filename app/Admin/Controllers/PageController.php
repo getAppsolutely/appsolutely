@@ -16,11 +16,11 @@ class PageController extends AdminBaseController
         return Grid::make(Page::query(), function (Grid $grid) {
             $grid->column('id', __t('ID'))->sortable();
             $grid->column('title', __t('Title'))->editable();
-            $grid->column('slug', __t('Slug'))->editable();
             $grid->column('link', __t('Link'))->display(function () {
-                $url = app_url($this->slug);
+                $clean = trim($this->slug, '/');
+                $url   = app_url($clean);
 
-                return '<a href="' . $url . '" target="_blank">View</a>';
+                return '<a href="' . $url . '" target="_blank">/' . $clean . '</a>';
             });
             $grid->column('name', __t('Name (Internal use)'))->help(__t('form_help.internal_reference'));
             $grid->column('published_at', __t('Published At'))->display(column_time_format())->sortable();
