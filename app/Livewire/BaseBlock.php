@@ -123,9 +123,13 @@ abstract class BaseBlock extends Component
 
         $viewName = 'livewire.' . $this->getViewName();
 
-        return themed_view($viewName, [
-            'data' => $this->data,
-        ]);
+        return themed_view($viewName, array_merge($this->getExtraData()),
+            ['data' => $this->data]);
+    }
+
+    protected function getExtraData(): array
+    {
+        return [];
     }
 
     /**
@@ -155,5 +159,10 @@ abstract class BaseBlock extends Component
     protected function hasData(string $key): bool
     {
         return isset($this->data[$key]);
+    }
+
+    public function paginationView()
+    {
+        return 'pagination.bootstrap';
     }
 }

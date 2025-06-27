@@ -23,8 +23,8 @@
                             <!-- Featured Image -->
                             @if(($data['show_featured_image'] ?? true) && $article->cover)
                                 <div class="card-img-top position-relative">
-                                    <img src="{{ $article->cover }}" 
-                                         class="card-img-top" 
+                                    <img src="{{ $article->cover }}"
+                                         class="card-img-top"
                                          alt="{{ $article->title }}"
                                          style="height: 200px; object-fit: cover;">
                                     @if($article->categories->first())
@@ -56,7 +56,7 @@
 
                                 <!-- Title -->
                                 <h5 class="card-title fw-bold mb-3">
-                                    <a href="{{ route('articles.show', $article->slug) }}" 
+                                    <a href="{{ nested_url($article->slug) }}"
                                        class="text-decoration-none text-dark">
                                         {{ $article->title }}
                                     </a>
@@ -72,7 +72,7 @@
                                 <!-- Read More Button -->
                                 @if($data['show_read_more'] ?? true)
                                     <div class="mt-auto">
-                                        <a href="{{ route('articles.show', $article->slug) }}" 
+                                        <a href="{{ nested_url($article->slug) }}"
                                            class="btn btn-outline-primary btn-sm">
                                             {{ $data['read_more_text'] ?? 'Read More' }}
                                             <i class="fas fa-arrow-right ms-1"></i>
@@ -102,4 +102,4 @@
             </div>
         @endif
     </div>
-</section> 
+</section>

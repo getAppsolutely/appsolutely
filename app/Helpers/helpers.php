@@ -685,3 +685,41 @@ if (! function_exists('page_meta')) {
         return $page->$key ?? $page[$key] ?? '';
     }
 }
+
+if (! function_exists('current_uri')) {
+    /**
+     * Get the current request URI (path and query string).
+     *
+     * @param  bool  $withQueryString  Whether to include query string (default: false)
+     * @return string The current URI
+     */
+    function current_uri(bool $withQueryString = false): string
+    {
+        if ($withQueryString) {
+            return request()->getRequestUri();
+        }
+
+        return request()->getPathInfo();
+    }
+}
+
+if (! function_exists('nested_url')) {
+    /**
+     * Generate a full URL by nesting a path under the current URI.
+     *
+     * @param  string  $path  The path to append to current URI
+     * @return string The generated URL
+     */
+    function nested_url(string $path = ''): string
+    {
+        $currentPath = current_uri();
+
+        if (empty($path)) {
+            return app_url($currentPath);
+        }
+
+        $fullPath = rtrim($currentPath, '/') . '/' . ltrim($path, '/');
+
+        return app_url($fullPath);
+    }
+}

@@ -41,13 +41,15 @@ final class ArticleList extends BaseBlock
             'order_direction' => $this->getData('order_direction', 'desc'),
         ];
 
-        return app(ArticleRepository::class)->getPublishedArticles($filters);
+        $query = app(ArticleRepository::class)->getPublishedArticles($filters);
+
+        return $query->paginate($filters['posts_per_page']);
     }
 
-    public function render()
+    protected function getExtraData(): array
     {
-        return view('livewire.article-list', [
+        return [
             'articles' => $this->articles,
-        ]);
+        ];
     }
 }

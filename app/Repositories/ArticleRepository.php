@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Article;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class ArticleRepository extends BaseRepository
 {
@@ -12,7 +11,7 @@ class ArticleRepository extends BaseRepository
         return Article::class;
     }
 
-    public function getPublishedArticles(array $filters = []): LengthAwarePaginator
+    public function getPublishedArticles(array $filters = []): \Illuminate\Database\Eloquent\Builder
     {
         $query = $this->model->newQuery()
             ->where('status', 1) // Published articles only
@@ -38,8 +37,6 @@ class ArticleRepository extends BaseRepository
         $orderDirection = $filters['order_direction'] ?? 'desc';
         $query->orderBy($orderBy, $orderDirection);
 
-        $perPage = $filters['posts_per_page'] ?? 6;
-
-        return $query->paginate($perPage);
+        return $query;
     }
 }
