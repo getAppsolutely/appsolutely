@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\Menu;
-use App\Repositories\MenuItemRepository;
 use App\Repositories\MenuRepository;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
@@ -13,22 +12,30 @@ use Illuminate\Database\Eloquent\Collection;
 final class MenuService
 {
     public function __construct(
-        protected MenuItemRepository $menuItemRepository,
         protected MenuRepository $menuRepository
     ) {}
 
     public function getActiveMenuTree($menuId, ?Carbon $datetime = null): Collection
     {
-        return $this->menuItemRepository->getActiveMenuTree($menuId, $datetime);
+        return $this->menuRepository->getActiveMenuTree($menuId, $datetime);
     }
 
     public function getActiveMenus($menuId, ?Carbon $datetime = null): Collection
     {
-        return $this->menuItemRepository->getActiveMenus($menuId, $datetime);
+        return $this->menuRepository->getActiveMenus($menuId, $datetime);
     }
 
-    public function getMenuByReference(string $reference): ?Menu
+    public function findByReference(string $reference): ?Menu
     {
         return $this->menuRepository->findByReference($reference);
+    }
+
+    public function getMenusByReference(string $reference): \Illuminate\Support\Collection
+    {
+        $root = $this->findByReference($reference);
+
+        return $root
+            ? $this->getActiveMenuTree($root->id, now())
+            : collect();
     }
 }

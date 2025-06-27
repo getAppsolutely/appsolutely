@@ -39,7 +39,7 @@
                                         <li class="d-flex flex-row justify-content-center w-80">
                                             @foreach($item->children as $child)
                                                 <a class="dropdown-item text-center flex-fill"
-                                                   href="{{ $child->route }}" target="{{ $child->target->value }}">
+                                                   href="{{ $child->url }}" target="{{ $child->target->value }}">
                                                     @if($child->icon)
                                                         <i class="{{ $child->icon }} me-2"></i>
                                                     @endif
@@ -52,8 +52,8 @@
                                         </li>
                                     </ul>
                                 @else
-                                    <a class="nav-link text-uppercase {{ request()->routeIs($item->route) ? 'active' : '' }}"
-                                       href="{{ $item->route }}" target="{{ $item->target->value }}">
+                                    <a class="nav-link text-uppercase {{ request()->routeIs($item->url) ? 'active' : '' }}"
+                                       href="{{ $item->url }}" target="{{ $item->target->value }}">
                                         @if($item->icon)
                                             <i class="{{ $item->icon }} me-1"></i>
                                         @endif
@@ -85,8 +85,8 @@
                 <ul class="navbar-nav flex-column align-items-stretch">
                     @foreach($mainNavigation as $item)
                         <li class="nav-item {{ $item->children->isNotEmpty() ? 'has-submenu' : '' }}">
-                            <a class="nav-link text-uppercase {{ request()->routeIs($item->route) ? 'active' : '' }}"
-                               href="{{ $item->route }}" target="{{ $item->target->value }}">
+                            <a class="nav-link text-uppercase {{ request()->routeIs($item->url) ? 'active' : '' }}"
+                               href="{{ $item->url }}" target="{{ $item->target->value }}">
                                 @if($item->icon)
                                     <i class="{{ $item->icon }} me-1"></i>
                                 @endif
@@ -97,7 +97,7 @@
                                     @foreach($item->children as $child)
                                         <li>
                                             <a class="dropdown-item text-center"
-                                               href="{{ $child->route }}" target="{{ $child->target->value }}">
+                                               href="{{ $child->url }}" target="{{ $child->target->value }}">
                                                 @if($child->icon)
                                                     <i class="{{ $child->icon }} me-2"></i>
                                                 @endif

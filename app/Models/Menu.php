@@ -4,34 +4,61 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\MenuTarget;
+use App\Enums\MenuType;
+use App\Models\Traits\ScopePublished;
 use App\Models\Traits\ScopeReference;
 use App\Models\Traits\ScopeStatus;
+use Dcat\Admin\Traits\ModelTree;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 
-final class Menu extends Model
+final class Menu extends NestedSetModel implements Sortable
 {
+    use ModelTree;
+    use ScopePublished;
     use ScopeReference;
     use ScopeStatus;
+    // use SortableTrait;
 
     protected $fillable = [
+        'parent_id',
         'title',
         'reference',
         'remark',
+        'url',
+        'type',
+        'icon',
+        'thumbnail',
+        'setting',
+        'permission_key',
+        'target',
+        'is_external',
+        'published_at',
+        'expired_at',
         'status',
     ];
 
     protected $casts = [
-        'status' => 'integer',
+        'parent_id'    => 'integer',
+        'is_external'  => 'boolean',
+        'type'         => MenuType::class,
+        'target'       => MenuTarget::class,
+        'setting'      => 'array',
+        'published_at' => 'datetime',
+        'expired_at'   => 'datetime',
+        'status'       => 'integer',
     ];
 
-    protected static function boot()
+    public function children(): HasMany
     {
-        parent::boot();
-        self::bootScopeReference();
+        return $this->hasMany(Menu::class, 'parent_id')->orderBy('left', 'asc')->with('children');
     }
 
-    public function menuItems(): HasMany
+    public function parent(): BelongsTo
     {
-        return $this->hasMany(MenuItem::class)->orderBy('left');
+        return $this->belongsTo(Menu::class, 'parent_id');
     }
 }

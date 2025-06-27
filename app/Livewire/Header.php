@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
-use App\Repositories\MenuItemRepository;
-use App\Repositories\MenuRepository;
+use App\Services\MenuService;
 use Illuminate\Support\Collection;
 
 final class Header extends BaseBlock
@@ -45,19 +44,12 @@ final class Header extends BaseBlock
 
     private function loadMenus(): void
     {
-        $menuRepository     = app(MenuRepository::class);
-        $menuItemRepository = app(MenuItemRepository::class);
+        $menuService     = app(MenuService::class);
 
-        // Load main navigation
-        $mainMenu             = $menuRepository->findByReference($this->data['main_nav']);
-        $this->mainNavigation = $mainMenu
-            ? $menuItemRepository->getActiveMenuTree($mainMenu->id, now())
-            : collect();
+        $this->mainNavigation = $menuService->getMenusByReference($this->data['main_nav']);
+        $this->authMenuItems  = $menuService->getMenusByReference($this->data['auth_menu']);
 
-        // Load auth menu
-        $authMenu            = $menuRepository->findByReference($this->data['auth_menu']);
-        $this->authMenuItems = $authMenu
-            ? $menuItemRepository->getActiveMenuTree($authMenu->id, now())
-            : collect();
+        $t = $this->mainNavigation->toArray();
+        $d = true;
     }
 }

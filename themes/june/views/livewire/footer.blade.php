@@ -10,8 +10,8 @@
                             <div class="col-md-3">
                                 <div class="footer-menu-section">
                                     <h5 class="text-white fw-semibold text-uppercase mb-3">
-                                        @if($menuItem->route)
-                                            <a href="{{ $menuItem->route }}"
+                                        @if($menuItem->url)
+                                            <a href="{{ $menuItem->url }}"
                                                target="{{ $menuItem->target->value }}"
                                                class="text-white text-decoration-none">
                                                 {{ $menuItem->title }}
@@ -24,7 +24,7 @@
                                         <ul class="list-unstyled">
                                             @foreach($menuItem->children as $child)
                                                 <li class="mb-2">
-                                                    <a href="{{ $child->route }}"
+                                                    <a href="{{ $child->url }}"
                                                        target="{{ $child->target->value }}"
                                                        class="text-white text-decoration-none footer-link">
                                                         {{ $child->title }}
@@ -32,11 +32,11 @@
                                                 </li>
                                             @endforeach
                                         </ul>
-                                    @elseif($menuItem->route)
+                                    @elseif($menuItem->url)
                                         <!-- Show menu item as a link if it has no children but has a route -->
                                         <ul class="list-unstyled">
                                             <li class="mb-2">
-                                                <a href="{{ $menuItem->route }}"
+                                                <a href="{{ $menuItem->url }}"
                                                    target="{{ $menuItem->target->value }}"
                                                    class="text-white text-decoration-none footer-link">
                                                     {{ $menuItem->title }}
@@ -74,7 +74,7 @@
                 @if($socialMediaItems->isNotEmpty())
                     <div class="social-media-menu">
                         @foreach($socialMediaItems as $socialItem)
-                            <a href="{{ $socialItem->route }}"
+                            <a href="{{ $socialItem->url }}"
                                target="{{ $socialItem->target->value }}"
                                class="text-white text-decoration-none me-3 footer-link">
                                 @if($socialItem->icon)
@@ -103,7 +103,7 @@
                 @if($policyMenuItems->isNotEmpty())
                     <div class="policy-menu text-lg-end">
                         @foreach($policyMenuItems as $policyItem)
-                            <a href="{{ $policyItem->route }}"
+                            <a href="{{ $policyItem->url }}"
                                target="{{ $policyItem->target->value }}"
                                class="text-white text-decoration-none me-3 footer-link">
                                 {{ $policyItem->title }}

@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Enums\MenuTarget;
 use App\Enums\MenuType;
 use App\Models\Menu;
-use App\Models\MenuItem;
 use Illuminate\Database\Seeder;
 
 class MenuSeeder extends Seeder
@@ -18,27 +17,27 @@ class MenuSeeder extends Seeder
     public function run()
     {
         // Create menu first
-        $this->createMenus();
+        $this->createRoots();
 
         // Then create menu items
-        $mainGroup   = Menu::where('title', 'Main Navigation')->first();
-        $policyGroup = Menu::where('title', 'Policy menu')->first();
-        $socialGroup = Menu::where('title', 'Social Media')->first();
+        $mainRoot   = Menu::where('title', 'Main Navigation')->first();
+        $policyRoot = Menu::where('title', 'Policy menu')->first();
+        $socialRoot = Menu::where('title', 'Social Media')->first();
 
-        if ($mainGroup) {
-            $this->createMainNavigation($mainGroup);
+        if ($mainRoot) {
+            $this->createMainNavigation($mainRoot);
         }
 
-        if ($policyGroup) {
-            $this->createPolicyMenu($policyGroup);
+        if ($policyRoot) {
+            $this->createPolicyMenu($policyRoot);
         }
 
-        if ($socialGroup) {
-            $this->createSocialMediaMenu($socialGroup);
+        if ($socialRoot) {
+            $this->createSocialMediaMenu($socialRoot);
         }
     }
 
-    private function createMenus(): void
+    private function createRoots(): void
     {
         $groups = [
             [
@@ -81,15 +80,15 @@ class MenuSeeder extends Seeder
         }
     }
 
-    private function createMainNavigation(Menu $group): void
+    private function createMainNavigation(Menu $parent): void
     {
         // Home
-        $home = MenuItem::firstOrCreate(
-            ['title' => 'Home', 'menu_id' => $group->id],
+        $home = Menu::firstOrCreate(
+            ['title' => 'Home', 'parent_id' => $parent->id],
             [
                 'title'       => 'Home',
-                'menu_id'     => $group->id,
-                'route'       => '/',
+                'parent_id'   => $parent->id,
+                'url'         => '/',
                 'type'        => MenuType::Link->value,
                 'target'      => MenuTarget::Self->value,
                 'is_external' => false,
@@ -98,12 +97,12 @@ class MenuSeeder extends Seeder
         );
 
         // About
-        $about = MenuItem::firstOrCreate(
-            ['title' => 'About', 'menu_id' => $group->id],
+        $about = Menu::firstOrCreate(
+            ['title' => 'About', 'parent_id' => $parent->id],
             [
                 'title'       => 'About',
-                'menu_id'     => $group->id,
-                'route'       => '/about',
+                'parent_id'   => $parent->id,
+                'url'         => '/about',
                 'type'        => MenuType::Link->value,
                 'target'      => MenuTarget::Self->value,
                 'is_external' => false,
@@ -112,12 +111,12 @@ class MenuSeeder extends Seeder
         );
 
         // Services dropdown
-        $services = MenuItem::firstOrCreate(
-            ['title' => 'Services', 'menu_id' => $group->id],
+        $services = Menu::firstOrCreate(
+            ['title' => 'Services', 'parent_id' => $parent->id],
             [
                 'title'       => 'Services',
-                'menu_id'     => $group->id,
-                'route'       => '/services',
+                'parent_id'   => $parent->id,
+                'url'         => '/services',
                 'type'        => MenuType::Dropdown->value,
                 'target'      => MenuTarget::Self->value,
                 'is_external' => false,
@@ -126,13 +125,12 @@ class MenuSeeder extends Seeder
         );
 
         // Service sub-items
-        MenuItem::firstOrCreate(
-            ['title' => 'Web Development', 'menu_id' => $group->id, 'parent_id' => $services->id],
+        Menu::firstOrCreate(
+            ['title' => 'Web Development', 'parent_id' => $services->id],
             [
                 'title'       => 'Web Development',
-                'menu_id'     => $group->id,
                 'parent_id'   => $services->id,
-                'route'       => '/services/web-development',
+                'url'         => '/services/web-development',
                 'type'        => MenuType::Link->value,
                 'target'      => MenuTarget::Self->value,
                 'is_external' => false,
@@ -140,13 +138,12 @@ class MenuSeeder extends Seeder
             ]
         );
 
-        MenuItem::firstOrCreate(
-            ['title' => 'Mobile Apps', 'menu_id' => $group->id, 'parent_id' => $services->id],
+        Menu::firstOrCreate(
+            ['title' => 'Mobile Apps', 'parent_id' => $services->id],
             [
                 'title'       => 'Mobile Apps',
-                'menu_id'     => $group->id,
                 'parent_id'   => $services->id,
-                'route'       => '/services/mobile-apps',
+                'url'         => '/services/mobile-apps',
                 'type'        => MenuType::Link->value,
                 'target'      => MenuTarget::Self->value,
                 'is_external' => false,
@@ -155,12 +152,12 @@ class MenuSeeder extends Seeder
         );
 
         // Contact
-        MenuItem::firstOrCreate(
-            ['title' => 'Contact', 'menu_id' => $group->id],
+        Menu::firstOrCreate(
+            ['title' => 'Contact', 'parent_id' => $parent->id],
             [
                 'title'       => 'Contact',
-                'menu_id'     => $group->id,
-                'route'       => '/contact',
+                'parent_id'   => $parent->id,
+                'url'         => '/contact',
                 'type'        => MenuType::Link->value,
                 'target'      => MenuTarget::Self->value,
                 'is_external' => false,
@@ -169,15 +166,15 @@ class MenuSeeder extends Seeder
         );
     }
 
-    private function createPolicyMenu(Menu $group): void
+    private function createPolicyMenu(Menu $parent): void
     {
         // Terms of Service
-        MenuItem::firstOrCreate(
-            ['title' => 'Terms of Service', 'menu_id' => $group->id],
+        Menu::firstOrCreate(
+            ['title' => 'Terms of Service', 'parent_id' => $parent->id],
             [
                 'title'       => 'Terms of Service',
-                'menu_id'     => $group->id,
-                'route'       => '/terms-of-service',
+                'parent_id'   => $parent->id,
+                'url'         => '/terms-of-service',
                 'type'        => MenuType::Link->value,
                 'target'      => MenuTarget::Self->value,
                 'is_external' => false,
@@ -186,12 +183,12 @@ class MenuSeeder extends Seeder
         );
 
         // Privacy Policy
-        MenuItem::firstOrCreate(
-            ['title' => 'Privacy Policy', 'menu_id' => $group->id],
+        Menu::firstOrCreate(
+            ['title' => 'Privacy Policy', 'parent_id' => $parent->id],
             [
                 'title'       => 'Privacy Policy',
-                'menu_id'     => $group->id,
-                'route'       => '/privacy-policy',
+                'parent_id'   => $parent->id,
+                'url'         => '/privacy-policy',
                 'type'        => MenuType::Link->value,
                 'target'      => MenuTarget::Self->value,
                 'is_external' => false,
@@ -200,12 +197,12 @@ class MenuSeeder extends Seeder
         );
 
         // Cookie Policy
-        MenuItem::firstOrCreate(
-            ['title' => 'Cookie Policy', 'menu_id' => $group->id],
+        Menu::firstOrCreate(
+            ['title' => 'Cookie Policy', 'parent_id' => $parent->id],
             [
                 'title'       => 'Cookie Policy',
-                'menu_id'     => $group->id,
-                'route'       => '/cookie-policy',
+                'parent_id'   => $parent->id,
+                'url'         => '/cookie-policy',
                 'type'        => MenuType::Link->value,
                 'target'      => MenuTarget::Self->value,
                 'is_external' => false,
@@ -214,15 +211,15 @@ class MenuSeeder extends Seeder
         );
     }
 
-    private function createSocialMediaMenu(Menu $group): void
+    private function createSocialMediaMenu(Menu $parent): void
     {
         // TikTok
-        MenuItem::firstOrCreate(
-            ['title' => 'TikTok', 'menu_id' => $group->id],
+        Menu::firstOrCreate(
+            ['title' => 'TikTok', 'parent_id' => $parent->id],
             [
                 'title'       => 'TikTok',
-                'menu_id'     => $group->id,
-                'route'       => 'https://www.tiktok.com/@yourcompany',
+                'parent_id'   => $parent->id,
+                'url'         => 'https://www.tiktok.com/@yourcompany',
                 'type'        => MenuType::Link->value,
                 'target'      => MenuTarget::Blank->value,
                 'icon'        => 'bi bi-tiktok',
@@ -232,12 +229,12 @@ class MenuSeeder extends Seeder
         );
 
         // Facebook
-        MenuItem::firstOrCreate(
-            ['title' => 'Facebook', 'menu_id' => $group->id],
+        Menu::firstOrCreate(
+            ['title' => 'Facebook', 'parent_id' => $parent->id],
             [
                 'title'       => 'Facebook',
-                'menu_id'     => $group->id,
-                'route'       => 'https://www.facebook.com/yourcompany',
+                'parent_id'   => $parent->id,
+                'url'         => 'https://www.facebook.com/yourcompany',
                 'type'        => MenuType::Link->value,
                 'target'      => MenuTarget::Blank->value,
                 'icon'        => 'bi bi-facebook',
@@ -247,12 +244,12 @@ class MenuSeeder extends Seeder
         );
 
         // Twitter
-        MenuItem::firstOrCreate(
-            ['title' => 'Twitter', 'menu_id' => $group->id],
+        Menu::firstOrCreate(
+            ['title' => 'Twitter', 'parent_id' => $parent->id],
             [
                 'title'       => 'Twitter',
-                'menu_id'     => $group->id,
-                'route'       => 'https://twitter.com/yourcompany',
+                'parent_id'   => $parent->id,
+                'url'         => 'https://twitter.com/yourcompany',
                 'type'        => MenuType::Link->value,
                 'target'      => MenuTarget::Blank->value,
                 'icon'        => 'bi bi-twitter-x',
@@ -262,12 +259,12 @@ class MenuSeeder extends Seeder
         );
 
         // YouTube
-        MenuItem::firstOrCreate(
-            ['title' => 'YouTube', 'menu_id' => $group->id],
+        Menu::firstOrCreate(
+            ['title' => 'YouTube', 'parent_id' => $parent->id],
             [
                 'title'       => 'YouTube',
-                'menu_id'     => $group->id,
-                'route'       => 'https://www.youtube.com/@yourcompany',
+                'parent_id'   => $parent->id,
+                'url'         => 'https://www.youtube.com/@yourcompany',
                 'type'        => MenuType::Link->value,
                 'target'      => MenuTarget::Blank->value,
                 'icon'        => 'bi bi-youtube',

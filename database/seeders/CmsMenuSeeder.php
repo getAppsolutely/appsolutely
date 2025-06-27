@@ -93,18 +93,5 @@ class CmsMenuSeeder extends Seeder
                 'updated_at' => now(),
             ]);
         }
-
-        $menuItemsMenu = DB::table('admin_menu')->where('parent_id', $cmsMenuId)->where('title', 'Menu Items')->first();
-        if (! $menuItemsMenu) {
-            DB::table('admin_menu')->insert([
-                'parent_id'  => $cmsMenuId,
-                'order'      => 4,
-                'title'      => 'Menu Items',
-                'icon'       => 'fa-bars',
-                'uri'        => 'menus/items',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
     }
 }

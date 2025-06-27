@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
-use App\Repositories\MenuItemRepository;
-use App\Repositories\MenuRepository;
+use App\Services\MenuService;
 use Illuminate\Support\Collection;
 
 final class Footer extends BaseBlock
@@ -58,25 +57,10 @@ final class Footer extends BaseBlock
 
     private function loadMenus(): void
     {
-        $menuRepository     = app(MenuRepository::class);
-        $menuItemRepository = app(MenuItemRepository::class);
+        $menuService     = app(MenuService::class);
 
-        // Load footer menu
-        $footerMenu            = $menuRepository->findByReference($this->data['footer_menu']);
-        $this->footerMenuItems = $footerMenu
-            ? $menuItemRepository->getActiveMenuTree($footerMenu->id, now())
-            : collect();
-
-        // Load social media menu
-        $socialMenu             = $menuRepository->findByReference($this->data['social_media']);
-        $this->socialMediaItems = $socialMenu
-            ? $menuItemRepository->getActiveMenuTree($socialMenu->id, now())
-            : collect();
-
-        // Load policy menu
-        $policyMenu            = $menuRepository->findByReference($this->data['policy_menu']);
-        $this->policyMenuItems = $policyMenu
-            ? $menuItemRepository->getActiveMenuTree($policyMenu->id, now())
-            : collect();
+        $this->footerMenuItems  = $menuService->getMenusByReference($this->data['footer_menu']);
+        $this->socialMediaItems = $menuService->getMenusByReference($this->data['social_media']);
+        $this->policyMenuItems  = $menuService->getMenusByReference($this->data['policy_menu']);
     }
 }
