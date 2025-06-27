@@ -277,41 +277,13 @@ namespace App\Models{
 namespace App\Models{
     /**
      * @property int $id
-     * @property string $title
-     * @property string $reference
-     * @property string|null $remark
-     * @property int $status
-     * @property \Illuminate\Support\Carbon|null $created_at
-     * @property \Illuminate\Support\Carbon|null $updated_at
-     * @property-read \Kalnoy\Nestedset\Collection<int, \App\Models\Menu> $menuItems
-     * @property-read int|null $menu_items_count
-     *
-     * @method static \Illuminate\Database\Eloquent\Builder<static>|Menu newModelQuery()
-     * @method static \Illuminate\Database\Eloquent\Builder<static>|Menu newQuery()
-     * @method static \Illuminate\Database\Eloquent\Builder<static>|Menu query()
-     * @method static \Illuminate\Database\Eloquent\Builder<static>|Menu reference($value = null)
-     * @method static \Illuminate\Database\Eloquent\Builder<static>|Menu status($value = null, $operator = null)
-     * @method static \Illuminate\Database\Eloquent\Builder<static>|Menu whereCreatedAt($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<static>|Menu whereId($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<static>|Menu whereReference($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<static>|Menu whereRemark($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<static>|Menu whereStatus($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<static>|Menu whereTitle($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<static>|Menu whereUpdatedAt($value)
-     */
-    final class Menu extends \Eloquent {}
-}
-
-namespace App\Models{
-    /**
-     * @property int $id
      * @property int $left
      * @property int $right
      * @property int|null $parent_id
-     * @property int $menu_id
      * @property string $title
+     * @property string $reference
      * @property string|null $remark
-     * @property string|null $route
+     * @property string|null $url
      * @property \App\Enums\MenuType $type
      * @property string|null $icon
      * @property string|null $thumbnail
@@ -326,14 +298,12 @@ namespace App\Models{
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property-read \Kalnoy\Nestedset\Collection<int, Menu> $children
      * @property-read int|null $children_count
-     * @property-read \App\Models\Menu $menu
      * @property-read Menu|null $parent
      *
      * @method static \Kalnoy\Nestedset\Collection<int, static> all($columns = ['*'])
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu ancestorsAndSelf($id, array $columns = [])
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu ancestorsOf($id, array $columns = [])
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu applyNestedSetScope(?string $table = null)
-     * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu byMenu(int $menuId)
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu countErrors()
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu d()
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu defaultOrder(string $dir = 'asc')
@@ -362,6 +332,7 @@ namespace App\Models{
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu query()
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu rebuildSubtree($root, array $data, $delete = false)
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu rebuildTree(array $data, $delete = false, $root = null)
+     * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu reference($value = null)
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu reversed()
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu root(array $columns = [])
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu status($value = null, $operator = null)
@@ -379,15 +350,14 @@ namespace App\Models{
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu whereIsLeaf()
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu whereIsRoot()
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu whereLeft($value)
-     * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu whereMenuId($value)
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu whereNodeBetween($values, $boolean = 'and', $not = false, $query = null)
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu whereNotDescendantOf($id)
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu whereParentId($value)
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu wherePermissionKey($value)
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu wherePublishedAt($value)
+     * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu whereReference($value)
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu whereRemark($value)
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu whereRight($value)
-     * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu whereRoute($value)
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu whereSetting($value)
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu whereStatus($value)
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu whereTarget($value)
@@ -395,10 +365,11 @@ namespace App\Models{
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu whereTitle($value)
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu whereType($value)
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu whereUpdatedAt($value)
+     * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu whereUrl($value)
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu withDepth(string $as = 'depth')
      * @method static \Kalnoy\Nestedset\QueryBuilder<static>|Menu withoutRoot()
      */
-    final class MenuItem extends \Eloquent implements \Spatie\EloquentSortable\Sortable {}
+    final class Menu extends \Eloquent implements \Spatie\EloquentSortable\Sortable {}
 }
 
 namespace App\Models{
@@ -752,6 +723,7 @@ namespace App\Models{
      * @property \Illuminate\Support\Carbon|null $created_at
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property-read \App\Models\PageBlockGroup $group
+     * @property-read \App\Models\PageBlockValue|null $settingValue
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PageBlockSetting> $settings
      * @property-read int|null $settings_count
      *
@@ -813,15 +785,11 @@ namespace App\Models{
     /**
      * @property int $id
      * @property int $page_id
-     * @property int $block_id
      * @property string|null $reference
+     * @property int $block_id
+     * @property int $block_value_id
      * @property string|null $type
      * @property string|null $remark
-     * @property string|null $template
-     * @property string|null $scripts
-     * @property string|null $stylesheets
-     * @property array<array-key, mixed>|null $styles
-     * @property array<array-key, mixed>|null $schema_values
      * @property int $sort
      * @property int $status
      * @property \Illuminate\Support\Carbon $published_at
@@ -829,6 +797,7 @@ namespace App\Models{
      * @property \Illuminate\Support\Carbon|null $created_at
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property-read \App\Models\PageBlock $block
+     * @property-read \App\Models\PageBlockValue $blockValue
      * @property-read array $parameters
      * @property-read \App\Models\Page $page
      *
@@ -839,6 +808,7 @@ namespace App\Models{
      * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockSetting reference($value = null)
      * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockSetting status($value = null, $operator = null)
      * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockSetting whereBlockId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockSetting whereBlockValueId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockSetting whereCreatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockSetting whereExpiredAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockSetting whereId($value)
@@ -846,17 +816,43 @@ namespace App\Models{
      * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockSetting wherePublishedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockSetting whereReference($value)
      * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockSetting whereRemark($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockSetting whereSchemaValues($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockSetting whereScripts($value)
      * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockSetting whereSort($value)
      * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockSetting whereStatus($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockSetting whereStyles($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockSetting whereStylesheets($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockSetting whereTemplate($value)
      * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockSetting whereType($value)
      * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockSetting whereUpdatedAt($value)
      */
     final class PageBlockSetting extends \Eloquent {}
+}
+
+namespace App\Models{
+    /**
+     * @property int $id
+     * @property int $block_id
+     * @property string|null $template
+     * @property string|null $scripts
+     * @property string|null $stylesheets
+     * @property array<array-key, mixed>|null $styles
+     * @property array<array-key, mixed>|null $schema_values
+     * @property \Illuminate\Support\Carbon|null $created_at
+     * @property \Illuminate\Support\Carbon|null $updated_at
+     * @property int|null $setting_id
+     * @property-read \App\Models\PageBlock|null $block
+     *
+     * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockValue newModelQuery()
+     * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockValue newQuery()
+     * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockValue query()
+     * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockValue whereBlockId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockValue whereCreatedAt($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockValue whereId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockValue whereSchemaValues($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockValue whereScripts($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockValue whereSettingId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockValue whereStyles($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockValue whereStylesheets($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockValue whereTemplate($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<static>|PageBlockValue whereUpdatedAt($value)
+     */
+    final class PageBlockValue extends \Eloquent {}
 }
 
 namespace App\Models{
