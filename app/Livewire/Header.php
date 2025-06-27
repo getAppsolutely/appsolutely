@@ -31,11 +31,11 @@ final class Header extends BaseBlock
     protected function defaultConfig(): array
     {
         return [
-            'logo'        => true,
-            'main_nav'    => 'main-nav',
-            'auth_menu'   => 'auth-menu',
-            'footer_menu' => 'footer-menu',
-            'booking'     => [
+            'logo'            => true,
+            'main_navigation' => 'main-navigation',
+            'auth_menu'       => 'auth-menu',
+            'footer_menu'     => 'footer-menu',
+            'booking'         => [
                 'text' => 'Book A Test Drive',
                 'url'  => '/test-drive',
             ],
@@ -46,10 +46,7 @@ final class Header extends BaseBlock
     {
         $menuService     = app(MenuService::class);
 
-        $this->mainNavigation = $menuService->getMenusByReference($this->data['main_nav']);
+        $this->mainNavigation = $menuService->getMenusByReference($this->data['main_navigation']);
         $this->authMenuItems  = $menuService->getMenusByReference($this->data['auth_menu']);
-
-        $t = $this->mainNavigation->toArray();
-        $d = true;
     }
 }

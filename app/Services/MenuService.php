@@ -32,10 +32,8 @@ final class MenuService
 
     public function getMenusByReference(string $reference): \Illuminate\Support\Collection
     {
-        $root = $this->findByReference($reference);
+        $menu = $this->menuRepository->findByReference($reference);
 
-        return $root
-            ? $this->getActiveMenuTree($root->id, now())
-            : collect();
+        return $menu->children;
     }
 }

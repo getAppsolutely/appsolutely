@@ -82,8 +82,8 @@ final class PageBlockService
         }
 
         // Get parameters safely and normalize keys
-        $parameters = $this->normalizeParameterKeys($block->parameters);
-        $parameters = $this->getPossibleParameters($block->parameters, $parameters, $className);
+        $normalizeParameter = $this->normalizeParameterKeys($block->parameters);
+        $parameters         = $this->getPossibleParameters($block->parameters, $normalizeParameter, $className);
 
         // Render the Livewire component
         try {

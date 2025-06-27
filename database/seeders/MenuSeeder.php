@@ -19,258 +19,222 @@ class MenuSeeder extends Seeder
         // Create menu first
         $this->createRoots();
 
-        // Then create menu items
-        $mainRoot   = Menu::where('title', 'Main Navigation')->first();
-        $policyRoot = Menu::where('title', 'Policy menu')->first();
-        $socialRoot = Menu::where('title', 'Social Media')->first();
+        // Then create menu
+        $mainMenu   = Menu::where('title', 'Main Navigation')->first();
+        $footerMenu = Menu::where('title', 'Footer Menu')->first();
+        $userMenu   = Menu::where('title', 'User Menu')->first();
+        $policyMenu = Menu::where('title', 'Policy menu')->first();
+        $socialMenu = Menu::where('title', 'Social Media')->first();
 
-        if ($mainRoot) {
-            $this->createMainNavigation($mainRoot);
+        if ($mainMenu) {
+            $this->createMainNavigation($mainMenu);
         }
 
-        if ($policyRoot) {
-            $this->createPolicyMenu($policyRoot);
+        if ($footerMenu) {
+            $this->createFooterMenu($footerMenu);
         }
 
-        if ($socialRoot) {
-            $this->createSocialMediaMenu($socialRoot);
+        if ($userMenu) {
+            $this->createUserMenu($userMenu);
+        }
+
+        if ($policyMenu) {
+            $this->createPolicyMenu($policyMenu);
+        }
+
+        if ($socialMenu) {
+            $this->createSocialMediaMenu($socialMenu);
+        }
+    }
+
+    private function createMenuFromTree(array $menus, ?Menu $parent = null): void
+    {
+        foreach ($menus as $item) {
+            // Prepare data for creation
+            $data = [
+                'parent_id'    => $parent ? $parent->id : null,
+                'title'        => $item['title'],
+                'remark'       => $item['remark'] ?? null,
+                'url'          => $item['url'] ?? '',
+                'type'         => MenuType::Link->value ?? null,
+                'icon'         => $item['icon'] ?? '',
+                'target'       => MenuTarget::Self->value ?? null,
+                'is_external'  => $item['is_external'] ?? 0,
+                'published_at' => now(),
+                'status'       => 1,
+            ];
+
+            if (Menu::where('title', $data['title'])->where('parent_id', $data['parent_id'])->exists()) {
+                continue;
+            }
+
+            // Create the menu
+            if ($parent) {
+                // This is a child, append it to the parent
+                $menu = new Menu($data);
+                $menu->appendToNode($parent)->save();
+            } else {
+                // This is a root, create it as root
+                $menu = Menu::create($data);
+            }
+
+            // If this has children, create them recursively
+            if (isset($item['children']) && is_array($item['children'])) {
+                $this->createMenuFromTree($item['children'], $menu);
+            }
         }
     }
 
     private function createRoots(): void
     {
-        $groups = [
+        $menus = $this->getRoots();
+        $this->createMenuFromTree($menus);
+    }
+
+    private function getRoots(): array
+    {
+        return [
             [
-                'title'     => 'Main Navigation',
-                'reference' => 'main-nav',
-                'remark'    => 'Primary navigation menu for the website',
-                'status'    => 1,
+                'title'  => 'Main Navigation',
+                'remark' => 'Primary navigation menu for the website',
             ],
             [
-                'title'     => 'Footer Menu',
-                'reference' => 'footer-menu',
-                'remark'    => 'Footer navigation links',
-                'status'    => 1,
+                'title'  => 'Footer Menu',
+                'remark' => 'Footer navigation links',
             ],
             [
-                'title'     => 'User Menu',
-                'reference' => 'user-menu',
-                'remark'    => 'User-related links',
-                'status'    => 1,
+                'title'  => 'User Menu',
+                'remark' => 'User-related links',
             ],
             [
-                'title'     => 'Social Media',
-                'reference' => 'social-media',
-                'remark'    => 'Social media navigation links',
-                'status'    => 1,
+                'title'  => 'Social Media',
+                'remark' => 'Social media navigation links',
             ],
             [
-                'title'     => 'Policy menu',
-                'reference' => 'policy-menu',
-                'remark'    => 'Policy links',
-                'status'    => 1,
+                'title'  => 'Policy menu',
+                'remark' => 'Policy links',
             ],
         ];
 
-        foreach ($groups as $group) {
-            Menu::firstOrCreate(
-                ['reference' => $group['reference']],
-                $group
-            );
-        }
     }
 
     private function createMainNavigation(Menu $parent): void
     {
-        // Home
-        $home = Menu::firstOrCreate(
-            ['title' => 'Home', 'parent_id' => $parent->id],
-            [
-                'title'       => 'Home',
-                'parent_id'   => $parent->id,
-                'url'         => '/',
-                'type'        => MenuType::Link->value,
-                'target'      => MenuTarget::Self->value,
-                'is_external' => false,
-                'status'      => 1,
-            ]
-        );
+        $menu = $this->getMainNavigation();
+        $this->createMenuFromTree($menu, $parent);
+    }
 
-        // About
-        $about = Menu::firstOrCreate(
-            ['title' => 'About', 'parent_id' => $parent->id],
+    private function getMainNavigation(): array
+    {
+        return [
             [
-                'title'       => 'About',
-                'parent_id'   => $parent->id,
-                'url'         => '/about',
-                'type'        => MenuType::Link->value,
-                'target'      => MenuTarget::Self->value,
-                'is_external' => false,
-                'status'      => 1,
-            ]
-        );
+                'title' => 'Home',
+                'url'   => '/',
+            ],
+            [
+                'title' => 'About',
+                'url'   => '/about',
+            ],
+            [
+                'title'    => 'Services',
+                'url'      => '/services',
+                'children' => [
+                    [
+                        'title' => 'Web Development',
+                        'url'   => '/services/web-development',
+                    ],
+                    [
+                        'title' => 'Mobile Apps',
+                        'url'   => '/services/mobile-apps',
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Contact',
+                'url'   => '/contact',
+            ],
+        ];
+    }
 
-        // Services dropdown
-        $services = Menu::firstOrCreate(
-            ['title' => 'Services', 'parent_id' => $parent->id],
-            [
-                'title'       => 'Services',
-                'parent_id'   => $parent->id,
-                'url'         => '/services',
-                'type'        => MenuType::Dropdown->value,
-                'target'      => MenuTarget::Self->value,
-                'is_external' => false,
-                'status'      => 1,
-            ]
-        );
+    private function createFooterMenu(Menu $parent): void
+    {
+        $menu = $this->getFooterMenu();
+        $this->createMenuFromTree($menu, $parent);
+    }
 
-        // Service sub-items
-        Menu::firstOrCreate(
-            ['title' => 'Web Development', 'parent_id' => $services->id],
-            [
-                'title'       => 'Web Development',
-                'parent_id'   => $services->id,
-                'url'         => '/services/web-development',
-                'type'        => MenuType::Link->value,
-                'target'      => MenuTarget::Self->value,
-                'is_external' => false,
-                'status'      => 1,
-            ]
-        );
+    private function getFooterMenu(): array
+    {
+        return [];
+    }
 
-        Menu::firstOrCreate(
-            ['title' => 'Mobile Apps', 'parent_id' => $services->id],
-            [
-                'title'       => 'Mobile Apps',
-                'parent_id'   => $services->id,
-                'url'         => '/services/mobile-apps',
-                'type'        => MenuType::Link->value,
-                'target'      => MenuTarget::Self->value,
-                'is_external' => false,
-                'status'      => 1,
-            ]
-        );
+    private function createUserMenu(Menu $parent): void
+    {
+        $menu = $this->getUserMenu();
+        $this->createMenuFromTree($menu, $parent);
+    }
 
-        // Contact
-        Menu::firstOrCreate(
-            ['title' => 'Contact', 'parent_id' => $parent->id],
-            [
-                'title'       => 'Contact',
-                'parent_id'   => $parent->id,
-                'url'         => '/contact',
-                'type'        => MenuType::Link->value,
-                'target'      => MenuTarget::Self->value,
-                'is_external' => false,
-                'status'      => 1,
-            ]
-        );
+    private function getUserMenu(): array
+    {
+        return [];
     }
 
     private function createPolicyMenu(Menu $parent): void
     {
-        // Terms of Service
-        Menu::firstOrCreate(
-            ['title' => 'Terms of Service', 'parent_id' => $parent->id],
-            [
-                'title'       => 'Terms of Service',
-                'parent_id'   => $parent->id,
-                'url'         => '/terms-of-service',
-                'type'        => MenuType::Link->value,
-                'target'      => MenuTarget::Self->value,
-                'is_external' => false,
-                'status'      => 1,
-            ]
-        );
+        $menu = $this->getPolicyMenu();
+        $this->createMenuFromTree($menu, $parent);
+    }
 
-        // Privacy Policy
-        Menu::firstOrCreate(
-            ['title' => 'Privacy Policy', 'parent_id' => $parent->id],
+    private function getPolicyMenu(): array
+    {
+        return [
             [
-                'title'       => 'Privacy Policy',
-                'parent_id'   => $parent->id,
-                'url'         => '/privacy-policy',
-                'type'        => MenuType::Link->value,
-                'target'      => MenuTarget::Self->value,
-                'is_external' => false,
-                'status'      => 1,
-            ]
-        );
-
-        // Cookie Policy
-        Menu::firstOrCreate(
-            ['title' => 'Cookie Policy', 'parent_id' => $parent->id],
+                'title' => 'Terms of Service',
+                'url'   => '/terms-of-service',
+            ],
             [
-                'title'       => 'Cookie Policy',
-                'parent_id'   => $parent->id,
-                'url'         => '/cookie-policy',
-                'type'        => MenuType::Link->value,
-                'target'      => MenuTarget::Self->value,
-                'is_external' => false,
-                'status'      => 1,
-            ]
-        );
+                'title' => 'Privacy Policy',
+                'url'   => '/privacy-policy',
+            ],
+            [
+                'title' => 'Cookie Policy',
+                'url'   => '/cookie-policy',
+            ],
+        ];
     }
 
     private function createSocialMediaMenu(Menu $parent): void
     {
-        // TikTok
-        Menu::firstOrCreate(
-            ['title' => 'TikTok', 'parent_id' => $parent->id],
+        $menu = $this->getSocialMediaMenu();
+        $this->createMenuFromTree($menu, $parent);
+    }
+
+    private function getSocialMediaMenu(): array
+    {
+        return [
             [
                 'title'       => 'TikTok',
-                'parent_id'   => $parent->id,
                 'url'         => 'https://www.tiktok.com/@yourcompany',
-                'type'        => MenuType::Link->value,
-                'target'      => MenuTarget::Blank->value,
                 'icon'        => 'bi bi-tiktok',
                 'is_external' => true,
-                'status'      => 1,
-            ]
-        );
-
-        // Facebook
-        Menu::firstOrCreate(
-            ['title' => 'Facebook', 'parent_id' => $parent->id],
+            ],
             [
                 'title'       => 'Facebook',
-                'parent_id'   => $parent->id,
                 'url'         => 'https://www.facebook.com/yourcompany',
-                'type'        => MenuType::Link->value,
-                'target'      => MenuTarget::Blank->value,
                 'icon'        => 'bi bi-facebook',
                 'is_external' => true,
-                'status'      => 1,
-            ]
-        );
-
-        // Twitter
-        Menu::firstOrCreate(
-            ['title' => 'Twitter', 'parent_id' => $parent->id],
+            ],
             [
                 'title'       => 'Twitter',
-                'parent_id'   => $parent->id,
                 'url'         => 'https://twitter.com/yourcompany',
-                'type'        => MenuType::Link->value,
-                'target'      => MenuTarget::Blank->value,
                 'icon'        => 'bi bi-twitter-x',
                 'is_external' => true,
-                'status'      => 1,
-            ]
-        );
-
-        // YouTube
-        Menu::firstOrCreate(
-            ['title' => 'YouTube', 'parent_id' => $parent->id],
+            ],
             [
                 'title'       => 'YouTube',
-                'parent_id'   => $parent->id,
                 'url'         => 'https://www.youtube.com/@yourcompany',
-                'type'        => MenuType::Link->value,
-                'target'      => MenuTarget::Blank->value,
                 'icon'        => 'bi bi-youtube',
                 'is_external' => true,
-                'status'      => 1,
-            ]
-        );
+            ],
+        ];
     }
 }

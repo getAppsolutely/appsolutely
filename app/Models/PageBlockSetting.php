@@ -96,14 +96,9 @@ final class PageBlockSetting extends Model
             $this->load('block');
         }
 
-        // If block scope is 'page', return this setting's schema_values
-        if ($this->block && $this->block->scope === 'page') {
-            $schemaValues = $this->blockValue?->schema_values;
-            if (is_string($schemaValues)) {
-                return json_decode($schemaValues, true) ?? [];
-            }
-
-            return $schemaValues ?? [];
+        $schemaValues = $this->blockValue?->schema_values;
+        if (is_string($schemaValues)) {
+            return json_decode($schemaValues, true) ?? [];
         }
 
         // Otherwise, return the block's schema_values (for global scope)

@@ -37,6 +37,6 @@ final class MenuRepository extends BaseRepository
 
     public function findByReference(string $reference): ?Menu
     {
-        return $this->model->where('reference', $reference)->first();
+        return $this->model->with(['children'])->where('reference', $reference)->firstOrFail();
     }
 }
