@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
+use Carbon\Carbon;
 use Livewire\Component;
 
 abstract class BaseBlock extends Component
@@ -19,6 +20,16 @@ abstract class BaseBlock extends Component
     protected string $viewName = '';
 
     /**
+     * Published date for the block.
+     */
+    protected ?Carbon $publishedAt = null;
+
+    /**
+     * Expired date for the block.
+     */
+    protected ?Carbon $expiredAt = null;
+
+    /**
      * Mount the component with data.
      *
      * @param  array  $data  The data to pass to the component
@@ -27,6 +38,7 @@ abstract class BaseBlock extends Component
     {
         $this->data = $data;
         $this->initializeComponent();
+        $this->initializePublishDates();
     }
 
     /**
@@ -37,6 +49,46 @@ abstract class BaseBlock extends Component
     {
         // Override in child classes if needed
         $this->data = array_merge($this->defaultConfig(), $this->data);
+    }
+
+    /**
+     * Initialize publish dates from data.
+     */
+    protected function initializePublishDates(): void
+    {
+        $this->publishedAt = $this->getData('published_at')
+            ? Carbon::parse($this->getData('published_at'))
+            : null;
+
+        $this->expiredAt = $this->getData('expired_at')
+            ? Carbon::parse($this->getData('expired_at'))
+            : null;
+    }
+
+    /**
+     * Check if the block should be visible based on publish dates.
+     */
+    public function isVisible(): bool
+    {
+        $now = now();
+
+        // If no published_at is set, block is always visible
+        if (! $this->publishedAt) {
+            return true;
+        }
+
+        // Check if current time is after or equal to published_at
+        if ($now->lt($this->publishedAt)) {
+            return false;
+        }
+
+        // If expired_at is null, block is visible after published_at
+        if (! $this->expiredAt) {
+            return true;
+        }
+
+        // Check if current time is before or equal to expired_at
+        return $now->lte($this->expiredAt);
     }
 
     protected function defaultConfig(): array
@@ -61,11 +113,14 @@ abstract class BaseBlock extends Component
 
     /**
      * Render the component.
-     *
-     * @return \Illuminate\View\View
      */
     public function render()
     {
+        // Check if block should be visible
+        if (! $this->isVisible()) {
+            return '<span></span>';
+        }
+
         $viewName = 'livewire.' . $this->getViewName();
 
         return themed_view($viewName, [
