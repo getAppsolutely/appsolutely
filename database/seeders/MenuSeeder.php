@@ -47,7 +47,7 @@ class MenuSeeder extends Seeder
         }
     }
 
-    private function createMenuFromTree(array $menus, ?Menu $parent = null): void
+    protected function createMenuFromTree(array $menus, ?Menu $parent = null): void
     {
         foreach ($menus as $item) {
             // Prepare data for creation
@@ -85,13 +85,13 @@ class MenuSeeder extends Seeder
         }
     }
 
-    private function createRoots(): void
+    protected function createRoots(): void
     {
         $menus = $this->getRoots();
         $this->createMenuFromTree($menus);
     }
 
-    private function getRoots(): array
+    protected function getRoots(): array
     {
         return [
             [
@@ -118,13 +118,13 @@ class MenuSeeder extends Seeder
 
     }
 
-    private function createMainNavigation(Menu $parent): void
+    protected function createMainNavigation(Menu $parent): void
     {
         $menu = $this->getMainNavigation();
         $this->createMenuFromTree($menu, $parent);
     }
 
-    private function getMainNavigation(): array
+    protected function getMainNavigation(): array
     {
         return [
             [
@@ -156,35 +156,35 @@ class MenuSeeder extends Seeder
         ];
     }
 
-    private function createFooterMenu(Menu $parent): void
+    protected function createFooterMenu(Menu $parent): void
     {
         $menu = $this->getFooterMenu();
         $this->createMenuFromTree($menu, $parent);
     }
 
-    private function getFooterMenu(): array
+    protected function getFooterMenu(): array
     {
         return [];
     }
 
-    private function createUserMenu(Menu $parent): void
+    protected function createUserMenu(Menu $parent): void
     {
         $menu = $this->getUserMenu();
         $this->createMenuFromTree($menu, $parent);
     }
 
-    private function getUserMenu(): array
+    protected function getUserMenu(): array
     {
         return [];
     }
 
-    private function createPolicyMenu(Menu $parent): void
+    protected function createPolicyMenu(Menu $parent): void
     {
         $menu = $this->getPolicyMenu();
         $this->createMenuFromTree($menu, $parent);
     }
 
-    private function getPolicyMenu(): array
+    protected function getPolicyMenu(): array
     {
         return [
             [
@@ -202,13 +202,13 @@ class MenuSeeder extends Seeder
         ];
     }
 
-    private function createSocialMediaMenu(Menu $parent): void
+    protected function createSocialMediaMenu(Menu $parent): void
     {
         $menu = $this->getSocialMediaMenu();
         $this->createMenuFromTree($menu, $parent);
     }
 
-    private function getSocialMediaMenu(): array
+    protected function getSocialMediaMenu(): array
     {
         return [
             [
