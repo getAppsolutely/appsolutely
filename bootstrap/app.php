@@ -26,6 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             \App\Http\Middleware\RestrictRoutePrefixes::class,
             \App\Http\Middleware\SetThemeMiddleware::class,
+            \Spatie\ResponseCache\Middlewares\CacheResponse::class,
         ]);
 
         $middleware->api(append: [
@@ -44,7 +45,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'localeCookieRedirect'  => \Mcamara\LaravelLocalization\Middleware\LocaleCookieRedirect::class,
             'localeViewPath'        => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationViewPath::class,
             // Theme middleware
-            'theme' => \App\Http\Middleware\SetThemeMiddleware::class,
+            'theme'              => \App\Http\Middleware\SetThemeMiddleware::class,
+            'doNotCacheResponse' => \Spatie\ResponseCache\Middlewares\DoNotCacheResponse::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
