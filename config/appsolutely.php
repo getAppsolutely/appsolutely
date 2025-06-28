@@ -36,4 +36,7 @@ return [
             App\Repositories\ProductRepository::class,
         ],
     ],
+    'seo' => [
+        'title_separator' => ' | ',
+    ],
 ];

@@ -147,16 +147,16 @@ class GeneralPage
      */
     protected function getTitle(): string
     {
-        $contentTitle = $this->content->title ?? '';
+        $title     = $this->content->title ?? '';
+        $separator = config('appsolutely.seo.title_separator', ' | ');
+        $siteName  = config('appsolutely.general.site_name');
 
         // For nested pages, optionally append parent title
-        if ($this->isNested() && config('nested-urls.seo.append_parent_title', true)) {
-            $separator = config('nested-urls.seo.title_separator', ' | ');
-
-            return $contentTitle . $separator . $this->parentPage->title;
+        if ($this->isNested()) {
+            $title = $title . $separator . $this->parentPage->title;
         }
 
-        return $contentTitle;
+        return $siteName ? $title . $separator . $siteName : $title;
     }
 
     /**

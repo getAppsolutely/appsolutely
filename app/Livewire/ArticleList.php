@@ -16,7 +16,6 @@ final class ArticleList extends BaseBlock
         return [
             'title'               => 'Latest Articles',
             'subtitle'            => 'Stay updated with our latest articles and news',
-            'posts_per_page'      => 6,
             'show_featured_image' => true,
             'show_excerpt'        => true,
             'show_author'         => true,
@@ -24,10 +23,11 @@ final class ArticleList extends BaseBlock
             'show_read_more'      => true,
             'read_more_text'      => 'Read More',
             'layout'              => 'grid', // grid, list, masonry
-            'order_by'            => 'published_at', // published_at, title, created_at
-            'order_direction'     => 'desc', // asc, desc
+            'posts_per_page'      => 6,
             'category_filter'     => '', // empty for all categories
             'tag_filter'          => '', // empty for all tags
+            'order_by'            => 'published_at', // published_at, title, created_at
+            'order_direction'     => 'desc', // asc, desc
         ];
     }
 

@@ -680,12 +680,29 @@ if (! function_exists('children_attributes')) {
     }
 }
 
+if (! function_exists('get_property')) {
+    function get_property($target, $key, $default = null)
+    {
+        if (is_array($target)) {
+            return $target[$key] ?? $default;
+        }
+        if (is_object($target)) {
+            return $target->$key ?? $default;
+        }
+
+        return $default;
+    }
+}
+
 if (! function_exists('page_meta')) {
     function page_meta(GeneralPage $page, $key): string
     {
-        $content = $page->getContent() ?? null;
+        $value = get_property($page, $key);
+        if (! empty($value)) {
+            return $value;
+        }
 
-        return $content->$key ?? ($content[$key] ?? '');
+        return get_property($page->getContent(), $key, '');
     }
 }
 
