@@ -10,7 +10,7 @@
     <title>@title($page)</title>
     <meta name="keywords" content="@keywords($page)">
     <meta name="description" content="@description($page)">
-
+    <link rel="canonical" href="{{ url()->current() }}" />
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">

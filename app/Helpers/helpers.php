@@ -726,3 +726,10 @@ if (! function_exists('nested_url')) {
         return app_url($fullPath);
     }
 }
+
+if (! function_exists('app_uri')) {
+    function app_uri(string $path = ''): string
+    {
+        return '/' . ltrim($path, '/');
+    }
+}

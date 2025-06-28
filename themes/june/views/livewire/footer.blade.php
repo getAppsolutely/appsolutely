@@ -11,7 +11,7 @@
                                 <div class="footer-menu-section">
                                     <h5 class="text-white fw-semibold text-uppercase mb-3">
                                         @if($menuItem->url)
-                                            <a href="{{ $menuItem->url }}"
+                                            <a href="{{ app_uri($menuItem->url) }}"
                                                target="{{ $menuItem->target->value }}"
                                                class="text-white text-decoration-none">
                                                 {{ $menuItem->title }}
@@ -24,7 +24,7 @@
                                         <ul class="list-unstyled">
                                             @foreach($menuItem->children as $child)
                                                 <li class="mb-2">
-                                                    <a href="{{ $child->url }}"
+                                                    <a href="{{ app_uri($child->url) }}"
                                                        target="{{ $child->target->value }}"
                                                        class="text-white text-decoration-none footer-link">
                                                         {{ $child->title }}
@@ -36,7 +36,7 @@
                                         <!-- Show menu item as a link if it has no children but has a route -->
                                         <ul class="list-unstyled">
                                             <li class="mb-2">
-                                                <a href="{{ $menuItem->url }}"
+                                                <a href="{{ app_uri($menuItem->url) }}"
                                                    target="{{ $menuItem->target->value }}"
                                                    class="text-white text-decoration-none footer-link">
                                                     {{ $menuItem->title }}
@@ -54,7 +54,7 @@
             <!-- Right Side - Logo and Social Media -->
             <div class="col-lg-4 text-lg-end">
                 <!-- Logo -->
-                @if(($config['logo'] ?? false))
+                @if($data['logo'] ?? false)
                     <div class="mb-4">
                         @if(config('appsolutely.general.logo'))
                             <img src="{{ config('appsolutely.general.logo') }}"
@@ -103,7 +103,7 @@
                 @if($policyMenuItems->isNotEmpty())
                     <div class="policy-menu text-lg-end">
                         @foreach($policyMenuItems as $policyItem)
-                            <a href="{{ $policyItem->url }}"
+                            <a href="{{ app_uri($policyItem->url) }}"
                                target="{{ $policyItem->target->value }}"
                                class="text-white text-decoration-none me-3 footer-link">
                                 {{ $policyItem->title }}
