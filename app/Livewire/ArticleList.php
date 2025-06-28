@@ -49,7 +49,7 @@ final class ArticleList extends BaseBlock
     protected function getExtraData(): array
     {
         return [
-            'articles' => $this->articles,
+            'articles' => $this->getArticlesProperty(),
         ];
     }
 }

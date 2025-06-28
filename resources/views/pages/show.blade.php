@@ -3,7 +3,7 @@
 @section('content')
     <div>
         @forelse ($page->blocks as $block)
-            @renderBlock($block)
+            @renderBlock($block, $page->toArray()??[])
         @empty
         @endforelse
     </div>

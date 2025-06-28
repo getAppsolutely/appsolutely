@@ -56,7 +56,7 @@ final class PageBlockService
      * Validate and render a block safely
      * Returns the rendered HTML or error message
      */
-    public function renderBlockSafely($block): string
+    public function renderBlockSafely($block, $page): string
     {
         // Validate block structure
         if (! isset($block['block']['class']) || ! isset($block['reference'])) {
@@ -85,6 +85,7 @@ final class PageBlockService
         $normalizeParameter = $this->normalizeParameterKeys($block->parameters);
         $parameters         = $this->getPossibleParameters($block->parameters, $normalizeParameter, $className);
 
+        $parameters = array_merge($parameters, ['page' => $page]);
         // Render the Livewire component
         try {
             return Livewire::mount($className, $parameters, $reference);

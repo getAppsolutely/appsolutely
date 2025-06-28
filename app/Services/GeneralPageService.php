@@ -94,21 +94,21 @@ final readonly class GeneralPageService
 
             if ($page instanceof GeneralPage) {
                 if ($page->isNested()) {
-                    log_debug('Nested URL resolved', [
+                    local_debug('Nested URL resolved', [
                         'slug'           => $fullSlug,
                         'parent_page_id' => $page->getParentPage()->id,
                         'content_type'   => $page->getContentType(),
                         'content_id'     => $page->getContent()->id,
                     ]);
                 } else {
-                    log_debug('Root page resolved', [
+                    local_debug('Root page resolved', [
                         'slug'         => $fullSlug,
                         'page_id'      => $page->id,
                         'content_type' => $page->getContentType(),
                     ]);
                 }
             } else {
-                log_info('Page not found', ['slug' => $fullSlug]);
+                local_debug('Pa0ge not found', ['slug' => $fullSlug]);
             }
 
             return $page;

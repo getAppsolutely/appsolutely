@@ -14,6 +14,8 @@ abstract class BaseBlock extends Component
      */
     public array $data = [];
 
+    public array $page;
+
     /**
      * The view name to render (without the 'livewire.' prefix).
      */
@@ -32,11 +34,13 @@ abstract class BaseBlock extends Component
     /**
      * Mount the component with data.
      *
+     * @param  array  $page  page data
      * @param  array  $data  The data to pass to the component
      */
-    public function mount(array $data = []): void
+    public function mount(array $page, array $data = []): void
     {
         $this->data = $data;
+        $this->page = $page;
         $this->initializeComponent();
         $this->initializePublishDates();
     }
@@ -124,7 +128,10 @@ abstract class BaseBlock extends Component
         $viewName = 'livewire.' . $this->getViewName();
 
         return themed_view($viewName, array_merge($this->getExtraData()),
-            ['data' => $this->data]);
+            [
+                'data' => $this->data,
+                'page' => $this->page,
+            ]);
     }
 
     protected function getExtraData(): array
