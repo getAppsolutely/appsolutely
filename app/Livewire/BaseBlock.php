@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
+use App\Models\Model;
 use Carbon\Carbon;
 use Livewire\Component;
 
@@ -14,7 +15,9 @@ abstract class BaseBlock extends Component
      */
     public array $data = [];
 
-    public array $page;
+    public array $page = [];
+
+    public Model $model;
 
     /**
      * The view name to render (without the 'livewire.' prefix).
@@ -39,8 +42,9 @@ abstract class BaseBlock extends Component
      */
     public function mount(array $page, array $data = []): void
     {
-        $this->data = $data;
-        $this->page = $page;
+        $this->data  = $data;
+        $this->page  = $page;
+        $this->model = $page['model'] ?? null;
         $this->initializeComponent();
         $this->initializePublishDates();
     }

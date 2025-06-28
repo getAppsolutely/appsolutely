@@ -4,7 +4,6 @@
         <div class="text-center mb-5">
             <h2 class="display-5 fw-bold text-dark mb-3">
                 {{ $data['title'] }}
-                @dump($page)
             </h2>
             @if($data['subtitle'] ?? false)
                 <p class="lead text-muted">

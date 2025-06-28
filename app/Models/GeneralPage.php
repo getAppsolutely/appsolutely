@@ -337,6 +337,7 @@ class GeneralPage
             'child_slug'     => $this->childSlug,
             'title'          => $this->getTitle(),
             'slug'           => $this->getSlug(),
+            'model'          => $this->getContent(),
         ];
     }
 }
