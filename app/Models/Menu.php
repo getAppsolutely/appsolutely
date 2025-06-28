@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\MenuTarget;
 use App\Enums\MenuType;
+use App\Models\Traits\ClearsResponseCache;
 use App\Models\Traits\ScopePublished;
 use App\Models\Traits\ScopeReference;
 use App\Models\Traits\ScopeStatus;
@@ -17,6 +18,7 @@ use Spatie\EloquentSortable\SortableTrait;
 
 final class Menu extends NestedSetModel implements Sortable
 {
+    use ClearsResponseCache;
     use ModelTree;
     use ScopePublished;
     use ScopeReference;
