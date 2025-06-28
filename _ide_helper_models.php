@@ -55,6 +55,7 @@ namespace App\Models{
      * @method static \Illuminate\Database\Eloquent\Builder<static>|Article published(?\Carbon\Carbon $datetime = null)
      * @method static \Illuminate\Database\Eloquent\Builder<static>|Article query()
      * @method static \Illuminate\Database\Eloquent\Builder<static>|Article slug(string $slug)
+     * @method static \Illuminate\Database\Eloquent\Builder<static>|Article status($value = null, $operator = null)
      * @method static \Illuminate\Database\Eloquent\Builder<static>|Article whereContent($value)
      * @method static \Illuminate\Database\Eloquent\Builder<static>|Article whereCover($value)
      * @method static \Illuminate\Database\Eloquent\Builder<static>|Article whereCreatedAt($value)

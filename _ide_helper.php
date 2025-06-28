@@ -5564,7 +5564,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function lock($name, $seconds = 0, $owner = null)
         {
-            /** @var \Illuminate\Cache\DatabaseStore $instance */
+            /** @var \Illuminate\Cache\FileStore $instance */
             return $instance->lock($name, $seconds, $owner);
         }
 
@@ -5579,22 +5579,8 @@ namespace Illuminate\Support\Facades {
          */
         public static function restoreLock($name, $owner)
         {
-            /** @var \Illuminate\Cache\DatabaseStore $instance */
+            /** @var \Illuminate\Cache\FileStore $instance */
             return $instance->restoreLock($name, $owner);
-        }
-
-        /**
-         * Remove an item from the cache if it is expired.
-         *
-         * @param  string  $key
-         * @return bool
-         *
-         * @static
-         */
-        public static function forgetIfExpired($key)
-        {
-            /** @var \Illuminate\Cache\DatabaseStore $instance */
-            return $instance->forgetIfExpired($key);
         }
 
         /**
@@ -5606,35 +5592,76 @@ namespace Illuminate\Support\Facades {
          */
         public static function flush()
         {
-            /** @var \Illuminate\Cache\DatabaseStore $instance */
+            /** @var \Illuminate\Cache\FileStore $instance */
             return $instance->flush();
         }
 
         /**
-         * Get the underlying database connection.
+         * Get the full path for the given cache key.
          *
-         * @return \Illuminate\Database\MySqlConnection
+         * @param  string  $key
+         * @return string
          *
          * @static
          */
-        public static function getConnection()
+        public static function path($key)
         {
-            /** @var \Illuminate\Cache\DatabaseStore $instance */
-            return $instance->getConnection();
+            /** @var \Illuminate\Cache\FileStore $instance */
+            return $instance->path($key);
         }
 
         /**
-         * Specify the name of the connection that should be used to manage locks.
+         * Get the Filesystem instance.
          *
-         * @param  \Illuminate\Database\ConnectionInterface  $connection
-         * @return \Illuminate\Cache\DatabaseStore
+         * @return \Illuminate\Filesystem\Filesystem
          *
          * @static
          */
-        public static function setLockConnection($connection)
+        public static function getFilesystem()
         {
-            /** @var \Illuminate\Cache\DatabaseStore $instance */
-            return $instance->setLockConnection($connection);
+            /** @var \Illuminate\Cache\FileStore $instance */
+            return $instance->getFilesystem();
+        }
+
+        /**
+         * Get the working directory of the cache.
+         *
+         * @return string
+         *
+         * @static
+         */
+        public static function getDirectory()
+        {
+            /** @var \Illuminate\Cache\FileStore $instance */
+            return $instance->getDirectory();
+        }
+
+        /**
+         * Set the working directory of the cache.
+         *
+         * @param  string  $directory
+         * @return \Illuminate\Cache\FileStore
+         *
+         * @static
+         */
+        public static function setDirectory($directory)
+        {
+            /** @var \Illuminate\Cache\FileStore $instance */
+            return $instance->setDirectory($directory);
+        }
+
+        /**
+         * Set the cache directory where locks should be stored.
+         *
+         * @param  string|null  $lockDirectory
+         * @return \Illuminate\Cache\FileStore
+         *
+         * @static
+         */
+        public static function setLockDirectory($lockDirectory)
+        {
+            /** @var \Illuminate\Cache\FileStore $instance */
+            return $instance->setLockDirectory($lockDirectory);
         }
 
         /**
@@ -5646,22 +5673,8 @@ namespace Illuminate\Support\Facades {
          */
         public static function getPrefix()
         {
-            /** @var \Illuminate\Cache\DatabaseStore $instance */
+            /** @var \Illuminate\Cache\FileStore $instance */
             return $instance->getPrefix();
-        }
-
-        /**
-         * Set the cache key prefix.
-         *
-         * @param  string  $prefix
-         * @return void
-         *
-         * @static
-         */
-        public static function setPrefix($prefix)
-        {
-            /** @var \Illuminate\Cache\DatabaseStore $instance */
-            $instance->setPrefix($prefix);
         }
     }
     /**
@@ -25992,6 +26005,96 @@ namespace Mcamara\LaravelLocalization\Facades {
     }
 }
 
+namespace Spatie\ResponseCache\Facades {
+    class ResponseCache
+    {
+        /**
+         * @static
+         */
+        public static function enabled($request)
+        {
+            /** @var \Spatie\ResponseCache\ResponseCache $instance */
+            return $instance->enabled($request);
+        }
+
+        /**
+         * @static
+         */
+        public static function shouldCache($request, $response)
+        {
+            /** @var \Spatie\ResponseCache\ResponseCache $instance */
+            return $instance->shouldCache($request, $response);
+        }
+
+        /**
+         * @static
+         */
+        public static function shouldBypass($request)
+        {
+            /** @var \Spatie\ResponseCache\ResponseCache $instance */
+            return $instance->shouldBypass($request);
+        }
+
+        /**
+         * @static
+         */
+        public static function cacheResponse($request, $response, $lifetimeInSeconds = null, $tags = [])
+        {
+            /** @var \Spatie\ResponseCache\ResponseCache $instance */
+            return $instance->cacheResponse($request, $response, $lifetimeInSeconds, $tags);
+        }
+
+        /**
+         * @static
+         */
+        public static function hasBeenCached($request, $tags = [])
+        {
+            /** @var \Spatie\ResponseCache\ResponseCache $instance */
+            return $instance->hasBeenCached($request, $tags);
+        }
+
+        /**
+         * @static
+         */
+        public static function getCachedResponseFor($request, $tags = [])
+        {
+            /** @var \Spatie\ResponseCache\ResponseCache $instance */
+            return $instance->getCachedResponseFor($request, $tags);
+        }
+
+        /**
+         * @static
+         */
+        public static function clear($tags = [])
+        {
+            /** @var \Spatie\ResponseCache\ResponseCache $instance */
+            return $instance->clear($tags);
+        }
+
+        /**
+         * @param  string|array  $uris
+         * @param  string[]  $tags
+         * @return \Spatie\ResponseCache\ResponseCache
+         *
+         * @static
+         */
+        public static function forget($uris, $tags = [])
+        {
+            /** @var \Spatie\ResponseCache\ResponseCache $instance */
+            return $instance->forget($uris, $tags);
+        }
+
+        /**
+         * @static
+         */
+        public static function selectCachedItems()
+        {
+            /** @var \Spatie\ResponseCache\ResponseCache $instance */
+            return $instance->selectCachedItems();
+        }
+    }
+}
+
 namespace Illuminate\Support {
     /**
      * @template TKey of array-key
@@ -31502,4 +31605,5 @@ namespace {
     class Debugbar extends \Barryvdh\Debugbar\Facades\Debugbar {}
     class Livewire extends \Livewire\Livewire {}
     class LaravelLocalization extends \Mcamara\LaravelLocalization\Facades\LaravelLocalization {}
+    class ResponseCache extends \Spatie\ResponseCache\Facades\ResponseCache {}
 }
