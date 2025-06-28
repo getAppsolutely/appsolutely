@@ -93,10 +93,10 @@ trait Sluggable
         $trimmed = trim($slug, '/');
 
         return array_unique([
-            $slug,
-            '/' . ltrim($slug, '/'),
-            rtrim($slug, '/') . '/',
+            $trimmed,
+            '/' . $trimmed,
             '/' . $trimmed . '/',
+            $trimmed . '/',
         ]);
     }
 }

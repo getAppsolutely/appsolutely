@@ -1,19 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use App\Services\PageService;
+use App\Services\GeneralPageService;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
-class PageController extends BaseController
+final class PageController extends BaseController
 {
     public function __construct(
-        private PageService $pageService
+        private readonly GeneralPageService $generalPageService
     ) {}
 
-    public function show(Request $request, ?string $slug = null): object
+    public function show(Request $request, ?string $slug = null): View
     {
-        $page = $this->pageService->getPublishedPage($slug ?? '/');
+        $page = $this->generalPageService->resolvePageWithCaching($slug);
 
         if (! $page) {
             abort(404);

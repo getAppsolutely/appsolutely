@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Article;
+use Carbon\Carbon;
 
 class ArticleRepository extends BaseRepository
 {
@@ -38,5 +39,14 @@ class ArticleRepository extends BaseRepository
         $query->orderBy($orderBy, $orderDirection);
 
         return $query;
+    }
+
+    public function findActiveBySlug($slug, ?Carbon $datetime)
+    {
+        return $this->model->newQuery()
+            ->status()
+            ->published($datetime)
+            ->where('slug', $slug)
+            ->first();
     }
 }

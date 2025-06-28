@@ -26,7 +26,6 @@ class PageRepository extends BaseRepository
             ->with(['blocks' => function ($query) {
                 $query->status()->whereNotNull('sort')->orderBy('sort');
             }, 'blocks.block'])
-
             ->first();
     }
 }

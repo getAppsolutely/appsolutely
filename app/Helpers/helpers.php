@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Helpers\FileHelper;
+use App\Models\GeneralPage;
 use App\Services\TranslationService;
 use Carbon\Carbon;
 use Illuminate\Container\Attributes\Database;
@@ -680,9 +681,11 @@ if (! function_exists('children_attributes')) {
 }
 
 if (! function_exists('page_meta')) {
-    function page_meta($page, $key): string
+    function page_meta(GeneralPage $page, $key): string
     {
-        return $page->$key ?? $page[$key] ?? '';
+        $content = $page->getContent() ?? null;
+
+        return $content->$key ?? ($content[$key] ?? '');
     }
 }
 

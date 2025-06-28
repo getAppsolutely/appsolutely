@@ -30,4 +30,10 @@ return [
         'enabled'  => env('APPSOLUTELY_ENABLED_FEATURES', ''), // Will check enabled first
         'disabled' => env('APPSOLUTELY_DISABLED_FEATURES', ''),
     ],
+    'blocks' => [
+        App\Livewire\ArticleList::class => [
+            App\Repositories\ArticleRepository::class,
+            App\Repositories\ProductRepository::class,
+        ],
+    ],
 ];
