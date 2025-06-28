@@ -17,7 +17,7 @@ abstract class BaseBlock extends Component
 
     public array $page = [];
 
-    public Model $model;
+    public ?Model $model = null;
 
     /**
      * The view name to render (without the 'livewire.' prefix).

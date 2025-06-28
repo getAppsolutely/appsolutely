@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
+use App\Enums\PageType;
 use App\Repositories\ArticleRepository;
 use Livewire\WithPagination;
 
@@ -31,8 +32,12 @@ final class ArticleList extends BaseBlock
         ];
     }
 
-    public function getArticlesProperty()
+    protected function getArticlesProperty()
     {
+        if (isset($this->page['type']) && $this->page['type'] === PageType::Nested->value) {
+            return collect();
+        }
+
         $filters = [
             'posts_per_page'  => $this->getData('posts_per_page', 6),
             'category_filter' => $this->getData('category_filter', ''),

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PageType;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -330,7 +331,9 @@ class GeneralPage
     public function toArray(): array
     {
         return [
-            'type'           => $this->isNested() ? 'nested' : 'root',
+            'type'           => $this->isNested() ? PageType::Nested->value : PageType::Root->value,
+            'nested'         => $this->isNested(),
+            'root'           => $this->isRoot(),
             'content_type'   => $this->getContentType(),
             'content_id'     => $this->content->id,
             'parent_page_id' => $this->parentPage?->id,
