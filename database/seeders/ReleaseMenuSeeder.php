@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
+use Dcat\Admin\Models\Menu;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class ReleaseMenuSeeder extends Seeder
 {
@@ -14,9 +14,9 @@ class ReleaseMenuSeeder extends Seeder
      */
     public function run()
     {
-        $releasesMenu = DB::table('admin_menu')->where('parent_id', 0)->where('title', 'Releases')->first();
+        $releasesMenu = Menu::where('parent_id', 0)->where('title', 'Releases')->first();
         if (! $releasesMenu) {
-            $releasesMenuId = DB::table('admin_menu')->insertGetId([
+            $releasesMenuId = Menu::create([
                 'parent_id'  => 0,
                 'order'      => 100,
                 'title'      => 'Releases',
@@ -24,14 +24,14 @@ class ReleaseMenuSeeder extends Seeder
                 'uri'        => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]);
+            ])->id;
         } else {
             $releasesMenuId = $releasesMenu->id;
         }
 
-        $releaseVersionsMenu = DB::table('admin_menu')->where('parent_id', $releasesMenuId)->where('title', 'Versions')->first();
+        $releaseVersionsMenu = Menu::where('parent_id', $releasesMenuId)->where('title', 'Versions')->first();
         if (! $releaseVersionsMenu) {
-            DB::table('admin_menu')->insert([
+            Menu::create([
                 'parent_id'  => $releasesMenuId,
                 'order'      => 1,
                 'title'      => 'Versions',
@@ -42,9 +42,9 @@ class ReleaseMenuSeeder extends Seeder
             ]);
         }
 
-        $releaseBuildsMenu = DB::table('admin_menu')->where('parent_id', $releasesMenuId)->where('title', 'Builds')->first();
+        $releaseBuildsMenu = Menu::where('parent_id', $releasesMenuId)->where('title', 'Builds')->first();
         if (! $releaseBuildsMenu) {
-            DB::table('admin_menu')->insert([
+            Menu::create([
                 'parent_id'  => $releasesMenuId,
                 'order'      => 2,
                 'title'      => 'Builds',

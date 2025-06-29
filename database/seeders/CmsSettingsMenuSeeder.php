@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
+use Dcat\Admin\Models\Menu;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class CmsSettingsMenuSeeder extends Seeder
 {
@@ -12,9 +12,9 @@ class CmsSettingsMenuSeeder extends Seeder
      */
     public function run(): void
     {
-        $cmsSettingsMenu = DB::table('admin_menu')->where('parent_id', 0)->where('title', 'CMS Settings')->first();
+        $cmsSettingsMenu = Menu::where('parent_id', 0)->where('title', 'CMS Settings')->first();
         if (! $cmsSettingsMenu) {
-            $cmsSettingsId = DB::table('admin_menu')->insertGetId([
+            $cmsSettingsId = Menu::create([
                 'parent_id'  => 0,
                 'order'      => 120,
                 'title'      => 'CMS Settings',
@@ -22,14 +22,14 @@ class CmsSettingsMenuSeeder extends Seeder
                 'uri'        => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]);
+            ])->id;
         } else {
             $cmsSettingsId = $cmsSettingsMenu->id;
         }
 
-        $blockSettingsMenu = DB::table('admin_menu')->where('parent_id', $cmsSettingsId)->where('title', 'Page Blocks')->first();
+        $blockSettingsMenu = Menu::where('parent_id', $cmsSettingsId)->where('title', 'Page Blocks')->first();
         if (! $blockSettingsMenu) {
-            DB::table('admin_menu')->insert([
+            Menu::create([
                 'parent_id'  => $cmsSettingsId,
                 'order'      => 1,
                 'title'      => 'Page Blocks',
@@ -40,9 +40,9 @@ class CmsSettingsMenuSeeder extends Seeder
             ]);
         }
 
-        $blocksMenu = DB::table('admin_menu')->where('parent_id', $cmsSettingsId)->where('title', 'Blocks')->first();
+        $blocksMenu = Menu::where('parent_id', $cmsSettingsId)->where('title', 'Blocks')->first();
         if (! $blocksMenu) {
-            DB::table('admin_menu')->insert([
+            Menu::create([
                 'parent_id'  => $cmsSettingsId,
                 'order'      => 2,
                 'title'      => 'Blocks',
@@ -53,9 +53,9 @@ class CmsSettingsMenuSeeder extends Seeder
             ]);
         }
 
-        $blockGroupsMenu = DB::table('admin_menu')->where('parent_id', $cmsSettingsId)->where('title', 'Block Groups')->first();
+        $blockGroupsMenu = Menu::where('parent_id', $cmsSettingsId)->where('title', 'Block Groups')->first();
         if (! $blockGroupsMenu) {
-            DB::table('admin_menu')->insert([
+            Menu::create([
                 'parent_id'  => $cmsSettingsId,
                 'order'      => 3,
                 'title'      => 'Block Groups',

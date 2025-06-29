@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
+use Dcat\Admin\Models\Menu;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class AdminMenuSeeder extends Seeder
 {
@@ -14,9 +14,9 @@ class AdminMenuSeeder extends Seeder
      */
     public function run()
     {
-        $filesMenu = DB::table('admin_menu')->where('parent_id', 0)->where('title', 'Files')->first();
+        $filesMenu = Menu::where('parent_id', 0)->where('title', 'Files')->first();
         if (! $filesMenu) {
-            DB::table('admin_menu')->insert([
+            Menu::create([
                 'parent_id'  => 0,
                 'order'      => 180,
                 'title'      => 'Files',
@@ -27,9 +27,9 @@ class AdminMenuSeeder extends Seeder
             ]);
         }
 
-        $configMenu = DB::table('admin_menu')->where('parent_id', 0)->where('title', 'Config')->first();
+        $configMenu = Menu::where('parent_id', 0)->where('title', 'Config')->first();
         if (! $configMenu) {
-            DB::table('admin_menu')->insert([
+            Menu::create([
                 'parent_id'  => 0,
                 'order'      => 190,
                 'title'      => 'Config',
@@ -41,9 +41,9 @@ class AdminMenuSeeder extends Seeder
             ]);
         }
 
-        $adminMenu = DB::table('admin_menu')->where('parent_id', 0)->where('title', 'Admin')->first();
+        $adminMenu = Menu::where('parent_id', 0)->where('title', 'Admin')->first();
         if (! $adminMenu) {
-            $adminMenuId = DB::table('admin_menu')->insertGetId([
+            $adminMenuId = Menu::create([
                 'parent_id'  => 0,
                 'order'      => 200,
                 'title'      => 'Admin',
@@ -51,14 +51,14 @@ class AdminMenuSeeder extends Seeder
                 'uri'        => '',
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]);
+            ])->id;
         } else {
             $adminMenuId = $adminMenu->id;
         }
 
-        $usersMenu = DB::table('admin_menu')->where('parent_id', $adminMenuId)->where('title', 'Users')->first();
+        $usersMenu = Menu::where('parent_id', $adminMenuId)->where('title', 'Users')->first();
         if (! $usersMenu) {
-            DB::table('admin_menu')->insert([
+            Menu::create([
                 'parent_id'  => $adminMenuId,
                 'order'      => 1,
                 'title'      => 'Users',
@@ -69,9 +69,9 @@ class AdminMenuSeeder extends Seeder
             ]);
         }
 
-        $rolesMenu = DB::table('admin_menu')->where('parent_id', $adminMenuId)->where('title', 'Roles')->first();
+        $rolesMenu = Menu::where('parent_id', $adminMenuId)->where('title', 'Roles')->first();
         if (! $rolesMenu) {
-            DB::table('admin_menu')->insert([
+            Menu::create([
                 'parent_id'  => $adminMenuId,
                 'order'      => 2,
                 'title'      => 'Roles',
@@ -82,9 +82,9 @@ class AdminMenuSeeder extends Seeder
             ]);
         }
 
-        $permissionMenu = DB::table('admin_menu')->where('parent_id', $adminMenuId)->where('title', 'Permission')->first();
+        $permissionMenu = Menu::where('parent_id', $adminMenuId)->where('title', 'Permission')->first();
         if (! $permissionMenu) {
-            DB::table('admin_menu')->insert([
+            Menu::create([
                 'parent_id'  => $adminMenuId,
                 'order'      => 3,
                 'title'      => 'Permission',
@@ -95,9 +95,9 @@ class AdminMenuSeeder extends Seeder
             ]);
         }
 
-        $menu = DB::table('admin_menu')->where('parent_id', $adminMenuId)->where('title', 'Menu')->first();
+        $menu = Menu::where('parent_id', $adminMenuId)->where('title', 'Menu')->first();
         if (! $menu) {
-            DB::table('admin_menu')->insert([
+            Menu::create([
                 'parent_id'  => $adminMenuId,
                 'order'      => 4,
                 'title'      => 'Menu',
@@ -108,9 +108,9 @@ class AdminMenuSeeder extends Seeder
             ]);
         }
 
-        $extensionsMenu = DB::table('admin_menu')->where('parent_id', $adminMenuId)->where('title', 'Extensions')->first();
+        $extensionsMenu = Menu::where('parent_id', $adminMenuId)->where('title', 'Extensions')->first();
         if (! $extensionsMenu) {
-            DB::table('admin_menu')->insert([
+            Menu::create([
                 'parent_id'  => $adminMenuId,
                 'order'      => 5,
                 'title'      => 'Extensions',

@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
+use Dcat\Admin\Models\Menu;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class ProductSettingsMenuSeeder extends Seeder
 {
@@ -12,9 +12,9 @@ class ProductSettingsMenuSeeder extends Seeder
      */
     public function run(): void
     {
-        $productSettingsMenu = DB::table('admin_menu')->where('parent_id', 0)->where('title', 'Product Settings')->first();
+        $productSettingsMenu = Menu::where('parent_id', 0)->where('title', 'Product Settings')->first();
         if (! $productSettingsMenu) {
-            $productSettingsId = DB::table('admin_menu')->insertGetId([
+            $productSettingsId = Menu::create([
                 'parent_id'  => 0,
                 'order'      => 150,
                 'title'      => 'Product Settings',
@@ -22,14 +22,14 @@ class ProductSettingsMenuSeeder extends Seeder
                 'uri'        => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]);
+            ])->id;
         } else {
             $productSettingsId = $productSettingsMenu->id;
         }
 
-        $attributeGroupsMenu = DB::table('admin_menu')->where('parent_id', $productSettingsId)->where('title', 'Attribute Groups')->first();
+        $attributeGroupsMenu = Menu::where('parent_id', $productSettingsId)->where('title', 'Attribute Groups')->first();
         if (! $attributeGroupsMenu) {
-            DB::table('admin_menu')->insert([
+            Menu::create([
                 'parent_id'  => $productSettingsId,
                 'order'      => 1,
                 'title'      => 'Attribute Groups',
@@ -40,9 +40,9 @@ class ProductSettingsMenuSeeder extends Seeder
             ]);
         }
 
-        $attributesMenu = DB::table('admin_menu')->where('parent_id', $productSettingsId)->where('title', 'Attributes')->first();
+        $attributesMenu = Menu::where('parent_id', $productSettingsId)->where('title', 'Attributes')->first();
         if (! $attributesMenu) {
-            DB::table('admin_menu')->insert([
+            Menu::create([
                 'parent_id'  => $productSettingsId,
                 'order'      => 2,
                 'title'      => 'Attributes',
@@ -53,9 +53,9 @@ class ProductSettingsMenuSeeder extends Seeder
             ]);
         }
 
-        $attributeValuesMenu = DB::table('admin_menu')->where('parent_id', $productSettingsId)->where('title', 'Attribute Values')->first();
+        $attributeValuesMenu = Menu::where('parent_id', $productSettingsId)->where('title', 'Attribute Values')->first();
         if (! $attributeValuesMenu) {
-            DB::table('admin_menu')->insert([
+            Menu::create([
                 'parent_id'  => $productSettingsId,
                 'order'      => 3,
                 'title'      => 'Attribute Values',

@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
+use Dcat\Admin\Models\Menu;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class CmsMenuSeeder extends Seeder
 {
@@ -14,9 +14,9 @@ class CmsMenuSeeder extends Seeder
      */
     public function run()
     {
-        $dashboardMenu = DB::table('admin_menu')->where('parent_id', 0)->where('title', 'Dashboard')->first();
+        $dashboardMenu = Menu::where('parent_id', 0)->where('title', 'Dashboard')->first();
         if (! $dashboardMenu) {
-            DB::table('admin_menu')->insert([
+            Menu::create([
                 'parent_id'  => 0,
                 'order'      => 0,
                 'title'      => 'Dashboard',
@@ -27,9 +27,9 @@ class CmsMenuSeeder extends Seeder
             ]);
         }
 
-        $pagesMenu = DB::table('admin_menu')->where('parent_id', 0)->where('title', 'Pages')->first();
+        $pagesMenu = Menu::where('parent_id', 0)->where('title', 'Pages')->first();
         if (! $pagesMenu) {
-            DB::table('admin_menu')->insert([
+            Menu::create([
                 'parent_id'  => 0,
                 'order'      => 10,
                 'title'      => 'Pages',
@@ -40,9 +40,9 @@ class CmsMenuSeeder extends Seeder
             ]);
         }
 
-        $cmsMenu = DB::table('admin_menu')->where('parent_id', 0)->where('title', 'CMS')->first();
+        $cmsMenu = Menu::where('parent_id', 0)->where('title', 'CMS')->first();
         if (! $cmsMenu) {
-            $cmsMenuId = DB::table('admin_menu')->insertGetId([
+            $cmsMenuId = Menu::create([
                 'parent_id'  => 0,
                 'order'      => 20,
                 'title'      => 'CMS',
@@ -50,14 +50,14 @@ class CmsMenuSeeder extends Seeder
                 'uri'        => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]);
+            ])->id;
         } else {
             $cmsMenuId = $cmsMenu->id;
         }
 
-        $articlesMenu = DB::table('admin_menu')->where('parent_id', $cmsMenuId)->where('title', 'Articles')->first();
+        $articlesMenu = Menu::where('parent_id', $cmsMenuId)->where('title', 'Articles')->first();
         if (! $articlesMenu) {
-            DB::table('admin_menu')->insert([
+            Menu::create([
                 'parent_id'  => $cmsMenuId,
                 'order'      => 1,
                 'title'      => 'Articles',
@@ -68,9 +68,9 @@ class CmsMenuSeeder extends Seeder
             ]);
         }
 
-        $articleCategoriesMenu = DB::table('admin_menu')->where('parent_id', $cmsMenuId)->where('title', 'Article Categories')->first();
+        $articleCategoriesMenu = Menu::where('parent_id', $cmsMenuId)->where('title', 'Article Categories')->first();
         if (! $articleCategoriesMenu) {
-            DB::table('admin_menu')->insert([
+            Menu::create([
                 'parent_id'  => $cmsMenuId,
                 'order'      => 2,
                 'title'      => 'Article Categories',
@@ -81,9 +81,9 @@ class CmsMenuSeeder extends Seeder
             ]);
         }
 
-        $menusMenu = DB::table('admin_menu')->where('parent_id', $cmsMenuId)->where('title', 'Menu')->first();
+        $menusMenu = Menu::where('parent_id', $cmsMenuId)->where('title', 'Menu')->first();
         if (! $menusMenu) {
-            DB::table('admin_menu')->insert([
+            Menu::create([
                 'parent_id'  => $cmsMenuId,
                 'order'      => 3,
                 'title'      => 'Menu',

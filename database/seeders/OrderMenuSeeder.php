@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
+use Dcat\Admin\Models\Menu;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class OrderMenuSeeder extends Seeder
 {
@@ -14,9 +14,9 @@ class OrderMenuSeeder extends Seeder
      */
     public function run()
     {
-        $ordersMenu = DB::table('admin_menu')->where('parent_id', 0)->where('title', 'Orders')->first();
+        $ordersMenu = Menu::where('parent_id', 0)->where('title', 'Orders')->first();
         if (! $ordersMenu) {
-            DB::table('admin_menu')->insert([
+            Menu::create([
                 'parent_id'  => 0,
                 'order'      => 30,
                 'title'      => 'Orders',

@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
+use Dcat\Admin\Models\Menu;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class ProductMenuSeeder extends Seeder
 {
@@ -14,9 +14,9 @@ class ProductMenuSeeder extends Seeder
      */
     public function run()
     {
-        $productMainMenu = DB::table('admin_menu')->where('parent_id', 0)->where('title', 'Products')->first();
+        $productMainMenu = Menu::where('parent_id', 0)->where('title', 'Products')->first();
         if (! $productMainMenu) {
-            $productMainMenuId = DB::table('admin_menu')->insertGetId([
+            $productMainMenuId = Menu::create([
                 'parent_id'  => 0,
                 'order'      => 30,
                 'title'      => 'Products',
@@ -24,14 +24,14 @@ class ProductMenuSeeder extends Seeder
                 'uri'        => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]);
+            ])->id;
         } else {
             $productMainMenuId = $productMainMenu->id;
         }
 
-        $productsMenu = DB::table('admin_menu')->where('parent_id', $productMainMenuId)->where('title', 'Products')->first();
+        $productsMenu = Menu::where('parent_id', $productMainMenuId)->where('title', 'Products')->first();
         if (! $productsMenu) {
-            DB::table('admin_menu')->insert([
+            Menu::create([
                 'parent_id'  => $productMainMenuId,
                 'order'      => 1,
                 'title'      => 'Products',
@@ -42,9 +42,9 @@ class ProductMenuSeeder extends Seeder
             ]);
         }
 
-        $productSkusMenu = DB::table('admin_menu')->where('parent_id', $productMainMenuId)->where('title', 'Product Skus')->first();
+        $productSkusMenu = Menu::where('parent_id', $productMainMenuId)->where('title', 'Product Skus')->first();
         if (! $productSkusMenu) {
-            DB::table('admin_menu')->insert([
+            Menu::create([
                 'parent_id'  => $productMainMenuId,
                 'order'      => 2,
                 'title'      => 'Product Skus',
@@ -55,9 +55,9 @@ class ProductMenuSeeder extends Seeder
             ]);
         }
 
-        $productCategoriesMenu = DB::table('admin_menu')->where('parent_id', $productMainMenuId)->where('title', 'Product Categories')->first();
+        $productCategoriesMenu = Menu::where('parent_id', $productMainMenuId)->where('title', 'Product Categories')->first();
         if (! $productCategoriesMenu) {
-            DB::table('admin_menu')->insert([
+            Menu::create([
                 'parent_id'  => $productMainMenuId,
                 'order'      => 3,
                 'title'      => 'Product Categories',
