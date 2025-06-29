@@ -10,6 +10,7 @@
         "ext-dom": "*",
         "dcat/laravel-admin": "^2.0.x-dev",
         "deepseek-php/deepseek-php-client": "^2.0",
+        "diglactic/laravel-breadcrumbs": "^10.0",
         "fahlisaputra/laravel-minify": "^1.2",
         "ghost/dcat-config": "^1.0",
         "kalnoy/nestedset": "^6.0",
