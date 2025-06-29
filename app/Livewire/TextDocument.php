@@ -6,15 +6,12 @@ namespace App\Livewire;
 
 final class TextDocument extends BaseBlock
 {
-    protected function defaultConfig(): array
-    {
-        return [
-            'title'          => 'Document Title',
-            'subtitle'       => '',
-            'content'        => '<p>Document content goes here...</p>',
-            'published_date' => null,
-            'author'         => '',
-            'show_meta'      => true,
-        ];
-    }
+    protected array $defaultDisplayOptions = [
+        'title'          => 'Sample Title',
+        'subtitle'       => 'Optional Subtitle',
+        'content'        => '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>',
+        'published_date' => null, // or '2024-01-01' if you want a placeholder
+        'author'         => 'Anonymous',
+        'show_meta'      => true,
+    ];
 }

@@ -3,31 +3,31 @@
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <!-- Title -->
-                @if($data['title'] ?? false)
+                @if($displayOptions['title'] ?? false)
                     <h1 class="display-4 fw-bold text-dark mb-3">
-                        {{ $data['title'] }}
+                        {{ $displayOptions['title'] }}
                     </h1>
                 @endif
 
                 <!-- Subtitle -->
-                @if($data['subtitle'] ?? false)
+                @if($displayOptions['subtitle'] ?? false)
                     <p class="lead text-muted mb-4">
-                        {{ $data['subtitle'] }}
+                        {{ $displayOptions['subtitle'] }}
                     </p>
                 @endif
 
                 <!-- Meta Information -->
-                @if(($data['show_meta'] ?? true) && (($data['published_date'] ?? false) || ($data['author'] ?? false)))
+                @if(($displayOptions['show_meta'] ?? true) && (($displayOptions['published_date'] ?? false) || ($displayOptions['author'] ?? false)))
                     <div class="text-muted mb-4 pb-3 border-bottom">
                         <small>
-                            @if($data['author'] ?? false)
+                            @if($displayOptions['author'] ?? false)
                                 <i class="fas fa-user me-2"></i>
-                                <span class="me-3">By {{ $data['author'] }}</span>
+                                <span class="me-3">By {{ $displayOptions['author'] }}</span>
                             @endif
-                            @if($data['published_date'] ?? false)
+                            @if($displayOptions['published_date'] ?? false)
                                 <i class="fas fa-calendar-alt me-2"></i>
-                                <time datetime="{{ $data['published_date'] }}">
-                                    Published: {{ \Carbon\Carbon::parse($data['published_date'])->format('F j, Y') }}
+                                <time datetime="{{ $displayOptions['published_date'] }}">
+                                    Published: {{ \Carbon\Carbon::parse($displayOptions['published_date'])->format('F j, Y') }}
                                 </time>
                             @endif
                         </small>
@@ -35,12 +35,12 @@
                 @endif
 
                 <!-- Content -->
-                @if($data['content'] ?? false)
+                @if($displayOptions['content'] ?? false)
                     <div class="content-body">
-                        {!! $data['content'] !!}
+                        {!! $displayOptions['content'] !!}
                     </div>
                 @endif
             </div>
         </div>
     </div>
-</section> 
+</section>
