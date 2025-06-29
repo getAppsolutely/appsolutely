@@ -10,8 +10,7 @@ class ThemeServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        $theme         = Theme::active();
-        $themeViewPath = theme_path($theme);
+        $themeViewPath = themed_absolute_path(Theme::active(), 'views');
         View::getFinder()->prependLocation($themeViewPath);
     }
 }

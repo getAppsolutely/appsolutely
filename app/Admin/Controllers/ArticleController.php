@@ -20,13 +20,13 @@ class ArticleController extends AdminBaseController
         return Grid::make(Article::with(['categories']), function (Grid $grid) {
 
             $grid->column('id', __t('ID'))->sortable();
-            $grid->column('status', __t('Status'))->switch();
+
             $grid->column('title', __t('Title'))->editable();
             $grid->column('categories', __t('Categories'))->pluck('title')->label();
 
             $grid->column('published_at', __t('Published At'))->display(column_time_format())->sortable();
             $grid->column('expired_at', __t('Expired At'))->display(column_time_format())->sortable();
-            $grid->column('created_at', __t('Created At'))->display(column_time_format());
+            $grid->column('status', __t('Status'))->switch();
             $grid->column('sort', __t('Sort'))->editable();
             $grid->model()->orderByDesc('id');
 

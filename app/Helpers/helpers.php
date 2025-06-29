@@ -10,6 +10,7 @@ use Illuminate\Container\Attributes\Database;
 use Illuminate\Support\Facades\Log;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use Qirolab\Theme\Theme;
 
 if (! function_exists('appsolutely')) {
     /**
@@ -32,7 +33,7 @@ if (! function_exists('appsolutely')) {
     }
 }
 
-if (! function_exists('theme_path')) {
+if (! function_exists('themed_absolute_path')) {
     /**
      * Get the path to a theme's views directory.
      *
@@ -40,15 +41,33 @@ if (! function_exists('theme_path')) {
      * @param  string  $path  The path within the theme's views directory
      * @return string The full path to the theme's views directory or a path within it
      */
-    function theme_path(string $themeName, string $path = ''): string
+    function themed_absolute_path(string $themeName = '', string $path = ''): string
     {
-        $basePath = base_path('themes/' . $themeName . '/views');
+        $basePath = base_path(themed_path());
 
         if (empty($path)) {
             return $basePath;
         }
 
         return $basePath . '/' . ltrim($path, '/');
+    }
+}
+
+if (! function_exists('themed_build_path')) {
+    function themed_build_path(string $themeName = ''): string
+    {
+        return 'build/' . themed_path();
+    }
+}
+
+if (! function_exists('themed_path')) {
+    function themed_path(string $themeName = ''): string
+    {
+        if (empty($themeName)) {
+            $themeName = Theme::active();
+        }
+
+        return 'themes/' . $themeName;
     }
 }
 
@@ -601,7 +620,7 @@ if (! function_exists('themed_assets')) {
     function themed_assets(string $path, ?string $theme = null): string
     {
         $theme           = $theme ?? config('appsolutely.theme.name');
-        $buildPath       = "build/themes/{$theme}/";
+        $buildPath       = themed_build_path($theme);
 
         if (app()->environment('production')) {
             $manifest = cache()->rememberForever("vite_manifest_{$theme}", function () use ($buildPath) {
@@ -611,7 +630,7 @@ if (! function_exists('themed_assets')) {
             $manifest = load_vite_manifest($buildPath);
         }
 
-        $key = "themes/{$theme}/" . ltrim($path, '/');
+        $key = themed_path() . ltrim($path, '/');
 
         if (! isset($manifest[$key])) {
             throw new \Exception("Image [{$key}] not found in Vite manifest.");

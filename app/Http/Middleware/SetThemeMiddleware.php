@@ -18,7 +18,7 @@ class SetThemeMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         // Force theme setup for every request
-        $themeName = ! empty(config('basic.theme')) && file_exists(theme_path(config('basic.theme')))
+        $themeName = ! empty(config('basic.theme')) && file_exists(themed_absolute_path(config('basic.theme'), 'views'))
             ? config('basic.theme') : config('theme.active');
         $parentTheme = config('theme.parent');
 
@@ -37,7 +37,7 @@ class SetThemeMiddleware
             $paths      = $viewFinder->getPaths();
 
             // Verify the paths include the theme path
-            $themePath = theme_path($themeName);
+            $themePath = themed_absolute_path($themeName, 'views');
 
             // Make sure the theme path is the first path in the list
             if (! in_array($themePath, $paths) || array_search($themePath, $paths) !== 0) {
