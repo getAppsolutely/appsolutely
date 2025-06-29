@@ -16,7 +16,11 @@ abstract class BaseBlock extends Component
 
     public array $displayOptions = [];
 
-    protected array $queryOptions = [];
+    public array $queryOptions = [];
+
+    protected array $defaultDisplayOptions = [];
+
+    protected array $defaultQueryOptions = [];
 
     /**
      * The view name to render (without the 'livewire.' prefix).
@@ -43,8 +47,10 @@ abstract class BaseBlock extends Component
     {
         $this->page           = $page;
         $this->model          = $page['model'] ?? null;
-        $this->queryOptions   =  $this->mergeByKey($this->queryOptions, $data['query_options'] ?? []);
-        $this->displayOptions =  $this->mergeByKey($this->displayOptions, $data['display_options'] ?? []);
+        $queryOptions         = $this->queryOptions ?? ($data['query_options'] ?? []);
+        $displayOptions       = $this->displayOptions ?? ($data['display_options'] ?? []);
+        $this->queryOptions   =  $this->mergeByKey($this->defaultQueryOptions, $queryOptions);
+        $this->displayOptions =  $this->mergeByKey($this->defaultDisplayOptions, $displayOptions);
         $this->initializeComponent();
         $this->initializePublishDates();
     }

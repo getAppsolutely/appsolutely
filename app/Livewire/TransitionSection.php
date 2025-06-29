@@ -6,7 +6,7 @@ namespace App\Livewire;
 
 final class TransitionSection extends BaseBlock
 {
-    public array $displayOptions = [
+    protected array $defaultDisplayOptions = [
         'image'               => '', // Background image URL (required)
         'height'              => '300px', // Height in CSS units (e.g., '200px', '40vh')
         'background_position' => 'center center', // Background image position

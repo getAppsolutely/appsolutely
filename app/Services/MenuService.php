@@ -34,6 +34,6 @@ final class MenuService
     {
         $menu = $this->menuRepository->findByReference($reference);
 
-        return $menu->children;
+        return $menu->children ?? collect();
     }
 }

@@ -88,12 +88,7 @@ final class PageBlockService
 
         $parameters = array_merge($parameters, ['page' => $page->toArray()]);
 
-        // Render the Livewire component
-        try {
-            return Livewire::mount($className, $parameters, $reference);
-        } catch (\Exception $e) {
-            return $this->getBlockErrorHtml('Error rendering block: ' . $e->getMessage());
-        }
+        return Livewire::mount($className, $parameters, $reference);
     }
 
     /**

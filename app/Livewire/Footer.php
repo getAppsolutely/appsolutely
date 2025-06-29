@@ -15,7 +15,7 @@ final class Footer extends BaseBlock
 
     public Collection $policyMenuItems;
 
-    public array $displayOptions = [
+    protected array $defaultDisplayOptions = [
         'logo'    => true,
         'contact' => [
             'enabled' => true,
@@ -33,27 +33,13 @@ final class Footer extends BaseBlock
         ],
     ];
 
-    protected array $queryOptions = [
+    protected array $defaultQueryOptions = [
         'footer_menu'  => 'footer-menu',
         'social_media' => 'social-media',
         'policy_menu'  => 'policy-menu',
     ];
 
     protected function initializeComponent(): void
-    {
-        // Initialize empty collections
-        $this->footerMenuItems  = collect();
-        $this->socialMediaItems = collect();
-        $this->policyMenuItems  = collect();
-
-        // Try to load menus if database is available
-        try {
-            $this->loadMenus();
-        } catch (\Exception $e) {
-        }
-    }
-
-    private function loadMenus(): void
     {
         $menuService = app(MenuService::class);
 

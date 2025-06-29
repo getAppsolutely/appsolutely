@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\BlockScope;
 use App\Models\Traits\ScopePublished;
 use App\Models\Traits\ScopeReference;
 use App\Models\Traits\ScopeStatus;
@@ -49,7 +50,7 @@ final class PageBlockSetting extends Model
         }
 
         $data = self::where('block_value_id', $this->block_value_id)->whereNot('id', $this->id)->first();
-        if (! $data) {
+        if (empty($data) || $this->block->scope == BlockScope::Global->value) {
             $this->blockValue->save();
 
             return;

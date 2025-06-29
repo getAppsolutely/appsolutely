@@ -13,13 +13,7 @@ final class Header extends BaseBlock
 
     public Collection $authMenuItems;
 
-    public array $queryOptions = [
-        'main_navigation' => 'main-navigation',
-        'auth_menu'       => 'auth-menu',
-        'footer_menu'     => 'footer-menu',
-    ];
-
-    public array $displayOptions = [
+    protected array $defaultDisplayOptions = [
         'logo'    => true,
         'booking' => [
             'text' => 'Book A Test Drive',
@@ -27,24 +21,16 @@ final class Header extends BaseBlock
         ],
     ];
 
+    protected array $defaultQueryOptions = [
+        'main_navigation' => 'main-navigation',
+        'auth_menu'       => 'auth-menu',
+        'footer_menu'     => 'footer-menu',
+    ];
+
     protected function initializeComponent(): void
     {
         // Initialize empty collections
-        $this->mainNavigation = collect();
-        $this->authMenuItems  = collect();
-
-        // Try to load menus if database is available
-        try {
-            $this->loadMenus();
-        } catch (\Exception $e) {
-            log_error($e->getMessage(), [], __CLASS__, __METHOD__);
-        }
-    }
-
-    protected function loadMenus(): void
-    {
-        $menuService     = app(MenuService::class);
-
+        $menuService          = app(MenuService::class);
         $this->mainNavigation = $menuService->getMenusByReference($this->queryOptions['main_navigation']);
         $this->authMenuItems  = $menuService->getMenusByReference($this->queryOptions['auth_menu']);
     }

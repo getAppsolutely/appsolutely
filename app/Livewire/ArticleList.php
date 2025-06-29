@@ -12,7 +12,7 @@ final class ArticleList extends BaseBlock
 {
     use WithPagination;
 
-    public array $displayOptions = [
+    protected array $defaultDisplayOptions = [
         'title'               => 'Latest Articles',
         'subtitle'            => 'Stay updated with our latest articles and news',
         'show_featured_image' => true,
@@ -24,7 +24,7 @@ final class ArticleList extends BaseBlock
         'layout'              => 'grid', // grid, list, masonry
     ];
 
-    protected array $queryOptions = [
+    protected array $defaultQueryOptions = [
         'posts_per_page'  => 6,
         'category_filter' => '', // empty for all categories
         'tag_filter'      => '', // empty for all tags
