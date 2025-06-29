@@ -10,14 +10,13 @@ use Livewire\Component;
 
 abstract class BaseBlock extends Component
 {
-    /**
-     * The data passed to the component.
-     */
-    public array $data = [];
-
     public array $page = [];
 
     public ?Model $model = null;
+
+    public array $displayOptions = [];
+
+    protected array $queryOptions = [];
 
     /**
      * The view name to render (without the 'livewire.' prefix).
@@ -42,9 +41,10 @@ abstract class BaseBlock extends Component
      */
     public function mount(array $page, array $data = []): void
     {
-        $this->data  = $data;
-        $this->page  = $page;
-        $this->model = $page['model'] ?? null;
+        $this->page           = $page;
+        $this->model          = $page['model'] ?? null;
+        $this->queryOptions   =  $this->mergeByKey($this->queryOptions, $data['query_options'] ?? []);
+        $this->displayOptions =  $this->mergeByKey($this->displayOptions, $data['display_options'] ?? []);
         $this->initializeComponent();
         $this->initializePublishDates();
     }
@@ -56,7 +56,11 @@ abstract class BaseBlock extends Component
     protected function initializeComponent(): void
     {
         // Override in child classes if needed
-        $this->data = array_merge($this->defaultConfig(), $this->data);
+    }
+
+    protected function mergeByKey(array $default, array $data): array
+    {
+        return array_replace($default, array_intersect_key($data, $default));
     }
 
     /**
@@ -101,7 +105,7 @@ abstract class BaseBlock extends Component
 
     protected function defaultConfig(): array
     {
-        return [];
+        return array_merge($this->queryOptions, $this->displayOptions);
     }
 
     /**
@@ -131,11 +135,7 @@ abstract class BaseBlock extends Component
 
         $viewName = 'livewire.' . $this->getViewName();
 
-        return themed_view($viewName, array_merge($this->getExtraData()),
-            [
-                'data' => $this->data,
-                'page' => $this->page,
-            ]);
+        return themed_view($viewName, $this->getExtraData());
     }
 
     protected function getExtraData(): array
@@ -172,7 +172,7 @@ abstract class BaseBlock extends Component
         return isset($this->data[$key]);
     }
 
-    public function paginationView()
+    public function paginationView(): string
     {
         return 'pagination.bootstrap';
     }

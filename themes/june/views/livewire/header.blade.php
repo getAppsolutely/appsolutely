@@ -6,7 +6,7 @@
             <!-- Left: Logo -->
             <div class="header-left d-flex align-items-center flex-shrink-0">
                 <a href="{{ route('home') }}" class="navbar-brand m-0">
-                    @if($data['logo'])
+                    @if($displayOptions['logo'])
                         <img src="{{ asset_server('assets/images/logo-dark.webp') }}"
                              alt="{{ config('appsolutely.general.site_name') }}" height="40" class="logo-dark">
                         <img src="{{ asset_server('assets/images/logo.webp') }}"
@@ -67,11 +67,11 @@
             </div>
 
             <!-- Right: Booking Button (hidden below 1200px) -->
-            @if(($data['booking']['text'] ?? null) && ($data['booking']['url'] ?? null))
+            @if(($displayOptions['booking']['text'] ?? null) && ($displayOptions['booking']['url'] ?? null))
                 <div class="header-right d-none d-xl-block flex-shrink-0">
-                    <a href="{{ $data['booking']['url'] }}"
+                    <a href="{{ $displayOptions['booking']['url'] }}"
                        class="btn btn-outline-light-primary">
-                        {{ $data['booking']['text'] }}
+                        {{ $displayOptions['booking']['text'] }}
                     </a>
                 </div>
             @endif
@@ -116,12 +116,12 @@
             @endif
 
             <!-- Mobile Booking Button -->
-            @if(($data['booking']['text'] ?? null) && ($data['booking']['url'] ?? null))
+            @if(($displayOptions['booking']['text'] ?? null) && ($displayOptions['booking']['url'] ?? null))
                 <div class="header-mobile-testdrive mt-4">
-                    <a href="{{ $data['booking']['url'] }}"
+                    <a href="{{ $displayOptions['booking']['url'] }}"
                        class="btn btn-outline-light-primary w-100">
                         <i class="fas fa-play me-2"></i>
-                        {{ $data['booking']['text'] }}
+                        {{ $displayOptions['booking']['text'] }}
                     </a>
                 </div>
             @endif

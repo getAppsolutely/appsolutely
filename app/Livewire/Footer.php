@@ -15,10 +15,32 @@ final class Footer extends BaseBlock
 
     public Collection $policyMenuItems;
 
+    public array $displayOptions = [
+        'logo'    => true,
+        'contact' => [
+            'enabled' => true,
+            'phone'   => '+64 9 379 5555',
+            'email'   => 'info@company.com',
+            'address' => '123 Main Street, Auckland, NZ',
+        ],
+        'newsletter' => [
+            'enabled' => true,
+            'title'   => 'Subscribe to our newsletter',
+            'text'    => 'Get the latest updates and offers',
+        ],
+        'copyright' => [
+            'text' => '© %s Your Company. All rights reserved.',
+        ],
+    ];
+
+    protected array $queryOptions = [
+        'footer_menu'  => 'footer-menu',
+        'social_media' => 'social-media',
+        'policy_menu'  => 'policy-menu',
+    ];
+
     protected function initializeComponent(): void
     {
-        $this->data = array_merge($this->defaultConfig(), $this->data);
-
         // Initialize empty collections
         $this->footerMenuItems  = collect();
         $this->socialMediaItems = collect();
@@ -31,36 +53,12 @@ final class Footer extends BaseBlock
         }
     }
 
-    protected function defaultConfig(): array
-    {
-        return [
-            'logo'         => true,
-            'footer_menu'  => 'footer-menu',
-            'social_media' => 'social-media',
-            'policy_menu'  => 'policy-menu',
-            'contact'      => [
-                'enabled' => true,
-                'phone'   => '+64 9 379 5555',
-                'email'   => 'info@company.com',
-                'address' => '123 Main Street, Auckland, NZ',
-            ],
-            'newsletter' => [
-                'enabled' => true,
-                'title'   => 'Subscribe to our newsletter',
-                'text'    => 'Get the latest updates and offers',
-            ],
-            'copyright' => [
-                'text' => '© ' . date('Y') . ' Your Company. All rights reserved.',
-            ],
-        ];
-    }
-
     private function loadMenus(): void
     {
-        $menuService     = app(MenuService::class);
+        $menuService = app(MenuService::class);
 
-        $this->footerMenuItems  = $menuService->getMenusByReference($this->data['footer_menu']);
-        $this->socialMediaItems = $menuService->getMenusByReference($this->data['social_media']);
-        $this->policyMenuItems  = $menuService->getMenusByReference($this->data['policy_menu']);
+        $this->footerMenuItems  = $menuService->getMenusByReference($this->queryOptions['footer_menu']);
+        $this->socialMediaItems = $menuService->getMenusByReference($this->queryOptions['social_media']);
+        $this->policyMenuItems  = $menuService->getMenusByReference($this->queryOptions['policy_menu']);
     }
 }

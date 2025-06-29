@@ -6,12 +6,28 @@ namespace App\Livewire;
 
 final class TransitionSection extends BaseBlock
 {
+    public array $displayOptions = [
+        'image'               => '', // Background image URL (required)
+        'height'              => '300px', // Height in CSS units (e.g., '200px', '40vh')
+        'background_position' => 'center center', // Background image position
+        'background_size'     => 'cover', // Background image size (cover, contain, auto)
+        'overlay'             => [
+            'enabled' => false,
+            'color'   => '#000000',
+            'opacity' => 0.3,
+        ],
+        'responsive' => [
+            'mobile_height'  => '200px',
+            'hide_on_mobile' => false,
+        ],
+    ];
+
     protected function initializeComponent(): void
     {
-        $transitionSection = $this->data;
+        $transitionSection = $this->displayOptions;
         $default           = $this->defaultConfig();
 
-        $this->data = [
+        $this->displayOptions = [
             'image'               => $transitionSection['image'] ?? $default['image'],
             'height'              => $transitionSection['height'] ?? $default['height'],
             'background_position' => $transitionSection['background_position'] ?? $default['background_position'],
@@ -21,32 +37,13 @@ final class TransitionSection extends BaseBlock
         ];
     }
 
-    protected function defaultConfig(): array
-    {
-        return [
-            'image'               => '', // Background image URL (required)
-            'height'              => '300px', // Height in CSS units (e.g., '200px', '40vh')
-            'background_position' => 'center center', // Background image position
-            'background_size'     => 'cover', // Background image size (cover, contain, auto)
-            'overlay'             => [
-                'enabled' => false,
-                'color'   => '#000000',
-                'opacity' => 0.3,
-            ],
-            'responsive' => [
-                'mobile_height'  => '200px',
-                'hide_on_mobile' => false,
-            ],
-        ];
-    }
-
     /**
      * Use it in blade file
      */
     public function getBackgroundStyle(): string
     {
         $styles = [];
-        $config = $this->data;
+        $config = $this->displayOptions;
 
         // Height
         $styles[] = 'height: ' . $config['height'];

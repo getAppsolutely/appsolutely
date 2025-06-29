@@ -125,7 +125,7 @@ final class PageBlockService
 
             if (empty($originalIntersection)) {
                 $log .= "Not in original parameters either. guessing the key would be the first property of $className";
-                $possibleKeys = $propertyKeys;
+                $possibleKeys = ['data'];
             }
             local_debug($log, [
                 'className'            => $className,

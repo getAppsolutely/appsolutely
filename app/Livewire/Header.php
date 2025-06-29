@@ -13,10 +13,22 @@ final class Header extends BaseBlock
 
     public Collection $authMenuItems;
 
+    public array $queryOptions = [
+        'main_navigation' => 'main-navigation',
+        'auth_menu'       => 'auth-menu',
+        'footer_menu'     => 'footer-menu',
+    ];
+
+    public array $displayOptions = [
+        'logo'    => true,
+        'booking' => [
+            'text' => 'Book A Test Drive',
+            'url'  => '/test-drive',
+        ],
+    ];
+
     protected function initializeComponent(): void
     {
-        $this->data = array_merge($this->defaultConfig(), $this->data);
-
         // Initialize empty collections
         $this->mainNavigation = collect();
         $this->authMenuItems  = collect();
@@ -25,28 +37,15 @@ final class Header extends BaseBlock
         try {
             $this->loadMenus();
         } catch (\Exception $e) {
+            log_error($e->getMessage(), [], __CLASS__, __METHOD__);
         }
     }
 
-    protected function defaultConfig(): array
-    {
-        return [
-            'logo'            => true,
-            'main_navigation' => 'main-navigation',
-            'auth_menu'       => 'auth-menu',
-            'footer_menu'     => 'footer-menu',
-            'booking'         => [
-                'text' => 'Book A Test Drive',
-                'url'  => '/test-drive',
-            ],
-        ];
-    }
-
-    private function loadMenus(): void
+    protected function loadMenus(): void
     {
         $menuService     = app(MenuService::class);
 
-        $this->mainNavigation = $menuService->getMenusByReference($this->data['main_navigation']);
-        $this->authMenuItems  = $menuService->getMenusByReference($this->data['auth_menu']);
+        $this->mainNavigation = $menuService->getMenusByReference($this->queryOptions['main_navigation']);
+        $this->authMenuItems  = $menuService->getMenusByReference($this->queryOptions['auth_menu']);
     }
 }
