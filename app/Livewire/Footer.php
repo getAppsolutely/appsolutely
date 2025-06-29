@@ -29,7 +29,7 @@ final class Footer extends BaseBlock
             'text'    => 'Get the latest updates and offers',
         ],
         'copyright' => [
-            'text' => '© %s Your Company. All rights reserved.',
+            'text' => '© 2025 Your Company. All rights reserved.',
         ],
     ];
 

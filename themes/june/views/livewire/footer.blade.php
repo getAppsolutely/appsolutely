@@ -94,7 +94,7 @@
             <!-- Left Side - Copyright -->
             <div class="col-lg-6">
                 <p class="text-white mb-0">
-                    {{ $config['copyright']['text'] ?? '© ' . date('Y') . ' ' . config('appsolutely.general.site_name') . '. All rights reserved.' }}
+                    {{ $displayOptions['copyright']['text']??null }}
                 </p>
             </div>
 
