@@ -60,10 +60,6 @@
                             <img src="{{ config('appsolutely.general.logo') }}"
                                  alt="{{ config('appsolutely.general.site_name') }}"
                                  height="40">
-                        @elseif(themed_assets('images/logo.webp'))
-                            <img src="{{ themed_assets('images/logo-dark.webp') }}"
-                                 alt="{{ config('appsolutely.general.site_name') }}"
-                                 height="40">
                         @else
                             <span class="h4 text-white">{{ config('appsolutely.general.site_name') }}</span>
                         @endif
