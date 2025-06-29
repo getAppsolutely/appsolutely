@@ -18,107 +18,102 @@ final class DynamicForm extends BaseBlock
 
     public string $successMessage = '';
 
-    protected function initializeComponent(): void
-    {
-        $this->data           = array_merge($this->defaultConfig(), $this->data);
-        $this->data['layout'] = 'modal';
-        // Initialize form data with empty values
-        $this->initializeFormData();
-    }
-
-    protected function defaultConfig(): array
-    {
-        return [
-            'title'           => 'Test Drive Booking',
-            'subtitle'        => 'Book your test drive today',
-            'description'     => 'Fill out the form below and we\'ll get back to you within 24 hours.',
-            'submit_text'     => 'Book Test Drive',
-            'success_title'   => 'Thank You!',
-            'success_message' => 'Your test drive booking has been submitted. We\'ll contact you soon to confirm your appointment.',
-            'fields'          => [
-                'name' => [
-                    'type'        => 'text',
-                    'label'       => 'Full Name',
-                    'placeholder' => 'Enter your full name',
-                    'required'    => true,
-                    'validation'  => 'required|string|max:255',
-                ],
-                'email' => [
-                    'type'        => 'email',
-                    'label'       => 'Email Address',
-                    'placeholder' => 'Enter your email address',
-                    'required'    => true,
-                    'validation'  => 'required|email|max:255',
-                ],
-                'phone' => [
-                    'type'        => 'tel',
-                    'label'       => 'Phone Number',
-                    'placeholder' => 'Enter your phone number',
-                    'required'    => true,
-                    'validation'  => 'required|string|max:20',
-                ],
-                'preferred_date' => [
-                    'type'        => 'date',
-                    'label'       => 'Preferred Date',
-                    'placeholder' => '',
-                    'required'    => true,
-                    'validation'  => 'required|date|after:today',
-                ],
-                'preferred_time' => [
-                    'type'        => 'select',
-                    'label'       => 'Preferred Time',
-                    'placeholder' => 'Select preferred time',
-                    'required'    => true,
-                    'validation'  => 'required|string',
-                    'options'     => [
-                        '9:00 AM - 10:00 AM',
-                        '10:00 AM - 11:00 AM',
-                        '11:00 AM - 12:00 PM',
-                        '12:00 PM - 1:00 PM',
-                        '1:00 PM - 2:00 PM',
-                        '2:00 PM - 3:00 PM',
-                        '3:00 PM - 4:00 PM',
-                        '4:00 PM - 5:00 PM',
-                    ],
-                ],
-                'vehicle_interest' => [
-                    'type'        => 'select',
-                    'label'       => 'Vehicle of Interest',
-                    'placeholder' => 'Select a vehicle',
-                    'required'    => false,
-                    'validation'  => 'nullable|string',
-                    'options'     => [
-                        'Sedan Model A',
-                        'SUV Model B',
-                        'Hatchback Model C',
-                        'Electric Model D',
-                        'Hybrid Model E',
-                        'Not sure yet',
-                    ],
-                ],
-                'license_valid' => [
-                    'type'       => 'checkbox',
-                    'label'      => 'I have a valid driver\'s license',
-                    'required'   => true,
-                    'validation' => 'accepted',
-                ],
-                'message' => [
-                    'type'        => 'textarea',
-                    'label'       => 'Additional Comments',
-                    'placeholder' => 'Any specific requirements or questions?',
-                    'required'    => false,
-                    'validation'  => 'nullable|string|max:1000',
-                    'rows'        => 4,
+    protected array $defaultDisplayOptions = [
+        'title'           => 'Test Drive Booking',
+        'subtitle'        => 'Book your test drive today',
+        'description'     => 'Fill out the form below and we\'ll get back to you within 24 hours.',
+        'submit_text'     => 'Book Test Drive',
+        'success_title'   => 'Thank You!',
+        'success_message' => 'Your test drive booking has been submitted. We\'ll contact you soon to confirm your appointment.',
+        'fields'          => [
+            'name' => [
+                'type'        => 'text',
+                'label'       => 'Full Name',
+                'placeholder' => 'Enter your full name',
+                'required'    => true,
+                'validation'  => 'required|string|max:255',
+            ],
+            'email' => [
+                'type'        => 'email',
+                'label'       => 'Email Address',
+                'placeholder' => 'Enter your email address',
+                'required'    => true,
+                'validation'  => 'required|email|max:255',
+            ],
+            'phone' => [
+                'type'        => 'tel',
+                'label'       => 'Phone Number',
+                'placeholder' => 'Enter your phone number',
+                'required'    => true,
+                'validation'  => 'required|string|max:20',
+            ],
+            'preferred_date' => [
+                'type'        => 'date',
+                'label'       => 'Preferred Date',
+                'placeholder' => '',
+                'required'    => true,
+                'validation'  => 'required|date|after:today',
+            ],
+            'preferred_time' => [
+                'type'        => 'select',
+                'label'       => 'Preferred Time',
+                'placeholder' => 'Select preferred time',
+                'required'    => true,
+                'validation'  => 'required|string',
+                'options'     => [
+                    '9:00 AM - 10:00 AM',
+                    '10:00 AM - 11:00 AM',
+                    '11:00 AM - 12:00 PM',
+                    '12:00 PM - 1:00 PM',
+                    '1:00 PM - 2:00 PM',
+                    '2:00 PM - 3:00 PM',
+                    '3:00 PM - 4:00 PM',
+                    '4:00 PM - 5:00 PM',
                 ],
             ],
-            'layout'                => 'form', // form, modal
-            'theme'                 => 'default', // default, card, minimal
-            'columns'               => 1, // 1 or 2 columns
-            'save_to_db'            => true, // Whether to save submissions to database
-            'send_email'            => true, // Whether to send email notifications
-            'email_to'              => 'sales@company.com',
-            'redirect_after_submit' => '', // URL to redirect after successful submission
-        ];
+            'vehicle_interest' => [
+                'type'        => 'select',
+                'label'       => 'Vehicle of Interest',
+                'placeholder' => 'Select a vehicle',
+                'required'    => false,
+                'validation'  => 'nullable|string',
+                'options'     => [
+                    'Sedan Model A',
+                    'SUV Model B',
+                    'Hatchback Model C',
+                    'Electric Model D',
+                    'Hybrid Model E',
+                    'Not sure yet',
+                ],
+            ],
+            'license_valid' => [
+                'type'       => 'checkbox',
+                'label'      => 'I have a valid driver\'s license',
+                'required'   => true,
+                'validation' => 'accepted',
+            ],
+            'message' => [
+                'type'        => 'textarea',
+                'label'       => 'Additional Comments',
+                'placeholder' => 'Any specific requirements or questions?',
+                'required'    => false,
+                'validation'  => 'nullable|string|max:1000',
+                'rows'        => 4,
+            ],
+        ],
+        'layout'                => 'form', // form, modal
+        'theme'                 => 'default', // default, card, minimal
+        'columns'               => 1, // 1 or 2 columns
+        'save_to_db'            => true, // Whether to save submissions to database
+        'send_email'            => true, // Whether to send email notifications
+        'email_to'              => 'sales@company.com',
+        'redirect_after_submit' => '', // URL to redirect after successful submission
+    ];
+
+    protected function initializeComponent(): void
+    {
+        // Initialize form data with empty values
+        $this->initializeFormData();
     }
 
     /**
@@ -126,7 +121,7 @@ final class DynamicForm extends BaseBlock
      */
     private function initializeFormData(): void
     {
-        foreach ($this->data['fields'] as $fieldName => $fieldConfig) {
+        foreach ($this->displayOptions['fields'] as $fieldName => $fieldConfig) {
             $this->formData[$fieldName] = match ($fieldConfig['type']) {
                 'checkbox'    => false,
                 'multiselect' => [],
@@ -142,7 +137,7 @@ final class DynamicForm extends BaseBlock
     {
         $rules = [];
 
-        foreach ($this->data['fields'] as $fieldName => $fieldConfig) {
+        foreach ($this->displayOptions['fields'] as $fieldName => $fieldConfig) {
             if (isset($fieldConfig['validation'])) {
                 $rules["formData.{$fieldName}"] = $fieldConfig['validation'];
             }
@@ -158,7 +153,7 @@ final class DynamicForm extends BaseBlock
     {
         $messages = [];
 
-        foreach ($this->data['fields'] as $fieldName => $fieldConfig) {
+        foreach ($this->displayOptions['fields'] as $fieldName => $fieldConfig) {
             $label = $fieldConfig['label'] ?? ucfirst(str_replace('_', ' ', $fieldName));
 
             $messages["formData.{$fieldName}.required"] = "The {$label} field is required.";
@@ -191,22 +186,22 @@ final class DynamicForm extends BaseBlock
             $validatedData = $validator->validated()['formData'];
 
             // Save to database if configured
-            if ($this->data['save_to_db']) {
+            if ($this->displayOptions['save_to_db']) {
                 $this->saveToDatabase($validatedData);
             }
 
             // Send email if configured
-            if ($this->data['send_email']) {
+            if ($this->displayOptions['send_email']) {
                 $this->sendEmailNotification($validatedData);
             }
 
             // Set success state
             $this->submitted      = true;
-            $this->successMessage = $this->data['success_message'];
+            $this->successMessage = $this->displayOptions['success_message'];
 
             // Redirect if configured
-            if (! empty($this->data['redirect_after_submit'])) {
-                $this->redirect($this->data['redirect_after_submit']);
+            if (! empty($this->displayOptions['redirect_after_submit'])) {
+                $this->redirect($this->displayOptions['redirect_after_submit']);
             }
 
         } catch (ValidationException $e) {
@@ -252,7 +247,7 @@ final class DynamicForm extends BaseBlock
         $message = "New test drive booking request:\n\n";
 
         foreach ($data as $field => $value) {
-            $fieldConfig = $this->data['fields'][$field] ?? [];
+            $fieldConfig = $this->displayOptions['fields'][$field] ?? [];
             $label       = $fieldConfig['label'] ?? ucfirst(str_replace('_', ' ', $field));
 
             if (is_bool($value)) {
@@ -270,7 +265,7 @@ final class DynamicForm extends BaseBlock
         // Send email (you can implement proper mail class here)
         try {
             \Mail::raw($message, function ($mail) use ($subject, $data) {
-                $mail->to($this->data['email_to'])
+                $mail->to($this->displayOptions['email_to'])
                     ->subject($subject)
                     ->replyTo($data['email'] ?? 'noreply@company.com', $data['name'] ?? 'Test Drive Inquiry');
             });

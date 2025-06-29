@@ -2,18 +2,18 @@
     <div class="container">
         @if(!$submitted)
             <!-- Form Header -->
-            @if($data['title'] || $data['subtitle'] || $data['description'])
+            @if($displayOptions['title'] || $displayOptions['subtitle'] || $displayOptions['description'])
                 <div class="text-center mb-5">
-                    @if($data['title'])
-                        <h2 class="display-6 fw-bold mb-3">{{ $data['title'] }}</h2>
+                    @if($displayOptions['title'])
+                        <h2 class="display-6 fw-bold mb-3">{{ $displayOptions['title'] }}</h2>
                     @endif
 
-                    @if($data['subtitle'])
-                        <h3 class="h5 text-muted mb-4">{{ $data['subtitle'] }}</h3>
+                    @if($displayOptions['subtitle'])
+                        <h3 class="h5 text-muted mb-4">{{ $displayOptions['subtitle'] }}</h3>
                     @endif
 
-                    @if($data['description'])
-                        <p class="lead text-muted">{{ $data['description'] }}</p>
+                    @if($displayOptions['description'])
+                        <p class="lead text-muted">{{ $displayOptions['description'] }}</p>
                     @endif
                 </div>
             @endif
@@ -21,7 +21,7 @@
             <!-- Form Container -->
             <div class="row justify-content-center">
                 <div class="col-lg-8 col-xl-6">
-                    @if($data['theme'] === 'card')
+                    @if($displayOptions['theme'] === 'card')
                         <div class="card border-0 shadow-lg">
                             <div class="card-body p-5">
                                 @include('livewire.dynamic-form-content')
@@ -44,8 +44,8 @@
                                 <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
                             </div>
 
-                            @if($data['success_title'])
-                                <h3 class="h2 fw-bold text-dark mb-3">{{ $data['success_title'] }}</h3>
+                            @if($displayOptions['success_title'])
+                                <h3 class="h2 fw-bold text-dark mb-3">{{ $displayOptions['success_title'] }}</h3>
                             @endif
 
                             <p class="lead text-muted mb-4">{{ $successMessage }}</p>

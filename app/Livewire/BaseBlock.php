@@ -157,7 +157,7 @@ abstract class BaseBlock extends Component
      */
     protected function getData(string $key, $default = null)
     {
-        return $this->data[$key] ?? $default;
+        return $this->displayOptions[$key] ?? $default;
     }
 
     /**
@@ -167,7 +167,7 @@ abstract class BaseBlock extends Component
      */
     protected function setData(string $key, $value): void
     {
-        $this->data[$key] = $value;
+        $this->displayOptions[$key] = $value;
     }
 
     /**
@@ -175,7 +175,7 @@ abstract class BaseBlock extends Component
      */
     protected function hasData(string $key): bool
     {
-        return isset($this->data[$key]);
+        return isset($this->displayOptions[$key]);
     }
 
     public function paginationView(): string

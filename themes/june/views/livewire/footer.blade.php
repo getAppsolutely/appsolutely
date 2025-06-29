@@ -54,7 +54,7 @@
             <!-- Right Side - Logo and Social Media -->
             <div class="col-lg-4 text-lg-end">
                 <!-- Logo -->
-                @if($data['logo'] ?? false)
+                @if($displayOptions['logo'] ?? false)
                     <div class="mb-4">
                         @if(config('appsolutely.general.logo'))
                             <img src="{{ config('appsolutely.general.logo') }}"
