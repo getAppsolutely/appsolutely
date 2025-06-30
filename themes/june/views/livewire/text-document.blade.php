@@ -37,7 +37,7 @@
                 <!-- Content -->
                 @if($displayOptions['content'] ?? false)
                     <div class="content-body">
-                        {!! $displayOptions['content'] !!}
+                        {!! blade_content($displayOptions['content']) !!}
                     </div>
                 @endif
             </div>

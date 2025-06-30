@@ -8,6 +8,7 @@ use App\Services\TranslationService;
 use Carbon\Carbon;
 use Illuminate\Container\Attributes\Database;
 use Illuminate\Support\Facades\Log;
+use League\CommonMark\CommonMarkConverter;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use Qirolab\Theme\Theme;
@@ -767,5 +768,27 @@ if (! function_exists('app_uri')) {
     function app_uri(string $path = ''): string
     {
         return '/' . ltrim($path, '/');
+    }
+}
+
+if (! function_exists('blade_content')) {
+    function blade_content(string $text, float $threshold = 85.0): string
+    {
+        $text = trim($text);
+
+        try {
+            $converter = new CommonMarkConverter();
+            $html      = (string) $converter->convert($text);
+            $plainText = strip_tags($html);
+            similar_text($text, $plainText, $percent);
+
+            if ($percent >= $threshold) {
+                return $html;
+            }
+
+            return $text;
+        } catch (\Exception $e) {
+            return '';
+        }
     }
 }
