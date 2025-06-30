@@ -330,6 +330,8 @@ class GeneralPage
      */
     public function toArray(): array
     {
+        $ancestors = $this->getParentPage() ? [['title' => $this->getParentPage()->title, 'slug' => $this->getParentPage()->slug]] : [];
+
         return [
             'type'           => $this->isNested() ? PageType::Nested->value : PageType::Root->value,
             'nested'         => $this->isNested(),
@@ -341,6 +343,7 @@ class GeneralPage
             'title'          => $this->getTitle(),
             'slug'           => $this->getSlug(),
             'model'          => $this->getContent(),
+            'ancestors'      => $ancestors,
         ];
     }
 }

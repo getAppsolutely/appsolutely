@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-lg-8">
+        <div class="col-lg-10">
             <!-- Title -->
             @if($model->title ?? false)
                 <h1 class="display-4 fw-bold text-dark mb-3">
