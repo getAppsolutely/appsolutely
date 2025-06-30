@@ -21,9 +21,14 @@ class PageService
         protected PageBlockSettingRepository $pageBlockSettingRepository
     ) {}
 
-    public function getPublishedPage(string $slug): ?Page
+    public function findPublishedPage(string $slug): ?Page
     {
         return $this->pageRepository->findPageBySlug($slug, now());
+    }
+
+    public function findPublishedPageById(int $id): ?Page
+    {
+        return $this->pageRepository->findPageById($id, now());
     }
 
     public function findByReference(string $reference): Model

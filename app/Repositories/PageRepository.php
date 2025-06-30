@@ -28,4 +28,15 @@ class PageRepository extends BaseRepository
             }, 'blocks.block'])
             ->first();
     }
+
+    public function findPageById(int $id, Carbon $datetime): ?Page
+    {
+        return $this->model->newQuery()
+            ->status()
+            ->published($datetime)
+            ->with(['blocks' => function ($query) {
+                $query->status()->whereNotNull('sort')->orderBy('sort');
+            }, 'blocks.block'])
+            ->find($id);
+    }
 }

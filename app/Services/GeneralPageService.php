@@ -132,7 +132,7 @@ final readonly class GeneralPageService
     public function resolvePage(string $fullSlug): ?GeneralPage
     {
         // First, try to find a page with the exact slug
-        $page = $this->pageService->getPublishedPage($fullSlug);
+        $page = $this->pageService->findPublishedPage($fullSlug);
 
         if ($page) {
             // Wrap regular Page in GeneralPage for unified interface
@@ -395,7 +395,7 @@ final readonly class GeneralPageService
      */
     public function getPublishedPageById(int $id): ?Page
     {
-        return $this->pageService->getPublishedPageById($id);
+        return $this->pageService->findPublishedPageById($id);
     }
 
     /**
@@ -432,7 +432,7 @@ final readonly class GeneralPageService
      */
     public function hasBlockMapping(string $blockClass): bool
     {
-        $blocks = config('appsolutely.blocks', []);
+        $blocks = $this->getBlockMappings();
 
         return isset($blocks[$blockClass]) && ! empty($blocks[$blockClass]);
     }

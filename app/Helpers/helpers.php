@@ -10,6 +10,7 @@ use Illuminate\Container\Attributes\Database;
 use Illuminate\Support\Facades\Log;
 use League\CommonMark\CommonMarkConverter;
 use League\CommonMark\Environment\Environment;
+use League\CommonMark\Exception\CommonMarkException;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use Qirolab\Theme\Theme;
 
@@ -787,7 +788,9 @@ if (! function_exists('blade_content')) {
             }
 
             return $text;
-        } catch (\Exception $e) {
+        } catch (CommonMarkException $e) {
+            log_warning('Unable to parse text.', ['exception' => $e->getMessage(), 'text' => $text]);
+
             return '';
         }
     }
