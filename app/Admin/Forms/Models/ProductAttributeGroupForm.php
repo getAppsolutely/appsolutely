@@ -9,13 +9,19 @@ class ProductAttributeGroupForm extends ModelForm
 {
     public function __construct(?int $id = null)
     {
-        parent::__construct();
-        $this->model = $id ? ProductAttributeGroup::find($id) : new ProductAttributeGroup();
+        $this->relationships = ['attributes'];
+        parent::__construct($id);
+    }
+
+    protected function initializeModel(): void
+    {
+        $this->model = new ProductAttributeGroup();
     }
 
     public function form(): void
     {
         parent::form();
+
         $this->hidden('id');
 
         $this->text('title', __t('Title'))->required();

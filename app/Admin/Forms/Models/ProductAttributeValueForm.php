@@ -9,13 +9,18 @@ class ProductAttributeValueForm extends ModelForm
 {
     public function __construct(?int $id = null)
     {
-        parent::__construct();
-        $this->model = $id ? ProductAttributeValue::find($id) : new ProductAttributeValue();
+        parent::__construct($id);
+    }
+
+    protected function initializeModel(): void
+    {
+        $this->model = new ProductAttributeValue();
     }
 
     public function form(): void
     {
         parent::form();
+
         $this->hidden('id');
 
         $this->select('product_attribute_id', 'Attribute')
