@@ -24,7 +24,7 @@ class ProductAttributeValue extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'attribute_id',
+        'product_attribute_id',
         'value',
         'slug',
         'status',
@@ -44,7 +44,7 @@ class ProductAttributeValue extends Model
      */
     public function attribute(): BelongsTo
     {
-        return $this->belongsTo(ProductAttribute::class);
+        return $this->belongsTo(ProductAttribute::class, 'product_attribute_id');
     }
 
     /**

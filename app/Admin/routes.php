@@ -15,6 +15,7 @@ use App\Admin\Controllers\PageBlockGroupController;
 use App\Admin\Controllers\PageBlockSettingController;
 use App\Admin\Controllers\PageController;
 use App\Admin\Controllers\ProductAttributeController;
+use App\Admin\Controllers\ProductAttributeEntry;
 use App\Admin\Controllers\ProductAttributeGroupController;
 use App\Admin\Controllers\ProductAttributeValueController;
 use App\Admin\Controllers\ProductCategoryController;
@@ -61,6 +62,7 @@ Route::group([
         Route::resource('entry', ProductController::class);
         Route::resource('categories', ProductCategoryController::class)->names('categories');
         Route::resource('skus', ProductSkuController::class)->names('skus');
+        Route::resource('attributes/entry', ProductAttributeEntry::class)->names('attribute');
         Route::resource('attribute-groups', ProductAttributeGroupController::class)->names('attribute-groups');
         Route::resource('attributes', ProductAttributeController::class)->names('attributes');
         Route::resource('attribute-values', ProductAttributeValueController::class)->names('attribute-values');

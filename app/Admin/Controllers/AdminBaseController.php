@@ -19,7 +19,7 @@ class AdminBaseController extends AdminController
     public function update($id)
     {
         if (! request()->get('_inline_edit_')) {
-            return $this->form()->update($id);
+            return parent::update($id);
         }
 
         $data       = request()->all();
