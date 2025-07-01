@@ -67,5 +67,18 @@ class ProductMenuSeeder extends Seeder
                 'updated_at' => now(),
             ]);
         }
+
+        $attributesMenu = Menu::where('parent_id', $productMainMenuId)->where('title', 'Product Attributes')->first();
+        if (! $attributesMenu) {
+            Menu::create([
+                'parent_id'  => $productMainMenuId,
+                'order'      => 4,
+                'title'      => 'Product Attributes',
+                'icon'       => 'fa-list-ol',
+                'uri'        => 'products/attributes/entry',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }

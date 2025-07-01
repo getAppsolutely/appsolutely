@@ -93,5 +93,18 @@ class CmsMenuSeeder extends Seeder
                 'updated_at' => now(),
             ]);
         }
+
+        $blocksMenu = Menu::where('parent_id', $cmsMenuId)->where('title', 'Page Blocks')->first();
+        if (! $blocksMenu) {
+            Menu::create([
+                'parent_id'  => $cmsMenuId,
+                'order'      => 4,
+                'title'      => 'Page Blocks',
+                'icon'       => 'fa-list',
+                'uri'        => 'pages/blocks/entry',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }
