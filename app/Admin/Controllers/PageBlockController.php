@@ -28,7 +28,6 @@ final class PageBlockController extends AdminBaseController
             $grid->column('remark', __t('Remark'))->editable();
             $grid->column('group.title', __t('Group'));
             $grid->column('class', __t('Class'));
-            $grid->column('created_at', __t('Created At'))->display(column_time_format());
             $grid->column('droppable', __t('Droppable'))->switch();
             $grid->column('sort', __t('Sort'))->editable();
             $grid->column('status', __t('Status'))->switch();

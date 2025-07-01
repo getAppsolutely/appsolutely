@@ -20,7 +20,6 @@ final class ReleaseVersionController extends AdminBaseController
             $grid->column('release_channel', __t('Release Channel'))->editable();
             $grid->column('status', __t('Status'))->switch();
             $grid->column('published_at', __t('Published At'))->editable()->sortable();
-            $grid->column('created_at', __t('Created At'))->display(column_time_format())->sortable();
             $grid->actions(function (Grid\Displayers\Actions $actions) {
                 $actions->disableView();
                 $actions->disableEdit();

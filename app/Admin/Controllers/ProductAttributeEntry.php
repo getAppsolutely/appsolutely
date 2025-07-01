@@ -21,8 +21,8 @@ class ProductAttributeEntry extends AdminBaseController
     public function index(Content $content): Content
     {
         return $content
-            ->header('Product Attributes')
-            ->description('Manage Product Attributes')
+            ->header(__t('Product Attributes'))
+            ->description(__t('Manage Product Attributes'))
             ->body($this->buildTabs());
     }
 

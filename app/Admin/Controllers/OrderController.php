@@ -22,7 +22,6 @@ class OrderController extends AdminBaseController
             $grid->column('discounted_amount', __t('Discounted Amount'));
             $grid->column('total_amount', __t('Total Amount'));
             $grid->column('status', __t('Status'))->label();
-            $grid->column('created_at', __t('Created At'))->display(column_time_format())->sortable();
             $grid->model()->orderByDesc('id');
 
             $grid->quickSearch('id', 'reference', 'user_id');

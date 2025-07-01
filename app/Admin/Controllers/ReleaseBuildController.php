@@ -41,7 +41,6 @@ final class ReleaseBuildController extends AdminBaseController
             $grid->column('build_status', __t('Build Status'));
             $grid->column('status', __t('Status'))->switch();
             $grid->column('published_at', __t('Published At'))->sortable();
-            $grid->column('created_at', __t('Created At'))->sortable();
             $grid->model()->orderByDesc('id');
 
             $grid->quickSearch('id', 'platform', 'arch');

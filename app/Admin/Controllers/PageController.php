@@ -26,7 +26,6 @@ class PageController extends AdminBaseController
             $grid->column('published_at', __t('Published At'))->display(column_time_format())->sortable();
             $grid->column('expired_at', __t('Expired At'))->display(column_time_format())->sortable();
             $grid->column('status', __t('Status'))->switch();
-            $grid->column('created_at', __t('Created At'))->display(column_time_format());
             $grid->model()->orderByDesc('id');
 
             $grid->quickSearch('id', 'name', 'slug', 'title');
