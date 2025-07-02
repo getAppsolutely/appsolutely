@@ -107,6 +107,28 @@ final class FormEntryRepository extends BaseRepository
     }
 
     /**
+     * Mark single entry as spam
+     */
+    public function markSingleAsSpam(int $entryId): bool
+    {
+        $entry = $this->findOrFail($entryId);
+        $entry->markAsSpam();
+
+        return true;
+    }
+
+    /**
+     * Mark single entry as not spam
+     */
+    public function markSingleAsNotSpam(int $entryId): bool
+    {
+        $entry = $this->findOrFail($entryId);
+        $entry->markAsNotSpam();
+
+        return true;
+    }
+
+    /**
      * Get spam entries
      */
     public function getSpamEntries(?int $formId = null): Collection
@@ -203,5 +225,54 @@ final class FormEntryRepository extends BaseRepository
         }
 
         return false;
+    }
+
+    /**
+     * Get valid entries for export
+     */
+    public function getValidEntriesForExport(?int $formId = null): Collection
+    {
+        $query = $this->model->newQuery()
+            ->with(['form', 'user'])
+            ->where('is_spam', false)
+            ->orderBy('submitted_at', 'desc');
+
+        if ($formId) {
+            $query->where('form_id', $formId);
+        }
+
+        return $query->get();
+    }
+
+    /**
+     * Count valid entries
+     */
+    public function countValid(): int
+    {
+        return $this->model->where('is_spam', false)->count();
+    }
+
+    /**
+     * Count spam entries
+     */
+    public function countSpam(): int
+    {
+        return $this->model->where('is_spam', true)->count();
+    }
+
+    /**
+     * Count valid entries by date range
+     */
+    public function countValidByDateRange($startDate, $endDate): int
+    {
+        if ($startDate === $endDate) {
+            return $this->model->whereDate('submitted_at', $startDate)
+                ->where('is_spam', false)
+                ->count();
+        }
+
+        return $this->model->whereBetween('submitted_at', [$startDate, $endDate])
+            ->where('is_spam', false)
+            ->count();
     }
 }

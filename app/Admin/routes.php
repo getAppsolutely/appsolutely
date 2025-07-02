@@ -2,10 +2,12 @@
 
 use App\Admin\Controllers\Api\AttributeGroupController as AttributeGroupApiController;
 use App\Admin\Controllers\Api\CommonController;
+use App\Admin\Controllers\Api\DynamicFormApiController;
 use App\Admin\Controllers\Api\FileController as FileApiController;
 use App\Admin\Controllers\Api\PageBuilderAdminApiController;
 use App\Admin\Controllers\ArticleCategoryController;
 use App\Admin\Controllers\ArticleController;
+use App\Admin\Controllers\DynamicFormController;
 use App\Admin\Controllers\FileController;
 use App\Admin\Controllers\HomeController;
 use App\Admin\Controllers\MenuController;
@@ -67,6 +69,11 @@ Route::group([
         Route::resource('', ReleaseController::class)->names('entry');
     });
 
+    // Dynamic Forms Management
+    Route::prefix('forms')->name('forms.')->group(function () {
+        Route::resource('', DynamicFormController::class)->only(['index'])->names('entry');
+    });
+
     // API Routes
     Route::prefix('api/')->name('api.')->group(function () {
         Route::get('file-library', [FileApiController::class, 'library'])->name('file-library');
@@ -80,6 +87,14 @@ Route::group([
             Route::put('{reference}/reset', [PageBuilderAdminApiController::class, 'resetPageData'])->name('reset');
             Route::get('block-registry', [PageBuilderAdminApiController::class, 'getBlockRegistry'])->name('block-registry');
             Route::get('block/schema-fields', [PageBuilderAdminApiController::class, 'getSchemaFields'])->name('block.schema-fields');
+        });
+
+        // Dynamic Forms API Routes
+        Route::prefix('forms')->name('forms.')->group(function () {
+            Route::post('entries/{id}/mark-spam', [DynamicFormApiController::class, 'markAsSpam'])->name('entries.mark-spam');
+            Route::post('entries/{id}/mark-not-spam', [DynamicFormApiController::class, 'markAsNotSpam'])->name('entries.mark-not-spam');
+            Route::get('entries/export', [DynamicFormApiController::class, 'exportCsv'])->name('entries.export');
+            Route::get('{formId}/entries/export', [DynamicFormApiController::class, 'exportCsv'])->name('entries.export-by-form');
         });
     });
 });

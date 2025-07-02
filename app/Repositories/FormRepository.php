@@ -107,4 +107,20 @@ final class FormRepository extends BaseRepository
 
         return $form->load('fields');
     }
+
+    /**
+     * Get form options for select dropdown
+     */
+    public function getFormOptions(): array
+    {
+        return $this->model->pluck('name', 'id')->toArray();
+    }
+
+    /**
+     * Count forms by status
+     */
+    public function countByStatus(int $status): int
+    {
+        return $this->model->where('status', $status)->count();
+    }
 }
