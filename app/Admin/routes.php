@@ -16,14 +16,13 @@ use App\Admin\Controllers\PageBlockGroupController;
 use App\Admin\Controllers\PageBlockSettingController;
 use App\Admin\Controllers\PageController;
 use App\Admin\Controllers\ProductAttributeController;
-use App\Admin\Controllers\ProductAttributeEntry;
+use App\Admin\Controllers\ProductAttributeEntryController;
 use App\Admin\Controllers\ProductAttributeGroupController;
 use App\Admin\Controllers\ProductAttributeValueController;
 use App\Admin\Controllers\ProductCategoryController;
 use App\Admin\Controllers\ProductController;
 use App\Admin\Controllers\ProductSkuController;
-use App\Admin\Controllers\ReleaseBuildController;
-use App\Admin\Controllers\ReleaseVersionController;
+use App\Admin\Controllers\ReleaseController;
 use Dcat\Admin\Admin;
 use Illuminate\Support\Facades\Route;
 
@@ -64,7 +63,7 @@ Route::group([
         Route::resource('entry', ProductController::class);
         Route::resource('categories', ProductCategoryController::class)->names('categories');
         Route::resource('skus', ProductSkuController::class)->names('skus');
-        Route::resource('attributes/entry', ProductAttributeEntry::class)->names('attributes.entry');
+        Route::resource('attributes/entry', ProductAttributeEntryController::class)->names('attributes.entry');
         Route::resource('attribute-groups', ProductAttributeGroupController::class)->names('attribute-groups');
         Route::resource('attributes', ProductAttributeController::class)->names('attributes');
         Route::resource('attribute-values', ProductAttributeValueController::class)->names('attribute-values');
@@ -77,8 +76,7 @@ Route::group([
 
     // Application releases
     Route::prefix('releases')->name('releases.')->group(function () {
-        Route::resource('builds', ReleaseBuildController::class)->names('builds');
-        Route::resource('versions', ReleaseVersionController::class)->names('versions');
+        Route::resource('', ReleaseController::class)->names('entry');
     });
 
     // API Routes

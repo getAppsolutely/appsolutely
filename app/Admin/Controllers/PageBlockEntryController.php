@@ -29,16 +29,16 @@ class PageBlockEntryController extends AdminBaseController
     {
         $tab = new Tab();
 
-        $tab->add(__t('Block Settings'), $this->blockSettings(), true, 'block-settings');
-        $tab->add(__t('Block'), $this->blocks(), false, 'blocks');
-        $tab->add(__t('Block Groups'), $this->blockGroup(), false, 'block-groups');
+        $tab->add(__t('Block Settings'), $this->blockSettingsGrid(), true, 'block-settings');
+        $tab->add(__t('Block'), $this->blocksGrid(), false, 'blocks');
+        $tab->add(__t('Block Groups'), $this->blockGroupGrid(), false, 'block-groups');
 
         $tab->withCard();
 
         return $tab;
     }
 
-    protected function blockSettings(): Grid
+    protected function blockSettingsGrid(): Grid
     {
         return Grid::make(PageBlockSetting::query()->with(['block', 'page']), function (Grid $grid) {
             $grid->column('id', __t('ID'))->sortable();
@@ -76,7 +76,7 @@ class PageBlockEntryController extends AdminBaseController
         });
     }
 
-    protected function blocks(): Grid
+    protected function blocksGrid(): Grid
     {
         return Grid::make(PageBlock::query()->with('group'), function (Grid $grid) {
             $grid->column('id', __t('ID'))->sortable();
@@ -114,7 +114,7 @@ class PageBlockEntryController extends AdminBaseController
             $grid->tools(function (Tools $tools) {
                 $tools->append(
                     Modal::make()->xl()->scrollable()
-                        ->title(__t('Blocks'))
+                        ->title(__t('Block'))
                         ->body(PageBlockForm::make())
                         ->button(admin_create_button())
                 );
@@ -122,7 +122,7 @@ class PageBlockEntryController extends AdminBaseController
         });
     }
 
-    protected function blockGroup(): Grid
+    protected function blockGroupGrid(): Grid
     {
         return Grid::make(PageBlockGroup::query(), function (Grid $grid) {
             $grid->column('id', __t('ID'))->sortable();
@@ -156,7 +156,7 @@ class PageBlockEntryController extends AdminBaseController
             $grid->tools(function (Tools $tools) {
                 $tools->append(
                     Modal::make()->xl()->scrollable()
-                        ->title(__t('Block Groups'))
+                        ->title(__t('Block Group'))
                         ->body(PageBlockGroupForm::make())
                         ->button(admin_create_button())
                 );

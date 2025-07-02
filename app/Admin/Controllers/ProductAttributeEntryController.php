@@ -16,7 +16,7 @@ use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Widgets\Modal;
 use Dcat\Admin\Widgets\Tab;
 
-class ProductAttributeEntry extends AdminBaseController
+class ProductAttributeEntryController extends AdminBaseController
 {
     public function index(Content $content): Content
     {
@@ -30,16 +30,16 @@ class ProductAttributeEntry extends AdminBaseController
     {
         $tab = new Tab();
 
-        $tab->add(__t('Attributes'), $this->attributes(), true, 'attributes');
-        $tab->add(__t('Attribute Values'), $this->attributeValue(), false, 'attribute-values');
-        $tab->add(__t('Attribute Groups'), $this->attributeGroup(), false, 'attribute-groups');
+        $tab->add(__t('Attributes'), $this->attributesGrid(), true, 'attributes');
+        $tab->add(__t('Attribute Values'), $this->attributeValuesGrid(), false, 'attribute-values');
+        $tab->add(__t('Attribute Groups'), $this->attributeGroupsGrid(), false, 'attribute-groups');
 
         $tab->withCard();
 
         return $tab;
     }
 
-    protected function attributes(): Grid
+    protected function attributesGrid(): Grid
     {
         return Grid::make(new ProductAttribute(), function (Grid $grid) {
             $grid->column('id', __t('ID'))->sortable();
@@ -74,7 +74,7 @@ class ProductAttributeEntry extends AdminBaseController
             $grid->tools(function (Tools $tools) {
                 $tools->append(
                     Modal::make()->xl()->scrollable()
-                        ->title(__t('Attributes'))
+                        ->title(__t('Attribute'))
                         ->body(ProductAttributeForm::make())
                         ->button(admin_create_button())
                 );
@@ -82,7 +82,7 @@ class ProductAttributeEntry extends AdminBaseController
         });
     }
 
-    protected function attributeValue(): Grid
+    protected function attributeValuesGrid(): Grid
     {
         return Grid::make(ProductAttributeValue::with(['attribute']), function (Grid $grid) {
             $grid->column('id', __t('ID'))->sortable();
@@ -120,7 +120,7 @@ class ProductAttributeEntry extends AdminBaseController
             $grid->tools(function (Tools $tools) {
                 $tools->append(
                     Modal::make()->xl()->scrollable()
-                        ->title(__t('Attribute Values'))
+                        ->title(__t('Attribute Value'))
                         ->body(ProductAttributeValueForm::make())
                         ->button(admin_create_button())
                 );
@@ -128,7 +128,7 @@ class ProductAttributeEntry extends AdminBaseController
         });
     }
 
-    protected function attributeGroup(): Grid
+    protected function attributeGroupsGrid(): Grid
     {
         return Grid::make(new ProductAttributeGroup(), function (Grid $grid) {
             $grid->column('id', __t('ID'))->sortable();
@@ -161,7 +161,7 @@ class ProductAttributeEntry extends AdminBaseController
             $grid->tools(function (Tools $tools) {
                 $tools->append(
                     Modal::make()->xl()->scrollable()
-                        ->title(__t('Attribute Groups'))
+                        ->title(__t('Attribute Group'))
                         ->body(ProductAttributeGroupForm::make())
                         ->button(admin_create_button())
                 );
