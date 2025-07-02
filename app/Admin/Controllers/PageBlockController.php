@@ -1,26 +1,82 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Grid\DeleteAction;
+use App\Admin\Forms\Models\PageBlockForm;
+use App\Admin\Forms\Models\PageBlockGroupForm;
 use App\Enums\BlockScope;
 use App\Models\PageBlock;
-use App\Repositories\PageBlockGroupRepository;
-use App\Repositories\PageBlockRepository;
-use App\Services\PageBlockService;
-use Dcat\Admin\Form;
+use App\Models\PageBlockGroup;
+use App\Models\PageBlockSetting;
 use Dcat\Admin\Grid;
+use Dcat\Admin\Grid\Tools;
+use Dcat\Admin\Layout\Content;
+use Dcat\Admin\Widgets\Modal;
+use Dcat\Admin\Widgets\Tab;
 
-final class PageBlockController extends AdminBaseController
+class PageBlockController extends AdminBaseController
 {
-    public function __construct(
-        protected PageBlockRepository $blockRepository,
-        protected PageBlockGroupRepository $groupRepository,
-        protected PageBlockService $blockService
-    ) {}
+    public function index(Content $content): Content
+    {
+        return $content
+            ->header(__t('Page Blocks'))
+            ->description(__t('Manage Page Blocks'))
+            ->body($this->buildTabs());
+    }
 
-    protected function grid(): Grid
+    protected function buildTabs(): Tab
+    {
+        $tab = new Tab();
+
+        $tab->add(__t('Block Settings'), $this->blockSettingsGrid(), true, 'block-settings');
+        $tab->add(__t('Block'), $this->blocksGrid(), false, 'blocks');
+        $tab->add(__t('Block Groups'), $this->blockGroupGrid(), false, 'block-groups');
+
+        $tab->withCard();
+
+        return $tab;
+    }
+
+    protected function blockSettingsGrid(): Grid
+    {
+        return Grid::make(PageBlockSetting::query()->with(['block', 'page']), function (Grid $grid) {
+            $grid->column('id', __t('ID'))->sortable();
+            $grid->column('page.title', __t('Page'));
+            $grid->column('block.title', __t('Block'));
+            $grid->column('remark', __t('Remark'))->editable();
+            $grid->column('sort', __t('Sort'))->editable();
+            $grid->column('status', __t('Status'))->switch();
+
+            // Filter to show only page-scoped blocks by default
+            $grid->model()->whereHas('block', function ($query) {
+                $query->where('scope', BlockScope::Page->value);
+            });
+
+            $grid->model()->orderByDesc('page_id');
+            $grid->quickSearch('id', 'type', 'template');
+            $grid->filter(function (Grid\Filter $filter) {
+                $filter->equal('id')->width(4);
+                $filter->equal('page_id')->width(4);
+                $filter->equal('block_id')->width(4);
+                $filter->equal('type')->width(4);
+                $filter->equal('status')->width(4);
+                $filter->between('created_at')->datetime()->width(4);
+            });
+
+            $grid->disableCreateButton();
+            $grid->disableViewButton();
+            $grid->disableEditButton();
+            $grid->disableDeleteButton();
+            $grid->actions(function (Grid\Displayers\Actions $actions) {
+                $actions->append(new DeleteAction());
+            });
+
+            $grid->tools(function (Tools $tools) {});
+        });
+    }
+
+    protected function blocksGrid(): Grid
     {
         return Grid::make(PageBlock::query()->with('group'), function (Grid $grid) {
             $grid->column('id', __t('ID'))->sortable();
@@ -41,49 +97,70 @@ final class PageBlockController extends AdminBaseController
                 $filter->between('created_at')->datetime()->width(4);
             });
 
+            $grid->disableCreateButton();
+            $grid->disableViewButton();
+            $grid->disableEditButton();
+            $grid->disableDeleteButton();
             $grid->actions(function (Grid\Displayers\Actions $actions) {
-                $actions->disableView();
+                $actions->append(Modal::make()->xl()->scrollable()
+                    ->title('Edit Block #' . $actions->getKey())
+                    ->body(PageBlockForm::make($actions->getKey())->payload([
+                        'id' => $actions->getKey(),
+                    ]))
+                    ->button(admin_edit_action()));
+                $actions->append(new DeleteAction());
+            });
+
+            $grid->tools(function (Tools $tools) {
+                $tools->append(
+                    Modal::make()->xl()->scrollable()
+                        ->title(__t('Block'))
+                        ->body(PageBlockForm::make())
+                        ->button(admin_create_button())
+                );
             });
         });
     }
 
-    protected function form(): Form
+    protected function blockGroupGrid(): Grid
     {
-        return Form::make(PageBlock::query(), function (Form $form) {
-            $form->display('id', __t('ID'));
-            $form->select('block_group_id', __t('Group'))->options(
-                $this->groupRepository->all()->pluck('title', 'id')->toArray()
-            )->required();
-            $form->text('title', __t('Title'))->required();
-            $form->text('class', __t('Class'))->required();
-            $form->text('remark', __t('Remark'));
-            $form->textarea('description', __t('Description'))->rows(2);
-            $form->textarea('template', __t('template'))->rows(3);
-            $form->textarea('instruction', __t('Instruction'))->rows(2);
-            $form->textarea('schema', __t('Schema'))
-                ->rows(10)
-                ->help(__t('Enter JSON format for block schema'));
+        return Grid::make(PageBlockGroup::query(), function (Grid $grid) {
+            $grid->column('id', __t('ID'))->sortable();
+            $grid->column('title', __t('Title'))->editable();
+            $grid->column('remark', __t('Remark'))->editable();
+            $grid->column('sort', __t('Sort'))->editable();
+            $grid->column('status', __t('Status'))->switch();
+            $grid->model()->orderByDesc('id');
+            $grid->quickSearch('id', 'title');
+            $grid->filter(function (Grid\Filter $filter) {
+                $filter->equal('id')->width(4);
+                $filter->like('title')->width(4);
+                $filter->equal('status')->width(4);
+                $filter->between('created_at')->datetime()->width(4);
+            });
 
-            // Add scope field with radio buttons
-            $form->radio('scope', __t('Scope'))
-                ->options([
-                    BlockScope::Page->value   => BlockScope::Page->toArray(),
-                    BlockScope::Global->value => BlockScope::Global->toArray(),
-                ])
-                ->default(BlockScope::Page->value)
-                ->required();
+            $grid->disableCreateButton();
+            $grid->disableViewButton();
+            $grid->disableEditButton();
+            $grid->disableDeleteButton();
+            $grid->actions(function (Grid\Displayers\Actions $actions) {
+                $actions->append(Modal::make()->xl()->scrollable()
+                    ->title('Edit Block Group #' . $actions->getKey())
+                    ->body(PageBlockGroupForm::make($actions->getKey())->payload([
+                        'id' => $actions->getKey(),
+                    ]))
+                    ->button(admin_edit_action()));
+                $actions->append(new DeleteAction());
+            });
 
-            // Add schema_values field as textarea
-            $form->textarea('schema_values', __t('Schema Values'))
-                ->rows(10)
-                ->help(__t('Enter JSON format for schema values'));
-
-            $form->switch('droppable', __t('Droppable'));
-            $form->keyValue('setting', __t('Setting'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
-            $form->number('sort', __t('Sort'));
-            $form->switch('status', __t('Status'));
-            $form->disableViewButton();
-            $form->disableViewCheck();
+            $grid->tools(function (Tools $tools) {
+                $tools->append(
+                    Modal::make()->xl()->scrollable()
+                        ->title(__t('Block Group'))
+                        ->body(PageBlockGroupForm::make())
+                        ->button(admin_create_button())
+                );
+            });
         });
     }
 }

@@ -75,7 +75,7 @@ class ProductMenuSeeder extends Seeder
                 'order'      => 4,
                 'title'      => 'Product Attributes',
                 'icon'       => 'fa-list-ol',
-                'uri'        => 'products/attributes/entry',
+                'uri'        => 'products/attributes',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
             ProductMenuSeeder::class,
             OrderMenuSeeder::class,
             ReleaseMenuSeeder::class,
-            AdvancedMenuSeeder::class,
+            // AdvancedMenuSeeder::class,
             AdminMenuSeeder::class,
         ];
     }

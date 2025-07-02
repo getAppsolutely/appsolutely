@@ -11,14 +11,9 @@ use App\Admin\Controllers\HomeController;
 use App\Admin\Controllers\MenuController;
 use App\Admin\Controllers\OrderController;
 use App\Admin\Controllers\PageBlockController;
-use App\Admin\Controllers\PageBlockEntryController;
-use App\Admin\Controllers\PageBlockGroupController;
 use App\Admin\Controllers\PageBlockSettingController;
 use App\Admin\Controllers\PageController;
 use App\Admin\Controllers\ProductAttributeController;
-use App\Admin\Controllers\ProductAttributeEntryController;
-use App\Admin\Controllers\ProductAttributeGroupController;
-use App\Admin\Controllers\ProductAttributeValueController;
 use App\Admin\Controllers\ProductCategoryController;
 use App\Admin\Controllers\ProductController;
 use App\Admin\Controllers\ProductSkuController;
@@ -47,10 +42,8 @@ Route::group([
     Route::prefix('pages')->name('pages.')->group(function () {
         Route::resource('entry', PageController::class);
         Route::get('{reference}/design', [PageController::class, 'design'])->name('design');
-        Route::resource('blocks/entry', PageBlockEntryController::class)->names('blocks.entry');
-        Route::resource('block-settings', PageBlockSettingController::class)->names('block-settings');
         Route::resource('blocks', PageBlockController::class)->names('blocks');
-        Route::resource('block-groups', PageBlockGroupController::class)->names('block-groups');
+        Route::resource('block-settings', PageBlockSettingController::class)->names('block-settings');
     });
 
     // Menu Management Routes
@@ -63,10 +56,7 @@ Route::group([
         Route::resource('entry', ProductController::class);
         Route::resource('categories', ProductCategoryController::class)->names('categories');
         Route::resource('skus', ProductSkuController::class)->names('skus');
-        Route::resource('attributes/entry', ProductAttributeEntryController::class)->names('attributes.entry');
-        Route::resource('attribute-groups', ProductAttributeGroupController::class)->names('attribute-groups');
         Route::resource('attributes', ProductAttributeController::class)->names('attributes');
-        Route::resource('attribute-values', ProductAttributeValueController::class)->names('attribute-values');
     });
 
     // Order Management Routes

@@ -101,7 +101,7 @@ class CmsMenuSeeder extends Seeder
                 'order'      => 4,
                 'title'      => 'Page Blocks',
                 'icon'       => 'fa-list',
-                'uri'        => 'pages/blocks/entry',
+                'uri'        => 'pages/blocks',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
