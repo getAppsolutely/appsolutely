@@ -35,8 +35,8 @@ class DatabaseSeeder extends Seeder
         return [
             AdminCoreSeeder::class,
             CmsMenuSeeder::class,
-            ProductMenuSeeder::class,
             OrderMenuSeeder::class,
+            ProductMenuSeeder::class,
             ReleaseMenuSeeder::class,
             // AdvancedMenuSeeder::class,
             AdminMenuSeeder::class,

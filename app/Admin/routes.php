@@ -11,7 +11,6 @@ use App\Admin\Controllers\HomeController;
 use App\Admin\Controllers\MenuController;
 use App\Admin\Controllers\OrderController;
 use App\Admin\Controllers\PageBlockController;
-use App\Admin\Controllers\PageBlockSettingController;
 use App\Admin\Controllers\PageController;
 use App\Admin\Controllers\ProductAttributeController;
 use App\Admin\Controllers\ProductCategoryController;
@@ -43,7 +42,6 @@ Route::group([
         Route::resource('entry', PageController::class);
         Route::get('{reference}/design', [PageController::class, 'design'])->name('design');
         Route::resource('blocks', PageBlockController::class)->names('blocks');
-        Route::resource('block-settings', PageBlockSettingController::class)->names('block-settings');
     });
 
     // Menu Management Routes

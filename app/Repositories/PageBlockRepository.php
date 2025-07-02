@@ -16,14 +16,18 @@ final class PageBlockRepository extends BaseRepository
     }
 
     /**
-     * Get all global scope blocks
+     * Get all global scope blocks that pages are using
      */
     public function getGlobalBlocks(): Collection
     {
         return $this->model->newQuery()
+            ->with(['settings'])
+            ->whereHas('settings', function ($query) {
+                $query->status();
+            })
             ->where('scope', BlockScope::Global->value)
             ->status()
-            ->orderBy('title')
+            ->orderBy('id')
             ->get();
     }
 }

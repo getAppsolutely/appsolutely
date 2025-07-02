@@ -5,10 +5,13 @@ namespace App\Admin\Controllers;
 use App\Admin\Actions\Grid\DeleteAction;
 use App\Admin\Forms\Models\PageBlockForm;
 use App\Admin\Forms\Models\PageBlockGroupForm;
+use App\Admin\Forms\Models\PageBlockSettingForm;
 use App\Enums\BlockScope;
 use App\Models\PageBlock;
 use App\Models\PageBlockGroup;
 use App\Models\PageBlockSetting;
+use App\Repositories\PageBlockRepository;
+use Arr;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Grid\Tools;
 use Dcat\Admin\Layout\Content;
@@ -17,6 +20,10 @@ use Dcat\Admin\Widgets\Tab;
 
 class PageBlockController extends AdminBaseController
 {
+    public function __construct(
+        protected PageBlockRepository $blockRepository,
+    ) {}
+
     public function index(Content $content): Content
     {
         return $content
@@ -69,10 +76,20 @@ class PageBlockController extends AdminBaseController
             $grid->disableEditButton();
             $grid->disableDeleteButton();
             $grid->actions(function (Grid\Displayers\Actions $actions) {
+                $actions->append(Modal::make()->xl()->scrollable()
+                    ->title('Edit Block Setting #' . $actions->getKey())
+                    ->body(PageBlockSettingForm::make($actions->getKey())->payload([
+                        'id' => $actions->getKey(),
+                    ]))
+                    ->button(admin_edit_action()));
                 $actions->append(new DeleteAction());
             });
 
             $grid->tools(function (Tools $tools) {});
+
+            $grid->header(function () {
+                return $this->renderGlobalBlocksQuickLinks();
+            });
         });
     }
 
@@ -162,5 +179,43 @@ class PageBlockController extends AdminBaseController
                 );
             });
         });
+    }
+
+    public function renderGlobalBlocksQuickLinks(): string
+    {
+        $globalBlocks = $this->blockRepository->getGlobalBlocks();
+
+        if ($globalBlocks->isEmpty()) {
+            return '';
+        }
+
+        $modals = $globalBlocks->map(function ($block) {
+            $blockSetting = Arr::first($block->settings);
+            $buttonId     = 'global-block-btn-' . $blockSetting->id;
+
+            $modal = Modal::make()
+                ->xl()
+                ->scrollable()
+                ->title('Edit Global Block Setting: ' . $block->title . ' (Page: ' . $blockSetting->page->title . ')')
+                ->body(PageBlockSettingForm::make($blockSetting->id)->payload([
+                    'id' => $blockSetting->id,
+                ]))
+                ->button("<button type='button' class='btn btn-sm btn-primary mr-2' id='{$buttonId}' style='text-decoration: none;'>
+                    <i class='fa fa-globe mr-1'></i>{$block->title} ({$blockSetting->page->title})
+                </button>");
+
+            return $modal->render();
+        })->join('');
+
+        return "<div class='alert alert-info border-0 mt-1 w-100'>
+            <div class='d-flex align-items-center mb-1'>
+                <i class='fa fa-globe text-info mr-2'></i>
+                <strong>Global Blocks Available</strong>
+            </div>
+            <p class='text-dark mb-1'>Click on any block below to quickly edit its global settings:</p>
+            <div class='d-flex flex-wrap'>
+                {$modals}
+            </div>
+        </div>";
     }
 }

@@ -52,7 +52,7 @@ final class PageBlock extends Model
         return $this->hasMany(PageBlockSetting::class, 'block_id');
     }
 
-    public function settingValue(): HasOne
+    public function blockValue(): HasOne
     {
         return $this->hasOne(PageBlockValue::class, 'block_id');
     }

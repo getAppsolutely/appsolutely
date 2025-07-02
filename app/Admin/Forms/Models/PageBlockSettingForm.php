@@ -2,14 +2,15 @@
 
 namespace App\Admin\Forms\Models;
 
-use App\Enums\BlockScope;
-use App\Models\PageBlockGroup;
+use App\Models\Page;
+use App\Models\PageBlock;
 use App\Models\PageBlockSetting;
 
 class PageBlockSettingForm extends ModelForm
 {
     public function __construct(?int $id = null)
     {
+        $this->relationships = ['blockValue'];
         parent::__construct($id);
     }
 
@@ -24,36 +25,34 @@ class PageBlockSettingForm extends ModelForm
 
         $this->hidden('id');
 
-        $this->select('block_group_id', __t('Group'))->options(
-            PageBlockGroup::all()->pluck('title', 'id')->toArray()
+        $this->select('page_id', __t('Page'))->options(
+            Page::all()->pluck('title', 'id')->toArray()
         )->required();
-        $this->text('title', __t('Title'))->required();
-        $this->text('class', __t('Class'))->required();
+        $this->select('block_id', __t('Block'))->options(
+            PageBlock::all()->pluck('title', 'id')->toArray()
+        )->required();
+
+        $this->text('type', __t('Type'));
         $this->text('remark', __t('Remark'));
-        $this->textarea('description', __t('Description'))->rows(2);
-        $this->textarea('template', __t('template'))->rows(3);
-        $this->textarea('instruction', __t('Instruction'))->rows(2);
-        $this->textarea('schema', __t('Schema'))
-            ->rows(10)
-            ->help(__t('Enter JSON format for block schema'));
 
-        // Add scope field with radio buttons
-        $this->radio('scope', __t('Scope'))
-            ->options([
-                BlockScope::Page->value   => BlockScope::Page->toArray(),
-                BlockScope::Global->value => BlockScope::Global->toArray(),
-            ])
-            ->default(BlockScope::Page->value)
-            ->required();
+        $this->textarea('blockValue.schema_values', __t('Schema Values'))
+            ->rows(10);
 
-        // Add schema_values field as textarea
-        $this->textarea('schema_values', __t('Schema Values'))
-            ->rows(10)
-            ->help(__t('Enter JSON format for schema values'));
-
-        $this->switch('droppable', __t('Droppable'));
-        $this->keyValue('setting', __t('Setting'))->default([])->setKeyLabel('Key')->setValueLabel('Value')->saveAsJson();
         $this->number('sort', __t('Sort'));
         $this->switch('status', __t('Status'));
+    }
+
+    protected function updateModel(int $id, array $input): void
+    {
+        /** @var PageBlockSetting $model */
+        $model         = $this->model->findOrFail($id);
+        if (! empty($input['blockValue']['schema_values'])) {
+            $model->blockValue->schema_values = $input['blockValue']['schema_values'];
+            $model->checkAndCreateNewBlockValue();
+            unset($input['blockValue']);
+        }
+
+        $model->fill($input);
+        $model->save();
     }
 }
