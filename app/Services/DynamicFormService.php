@@ -112,7 +112,7 @@ final class DynamicFormService
             $fieldRules = $field->validation_rules;
 
             if (! empty($fieldRules)) {
-                $rules[$field->name] = $fieldRules;
+                $rules["formData.{$field->name}"] = $fieldRules;
             }
         }
 
