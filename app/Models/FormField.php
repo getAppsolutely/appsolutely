@@ -85,6 +85,38 @@ final class FormField extends Model
                     $rules[] = 'regex:' . $this->setting['pattern'];
                 }
                 break;
+            case 'select':
+            case 'radio':
+                // Validate that the value is one of the available options
+                $options = $this->field_options;
+                if (! empty($options)) {
+                    $rules[] = 'in:' . implode(',', $options);
+                }
+                break;
+            case 'checkbox':
+                $options = $this->field_options;
+                if (empty($options) || count($options) === 1) {
+                    // Single checkbox (e.g., "I agree", "I have a valid license")
+                    // Treat as boolean or acceptance field
+                    if ($this->required) {
+                        $rules[] = 'accepted'; // Must be checked if required
+                    } else {
+                        $rules[] = 'boolean'; // Can be true/false
+                    }
+                } else {
+                    // Multiple checkbox options (checkbox group)
+                    $rules[] = 'array';
+                    $rules[] = 'in:' . implode(',', $options);
+                }
+                break;
+            case 'multiple_select':
+                // For multiple select, validate that each value is in the options
+                $rules[] = 'array';
+                $options = $this->field_options;
+                if (! empty($options)) {
+                    $rules[] = 'in:' . implode(',', $options);
+                }
+                break;
             case 'file':
                 $rules[] = 'file';
                 if (isset($this->setting['mimes'])) {
@@ -93,6 +125,18 @@ final class FormField extends Model
                 if (isset($this->setting['max_size'])) {
                     $rules[] = 'max:' . $this->setting['max_size'];
                 }
+                break;
+            case 'date':
+                $rules[] = 'date';
+                if (isset($this->setting['after'])) {
+                    $rules[] = 'after:' . $this->setting['after'];
+                }
+                if (isset($this->setting['before'])) {
+                    $rules[] = 'before:' . $this->setting['before'];
+                }
+                break;
+            case 'boolean':
+                $rules[] = 'boolean';
                 break;
         }
 

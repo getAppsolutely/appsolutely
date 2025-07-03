@@ -33,6 +33,9 @@ final class FormForm extends ModelForm
         $this->textarea('description', __t('Description'))->rows(3)
             ->help(__t('Optional description that will be shown to users'));
 
+        $this->text('target_table', __t('Target Table'))
+            ->help(__t('Optional: Database table name to also store submissions (e.g., test_drive_bookings)'));
+
         $this->switch('status', __t('Status'))
             ->help(__t('Enable or disable this form'));
     }

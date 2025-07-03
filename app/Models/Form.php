@@ -15,6 +15,7 @@ final class Form extends Model
         'name',
         'slug',
         'description',
+        'target_table',
         'status',
     ];
 

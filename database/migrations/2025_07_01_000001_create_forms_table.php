@@ -16,11 +16,13 @@ return new class() extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('description')->nullable();
+            $table->string('target_table')->nullable();
             $table->tinyInteger('status')->default(0);
             $table->timestamps();
 
             $table->index(['status', 'created_at']);
             $table->index('slug');
+            $table->index('target_table');
         });
     }
 

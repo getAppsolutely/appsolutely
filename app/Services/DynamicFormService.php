@@ -11,12 +11,16 @@ use App\Repositories\FormEntryRepository;
 use App\Repositories\FormFieldRepository;
 use App\Repositories\FormRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 final class DynamicFormService
 {
+    const FORM_WRAPPER = 'formData';
+
     public function __construct(
         protected FormRepository $formRepository,
         protected FormFieldRepository $fieldRepository,
@@ -57,7 +61,7 @@ final class DynamicFormService
         }
 
         // Validate the submission
-        $validatedData = $this->validateFormSubmission($form, $data);
+        $validatedData = $this->validateFormSubmission($form, [self::FORM_WRAPPER => $data])[self::FORM_WRAPPER] ?? null;
 
         // Prepare entry data
         $entryData = [
@@ -80,7 +84,15 @@ final class DynamicFormService
             }
         }
 
-        return $this->entryRepository->createEntryWithSpamCheck($entryData);
+        // Create the form entry
+        $formEntry = $this->entryRepository->createEntryWithSpamCheck($entryData);
+
+        // Insert into target table if specified
+        if ($form->target_table) {
+            $this->insertIntoTargetTable($form, $validatedData, $formEntry);
+        }
+
+        return $formEntry;
     }
 
     /**
@@ -112,7 +124,7 @@ final class DynamicFormService
             $fieldRules = $field->validation_rules;
 
             if (! empty($fieldRules)) {
-                $rules["formData.{$field->name}"] = $fieldRules;
+                $rules[self::FORM_WRAPPER . ".{$field->name}"] = $fieldRules;
             }
         }
 
@@ -127,8 +139,47 @@ final class DynamicFormService
         $messages = [];
 
         foreach ($form->fields as $field) {
-            if ($field->required) {
-                $messages["formData.{$field->name}.required"] = "The {$field->label} field is required.";
+            $fieldKey = self::FORM_WRAPPER . ".{$field->name}";
+            $label    = $field->label;
+
+            // Get validation rules for this field
+            $validationRules = $field->validation_rules ?? [];
+            if (empty($validationRules)) {
+                continue;
+            }
+
+            // Use Laravel's built-in validation message generation
+            // Create a temporary validator to get default messages
+            $validator = \Illuminate\Support\Facades\Validator::make(
+                [$field->name => null], // dummy data
+                [$field->name => $validationRules], // rules
+                [], // no custom messages
+                [$field->name => $label] // attributes
+            );
+
+            // Extract the default messages and remap to our field key format
+            $defaultMessages = $validator->getMessageBag()->getMessages();
+
+            foreach ($validationRules as $rule) {
+                $ruleName = is_string($rule) ? explode(':', $rule)[0] : $rule;
+
+                // Generate the Laravel message key and our custom key
+                $laravelKey = "{$field->name}.{$ruleName}";
+                $ourKey     = "{$fieldKey}.{$ruleName}";
+
+                // Try to get Laravel's default message for this rule
+                $defaultMessage = trans("validation.{$ruleName}", [
+                    'attribute' => $label,
+                    'value'     => '', // placeholder
+                ]);
+
+                // If Laravel has a default message and it's not the translation key, use it
+                if ($defaultMessage !== "validation.{$ruleName}") {
+                    $messages[$ourKey] = $defaultMessage;
+                } else {
+                    // Fallback to custom message for field-specific rules
+                    $messages[$ourKey] = "The {$label} field is invalid.";
+                }
             }
         }
 
@@ -398,5 +449,120 @@ final class DynamicFormService
         }
 
         return $fields;
+    }
+
+    /**
+     * Insert form data into target table
+     */
+    protected function insertIntoTargetTable(Form $form, array $validatedData, FormEntry $formEntry): void
+    {
+        if (empty($form->target_table)) {
+            return;
+        }
+
+        // Get table columns to filter data
+        $tableColumns = $this->getTableColumns($form->target_table);
+
+        if (empty($tableColumns)) {
+            Log::warning("Target table '{$form->target_table}' does not exist or has no columns");
+
+            return;
+        }
+
+        // Prepare data for target table
+        $targetData = $this->prepareTargetTableData($validatedData, $tableColumns, $formEntry);
+
+        if (empty($targetData)) {
+            Log::warning("No matching columns found for target table '{$form->target_table}'");
+
+            return;
+        }
+
+        try {
+            // Insert into target table using DB::table
+            DB::table($form->target_table)->insert($targetData);
+
+            Log::info("Successfully inserted form data into target table '{$form->target_table}'", [
+                'form_id'       => $form->id,
+                'form_entry_id' => $formEntry->id,
+                'target_table'  => $form->target_table,
+            ]);
+        } catch (\Exception $e) {
+            Log::error("Failed to insert into target table '{$form->target_table}': " . $e->getMessage(), [
+                'form_id'       => $form->id,
+                'form_entry_id' => $formEntry->id,
+                'error'         => $e->getMessage(),
+            ]);
+        }
+    }
+
+    /**
+     * Get table columns for the target table
+     */
+    protected function getTableColumns(string $tableName): array
+    {
+        try {
+            $columns = DB::getSchemaBuilder()->getColumnListing($tableName);
+
+            return $columns;
+        } catch (\Exception $e) {
+            Log::error("Failed to get columns for table '{$tableName}': " . $e->getMessage());
+
+            return [];
+        }
+    }
+
+    /**
+     * Prepare data for target table by filtering only existing columns
+     */
+    protected function prepareTargetTableData(array $validatedData, array $tableColumns, FormEntry $formEntry): array
+    {
+        $targetData = [];
+
+        // Add form entry reference if column exists
+        if (in_array('form_entry_id', $tableColumns)) {
+            $targetData['form_entry_id'] = $formEntry->id;
+        }
+
+        // Add common contact fields if they exist in target table
+        $contactFields = [
+            'first_name' => $formEntry->first_name,
+            'last_name'  => $formEntry->last_name,
+            'email'      => $formEntry->email,
+            'mobile'     => $formEntry->mobile,
+        ];
+
+        foreach ($contactFields as $field => $value) {
+            if (in_array($field, $tableColumns) && ! is_null($value)) {
+                $targetData[$field] = $value;
+            }
+        }
+
+        // Add form data fields that match table columns
+        foreach ($validatedData as $fieldName => $value) {
+            // Remove 'formData.' prefix if present
+            $cleanFieldName = str_replace('formData.', '', $fieldName);
+
+            if (in_array($cleanFieldName, $tableColumns)) {
+                // Handle different data types
+                if (is_array($value)) {
+                    // Convert arrays to JSON or comma-separated string based on column type
+                    $targetData[$cleanFieldName] = json_encode($value);
+                } else {
+                    $targetData[$cleanFieldName] = $value;
+                }
+            }
+        }
+
+        // Add timestamps if columns exist
+        $now = now();
+        if (in_array('created_at', $tableColumns)) {
+            $targetData['created_at'] = $now;
+        }
+        if (in_array('updated_at', $tableColumns)) {
+            $targetData['updated_at'] = $now;
+        }
+
+        return $targetData;
     }
 }
