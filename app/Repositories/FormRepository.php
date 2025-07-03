@@ -20,6 +20,7 @@ final class FormRepository extends BaseRepository
     public function findBySlug(string $slug): ?Form
     {
         return $this->model->newQuery()
+            ->with(['fields'])
             ->where('slug', $slug)
             ->status()
             ->first();

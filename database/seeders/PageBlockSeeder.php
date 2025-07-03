@@ -406,7 +406,7 @@ final class PageBlockSeeder extends Seeder
                     'title'       => 'Dynamic Form',
                     'class'       => 'App\\Livewire\\DynamicForm',
                     'template'    => $this->getTemplate('dynamic-form'),
-                    'description' => 'Configurable form component for contact forms, test drive bookings, and other data collection needs.',
+                    'description' => 'Database-driven form component that pulls form configuration from the database.',
                     'sort'        => 19,
                     'reference'   => 'dynamic-form',
                 ]

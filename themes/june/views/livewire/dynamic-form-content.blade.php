@@ -3,9 +3,9 @@
 
     <!-- Form Fields -->
     <div class="row g-4">
-        @foreach($displayOptions['fields'] as $fieldName => $fieldConfig)
+        @foreach($formFields as $fieldName => $fieldConfig)
             @php
-                $colClass = $displayOptions['columns'] == 2 ? 'col-md-6' : 'col-12';
+                $colClass = (!empty($displayOptions['columns']) && $displayOptions['columns'] == 2) ? 'col-md-6' : 'col-12';
                 $errorName = "formData.{$fieldName}";
             @endphp
 

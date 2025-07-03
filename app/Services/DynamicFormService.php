@@ -128,7 +128,7 @@ final class DynamicFormService
 
         foreach ($form->fields as $field) {
             if ($field->required) {
-                $messages["{$field->name}.required"] = "The {$field->label} field is required.";
+                $messages["formData.{$field->name}.required"] = "The {$field->label} field is required.";
             }
         }
 
@@ -379,5 +379,24 @@ final class DynamicFormService
         }
 
         return $query->exists();
+    }
+
+    public function getFields(Form $form): array
+    {
+        $fields = [];
+        foreach ($form->fields->sortBy('sort') as $field) {
+            $fields[$field->name] = [
+                'type'        => $field->type,
+                'label'       => $field->label,
+                'placeholder' => $field->placeholder,
+                'required'    => $field->required,
+                'validation'  => $field->validation_rules,
+                'options'     => $field->options ?? [],
+                'default'     => $field->default_value,
+                'rows'        => $field->setting['rows'] ?? 4,
+            ];
+        }
+
+        return $fields;
     }
 }

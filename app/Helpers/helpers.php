@@ -45,7 +45,7 @@ if (! function_exists('themed_absolute_path')) {
      */
     function themed_absolute_path(string $themeName = '', string $path = ''): string
     {
-        $basePath = base_path(themed_path());
+        $basePath = base_path(themed_path($themeName));
 
         if (empty($path)) {
             return $basePath;
