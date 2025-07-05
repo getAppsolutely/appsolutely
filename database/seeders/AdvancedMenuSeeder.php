@@ -39,5 +39,18 @@ class AdvancedMenuSeeder extends Seeder
                 'updated_at' => now(),
             ]);
         }
+
+        $notificationsMenu = Menu::where('parent_id', $menuId)->where('title', 'Notifications')->first();
+        if (! $notificationsMenu) {
+            Menu::create([
+                'parent_id'  => $menuId,
+                'order'      => 2,
+                'title'      => 'Notifications',
+                'icon'       => 'fa-envelope',
+                'uri'        => 'notifications',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }

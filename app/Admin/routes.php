@@ -11,6 +11,7 @@ use App\Admin\Controllers\DynamicFormController;
 use App\Admin\Controllers\FileController;
 use App\Admin\Controllers\HomeController;
 use App\Admin\Controllers\MenuController;
+use App\Admin\Controllers\NotificationController;
 use App\Admin\Controllers\OrderController;
 use App\Admin\Controllers\PageBlockController;
 use App\Admin\Controllers\PageController;
@@ -72,6 +73,11 @@ Route::group([
     // Dynamic Forms Management
     Route::prefix('forms')->name('forms.')->group(function () {
         Route::resource('', DynamicFormController::class)->only(['index'])->names('entry');
+    });
+
+    // Notifications Management
+    Route::prefix('notifications')->name('notifications.')->group(function () {
+        Route::resource('', NotificationController::class)->only(['index'])->names('entry');
     });
 
     // API Routes

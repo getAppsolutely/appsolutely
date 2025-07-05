@@ -92,6 +92,9 @@ final class DynamicFormService
             $this->insertIntoTargetTable($form, $validatedData, $formEntry);
         }
 
+        // Trigger notifications
+        $this->triggerNotifications($form, $formEntry, $validatedData);
+
         return $formEntry;
     }
 
@@ -564,5 +567,35 @@ final class DynamicFormService
         }
 
         return $targetData;
+    }
+
+    /**
+     * Trigger notifications for form submission
+     */
+    protected function triggerNotifications(Form $form, FormEntry $formEntry, array $validatedData): void
+    {
+        try {
+            $notificationService = app(\App\Services\NotificationService::class);
+
+            $notificationData = [
+                'form_name'        => $form->name,
+                'form_description' => $form->description,
+                'user_name'        => trim(($formEntry->first_name ?? '') . ' ' . ($formEntry->last_name ?? '')),
+                'user_email'       => $formEntry->email,
+                'user_phone'       => $formEntry->mobile,
+                'submitted_at'     => $formEntry->created_at->format('Y-m-d H:i:s'),
+                'entry_id'         => $formEntry->id,
+                'form_data'        => json_encode($validatedData),
+                'admin_link'       => url('/admin/dynamic-forms?tab=form-entries&form_id=' . $form->id),
+            ];
+
+            $notificationService->trigger('form_submission', $form->slug, $notificationData);
+        } catch (\Exception $e) {
+            Log::error('Failed to trigger form submission notifications', [
+                'form_id'  => $form->id,
+                'entry_id' => $formEntry->id,
+                'error'    => $e->getMessage(),
+            ]);
+        }
     }
 }
