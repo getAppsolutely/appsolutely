@@ -132,6 +132,14 @@ final class NotificationService
     }
 
     /**
+     * Process queue (alias for processPendingNotifications)
+     */
+    public function processQueue(): int
+    {
+        return $this->processPendingNotifications();
+    }
+
+    /**
      * Get notification statistics
      */
     public function getStatistics(): array

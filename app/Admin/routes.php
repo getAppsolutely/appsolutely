@@ -4,6 +4,7 @@ use App\Admin\Controllers\Api\AttributeGroupController as AttributeGroupApiContr
 use App\Admin\Controllers\Api\CommonController;
 use App\Admin\Controllers\Api\DynamicFormApiController;
 use App\Admin\Controllers\Api\FileController as FileApiController;
+use App\Admin\Controllers\Api\NotificationApiController;
 use App\Admin\Controllers\Api\PageBuilderAdminApiController;
 use App\Admin\Controllers\ArticleCategoryController;
 use App\Admin\Controllers\ArticleController;
@@ -101,6 +102,18 @@ Route::group([
             Route::post('entries/{id}/mark-not-spam', [DynamicFormApiController::class, 'markAsNotSpam'])->name('entries.mark-not-spam');
             Route::get('entries/export', [DynamicFormApiController::class, 'exportCsv'])->name('entries.export');
             Route::get('{formId}/entries/export', [DynamicFormApiController::class, 'exportCsv'])->name('entries.export-by-form');
+        });
+
+        // Notifications API Routes
+        Route::prefix('notifications')->name('notifications.')->group(function () {
+            Route::post('process-queue', [NotificationApiController::class, 'processQueue'])->name('process-queue');
+            Route::post('retry-failed', [NotificationApiController::class, 'retryFailed'])->name('retry-failed');
+            Route::delete('clean-old', [NotificationApiController::class, 'cleanOld'])->name('clean-old');
+            Route::post('{id}/retry', [NotificationApiController::class, 'retry'])->name('retry');
+            Route::post('{id}/cancel', [NotificationApiController::class, 'cancel'])->name('cancel');
+            Route::post('{id}/duplicate-template', [NotificationApiController::class, 'duplicateTemplate'])->name('duplicate-template');
+            Route::post('test-rule/{id}', [NotificationApiController::class, 'testRule'])->name('test-rule');
+            Route::get('{id}/preview', [NotificationApiController::class, 'preview'])->name('preview');
         });
     });
 });

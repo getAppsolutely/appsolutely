@@ -8,6 +8,7 @@ use App\Admin\Actions\Grid\DeleteAction;
 use App\Admin\Forms\Models\NotificationQueueForm;
 use App\Admin\Forms\Models\NotificationRuleForm;
 use App\Admin\Forms\Models\NotificationTemplateForm;
+use App\Helpers\AdminButtonHelper;
 use App\Models\NotificationQueue;
 use App\Models\NotificationRule;
 use App\Models\NotificationTemplate;
@@ -94,7 +95,7 @@ final class NotificationController extends AdminBaseController
                     ->button(admin_edit_action()));
 
                 if (! $actions->row->is_system) {
-                    $actions->append('<a class="btn btn-xs btn-outline-success" href="#" onclick="duplicateTemplate(' . $actions->getKey() . ')">' . __t('Duplicate') . '</a>');
+                    $actions->append($this->duplicateTemplateButton($actions->getKey()));
                 }
 
                 $actions->append(new DeleteAction());
@@ -159,7 +160,7 @@ final class NotificationController extends AdminBaseController
                     ]))
                     ->button(admin_edit_action()));
 
-                $actions->append('<a class="btn btn-xs btn-outline-info" href="#" onclick="testRule(' . $actions->getKey() . ')">' . __t('Test') . '</a>');
+                $actions->append($this->testRuleButton($actions->getKey()));
                 $actions->append(new DeleteAction());
             });
 
@@ -232,16 +233,22 @@ final class NotificationController extends AdminBaseController
                     ]))
                     ->button(admin_edit_action()));
 
+                $buttons = [];
+
                 if ($actions->row->status === 'failed') {
-                    $actions->append('<a class="btn btn-xs btn-outline-success" href="#" onclick="retryNotification(' . $actions->getKey() . ')">' . __t('Retry') . '</a>');
+                    $buttons[] = $this->retryButton($actions->getKey());
                 }
                 if ($actions->row->status === 'pending') {
-                    $actions->append('<a class="btn btn-xs btn-outline-danger" href="#" onclick="cancelNotification(' . $actions->getKey() . ')">' . __t('Cancel') . '</a>');
+                    $buttons[] = $this->cancelButton($actions->getKey());
+                }
+
+                if (! empty($buttons)) {
+                    $actions->append(AdminButtonHelper::buttonGroup($buttons));
                 }
             });
 
             $grid->tools(function (Tools $tools) {
-                $tools->append('<a class="btn btn-success" href="#" onclick="processQueue()">' . __t('Process Queue') . '</a>');
+                $tools->append($this->processQueueButton());
             });
         });
     }
@@ -310,13 +317,151 @@ final class NotificationController extends AdminBaseController
         $html .= '<div class="card">';
         $html .= '<div class="card-header">' . __t('Actions') . '</div>';
         $html .= '<div class="card-body">';
-        $html .= '<button type="button" class="btn btn-primary btn-block mb-2" onclick="processQueue()">' . __t('Process Queue') . '</button>';
-        $html .= '<button type="button" class="btn btn-warning btn-block mb-2" onclick="retryFailed()">' . __t('Retry Failed') . '</button>';
-        $html .= '<button type="button" class="btn btn-info btn-block mb-2" onclick="cleanOldSent()">' . __t('Clean Old Sent') . '</button>';
+        $html .= AdminButtonHelper::customButton(
+            __t('Process Queue'),
+            'processQueue',
+            admin_route('api.notifications.process-queue'),
+            [
+                'icon'            => 'fa fa-cog',
+                'style'           => 'primary',
+                'class'           => 'btn-block mb-2',
+                'method'          => 'POST',
+                'success_message' => __t('Queue processing started'),
+            ]
+        );
+        $html .= $this->retryFailedButton();
+        $html .= $this->cleanOldSentButton();
         $html .= '</div></div></div>';
 
         $html .= '</div>';
 
         return $html;
+    }
+
+    // Notification-specific button helpers
+
+    /**
+     * Generate retry button for notifications
+     */
+    protected function retryButton(int $id): string
+    {
+        return AdminButtonHelper::apiButton([
+            'text'            => __t('Retry'),
+            'icon'            => 'fa fa-refresh',
+            'style'           => 'outline-warning',
+            'function_name'   => 'retryNotification',
+            'api_url'         => admin_route('api.notifications.retry'),
+            'payload'         => $id,
+            'method'          => 'POST',
+            'confirm'         => __t('Are you sure you want to retry this notification?'),
+            'success_message' => __t('Notification queued for retry'),
+            'error_message'   => __t('Failed to retry notification'),
+        ]);
+    }
+
+    /**
+     * Generate cancel button for notifications
+     */
+    protected function cancelButton(int $id): string
+    {
+        return AdminButtonHelper::apiButton([
+            'text'            => __t('Cancel'),
+            'icon'            => 'fa fa-times',
+            'style'           => 'outline-danger',
+            'function_name'   => 'cancelNotification',
+            'api_url'         => admin_route('api.notifications.cancel'),
+            'payload'         => $id,
+            'method'          => 'POST',
+            'confirm'         => __t('Are you sure you want to cancel this notification?'),
+            'success_message' => __t('Notification cancelled'),
+            'error_message'   => __t('Failed to cancel notification'),
+        ]);
+    }
+
+    /**
+     * Generate test button for notification rules
+     */
+    protected function testRuleButton(int $id): string
+    {
+        return AdminButtonHelper::apiButton([
+            'text'            => __t('Test'),
+            'icon'            => 'fa fa-flask',
+            'style'           => 'outline-info',
+            'function_name'   => 'testNotificationRule',
+            'api_url'         => admin_route('api.notifications.test-rule'),
+            'payload'         => $id,
+            'method'          => 'POST',
+            'refresh'         => false,
+            'success_message' => null,
+            'error_message'   => __t('Failed to test rule'),
+        ]);
+    }
+
+    /**
+     * Generate duplicate template button
+     */
+    protected function duplicateTemplateButton(int $id): string
+    {
+        return AdminButtonHelper::duplicateButton($id, admin_route('api.notifications.duplicate-template'));
+    }
+
+    /**
+     * Generate process queue button
+     */
+    protected function processQueueButton(): string
+    {
+        return AdminButtonHelper::customButton(
+            __t('Process Queue'),
+            'processQueue',
+            admin_route('api.notifications.process-queue'),
+            [
+                'icon'            => 'fa fa-cog',
+                'style'           => 'success',
+                'size'            => 'sm',
+                'method'          => 'POST',
+                'success_message' => __t('Queue processing started'),
+                'error_message'   => __t('Failed to process queue'),
+            ]
+        );
+    }
+
+    /**
+     * Generate retry failed button
+     */
+    protected function retryFailedButton(): string
+    {
+        return AdminButtonHelper::customButton(
+            __t('Retry Failed'),
+            'retryFailed',
+            admin_route('api.notifications.retry-failed'),
+            [
+                'icon'            => 'fa fa-refresh',
+                'style'           => 'warning',
+                'class'           => 'btn-block mb-2',
+                'method'          => 'POST',
+                'confirm'         => __t('Are you sure you want to retry all failed notifications?'),
+                'success_message' => __t('Failed notifications queued for retry'),
+            ]
+        );
+    }
+
+    /**
+     * Generate clean old sent button
+     */
+    protected function cleanOldSentButton(): string
+    {
+        return AdminButtonHelper::customButton(
+            __t('Clean Old Sent'),
+            'cleanOldSent',
+            admin_route('api.notifications.clean-old'),
+            [
+                'icon'            => 'fa fa-trash-o',
+                'style'           => 'info',
+                'class'           => 'btn-block mb-2',
+                'method'          => 'DELETE',
+                'confirm'         => __t('Are you sure you want to clean old sent notifications? This action cannot be undone.'),
+                'success_message' => __t('Old notifications cleaned'),
+            ]
+        );
     }
 }

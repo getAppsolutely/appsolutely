@@ -82,6 +82,58 @@ final class NotificationRuleService
     }
 
     /**
+     * Test rule by ID with sample data
+     */
+    public function testRuleById(int $id): array
+    {
+        $rule = $this->ruleRepository->find($id);
+
+        if (! $rule) {
+            throw new \Exception('Rule not found');
+        }
+
+        // Generate sample data based on trigger type
+        $sampleData = $this->generateSampleData($rule->trigger_type);
+
+        return $this->testRule($rule, $sampleData);
+    }
+
+    /**
+     * Generate sample data for testing
+     */
+    protected function generateSampleData(string $triggerType): array
+    {
+        return match ($triggerType) {
+            'form_submission' => [
+                'name'         => 'John Doe',
+                'email'        => 'john@example.com',
+                'phone'        => '+1234567890',
+                'message'      => 'This is a test message',
+                'form_name'    => 'Contact Form',
+                'submitted_at' => now()->toDateTimeString(),
+            ],
+            'user_registration' => [
+                'name'          => 'Jane Smith',
+                'email'         => 'jane@example.com',
+                'registered_at' => now()->toDateTimeString(),
+                'ip_address'    => '192.168.1.1',
+            ],
+            'order_placed' => [
+                'order_id'       => 'ORD-12345',
+                'customer_name'  => 'John Customer',
+                'customer_email' => 'customer@example.com',
+                'total_amount'   => 99.99,
+                'order_date'     => now()->toDateTimeString(),
+            ],
+            default => [
+                'event_type' => $triggerType,
+                'timestamp'  => now()->toDateTimeString(),
+                'data'       => 'Sample data for ' . $triggerType,
+            ]
+        };
+    }
+
+    /**
      * Get available trigger types
      */
     public function getAvailableTriggerTypes(): array

@@ -237,9 +237,28 @@ final class NotificationQueueRepository extends BaseRepository
     /**
      * Retry failed items
      */
-    public function retryFailed(array $ids): int
+    public function retryFailed(array $ids = []): int
     {
-        return $this->model->newQuery()->whereIn('id', $ids)
+        $query = $this->model->newQuery()->where('status', 'failed')
+            ->where('retry_count', '<', 3);
+
+        if (! empty($ids)) {
+            $query->whereIn('id', $ids);
+        }
+
+        return $query->update([
+            'status'        => 'pending',
+            'scheduled_at'  => now(),
+            'error_message' => null,
+        ]);
+    }
+
+    /**
+     * Retry a specific notification
+     */
+    public function retry(int $id): bool
+    {
+        $updated = $this->model->newQuery()->where('id', $id)
             ->where('status', 'failed')
             ->where('retry_count', '<', 3)
             ->update([
@@ -247,6 +266,20 @@ final class NotificationQueueRepository extends BaseRepository
                 'scheduled_at'  => now(),
                 'error_message' => null,
             ]);
+
+        return $updated > 0;
+    }
+
+    /**
+     * Cancel a specific notification
+     */
+    public function cancel(int $id): bool
+    {
+        $updated = $this->model->newQuery()->where('id', $id)
+            ->whereIn('status', ['pending', 'processing'])
+            ->update(['status' => 'cancelled']);
+
+        return $updated > 0;
     }
 
     /**
