@@ -5,10 +5,11 @@
 
 class Header {
     constructor() {
-        this.header = document.querySelector('.header');
+        this.header = document.querySelector('#mainHeader');
         this.navbar = this.header?.querySelector('.navbar');
         this.navbarToggler = this.header?.querySelector('.navbar-toggler');
         this.navbarCollapse = this.header?.querySelector('.navbar-collapse');
+        this.submenuItems = this.header?.querySelectorAll('.has-submenu');
 
         this.init();
     }
@@ -73,39 +74,46 @@ class Header {
     }
 
     handleDropdownHover() {
-        const dropdownItems = this.header?.querySelectorAll('.dropdown');
+        // Handle mega menu hover effects
+        this.submenuItems?.forEach(item => {
+            const submenu = item.querySelector('.submenu');
+            let hoverTimeout;
 
-        dropdownItems?.forEach(item => {
-            const dropdownMenu = item.querySelector('.dropdown-menu');
-
-            if (dropdownMenu) {
+            if (submenu) {
                 // Desktop hover effect
-                if (window.innerWidth >= 992) {
+                if (window.innerWidth >= 1200) {
                     item.addEventListener('mouseenter', () => {
-                        this.showDropdown(dropdownMenu);
+                        clearTimeout(hoverTimeout);
+                        this.showMegaMenu(submenu);
+                        // Add active class to parent nav item
+                        item.classList.add('active');
                     });
 
                     item.addEventListener('mouseleave', () => {
-                        this.hideDropdown(dropdownMenu);
+                        // Add small delay before hiding to prevent flickering
+                        hoverTimeout = setTimeout(() => {
+                            this.hideMegaMenu(submenu);
+                            item.classList.remove('active');
+                        }, 150);
                     });
                 }
 
                 // Mobile click effect
-                if (window.innerWidth < 992) {
-                    const dropdownToggle = item.querySelector('.dropdown-toggle');
+                if (window.innerWidth < 1200) {
+                    const navLink = item.querySelector('.nav-link');
 
-                    dropdownToggle?.addEventListener('click', (e) => {
+                    navLink?.addEventListener('click', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
 
-                        // Close other dropdowns
-                        dropdownItems.forEach(otherItem => {
+                        // Close other submenus
+                        this.submenuItems.forEach(otherItem => {
                             if (otherItem !== item) {
                                 otherItem.classList.remove('show');
                             }
                         });
 
-                        // Toggle current dropdown
+                        // Toggle current submenu
                         item.classList.toggle('show');
                     });
                 }
@@ -113,16 +121,26 @@ class Header {
         });
     }
 
-    showDropdown(dropdownMenu) {
-        dropdownMenu.style.opacity = '1';
-        dropdownMenu.style.visibility = 'visible';
-        dropdownMenu.style.transform = 'translateY(0)';
+    showMegaMenu(submenu) {
+        submenu.style.display = 'block';
+        // Force reflow to ensure display:block takes effect
+        submenu.offsetHeight;
+        submenu.style.opacity = '1';
+        submenu.style.pointerEvents = 'auto';
+        submenu.style.transform = 'translateY(0)';
     }
 
-    hideDropdown(dropdownMenu) {
-        dropdownMenu.style.opacity = '0';
-        dropdownMenu.style.visibility = 'hidden';
-        dropdownMenu.style.transform = 'translateY(-100%)';
+    hideMegaMenu(submenu) {
+        submenu.style.opacity = '0';
+        submenu.style.pointerEvents = 'none';
+        submenu.style.transform = 'translateY(-10px)';
+        
+        // Hide after transition completes
+        setTimeout(() => {
+            if (submenu.style.opacity === '0') {
+                submenu.style.display = 'none';
+            }
+        }, 400);
     }
 }
 
