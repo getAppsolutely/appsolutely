@@ -35,20 +35,26 @@
                                         {{ $item->title }}
                                     </a>
                                     <!-- Submenu markup -->
-                                    <ul class="submenu list-unstyled m-0 p-0 position-absolute w-80 start-0 top-100">
-                                        <li class="d-flex flex-row justify-content-center w-80">
-                                            @foreach($item->children as $child)
-                                                <a class="dropdown-item text-center flex-fill"
-                                                   href="{{ app_uri($child->url) }}" target="{{ $child->target->value }}">
-                                                    @if($child->icon)
-                                                        <i class="{{ $child->icon }} me-2"></i>
-                                                    @endif
-                                                    @if($child->thumbnail)
-                                                        <img class="w-100 h-80" src="{{ asset_server($child->thumbnail) }}" alt="{{ $child->title }}">
-                                                    @endif
-                                                    <span>{{ $child->title }}</span>
-                                                </a>
-                                            @endforeach
+                                    <ul class="submenu list-unstyled m-0 p-0 position-absolute">
+                                        <li class="d-flex justify-content-center w-100">
+                                            <div class="container-xl">
+                                                <div class="row justify-content-center">
+                                                    @foreach($item->children as $child)
+                                                        <div class="col-auto">
+                                                            <a class="dropdown-item text-center d-block p-3"
+                                                               href="{{ app_uri($child->url) }}" target="{{ $child->target->value }}">
+                                                                @if($child->icon)
+                                                                    <i class="{{ $child->icon }} d-block mb-2"></i>
+                                                                @endif
+                                                                @if($child->thumbnail)
+                                                                    <img class="img-fluid mb-2" src="{{ asset_server($child->thumbnail) }}" alt="{{ $child->title }}">
+                                                                @endif
+                                                                <span class="d-block pt-3">{{ $child->title }}</span>
+                                                            </a>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
                                         </li>
                                     </ul>
                                 @else
