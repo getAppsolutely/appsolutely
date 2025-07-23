@@ -53,28 +53,29 @@
 
             @elseif($displayOptions['layout'] === 'list')
                 <!-- List Layout -->
-                <div class="specification-list">
-                    @foreach($displayOptions['specifications'] as $spec)
-                        <div class="specification-item d-flex align-items-center py-3 border-bottom">
-                            <div class="specification-content flex-grow-1">
-                                <h6 class="specification-label fw-semibold mb-1">
-                                    @if($spec['icon'] ?? false)
-                                        <i class="{{ $spec['icon'] }} me-2"></i>
-                                    @endif
-                                    {{ $spec['label'] }}
-                                </h6>
+                <div class="row justify-content-center">
+                    <div class="specification-list col-lg-6">
+                        @foreach($displayOptions['specifications'] as $spec)
+                            <div class="specification-item d-flex align-items-center py-3 border-bottom">
+                                <div class="specification-content flex-grow-1">
+                                    <h6 class="specification-label fw-semibold mb-1">
+                                        @if($spec['icon'] ?? false)
+                                            <i class="{{ $spec['icon'] }} me-2"></i>
+                                        @endif
+                                        {{ $spec['label'] }}
+                                    </h6>
 
-                                <div class="specification-value">
-                                    {{ $spec['value'] }}
-                                    @if($spec['unit'] ?? false)
-                                        <span class="text-muted">{{ $spec['unit'] }}</span>
-                                    @endif
+                                    <div class="specification-value">
+                                        {{ $spec['value'] }}
+                                        @if($spec['unit'] ?? false)
+                                            <span class="text-muted">{{ $spec['unit'] }}</span>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 </div>
-
             @else
                 <!-- Table Layout -->
                 <div class="row justify-content-center">
@@ -110,6 +111,19 @@
                     </div>
                 </div>
             @endif
+        @endif
+
+        <!-- Download Button -->
+        @if($displayOptions['download_url'] ?? false)
+            <div class="text-center mt-5">
+                <a href="{{ $displayOptions['download_url'] }}"
+                   class="btn btn-primary px-5 py-3 fs-6 rounded-pill shadow-lg"
+                   download="{{ $displayOptions['download_filename'] ?? 'specifications' }}"
+                   target="_blank">
+                    <i class="fas fa-download me-2"></i>
+                    {{ !empty($displayOptions['download_label']) ? $displayOptions['download_label'] : 'Download Brochure' }}
+                </a>
+            </div>
         @endif
     </div>
 </section>

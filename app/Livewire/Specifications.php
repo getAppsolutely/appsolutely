@@ -22,5 +22,8 @@ final class Specifications extends BaseBlock
                 'value' => 'Premium materials with digital display',
             ],
         ],
+        'download_url'      => '#',
+        'download_filename' => '',
+        'download_label'    => '',
     ];
 }
