@@ -1,4 +1,4 @@
-<div id="mediaSliderCarousel" class="carousel slide section-full" data-bs-ride="carousel">
+<div id="mediaSliderCarousel-{{ $this->getId() }}" class="carousel slide section-full" data-bs-ride="carousel">
     <div class="carousel-inner">
         @if (!empty($displayOptions['slides']))
             @foreach($displayOptions['slides'] as $index => $slide)
@@ -33,7 +33,7 @@
     <div class="carousel-indicators">
         @if (!empty($displayOptions['slides']))
             @foreach($displayOptions['slides'] as $index => $slide)
-                <button type="button" data-bs-target="#mediaSliderCarousel" data-bs-slide-to="{{ $index }}"
+                <button type="button" data-bs-target="#mediaSliderCarousel-{{ $this->getId() }}" data-bs-slide-to="{{ $index }}"
                         @if($index === 0) class="active" aria-current="true"
                         @endif aria-label="Slide {{ $index + 1 }}"></button>
             @endforeach
