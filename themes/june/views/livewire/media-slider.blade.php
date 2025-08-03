@@ -3,7 +3,7 @@
     $viewName = 'livewire.media-slider_' . $style;
 @endphp
 
-<div>
+<div class="media-slider">
 @if(View::exists($viewName))
     @include($viewName)
 @else
