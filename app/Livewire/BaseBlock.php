@@ -123,7 +123,22 @@ abstract class BaseBlock extends Component
         if (empty($this->viewName)) {
             // Auto-generate view name from class name
             $className      = class_basename($this);
-            $this->viewName = \Str::kebab($className);
+            $baseViewName   = \Str::kebab($className);
+
+            // Check if there's a style specified in displayOptions
+            $style = $this->getData('style');
+            if ($style && $style !== 'default') {
+                $styleViewName = $baseViewName . '_' . $style;
+                // Check if the style-specific view exists in the current theme
+                $themedStyleView = themed_path() . '/views/livewire/' . $styleViewName . '.blade.php';
+                if (file_exists(base_path($themedStyleView))) {
+                    $this->viewName = $styleViewName;
+                } else {
+                    $this->viewName = $baseViewName;
+                }
+            } else {
+                $this->viewName = $baseViewName;
+            }
         }
 
         return $this->viewName;

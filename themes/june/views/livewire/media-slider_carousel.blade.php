@@ -2,7 +2,7 @@
     $sliderId = 'mediaSlider-' . $this->getId();
 @endphp
 
-<div class="media-slider-carousel-container">
+<div class="media-slider-carousel-container media-slider">
     {{-- Title, Subtitle, Description Section --}}
     @if(!empty($displayOptions['title']) || !empty($displayOptions['subtitle']) || !empty($displayOptions['description']))
         <div class="media-slider-header">
