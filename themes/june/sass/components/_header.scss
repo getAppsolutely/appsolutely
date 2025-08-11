@@ -20,6 +20,8 @@
   transform-origin: top right;
   z-index: 2;
   pointer-events: none;
+  border-radius: unset !important;
+  box-shadow: none !important;
 }
 
 #mainHeader .navbar,
