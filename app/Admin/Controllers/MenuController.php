@@ -49,7 +49,7 @@ final class MenuController extends AdminBaseController
 
     protected function form(): Form
     {
-        return Form::make(Menu::with(['menu']), function (Form $form) {
+        return Form::make(Menu::class, function (Form $form) {
             $form->disableViewButton();
             $form->disableViewCheck();
             $form->display('id', __t('ID'));

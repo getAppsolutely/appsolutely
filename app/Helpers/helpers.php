@@ -632,13 +632,13 @@ if (! function_exists('themed_assets')) {
             $manifest = load_vite_manifest($buildPath);
         }
 
-        $key = themed_path() . ltrim($path, '/');
+        $key = path_join(themed_path(), $path);
 
         if (! isset($manifest[$key])) {
             throw new \Exception("Image [{$key}] not found in Vite manifest.");
         }
 
-        return asset($buildPath . $manifest[$key]['file']);
+        return asset(path_join($buildPath, $manifest[$key]['file']));
     }
 }
 
@@ -649,10 +649,20 @@ if (! function_exists('asset_server')) {
     }
 }
 
+if (! function_exists('path_join')) {
+    /**
+     * Concatenate a base path and a file ensuring a single slash boundary.
+     */
+    function path_join(string $basePath, string $file): string
+    {
+        return rtrim($basePath, '/') . '/' . ltrim($file, '/');
+    }
+}
+
 if (! function_exists('load_vite_manifest')) {
     function load_vite_manifest(string $path): array
     {
-        $manifestPath    = public_path($path . 'manifest.json');
+        $manifestPath    = public_path(path_join($path, 'manifest.json'));
         if (! file_exists($manifestPath)) {
             throw new \Exception('Vite manifest.json not found.');
         }

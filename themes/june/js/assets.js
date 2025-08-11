@@ -5,15 +5,13 @@
  * they are included in the Vite build output and available via Vite::asset()
  */
 
-// Import all images from the images folder
-import '../images/logo.webp';
-import '../images/logo-dark.webp';
+// Import images that should be emitted by Vite
+import '../images/coming.png';
 
 // Export asset paths for use in components if needed
 export const assets = {
     images: {
-        logo: '../images/logo.webp',
-        logoDark: '../images/logo-dark.webp',
+        coming: '../images/coming.png',
     },
 };
 

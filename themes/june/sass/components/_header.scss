@@ -14,6 +14,14 @@
   }
 }
 
+// Coming soon ribbon
+.coming-ribbon {
+  transform: rotate(90deg);
+  transform-origin: top right;
+  z-index: 2;
+  pointer-events: none;
+}
+
 #mainHeader .navbar,
 #mainHeader .navbar-nav .nav-link,
 #mainHeader .navbar-brand,
