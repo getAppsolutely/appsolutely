@@ -10,9 +10,13 @@
                         </video>
                     </div>
                 @else
-                    <div class="hero-image-container"
-                         style="background-image: url('{{ asset_server($hero['url']) }}');">
-                    </div>
+                    @if($displayOptions['style'] == 'fullscreen')
+                        <div class="hero-image-container"
+                             style="background-image: url('{{ asset_server($hero['url']) }}');">
+                        </div>
+                    @else
+                        <img src="{{ asset_server($hero['url']) }}" class="w-100 h-auto d-block" alt="">
+                    @endif
                 @endif
 
                 <!-- Content Overlay -->

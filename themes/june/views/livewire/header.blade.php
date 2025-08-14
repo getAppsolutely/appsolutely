@@ -26,7 +26,7 @@
                 @if($mainNavigation->isNotEmpty())
                     <ul class="navbar-nav flex-row align-items-center">
                         @foreach($mainNavigation as $item)
-                            <li class="nav-item position-relative {{ $item->children->isNotEmpty() ? 'has-submenu' : '' }}">
+                            <li class="nav-item ms-2 me-2 position-relative {{ $item->children->isNotEmpty() ? 'has-submenu' : '' }}">
                                 @if($item->children->isNotEmpty())
                                     <a class="nav-link text-uppercase" href="#" role="button">
                                         @if($item->icon)
