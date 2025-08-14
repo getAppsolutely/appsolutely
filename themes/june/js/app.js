@@ -12,3 +12,4 @@ import './components/header.js';
 import './components/hero-banner.js';
 import './components/video-showcase.js';
 import './components/media-slider.js';
+import './components/features.js';

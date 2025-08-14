@@ -1,3 +1,6 @@
+// Import animation mixins
+@import 'mixins';
+
 // Feature Block Component Styles
 .features {
   padding: 4rem 0;
@@ -11,6 +14,9 @@
     font-weight: 700;
     color: $dark;
     margin-bottom: 1rem;
+    
+    // Use existing fade-in-up mixin
+    @include fade-in-up(0s);
 
     @media (max-width: 768px) {
       font-size: 2rem;
@@ -33,6 +39,9 @@
     color: $gray-700;
     margin-bottom: 0.5rem;
     line-height: 1.6;
+    
+    // Use existing fade-in-up mixin with staggered delays
+    @include fade-in-up(0.2s);
 
     &:last-child {
       margin-bottom: 0;
@@ -232,6 +241,9 @@
     font-weight: 700;
     color: $dark;
     margin-bottom: 1rem;
+    
+    // Use existing fade-in-up mixin
+    @include fade-in-up(0s);
 
     @media (max-width: 768px) {
       font-size: 2rem;
@@ -254,6 +266,9 @@
     color: $gray-700;
     margin-bottom: 0.5rem;
     line-height: 1.6;
+    
+    // Use existing fade-in-up mixin with staggered delays
+    @include fade-in-up(0.2s);
 
     &:last-child {
       margin-bottom: 0;

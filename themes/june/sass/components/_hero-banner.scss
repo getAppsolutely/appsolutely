@@ -1,22 +1,5 @@
-// Animation mixins
-@mixin fade-in-up($delay: 0s) {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s ease $delay, transform 0.8s ease $delay;
-
-    &.animate {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@mixin stagger-animation($base-delay: 0.2s, $stagger: 0.2s) {
-    @for $i from 1 through 3 {
-        &:nth-child(#{$i}) {
-            @include fade-in-up($base-delay + ($i - 1) * $stagger);
-        }
-    }
-}
+// Import animation mixins
+@import 'mixins';
 
 // Hero banner container
 .hero-banner {
