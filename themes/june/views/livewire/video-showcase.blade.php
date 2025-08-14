@@ -47,13 +47,13 @@
             <div class="row justify-content-{{ $displayOptions['text_position'] === 'left' ? 'start' : ($displayOptions['text_position'] === 'right' ? 'end' : 'center') }}">
                 <div class="col-12 col-lg-8 col-xl-6 text-{{ $displayOptions['text_position'] === 'center' ? 'center' : $displayOptions['text_position'] }}">
                     @if($displayOptions['title'])
-                        <h1 class="display-1 fw-bold mb-4 lh-1" style="color: {{ $displayOptions['text_color'] }};">
+                        <h1 class="display-3 fw-bold mb-4 lh-1" style="color: {{ $displayOptions['text_color'] }};">
                             {{ $displayOptions['title'] }}
                         </h1>
                     @endif
 
                     @if($displayOptions['subtitle'])
-                        <h2 class="display-5 mb-4 fw-normal" style="color: {{ $displayOptions['text_color'] }}; opacity: 0.9;">
+                        <h2 class="display-7 mb-4 fw-light" style="color: {{ $displayOptions['text_color'] }}; opacity: 0.9;">
                             {{ $displayOptions['subtitle'] }}
                         </h2>
                     @endif
