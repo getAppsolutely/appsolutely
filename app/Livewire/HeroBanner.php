@@ -7,6 +7,7 @@ namespace App\Livewire;
 final class HeroBanner extends BaseBlock
 {
     protected array $defaultDisplayOptions = [
+        'style'  => 'default',
         'heroes' => [
             [
                 'type'     => 'image', // image or video

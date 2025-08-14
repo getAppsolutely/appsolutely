@@ -1,7 +1,7 @@
 <div>
     @if (!empty($displayOptions['heroes']))
         @foreach($displayOptions['heroes'] as $hero)
-            <div class="hero-banner position-relative section-full">
+            <div class="hero-banner {{ @$displayOptions['style'] }}">
                 @if(($hero['type'] ?? 'image') === 'video')
                     <div class="hero-video-container position-absolute top-0 start-0 w-100 h-100">
                         <video class="w-100 h-100 object-fit-cover" controls loading="lazy">
@@ -10,24 +10,27 @@
                         </video>
                     </div>
                 @else
-                    <div class="hero-image-container position-absolute top-0 start-0 w-100 h-100"
-                         style="background-image: url('{{ asset_server($hero['url']) }}');
-                        background-size: cover;
-                        background-position: center center;
-                        background-repeat: no-repeat;">
+                    <div class="hero-image-container"
+                         style="background-image: url('{{ asset_server($hero['url']) }}');">
                     </div>
                 @endif
 
                 <!-- Content Overlay -->
-                <div class="hero-banner-caption position-relative d-flex align-items-center justify-content-center">
+                <div class="hero-banner-caption d-flex align-items-center justify-content-center">
                     <div class="container text-center text-white">
                         <div class="row justify-content-center">
                             <div class="col-12 col-lg-8 col-xl-6">
                                 @if(!empty($hero['title']))
-                                    <h2 class="display-4 fw-bold mb-4">{{ $hero['title'] }}</h2>
+                                    <h4 class="display-6 fw-bold mb-3">{{ $hero['title'] }}</h4>
                                 @endif
                                 @if(!empty($hero['subtitle']))
-                                    <p class="lead mb-4">{{ $hero['subtitle'] }}</p>
+                                    @if(is_string($hero['subtitle']))
+                                        <p class="lead mb-4">{{ $hero['subtitle'] }}</p>
+                                    @elseif(is_array($hero['subtitle']))
+                                        @foreach($hero['subtitle'] as $subtitle)
+                                            <p class="lead mb-1">{{ $subtitle }}</p>
+                                        @endforeach
+                                    @endif
                                 @endif
                                 @if(!empty($hero['link']))
                                     <a href="{{ $hero['link'] }}" class="btn btn-outline-light btn-lg px-4 py-2">
