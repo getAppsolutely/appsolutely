@@ -5,15 +5,15 @@
 <div class="media-slider-carousel-container media-slider">
     {{-- Title, Subtitle, Description Section --}}
     @if(!empty($displayOptions['title']) || !empty($displayOptions['subtitle']) || !empty($displayOptions['description']))
-        <div class="media-slider-header">
+        <div class="media-slider-header container">
             @if(!empty($displayOptions['title']))
                 <h2 class="media-slider-title">{{ $displayOptions['title'] }}</h2>
             @endif
-            
+
             @if(!empty($displayOptions['subtitle']))
                 <h3 class="media-slider-subtitle">{{ $displayOptions['subtitle'] }}</h3>
             @endif
-            
+
             @if(!empty($displayOptions['description']))
                 <div class="media-slider-description">
                     @if(is_array($displayOptions['description']))
@@ -30,7 +30,28 @@
 
     {{-- Navigation Controls --}}
     @if(!empty($displayOptions['slides']) && count($displayOptions['slides']) > 1)
-        <div class="media-slider-controls">
+        <div class="media-slider-controls container">
+            <div class="media-slide-caption-container">
+                <div class="title-slider">
+                    <div class="title-slider-wrapper">
+                        @foreach($displayOptions['slides'] as $index => $slide)
+                            <div class="title-slide @if($index === 0) active @endif" data-slide-index="{{ $index }}">
+                                @if(!empty($slide['title']))
+                                    <h4 class="slide-title">{{ $slide['title'] }}</h4>
+                                @endif
+                                @if(!empty($slide['subtitle']))
+                                    <p class="slide-subtitle">{{ $slide['subtitle'] }}</p>
+                                @endif
+                                @if(!empty($slide['link']))
+                                    <a href="{{ $slide['link'] }}" class="btn btn-primary slide-btn">
+                                        Learn More
+                                    </a>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
             <div class="swiper-button-prev" data-slider-id="{{ $sliderId }}">
                 <i class="bi bi-chevron-left"></i>
             </div>
@@ -42,7 +63,7 @@
 
     {{-- Swiper Carousel --}}
     @if(!empty($displayOptions['slides']))
-        <div class="swiper {{ $sliderId }}" data-slider-id="{{ $sliderId }}">
+        <div class="ms-5 swiper {{ $sliderId }}" data-slider-id="{{ $sliderId }}">
             <div class="swiper-wrapper">
                 @foreach($displayOptions['slides'] as $index => $slide)
                     <div class="swiper-slide">
@@ -56,24 +77,8 @@
                                 </div>
                             @else
                                 <div class="media-slide-image">
-                                    <img src="{{ asset_server($slide['url']) }}" 
+                                    <img src="{{ asset_server($slide['url']) }}"
                                          alt="{{ $slide['title'] ?? 'Slide ' . ($index + 1) }}">
-                                </div>
-                            @endif
-                            
-                            @if(!empty($slide['title']) || !empty($slide['subtitle']))
-                                <div class="media-slide-caption">
-                                    @if(!empty($slide['title']))
-                                        <h4 class="slide-title">{{ $slide['title'] }}</h4>
-                                    @endif
-                                    @if(!empty($slide['subtitle']))
-                                        <p class="slide-subtitle">{{ $slide['subtitle'] }}</p>
-                                    @endif
-                                    @if(!empty($slide['link']))
-                                        <a href="{{ $slide['link'] }}" class="btn btn-primary slide-btn">
-                                            Learn More
-                                        </a>
-                                    @endif
                                 </div>
                             @endif
                         </div>

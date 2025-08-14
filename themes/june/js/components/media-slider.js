@@ -77,10 +77,12 @@ class MediaSliderCarousel {
                 on: {
                     init: function() {
                         console.log('Media slider initialized:', sliderId);
+                        self.updateTitleSlider(sliderId, 0);
                     },
                     slideChange: function() {
                         // Handle slide change events if needed
                         self.pauseAllVideos();
+                        self.updateTitleSlider(sliderId, this.realIndex);
                     }
                 }
             });
@@ -91,6 +93,25 @@ class MediaSliderCarousel {
             // Add video handling
             this.handleVideoSlides(sliderElement, swiper);
         });
+    }
+
+    updateTitleSlider(sliderId, slideIndex) {
+        const titleSlider = document.querySelector(`[data-slider-id="${sliderId}"]`).closest('.media-slider-carousel-container').querySelector('.title-slider');
+        if (!titleSlider) return;
+
+        const titleSlides = titleSlider.querySelectorAll('.title-slide');
+        const totalSlides = titleSlides.length;
+
+        // Remove active class from all slides
+        titleSlides.forEach(slide => {
+            slide.classList.remove('active');
+        });
+
+        // Add active class to current slide
+        const currentIndex = slideIndex % totalSlides;
+        if (titleSlides[currentIndex]) {
+            titleSlides[currentIndex].classList.add('active');
+        }
     }
 
     handleVideoSlides(sliderElement, swiper) {

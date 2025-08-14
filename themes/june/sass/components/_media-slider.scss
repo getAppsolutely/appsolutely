@@ -16,13 +16,12 @@
 // Carousel styles
 .media-slider-carousel-container {
     .media-slider-header {
-        text-align: center;
-        margin-bottom: 2rem;
+        margin-bottom: 1rem;
         padding: 0 1rem;
 
         .media-slider-title {
-            font-size: 2.5rem;
-            font-weight: 700;
+            font-size: 2rem;
+            font-weight: 400;
             margin-bottom: 0.5rem;
             color: var(--bs-dark);
         }
@@ -58,7 +57,7 @@
 
         .swiper-slide {
             width: auto;
-            max-width: 80%;
+            max-width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -145,20 +144,89 @@
     // External Navigation Controls
     .media-slider-controls {
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
         align-items: center;
         gap: 1rem;
-        margin: 1.5rem 0;
+
+        .media-slide-caption-container {
+            flex: 1;
+            margin-right: 1rem;
+
+            .title-slider {
+                position: relative;
+                overflow: hidden;
+                min-height: 60px;
+                display: flex;
+                align-items: center;
+
+                .title-slider-wrapper {
+                    position: relative;
+                    transition: transform 0.5s ease;
+                    width: 100%;
+
+                    .title-slide {
+                        opacity: 0;
+                        transform: translateX(20px);
+                        transition: all 0.5s ease;
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        text-align: left;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        min-height: 60px;
+
+                        &.active {
+                            opacity: 1;
+                            transform: translateX(0);
+                            position: relative;
+                        }
+
+                        .slide-title {
+                            font-size: 1rem;
+                            font-weight: 300;
+                            margin-bottom: 0.5rem;
+                            color: var(--bs-dark);
+                            line-height: 1.2;
+                        }
+
+                        .slide-subtitle {
+                            font-size: 1rem;
+                            margin-bottom: 1rem;
+                            color: var(--bs-secondary);
+                            line-height: 1.4;
+                        }
+
+                        .slide-btn {
+                            background: var(--bs-primary);
+                            border: none;
+                            padding: 0.5rem 1.5rem;
+                            font-size: 0.9rem;
+                            font-weight: 500;
+                            transition: all 0.3s ease;
+
+                            &:hover {
+                                background: var(--bs-primary);
+                                filter: brightness(1.1);
+                                transform: translateY(-1px);
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         .swiper-button-next,
         .swiper-button-prev {
             position: static;
-            width: 40px;
-            height: 40px;
+            width: 30px;
+            height: 30px;
             margin: 0;
             color: var(--bs-secondary);
             background: rgba(255, 255, 255, 0.95);
-            border: 1px solid var(--bs-secondary);
+            //border: 1px solid var(--bs-secondary);
             border-radius: 50%;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             transition: all 0.3s ease;
@@ -213,6 +281,22 @@
         }
 
         .media-slider-controls {
+            .media-slide-caption-container {
+                .title-slider {
+                    min-height: 70px;
+
+                    .title-slide {
+                        .slide-title {
+                            font-size: 1.25rem;
+                        }
+
+                        .slide-subtitle {
+                            font-size: 0.9rem;
+                        }
+                    }
+                }
+            }
+
             .swiper-button-next,
             .swiper-button-prev {
                 width: 36px;
@@ -245,28 +329,43 @@
 
             .swiper-slide {
                 max-width: 95%;
-
-                .media-slide-caption {
-                    padding: 1.5rem 1rem 1rem;
-
-                    .slide-title {
-                        font-size: 1.25rem;
-                    }
-
-                    .slide-subtitle {
-                        font-size: 0.9rem;
-                    }
-                }
             }
         }
 
         .media-slider-controls {
-            margin: 1rem 0;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1rem;
+
+            .media-slide-caption-container {
+                margin-right: 0;
+                margin-bottom: 1rem;
+
+                .title-slider {
+                    min-height: 60px;
+
+                    .title-slide {
+                        .slide-title {
+                            font-size: 1.1rem;
+                        }
+
+                        .slide-subtitle {
+                            font-size: 0.85rem;
+                        }
+
+                        .slide-btn {
+                            padding: 0.4rem 1.2rem;
+                            font-size: 0.8rem;
+                        }
+                    }
+                }
+            }
 
             .swiper-button-next,
             .swiper-button-prev {
                 width: 32px;
                 height: 32px;
+                align-self: center;
 
                 i {
                     font-size: 10px;
