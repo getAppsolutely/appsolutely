@@ -32,6 +32,7 @@
 // Hero banner caption
 .hero-banner-caption {
     @extend .overlay-caption;
+    top: 25% !important;
 
     // Initial state
     opacity: 0;

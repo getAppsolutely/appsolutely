@@ -6,6 +6,7 @@
 
 .media-slider-caption {
     @extend .overlay-caption;
+    top: 40% !important;
 }
 
 .media-slider-btn {
