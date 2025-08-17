@@ -7,6 +7,7 @@ namespace App\Livewire;
 final class VideoShowcase extends BaseBlock
 {
     protected array $defaultDisplayOptions = [
+        'style'                 => 'default',
         'video_url'             => 'assets/videos/your-video.mp4',
         'poster_image'          => 'assets/images/posters/your-poster.webp',
         'title'                 => 'Your Title Here',
