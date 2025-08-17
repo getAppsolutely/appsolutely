@@ -43,49 +43,82 @@ class MediaSliderCarousel {
             // Store reference to this instance for callbacks
             const self = this;
 
-            // Initialize Swiper
-            const swiper = new Swiper('.' + sliderId, {
-                slidesPerView: "auto",
-                spaceBetween: 30,
+            // Detect slider type
+            const isSimpleSlider = sliderElement.closest('.media-slider-simple-container') !== null;
+            const isCarouselSlider = sliderElement.closest('.media-slider-carousel-container') !== null;
+
+            // Base Swiper configuration
+            const swiperConfig = {
                 loop: true,
                 autoplay: {
                     delay: 5000,
                     disableOnInteraction: false,
                 },
-
-                navigation: {
-                    nextEl: '.swiper-button-next[data-slider-id="' + sliderId + '"]',
-                    prevEl: '.swiper-button-prev[data-slider-id="' + sliderId + '"]',
-                },
                 keyboard: {
                     enabled: true,
-                },
-                breakpoints: {
-                    320: {
-                        slidesPerView: 1,
-                        spaceBetween: 10
-                    },
-                    768: {
-                        slidesPerView: 'auto',
-                        spaceBetween: 20
-                    },
-                    1024: {
-                        slidesPerView: 'auto',
-                        spaceBetween: 30
-                    }
                 },
                 on: {
                     init: function() {
                         console.log('Media slider initialized:', sliderId);
-                        self.updateTitleSlider(sliderId, 0);
+                        // Only update title slider if it exists
+                        if (self.hasTitleSlider(sliderId)) {
+                            self.updateTitleSlider(sliderId, 0);
+                        }
                     },
                     slideChange: function() {
                         // Handle slide change events if needed
                         self.pauseAllVideos();
-                        self.updateTitleSlider(sliderId, this.realIndex);
+                        // Only update title slider if it exists
+                        if (self.hasTitleSlider(sliderId)) {
+                            self.updateTitleSlider(sliderId, this.realIndex);
+                        }
                     }
                 }
-            });
+            };
+
+            // Add type-specific configuration
+            if (isSimpleSlider) {
+                // Simple slider configuration
+                Object.assign(swiperConfig, {
+                    slidesPerView: 1,
+                    spaceBetween: 0,
+                    navigation: {
+                        nextEl: '.swiper-button-next[data-slider-id="' + sliderId + '"]',
+                        prevEl: '.swiper-button-prev[data-slider-id="' + sliderId + '"]',
+                    },
+                    pagination: {
+                        el: '.swiper-pagination',
+                        clickable: true,
+                    },
+                });
+            } else {
+                // Carousel slider configuration
+                Object.assign(swiperConfig, {
+                    slidesPerView: "auto",
+                    spaceBetween: 30,
+                    navigation: {
+                        nextEl: '.swiper-button-next[data-slider-id="' + sliderId + '"]',
+                        prevEl: '.swiper-button-prev[data-slider-id="' + sliderId + '"]',
+                    },
+                    breakpoints: {
+                        320: {
+                            slidesPerView: 1,
+                            spaceBetween: 10
+                        },
+                        768: {
+                            slidesPerView: 'auto',
+                            spaceBetween: 20
+                        },
+                        1024: {
+                            slidesPerView: 'auto',
+                            spaceBetween: 30
+                        }
+                    },
+                });
+            }
+
+            // Initialize Swiper
+            const swiper = new Swiper('.' + sliderId, swiperConfig);
 
             // Store swiper instance
             this.swipers.set(sliderId, swiper);
@@ -95,22 +128,50 @@ class MediaSliderCarousel {
         });
     }
 
+    hasTitleSlider(sliderId) {
+        try {
+            const sliderElement = document.querySelector(`[data-slider-id="${sliderId}"]`);
+            if (!sliderElement) return false;
+            
+            const container = sliderElement.closest('.media-slider-carousel-container');
+            if (!container) return false;
+            
+            const titleSlider = container.querySelector('.title-slider');
+            return titleSlider !== null;
+        } catch (error) {
+            console.warn('Error checking for title slider:', error);
+            return false;
+        }
+    }
+
     updateTitleSlider(sliderId, slideIndex) {
-        const titleSlider = document.querySelector(`[data-slider-id="${sliderId}"]`).closest('.media-slider-carousel-container').querySelector('.title-slider');
-        if (!titleSlider) return;
+        try {
+            const sliderElement = document.querySelector(`[data-slider-id="${sliderId}"]`);
+            if (!sliderElement) return;
+            
+            const container = sliderElement.closest('.media-slider-carousel-container');
+            if (!container) return;
+            
+            const titleSlider = container.querySelector('.title-slider');
+            if (!titleSlider) return;
 
-        const titleSlides = titleSlider.querySelectorAll('.title-slide');
-        const totalSlides = titleSlides.length;
+            const titleSlides = titleSlider.querySelectorAll('.title-slide');
+            const totalSlides = titleSlides.length;
 
-        // Remove active class from all slides
-        titleSlides.forEach(slide => {
-            slide.classList.remove('active');
-        });
+            if (totalSlides === 0) return;
 
-        // Add active class to current slide
-        const currentIndex = slideIndex % totalSlides;
-        if (titleSlides[currentIndex]) {
-            titleSlides[currentIndex].classList.add('active');
+            // Remove active class from all slides
+            titleSlides.forEach(slide => {
+                slide.classList.remove('active');
+            });
+
+            // Add active class to current slide
+            const currentIndex = slideIndex % totalSlides;
+            if (titleSlides[currentIndex]) {
+                titleSlides[currentIndex].classList.add('active');
+            }
+        } catch (error) {
+            console.warn('Error updating title slider:', error);
         }
     }
 

@@ -374,3 +374,130 @@
         }
     }
 }
+
+// Simple Media Slider Styles
+.media-slider-simple-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+
+    .swiper {
+        width: 100%;
+        height: 100%;
+        min-height: 400px;
+
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+
+            .media-slide-image,
+            .media-slide-video {
+                width: 100%;
+                height: 100%;
+                position: relative;
+
+                img,
+                video {
+                    display: block;
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
+        }
+
+        // Pagination
+        .swiper-pagination {
+            bottom: 20px;
+
+            .swiper-pagination-bullet {
+                background: #fff;
+                opacity: 0.5;
+
+                &.swiper-pagination-bullet-active {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+
+    // Bottom center navigation controls
+    .simple-slider-controls {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 1rem;
+        z-index: 10;
+
+        .swiper-button-next,
+        .swiper-button-prev {
+            position: static;
+            width: 40px;
+            height: 40px;
+            margin: 0;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:hover {
+                background: rgba(0, 0, 0, 0.8);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            }
+
+            &:active {
+                transform: translateY(0);
+            }
+
+            // Remove default Swiper pseudo-element
+            &::after {
+                display: none;
+            }
+
+            i {
+                font-size: 18px;
+                font-weight: 600;
+            }
+        }
+    }
+}
+
+// Responsive adjustments for simple slider
+@media (max-width: 767.98px) {
+    .media-slider-simple-container {
+        .swiper {
+            min-height: 300px;
+        }
+
+        .simple-slider-controls {
+            bottom: 15px;
+            gap: 0.75rem;
+
+            .swiper-button-next,
+            .swiper-button-prev {
+                width: 36px;
+                height: 36px;
+
+                i {
+                    font-size: 16px;
+                }
+            }
+        }
+
+        .swiper-pagination {
+            bottom: 15px;
+        }
+    }
+}

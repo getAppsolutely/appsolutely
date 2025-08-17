@@ -7,7 +7,7 @@ namespace App\Livewire;
 final class MediaSlider extends BaseBlock
 {
     protected array $defaultDisplayOptions = [
-        'style'       => 'fullscreen', // fullscreen or compact
+        'style'       => 'carousel', // carousel, fullscreen, or simple
         'title'       => 'Media Slider',
         'subtitle'    => 'Media Slider Subtitle',
         'description' => [
@@ -29,5 +29,8 @@ final class MediaSlider extends BaseBlock
                 'subtitle' => 'Slide Subtitle 2',
             ],
         ],
+        'show_controls'   => true,
+        'show_indicators' => true,
+        'autoplay'        => true,
     ];
 }
