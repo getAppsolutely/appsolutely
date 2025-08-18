@@ -40,6 +40,10 @@
     transition: opacity 0.8s ease, transform 0.8s ease;
 
     // Animate children with staggered delays
+    img {
+        width: 20vw;
+    }
+
     h4 {
         @include fade-in-up(0.2s);
     }

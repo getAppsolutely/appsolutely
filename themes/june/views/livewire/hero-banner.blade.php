@@ -24,8 +24,8 @@
                     <div class="container text-center text-white">
                         <div class="row justify-content-center">
                             <div class="col-12 col-lg-8 col-xl-6">
-                                @if(!empty($hero['title']))
-                                    <h4 class="display-6 fw-bold mb-3">{{ $hero['title'] }}</h4>
+                                @if(!empty($hero['model']))
+                                    <img src="{{ asset_server($hero['model']) }}" alt="{{ $hero['title'] }}">
                                 @endif
                                 @if(!empty($hero['subtitle']))
                                     @if(is_string($hero['subtitle']))
