@@ -61,7 +61,7 @@
                                  alt="{{ config('appsolutely.general.site_name') }}"
                                  height="40">
                         @else
-                            <img src="{{ asset_server('assets/images/logo.webp') }}"
+                            <img src="{{ asset_server('assets/images/logo-dark.webp') }}"
                                  alt="{{ config('basic.name') }}"
                                  height="40">
                         @endif
