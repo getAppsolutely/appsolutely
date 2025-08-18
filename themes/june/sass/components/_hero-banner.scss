@@ -50,6 +50,8 @@
 
     p.lead {
         @include fade-in-up(0.4s);
+        font-size: 2vw;
+        font-weight: 500;
     }
 
     .hero-banner-btn {
