@@ -52,28 +52,58 @@
                 </div>
 
             @elseif($displayOptions['layout'] === 'list')
-                <!-- List Layout -->
+                <!-- Two-Column Layout with Dimensions and Drive sections -->
                 <div class="row justify-content-center">
-                    <div class="specification-list col-lg-6">
-                        @foreach($displayOptions['specifications'] as $spec)
-                            <div class="specification-item d-flex align-items-center py-3 border-bottom">
-                                <div class="specification-content flex-grow-1">
-                                    <h6 class="specification-label fw-semibold mb-1">
-                                        @if($spec['icon'] ?? false)
-                                            <i class="{{ $spec['icon'] }} me-2"></i>
-                                        @endif
-                                        {{ $spec['label'] }}
-                                    </h6>
-
-                                    <div class="specification-value">
-                                        {{ $spec['value'] }}
-                                        @if($spec['unit'] ?? false)
-                                            <span class="text-muted">{{ $spec['unit'] }}</span>
-                                        @endif
-                                    </div>
+                    <div class="col">
+                        <div class="row g-4">
+                            <!-- Dimensions Column -->
+                            <div class="col-xl-6">
+                                <div class="specifications-section__column">
+                                    <h4 class="specifications-section__section-title">Dimensions</h4>
+                                    <hr class="specifications-section__divider">
+                                    @if(!empty($displayOptions['dimensions']))
+                                        @foreach($displayOptions['dimensions'] as $spec)
+                                            <div class="specifications-section__row">
+                                                <span class="specifications-section__label">
+                                                    {{ $spec['label'] }}
+                                                </span>
+                                                <span class="specifications-section__value">
+                                                    {{ $spec['value'] }}
+                                                    @if($spec['unit'] ?? false)
+                                                        <span class="specifications-section__value--unit">{{ $spec['unit'] }}</span>
+                                                    @endif
+                                                </span>
+                                            </div>
+                                            <hr class="specifications-section__divider">
+                                        @endforeach
+                                    @endif
                                 </div>
                             </div>
-                        @endforeach
+
+                            <!-- Drive Column -->
+                            <div class="col-xl-6">
+                                <div class="specifications-section__column">
+                                    <h4 class="specifications-section__section-title">Drive</h4>
+                                    <hr class="specifications-section__divider">
+                                    @if(!empty($displayOptions['specifications']))
+                                        @foreach($displayOptions['specifications'] as $spec)
+                                            <div class="specifications-section__row">
+                                                <span class="specifications-section__label">
+                                                    {{ $spec['label'] }}
+                                                </span>
+                                                <span class="specifications-section__value">
+                                                    {{ $spec['value'] }}
+                                                    @if($spec['unit'] ?? false)
+                                                        <span class="specifications-section__value--unit">{{ $spec['unit'] }}</span>
+                                                    @endif
+                                                </span>
+                                            </div>
+                                            <hr class="specifications-section__divider">
+                                        @endforeach
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             @else
