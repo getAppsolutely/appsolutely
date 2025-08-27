@@ -274,7 +274,7 @@
 }
 
 // Responsive adjustments
-@media (max-width: 991.98px) {
+@include media-breakpoint-down(lg) {
     .media-slider-carousel-container {
         .media-slider-header {
             .media-slider-title {
@@ -324,7 +324,7 @@
     }
 }
 
-@media (max-width: 767.98px) {
+@include media-breakpoint-down(md) {
     .media-slider-carousel-container {
         .media-slider-header {
             margin-bottom: 1.5rem;
@@ -489,7 +489,7 @@
 }
 
 // Responsive adjustments for simple slider
-@media (max-width: 767.98px) {
+@include media-breakpoint-down(md) {
     .media-slider-simple-container {
         .swiper {
             min-height: 300px;

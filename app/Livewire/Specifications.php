@@ -26,6 +26,16 @@ final class Specifications extends BaseBlock
                 'value' => '',
             ],
         ],
+        'drives' => [
+            [
+                'label' => 'Power',
+                'value' => '',
+            ],
+            [
+                'label' => 'Torque',
+                'value' => '',
+            ],
+        ],
         'specifications' => [
             [
                 'label' => 'Front Exterior',
