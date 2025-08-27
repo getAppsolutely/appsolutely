@@ -13,8 +13,10 @@
                              alt="{{ $slide['title'] ?? '' }}">
                     @endif
                     <div class="carousel-caption d-none d-md-block media-slider-caption">
-                        @if(!empty($slide['title']))
-                            <h2 class="display-4 fw-bold">{{ $slide['title'] }}</h2>
+                        @if(!empty($slide['model']) && !empty($slide['title']))
+                            <img src="{{ asset_server($slide['model']) }}" alt="{{ $slide['title'] }}" class="mb-4">
+                        @elseif(empty($slide['model']) && !empty($slide['title']))
+                            <h2 class="display-6 fw-bold mb-3">{{ $slide['title'] }}</h2>
                         @endif
                         @if(!empty($slide['subtitle']))
                             <p class="lead">{{ $slide['subtitle'] }}</p>
