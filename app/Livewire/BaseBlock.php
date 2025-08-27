@@ -16,6 +16,8 @@ abstract class BaseBlock extends Component
 
     public array $displayOptions = [];
 
+    public string $style = 'default';
+
     public array $queryOptions = [];
 
     protected array $defaultDisplayOptions = [];
@@ -51,6 +53,7 @@ abstract class BaseBlock extends Component
         $displayOptions       = $this->displayOptions ?? ($data['display_options'] ?? []);
         $this->queryOptions   =  $this->mergeByKey($this->defaultQueryOptions, $queryOptions);
         $this->displayOptions =  $this->mergeByKey($this->defaultDisplayOptions, $displayOptions);
+        $this->style          = $displayOptions['style'] ?? $this->style;
         $this->initializeComponent();
         $this->initializePublishDates();
     }
@@ -125,10 +128,8 @@ abstract class BaseBlock extends Component
             $className      = class_basename($this);
             $baseViewName   = \Str::kebab($className);
 
-            // Check if there's a style specified in displayOptions
-            $style = $this->getData('style');
-            if ($style && $style !== 'default') {
-                $styleViewName = $baseViewName . '_' . $style;
+            if ($this->style && $this->style !== 'default') {
+                $styleViewName = $baseViewName . '_' . $this->style;
                 // Check if the style-specific view exists in the current theme
                 $themedStyleView = themed_path() . '/views/livewire/' . $styleViewName . '.blade.php';
                 if (file_exists(base_path($themedStyleView))) {

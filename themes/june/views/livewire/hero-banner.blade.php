@@ -1,7 +1,7 @@
 <div>
     @if (!empty($displayOptions['heroes']))
         @foreach($displayOptions['heroes'] as $hero)
-            <div class="hero-banner {{ @$displayOptions['style'] }}">
+            <div class="hero-banner {{ @$style }}">
                 @if(($hero['type'] ?? 'image') === 'video')
                     <div class="hero-video-container position-absolute top-0 start-0 w-100 h-100">
                         <video class="w-100 h-100 object-fit-cover" controls loading="lazy">
@@ -10,7 +10,7 @@
                         </video>
                     </div>
                 @else
-                    @if($displayOptions['style'] == 'fullscreen')
+                    @if($style == 'fullscreen')
                         <div class="hero-image-container"
                              style="background-image: url('{{ asset_server($hero['url']) }}');">
                         </div>

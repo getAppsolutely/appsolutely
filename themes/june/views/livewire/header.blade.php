@@ -17,7 +17,7 @@
                 </a>
             </div>
 
-            <label for="header-mobile-toggle" class="navbar-toggler d-xl-none ms-2 mb-0" aria-label="Toggle navigation" tabindex="0">
+            <label for="header-mobile-toggle" class="navbar-toggler bg-white d-xl-none ms-2 mb-0" aria-label="Toggle navigation" tabindex="0">
                 <span class="navbar-toggler-icon"></span>
             </label>
 
