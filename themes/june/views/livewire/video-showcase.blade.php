@@ -77,4 +77,7 @@
             </div>
         </div>
     </div>
+    @include('components.overseas-model-notice', [
+        'show' => !empty($displayOptions['flag_overseas'])
+    ])
 </section>

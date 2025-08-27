@@ -52,6 +52,10 @@
                 <!-- Optional Overlay for better text readability -->
                 <div class="hero-overlay position-absolute top-0 start-0 w-100 h-100"
                      style="opacity: 0.3; z-index: 1;"></div>
+
+                @include('components.overseas-model-notice', [
+                    'show' => !empty($hero['flag_overseas'])
+                ])
             </div>
         @endforeach
     @endif

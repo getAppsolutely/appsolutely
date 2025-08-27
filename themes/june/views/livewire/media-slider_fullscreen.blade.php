@@ -28,6 +28,11 @@
                             </a>
                         @endif
                     </div>
+
+                    <!-- Overseas model notice -->
+                    @include('components.overseas-model-notice', [
+                        'show' => !empty($slide['flag_overseas'])
+                    ])
                 </div>
             @endforeach
         @endif
