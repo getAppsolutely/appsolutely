@@ -113,14 +113,14 @@
                                                     <i class="{{ $child->icon }} me-2"></i>
                                                 @endif
                                                 @if($child->thumbnail)
-                                                    <span class="d-inline-block position-relative">
-                                                        <img class="" src="{{ asset_server($child->thumbnail) }}" alt="{{ $child->title }}">
+                                                    <span class="d-block position-relative">
+                                                        <img class="" src="{{ asset_server($child->thumbnail) }}" alt="{{ $child->title }}" style="width: 100%">
                                                         @if(($child->setting['flag_coming_soon'] ?? '') === 'true')
-                                                            <img src="{{ themed_assets('/images/coming.png') }}" alt="Coming soon" class="position-absolute coming-ribbon" style="top: -6px; right: -6px; width: 48px;">
+                                                            <img src="{{ themed_assets('/images/coming.png') }}" alt="Coming soon" class="position-absolute coming-ribbon" style="top: 48px; right: -6px; width: 48px;">
                                                         @endif
                                                     </span>
                                                 @endif
-                                                {{ $child->title }}
+                                                <span class="d-inline-block">{{ $child->title }}</span>
                                             </a>
                                         </li>
                                     @endforeach
