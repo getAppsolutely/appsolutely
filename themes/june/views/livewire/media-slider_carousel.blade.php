@@ -63,7 +63,7 @@
 
     {{-- Swiper Carousel --}}
     @if(!empty($displayOptions['slides']))
-        <div class="ms-5 swiper {{ $sliderId }}" data-slider-id="{{ $sliderId }}">
+        <div class="container swiper {{ $sliderId }}" data-slider-id="{{ $sliderId }}">
             <div class="swiper-wrapper">
                 @foreach($displayOptions['slides'] as $index => $slide)
                     <div class="swiper-slide">
