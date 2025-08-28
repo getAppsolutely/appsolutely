@@ -4,7 +4,7 @@
  */
 
 (() => {
-    const featuresSections = document.querySelectorAll('.features, .features-fullscreen');
+    const featuresSections = document.querySelectorAll('.features, .features-fullscreen, .features-fashionable');
     
     if (!featuresSections.length) return;
 
@@ -21,8 +21,8 @@
                 entry.target.classList.add('in-view');
                 
                 // Trigger staggered animations for title and descriptions
-                const title = entry.target.querySelector('.features__title, .features-fullscreen__title');
-                const descriptions = entry.target.querySelectorAll('.features__description, .features-fullscreen__description');
+                const title = entry.target.querySelector('.features__title, .features-fullscreen__title, .features-fashionable__title');
+                const descriptions = entry.target.querySelectorAll('.features__description, .features-fullscreen__description, .features-fashionable__description');
                 
                 if (title) {
                     title.classList.add('animate');
@@ -39,8 +39,8 @@
                 entry.target.classList.remove('in-view');
                 
                 // Reset animation classes
-                const title = entry.target.querySelector('.features__title, .features-fullscreen__title');
-                const descriptions = entry.target.querySelectorAll('.features__description, .features-fullscreen__description');
+                const title = entry.target.querySelector('.features__title, .features-fullscreen__title, .features-fashionable__title');
+                const descriptions = entry.target.querySelectorAll('.features__description, .features-fullscreen__description, .features-fashionable__description');
                 
                 if (title) {
                     title.classList.remove('animate');
