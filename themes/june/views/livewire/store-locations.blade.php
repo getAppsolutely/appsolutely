@@ -51,10 +51,10 @@
 
                                     <div class="store-info mb-4">
                                         <div class="d-flex align-items-start mb-2">
-                                            <i class="fas fa-map-marker-alt text-muted me-3 mt-1"></i>
+                                            <i class="fas bi bi-geo-alt-fill text-muted me-2"></i>
                                             <div class="flex-grow-1">
                                                 <div class="fw-medium">{{ $location['address'] }}</div>
-                                                <div class="text-muted small">
+                                                <div class="text-muted small d-none">
                                                     @if($location['city'] ?? false){{ $location['city'] }}@endif@if($location['state'] ?? false), {{ $location['state'] }}@endif@if($location['zip_code'] ?? false) {{ $location['zip_code'] }}@endif
                                                 </div>
                                             </div>
@@ -62,15 +62,50 @@
 
                                         @if($location['phone'] ?? false)
                                             <div class="d-flex align-items-center mb-2">
-                                                <i class="fas fa-phone text-muted me-3"></i>
+                                                <i class="fas bi-telephone-fill text-muted me-2"></i>
                                                 <a href="tel:{{ $location['phone'] }}" class="text-decoration-none text-dark fw-medium">{{ $location['phone'] }}</a>
                                             </div>
                                         @endif
 
                                         @if($location['hours'] ?? false)
+                                            <div class="small mb-1 fw-semibold">Vehicle Sales</div>
+                                            @php($__hoursLines = preg_split('/\s*,\s*/', $location['hours']))
                                             <div class="d-flex align-items-start mb-3">
-                                                <i class="fas fa-clock text-muted me-3 mt-1"></i>
-                                                <div class="small text-muted lh-sm">{{ $location['hours'] }}</div>
+                                                <i class="fas bi-clock-fill text-muted me-2"></i>
+                                                <div class="small text-muted w-100">
+                                                    <table class="table table-sm table-borderless mb-0 align-middle w-auto">
+                                                        <tbody>
+                                                        @foreach($__hoursLines as $__line)
+                                                            @php($__parts = explode(':', $__line, 2))
+                                                            <tr>
+                                                                <td class="pe-2 text-nowrap">{{ trim($__parts[0] ?? '') }}</td>
+                                                                <td class="ps-2 text-muted">{{ trim($__parts[1] ?? '') }}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        @endif
+
+                                        @if($location['service_hours'] ?? false)
+                                            <div class="small mb-1 fw-semibold">Servicing & Parts</div>
+                                            @php($__hoursLines = preg_split('/\s*,\s*/', $location['service_hours']))
+                                            <div class="d-flex align-items-start mb-3">
+                                                <i class="fas bi-clock-fill text-muted me-2"></i>
+                                                <div class="small text-muted w-100">
+                                                    <table class="table table-sm table-borderless mb-0 align-middle w-auto">
+                                                        <tbody>
+                                                        @foreach($__hoursLines as $__line)
+                                                            @php($__parts = explode(':', $__line, 2))
+                                                            <tr>
+                                                                <td class="pe-2 text-nowrap">{{ trim($__parts[0] ?? '') }}</td>
+                                                                <td class="ps-2 text-muted">{{ trim($__parts[1] ?? '') }}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         @endif
                                     </div>
@@ -141,9 +176,23 @@
                                                     @endif
 
                                                     @if($location['hours'] ?? false)
+                                                        <div class="small text-muted mb-1 fw-semibold">Vehicle Sales</div>
+                                                        @php($__hoursLines = preg_split('/\s*,\s*/', $location['hours']))
                                                         <div class="d-flex align-items-start">
                                                             <i class="fas fa-clock text-muted me-3 mt-1"></i>
-                                                            <div class="small text-muted lh-sm">{{ $location['hours'] }}</div>
+                                                            <div class="small text-muted lh-sm w-100">
+                                                                <table class="table table-sm table-borderless mb-0 align-middle w-auto">
+                                                                    <tbody>
+                                                                    @foreach($__hoursLines as $__line)
+                                                                        @php($__parts = explode(':', $__line, 2))
+                                                                        <tr>
+                                                                            <td class="pe-2 fw-semibold text-nowrap">{{ trim($__parts[0] ?? '') }}</td>
+                                                                            <td class="ps-2 text-muted">{{ trim($__parts[1] ?? '') }}</td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
                                                         </div>
                                                     @endif
                                                 </div>
@@ -210,7 +259,13 @@
                                         </td>
                                         <td>
                                             @if($location['hours'] ?? false)
-                                                <small>{{ $location['hours'] }}</small>
+                                                @php($__hoursLines = preg_split('/\s*,\s*/', $location['hours']))
+                                                <small>
+                                                    @foreach($__hoursLines as $__line)
+                                                        @php($__parts = explode(':', $__line, 2))
+                                                        <div><span class="me-2">{{ trim($__parts[0] ?? '') }}:</span>{{ trim($__parts[1] ?? '') }}</div>
+                                                    @endforeach
+                                                </small>
                                             @else
                                                 -
                                             @endif
