@@ -64,5 +64,17 @@ class AppServiceProvider extends ServiceProvider
             return $route->uri() === config('admin.route.prefix') . '/files';
         })->first();
         $matched?->uses('App\Admin\Controllers\Api\FileController@upload')->name('api.files.upload');
+
+        Route::macro('localized', function (\Closure $callback) {
+            if (config('app.localization', false)) {
+                // Apply localization when enabled
+                Route::prefix(\LaravelLocalization::setLocale())
+                    ->middleware(['localeCookieRedirect', 'localizationRedirect', 'localeViewPath'])
+                    ->group($callback);
+            } else {
+                // No localization when disabled
+                Route::group([], $callback);
+            }
+        });
     }
 }
