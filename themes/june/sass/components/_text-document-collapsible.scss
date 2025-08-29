@@ -1,0 +1,217 @@
+// Text Document Collapsible Component
+// BEM Methodology: Block__Element--Modifier
+
+.text-document-collapsible {
+
+
+    &__container {
+        background: #ffffff;
+        border: 1px solid $gray-400;
+        border-radius: $border-radius-lg;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        overflow: hidden;
+        transition: all 0.3s ease;
+
+        &:hover {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            border-color: $gray-500;
+        }
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: $spacer * 1.25;
+        background: $gray-100;
+        border-bottom: 1px solid $gray-300;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        user-select: none;
+
+        &:hover {
+            background: $gray-200;
+        }
+
+        &:focus {
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba($gray-200, 0.25);
+        }
+
+        // Active state when expanded
+        &[aria-expanded="true"] {
+            background: $gray-200;
+            color: #ffffff;
+            border-color: $gray-200;
+
+            .text-document-collapsible__title,
+            .text-document-collapsible__subtitle {
+                color: #ffffff;
+            }
+
+            .text-document-collapsible__arrow {
+                transform: rotate(180deg);
+
+                i {
+                    color: #ffffff;
+                }
+            }
+        }
+    }
+
+    &__header-content {
+        flex: 1;
+        min-width: 0; // Prevents flex item from overflowing
+    }
+
+    &__title {
+        color: $gray-900;
+        margin-bottom: $spacer * 0.25;
+        transition: color 0.3s ease;
+    }
+
+    &__subtitle {
+        color: $gray-600;
+        margin-bottom: 0;
+        transition: color 0.3s ease;
+    }
+
+    &__arrow {
+        flex-shrink: 0;
+        margin-left: $spacer;
+        transition: transform 0.3s ease;
+
+        i {
+            font-size: 1.25rem;
+            color: $gray-800;
+            transition: color 0.3s ease;
+        }
+    }
+
+    &__content {
+        // Bootstrap collapse animation
+        transition: height 0.3s ease;
+    }
+
+    &__body {
+        padding: $spacer * 1.25;
+        background: #ffffff;
+    }
+
+    &__meta {
+        font-size: $font-size-sm;
+        line-height: 1.5;
+
+        i {
+            width: 1rem;
+            text-align: center;
+        }
+    }
+
+    &__content-body {
+        line-height: 1.6;
+        color: $gray-700;
+
+        p {
+            margin-bottom: $spacer * 0.75;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    // Responsive adjustments
+    @include media-breakpoint-down(md) {
+        &__header {
+            padding: $spacer;
+        }
+
+        &__body {
+            padding: $spacer;
+        }
+
+        &__title {
+            font-size: $h5-font-size;
+        }
+
+        &__subtitle {
+            font-size: $font-size-sm;
+        }
+    }
+
+    // Dark mode support
+    [data-bs-theme="dark"] & {
+        &__container {
+            background: $dark;
+            border-color: $gray-700;
+            color: $light;
+        }
+
+        &__header {
+            background: $gray-800;
+            border-color: $gray-700;
+            color: $light;
+
+            &:hover {
+                background: $gray-700;
+            }
+        }
+
+        &__body {
+            background: $dark;
+            color: $light;
+        }
+
+        &__title {
+            color: $light;
+        }
+
+        &__subtitle {
+            color: $gray-400;
+        }
+
+        &__content-body {
+            color: $light;
+        }
+    }
+
+    // Animation for smooth transitions
+    &__container {
+        .collapse {
+            &:not(.show) {
+                display: none;
+            }
+        }
+
+        .collapsing {
+            height: 0;
+            overflow: hidden;
+            transition: height 0.3s ease;
+        }
+    }
+
+    // Focus management for accessibility
+    &__header:focus-visible {
+        outline: 2px solid $gray-200;
+        outline-offset: 2px;
+    }
+
+    // Print styles
+    @media print {
+        &__header {
+            cursor: default;
+            background: $gray-100 !important;
+            color: $gray-900 !important;
+        }
+
+        &__content {
+            display: block !important;
+            height: auto !important;
+        }
+
+        &__arrow {
+            display: none;
+        }
+    }
+}
