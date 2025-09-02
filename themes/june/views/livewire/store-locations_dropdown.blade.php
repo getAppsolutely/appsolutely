@@ -65,29 +65,34 @@
                                         <div class="location-info mb-4">
                                             <!-- Address -->
                                             <div class="d-flex align-items-start mb-3">
-                                                <i class="fas fa-map-marker-alt text-muted me-3 mt-1"></i>
+                                                <i class="fas bi-geo-alt-fill text-muted me-2"></i>
                                                 <div class="flex-grow-1">
                                                     <div id="selected-location-address" class="fw-medium"></div>
-                                                    <div id="selected-location-city" class="text-muted small"></div>
                                                 </div>
                                             </div>
 
                                             <!-- Phone -->
                                             <div id="phone-section" class="d-flex align-items-center mb-3" style="display: none !important;">
-                                                <i class="fas fa-phone text-muted me-3"></i>
+                                                <i class="fas bi-telephone-fill text-muted me-2"></i>
                                                 <a id="selected-location-phone" href="#" class="text-decoration-none text-dark fw-medium"></a>
                                             </div>
 
                                             <!-- Email -->
                                             <div id="email-section" class="d-flex align-items-center mb-3" style="display: none !important;">
-                                                <i class="fas fa-envelope text-muted me-3"></i>
+                                                <i class="fas fa-envelope text-muted me-2"></i>
                                                 <a id="selected-location-email" href="#" class="text-decoration-none text-dark fw-medium"></a>
                                             </div>
 
                                             <!-- Website -->
                                             <div id="website-section" class="d-flex align-items-center mb-3" style="display: none !important;">
-                                                <i class="fas fa-globe text-muted me-3"></i>
+                                                <i class="fas fa-globe text-muted me-2"></i>
                                                 <a id="selected-location-website" href="#" target="_blank" class="text-decoration-none text-dark fw-medium"></a>
+                                            </div>
+
+                                            <!-- Services -->
+                                            <div id="services-section" class="mb-4" style="display: none !important;">
+                                                <div class="small text-muted mb-2 fw-semibold">Available Services</div>
+                                                <div id="selected-location-services" class="d-flex flex-wrap gap-1"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -95,26 +100,12 @@
                                     <div class="col-lg-6">
                                         <!-- Hours -->
                                         <div id="hours-section" class="mb-4" style="display: none !important;">
-                                            <div class="small text-muted mb-2 fw-semibold">Operating Hours</div>
-                                            <div class="d-flex align-items-start">
-                                                <i class="fas fa-clock text-muted me-3 mt-1"></i>
-                                                <div id="selected-location-hours" class="small text-muted lh-sm w-100"></div>
-                                            </div>
+                                            <div id="selected-location-hours"></div>
                                         </div>
 
                                         <!-- Service Hours -->
                                         <div id="service-hours-section" class="mb-4" style="display: none !important;">
-                                            <div class="small text-muted mb-2 fw-semibold">Service Hours</div>
-                                            <div class="d-flex align-items-start">
-                                                <i class="fas fa-wrench text-muted me-3 mt-1"></i>
-                                                <div id="selected-location-service-hours" class="small text-muted lh-sm w-100"></div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Services -->
-                                        <div id="services-section" class="mb-4" style="display: none !important;">
-                                            <div class="small text-muted mb-2 fw-semibold">Available Services</div>
-                                            <div id="selected-location-services" class="d-flex flex-wrap gap-1"></div>
+                                            <div id="selected-location-service-hours"></div>
                                         </div>
                                     </div>
                                 </div>
