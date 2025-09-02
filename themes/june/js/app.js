@@ -14,3 +14,4 @@ import './components/video-showcase.js';
 import './components/media-slider.js';
 import './components/features.js';
 import './components/text-document-collapsible.js';
+import './components/store-locations-dropdown.js';
