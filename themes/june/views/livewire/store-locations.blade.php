@@ -79,7 +79,7 @@
                                                             @php($__parts = explode(':', $__line, 2))
                                                             <tr>
                                                                 <td class="pe-2 text-nowrap">{{ trim($__parts[0] ?? '') }}</td>
-                                                                <td class="ps-2 text-muted">{{ trim($__parts[1] ?? '') }}</td>
+                                                                <td class="ps-2 text-muted">{{ str_replace(':00', '', strtolower(trim($__parts[1] ?? ''))) }}</td>
                                                             </tr>
                                                         @endforeach
                                                         </tbody>
@@ -100,7 +100,7 @@
                                                             @php($__parts = explode(':', $__line, 2))
                                                             <tr>
                                                                 <td class="pe-2 text-nowrap">{{ trim($__parts[0] ?? '') }}</td>
-                                                                <td class="ps-2 text-muted">{{ trim($__parts[1] ?? '') }}</td>
+                                                                <td class="ps-2 text-muted">{{ str_replace(':00', '', strtolower(trim($__parts[1] ?? ''))) }}</td>
                                                             </tr>
                                                         @endforeach
                                                         </tbody>
