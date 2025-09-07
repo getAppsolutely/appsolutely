@@ -15,3 +15,4 @@ import './components/media-slider.js';
 import './components/features.js';
 import './components/text-document-collapsible.js';
 import './components/store-locations-dropdown.js';
+import './components/photo-gallery.js';
