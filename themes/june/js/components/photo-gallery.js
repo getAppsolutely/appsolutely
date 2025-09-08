@@ -21,10 +21,21 @@ document.addEventListener('DOMContentLoaded', () => {
         return [];
     };
 
-    // Build unique filter set
-    const tagSet = new Set();
-    photos.forEach(p => toTags(p).forEach(t => tagSet.add(t)));
-    const tags = Array.from(tagSet).sort();
+    // Build category order based on first occurrence in photos array
+    const categoryOrder = [];
+    const seenCategories = new Set();
+    
+    photos.forEach(photo => {
+        const categories = toTags(photo);
+        categories.forEach(category => {
+            if (!seenCategories.has(category)) {
+                categoryOrder.push(category);
+                seenCategories.add(category);
+            }
+        });
+    });
+
+    const tags = categoryOrder;
 
     const filtersEl = document.getElementById('gallery-filters');
     const cardTpl = document.getElementById('gallery-card-template');
@@ -75,10 +86,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const renderGrid = (filter = 'all') => {
         grid.innerHTML = '';
-        const list = filter === 'all' ? photos : photos.filter(p => {
+        let list = filter === 'all' ? photos : photos.filter(p => {
             const t = toTags(p);
             return t.includes(filter);
         });
+        
+        // Sort photos by category order when displaying
+        list = list.sort((a, b) => {
+            const aCategory = a.category || '';
+            const bCategory = b.category || '';
+            const aIndex = categoryOrder.indexOf(aCategory);
+            const bIndex = categoryOrder.indexOf(bCategory);
+            
+            // If both are in the defined order, sort by their position
+            if (aIndex !== -1 && bIndex !== -1) {
+                return aIndex - bIndex;
+            }
+            // If only one is in the defined order, prioritize it
+            if (aIndex !== -1) return -1;
+            if (bIndex !== -1) return 1;
+            // If neither is in the defined order, sort alphabetically
+            return aCategory.localeCompare(bCategory);
+        });
+        
         list.forEach(p => grid.appendChild(buildCard(p)));
     };
 
