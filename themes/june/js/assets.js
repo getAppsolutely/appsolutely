@@ -7,11 +7,13 @@
 
 // Import images that should be emitted by Vite
 import '../images/coming.png';
+import '../images/rednote.svg';
 
 // Export asset paths for use in components if needed
 export const assets = {
     images: {
         coming: '../images/coming.png',
+        rednote: '../images/rednote.svg',
     },
 };
 

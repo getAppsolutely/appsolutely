@@ -66,3 +66,12 @@
     @extend .btn-outline-light-primary;
     margin-top: 1.5rem;
 }
+
+.icon-rednote {
+    display: inline-block;
+    width: 1.125rem !important;  // 18px to match Bootstrap Icons width
+    height: 1.125rem !important;  // 18px to match Bootstrap Icons height
+    vertical-align: -.125em;  // Match Bootstrap Icons vertical alignment
+    background: url('../images/rednote.svg') no-repeat center center;
+    background-size: contain;
+}

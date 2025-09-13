@@ -35,8 +35,15 @@ final class MenuRepository extends BaseRepository
         return $activeMenus->toTree();
     }
 
-    public function findByReference(string $reference): ?Menu
+    public function findByReference(string $reference, bool $status = true): ?Menu
     {
-        return $this->model->with(['children'])->where('reference', $reference)->first();
+        return $this->model
+            ->with([
+                'children' => function ($query) use ($status) {
+                    $query->where('status', $status);
+                },
+            ])
+            ->where('reference', $reference)
+            ->first();
     }
 }
