@@ -29,102 +29,112 @@
                 <!-- Grid Layout -->
                 <div class="row g-4">
                     @foreach($displayOptions['locations'] as $location)
-                        <div class="col-lg-{{ 12 / $displayOptions['columns'] }} col-md-6 mb-4">
-                            <div class="store-card h-100 card border-0 shadow-lg position-relative
+                        @if($location['show'] ?? false)
+                            <div class="col-lg-{{ 12 / $displayOptions['columns'] }} col-md-6 mb-4">
+                                <div class="store-card h-100 card border-0 shadow-lg position-relative
                                 {{ ($location['featured'] ?? false) ? 'border-2 border-dark' : '' }}">
 
-                                @if($location['featured'] ?? false)
-                                    <div class="position-absolute top-0 end-0 m-3">
+                                    @if($location['featured'] ?? false)
+                                        <div class="position-absolute top-0 end-0 m-3">
                                         <span class="badge bg-dark text-white fs-6 px-3 py-2">
                                             <i class="fas fa-star me-1"></i>Featured
                                         </span>
-                                    </div>
-                                @endif
-
-                                <div class="card-body p-4">
-                                    <div class="mb-3">
-                                        <h5 class="store-name fw-bold text-dark mb-1">{{ $location['name'] }}</h5>
-                                        @if($location['type'] ?? false)
-                                            <p class="text-muted small mb-0 text-uppercase fw-semibold">{{ $location['type'] }}</p>
-                                        @endif
-                                    </div>
-
-                                    <div class="store-info mb-4">
-                                        <div class="d-flex align-items-start mb-2">
-                                            <i class="fas bi bi-geo-alt-fill text-muted me-2"></i>
-                                            <div class="flex-grow-1">
-                                                <div class="fw-medium">{{ $location['address'] }}</div>
-                                                <div class="text-muted small d-none">
-                                                    @if($location['city'] ?? false){{ $location['city'] }}@endif@if($location['state'] ?? false), {{ $location['state'] }}@endif@if($location['zip_code'] ?? false) {{ $location['zip_code'] }}@endif
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        @if($location['phone'] ?? false)
-                                            <div class="d-flex align-items-center mb-2">
-                                                <i class="fas bi-telephone-fill text-muted me-2"></i>
-                                                <a href="tel:{{ $location['phone'] }}" class="text-decoration-none text-dark fw-medium">{{ $location['phone'] }}</a>
-                                            </div>
-                                        @endif
-
-                                        @if($location['hours'] ?? false)
-                                            <div class="small mb-1 fw-semibold">Vehicle Sales</div>
-                                            @php($__hoursLines = preg_split('/\s*,\s*/', $location['hours']))
-                                            <div class="d-flex align-items-start mb-3">
-                                                <i class="fas bi-clock-fill text-muted me-2"></i>
-                                                <div class="small text-muted w-100">
-                                                    <table class="table table-sm table-borderless mb-0 align-middle w-auto">
-                                                        <tbody>
-                                                        @foreach($__hoursLines as $__line)
-                                                            @php($__parts = explode(':', $__line, 2))
-                                                            <tr>
-                                                                <td class="pe-2 text-nowrap">{{ trim($__parts[0] ?? '') }}</td>
-                                                                <td class="ps-2 text-muted">{{ str_replace(':00', '', strtolower(trim($__parts[1] ?? ''))) }}</td>
-                                                            </tr>
-                                                        @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        @endif
-
-                                        @if($location['service_hours'] ?? false)
-                                            <div class="small mb-1 fw-semibold">Servicing & Parts</div>
-                                            @php($__hoursLines = preg_split('/\s*,\s*/', $location['service_hours']))
-                                            <div class="d-flex align-items-start mb-3">
-                                                <i class="fas bi-clock-fill text-muted me-2"></i>
-                                                <div class="small text-muted w-100">
-                                                    <table class="table table-sm table-borderless mb-0 align-middle w-auto">
-                                                        <tbody>
-                                                        @foreach($__hoursLines as $__line)
-                                                            @php($__parts = explode(':', $__line, 2))
-                                                            <tr>
-                                                                <td class="pe-2 text-nowrap">{{ trim($__parts[0] ?? '') }}</td>
-                                                                <td class="ps-2 text-muted">{{ str_replace(':00', '', strtolower(trim($__parts[1] ?? ''))) }}</td>
-                                                            </tr>
-                                                        @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    </div>
-
-                                    @if(!empty($location['services']))
-                                        <div class="services mb-4">
-                                            <div class="small text-muted mb-2 fw-semibold">Available Services:</div>
-                                            <div class="d-flex flex-wrap gap-1">
-                                                @foreach($location['services'] as $service)
-                                                    <span class="badge bg-light text-dark border">{{ $service }}</span>
-                                                @endforeach
-                                            </div>
                                         </div>
                                     @endif
 
+                                    <div class="card-body p-4">
+                                        <div class="mb-3">
+                                            <h5 class="store-name fw-bold text-dark mb-1">{{ $location['name'] }}</h5>
+                                            @if($location['type'] ?? false)
+                                                <p class="text-muted small mb-0 text-uppercase fw-semibold">{{ $location['type'] }}</p>
+                                            @endif
+                                        </div>
 
+                                        <div class="store-info mb-4">
+                                            <div class="d-flex align-items-start mb-2">
+                                                <i class="fas bi bi-geo-alt-fill text-muted me-2"></i>
+                                                <div class="flex-grow-1">
+                                                    <div class="fw-medium">{{ $location['address'] }}</div>
+                                                    <div class="text-muted small d-none">
+                                                        @if($location['city'] ?? false)
+                                                            {{ $location['city'] }}
+                                                        @endif@if($location['state'] ?? false)
+                                                            , {{ $location['state'] }}
+                                                        @endif@if($location['zip_code'] ?? false)
+                                                            {{ $location['zip_code'] }}
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            @if($location['phone'] ?? false)
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <i class="fas bi-telephone-fill text-muted me-2"></i>
+                                                    <a href="tel:{{ $location['phone'] }}"
+                                                       class="text-decoration-none text-dark fw-medium">{{ $location['phone'] }}</a>
+                                                </div>
+                                            @endif
+
+                                            @if($location['hours'] ?? false)
+                                                <div class="small mb-1 fw-semibold">Vehicle Sales</div>
+                                                @php($__hoursLines = preg_split('/\s*,\s*/', $location['hours']))
+                                                <div class="d-flex align-items-start mb-3">
+                                                    <i class="fas bi-clock-fill text-muted me-2"></i>
+                                                    <div class="small text-muted w-100">
+                                                        <table
+                                                            class="table table-sm table-borderless mb-0 align-middle w-auto">
+                                                            <tbody>
+                                                            @foreach($__hoursLines as $__line)
+                                                                @php($__parts = explode(':', $__line, 2))
+                                                                <tr>
+                                                                    <td class="pe-2 text-nowrap">{{ trim($__parts[0] ?? '') }}</td>
+                                                                    <td class="ps-2 text-muted">{{ str_replace(':00', '', strtolower(trim($__parts[1] ?? ''))) }}</td>
+                                                                </tr>
+                                                            @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            @endif
+
+                                            @if($location['service_hours'] ?? false)
+                                                <div class="small mb-1 fw-semibold">Servicing & Parts</div>
+                                                @php($__hoursLines = preg_split('/\s*,\s*/', $location['service_hours']))
+                                                <div class="d-flex align-items-start mb-3">
+                                                    <i class="fas bi-clock-fill text-muted me-2"></i>
+                                                    <div class="small text-muted w-100">
+                                                        <table
+                                                            class="table table-sm table-borderless mb-0 align-middle w-auto">
+                                                            <tbody>
+                                                            @foreach($__hoursLines as $__line)
+                                                                @php($__parts = explode(':', $__line, 2))
+                                                                <tr>
+                                                                    <td class="pe-2 text-nowrap">{{ trim($__parts[0] ?? '') }}</td>
+                                                                    <td class="ps-2 text-muted">{{ str_replace(':00', '', strtolower(trim($__parts[1] ?? ''))) }}</td>
+                                                                </tr>
+                                                            @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+
+                                        @if(!empty($location['services']))
+                                            <div class="services mb-4">
+                                                <div class="small text-muted mb-2 fw-semibold">Available Services:</div>
+                                                <div class="d-flex flex-wrap gap-1">
+                                                    @foreach($location['services'] as $service)
+                                                        <span
+                                                            class="badge bg-light text-dark border">{{ $service }}</span>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
                     @endforeach
                 </div>
 
@@ -163,7 +173,11 @@
                                                         <div class="flex-grow-1">
                                                             <div class="fw-medium">{{ $location['address'] }}</div>
                                                             <div class="text-muted small">
-                                                                @if($location['city'] ?? false){{ $location['city'] }}@endif@if($location['state'] ?? false), {{ $location['state'] }}@endif
+                                                                @if($location['city'] ?? false)
+                                                                    {{ $location['city'] }}
+                                                                @endif@if($location['state'] ?? false)
+                                                                    , {{ $location['state'] }}
+                                                                @endif
                                                             </div>
                                                         </div>
                                                     </div>
@@ -171,17 +185,20 @@
                                                     @if($location['phone'] ?? false)
                                                         <div class="d-flex align-items-center mb-3">
                                                             <i class="fas fa-phone text-muted me-3"></i>
-                                                            <a href="tel:{{ $location['phone'] }}" class="text-decoration-none text-dark fw-medium">{{ $location['phone'] }}</a>
+                                                            <a href="tel:{{ $location['phone'] }}"
+                                                               class="text-decoration-none text-dark fw-medium">{{ $location['phone'] }}</a>
                                                         </div>
                                                     @endif
 
                                                     @if($location['hours'] ?? false)
-                                                        <div class="small text-muted mb-1 fw-semibold">Vehicle Sales</div>
+                                                        <div class="small text-muted mb-1 fw-semibold">Vehicle Sales
+                                                        </div>
                                                         @php($__hoursLines = preg_split('/\s*,\s*/', $location['hours']))
                                                         <div class="d-flex align-items-start">
                                                             <i class="fas fa-clock text-muted me-3 mt-1"></i>
                                                             <div class="small text-muted lh-sm w-100">
-                                                                <table class="table table-sm table-borderless mb-0 align-middle w-auto">
+                                                                <table
+                                                                    class="table table-sm table-borderless mb-0 align-middle w-auto">
                                                                     <tbody>
                                                                     @foreach($__hoursLines as $__line)
                                                                         @php($__parts = explode(':', $__line, 2))
@@ -201,10 +218,13 @@
                                             <div class="col-lg-6">
                                                 @if(!empty($location['services']))
                                                     <div class="services mb-4">
-                                                        <div class="small text-muted mb-2 fw-semibold">Available Services:</div>
+                                                        <div class="small text-muted mb-2 fw-semibold">Available
+                                                            Services:
+                                                        </div>
                                                         <div class="d-flex flex-wrap gap-1 mb-3">
                                                             @foreach($location['services'] as $service)
-                                                                <span class="badge bg-light text-dark border">{{ $service }}</span>
+                                                                <span
+                                                                    class="badge bg-light text-dark border">{{ $service }}</span>
                                                             @endforeach
                                                         </div>
                                                     </div>
@@ -248,11 +268,17 @@
                                         </td>
                                         <td>
                                             {{ $location['address'] }}
-                                            @if($location['city'] ?? false)<br><small class="text-muted">{{ $location['city'] }}@if($location['state'] ?? false), {{ $location['state'] }}@endif</small>@endif
+                                            @if($location['city'] ?? false)
+                                                <br><small
+                                                    class="text-muted">{{ $location['city'] }}@if($location['state'] ?? false)
+                                                        , {{ $location['state'] }}
+                                                    @endif</small>
+                                            @endif
                                         </td>
                                         <td>
                                             @if($location['phone'] ?? false)
-                                                <a href="tel:{{ $location['phone'] }}" class="text-decoration-none">{{ $location['phone'] }}</a>
+                                                <a href="tel:{{ $location['phone'] }}"
+                                                   class="text-decoration-none">{{ $location['phone'] }}</a>
                                             @else
                                                 -
                                             @endif
@@ -263,7 +289,9 @@
                                                 <small>
                                                     @foreach($__hoursLines as $__line)
                                                         @php($__parts = explode(':', $__line, 2))
-                                                        <div><span class="me-2">{{ trim($__parts[0] ?? '') }}:</span>{{ trim($__parts[1] ?? '') }}</div>
+                                                        <div><span
+                                                                class="me-2">{{ trim($__parts[0] ?? '') }}:</span>{{ trim($__parts[1] ?? '') }}
+                                                        </div>
                                                     @endforeach
                                                 </small>
                                             @else
@@ -291,7 +319,10 @@
                 function initStoreMap() {
                     const map = new google.maps.Map(document.getElementById('store-locations-map'), {
                         zoom: 10,
-                        center: { lat: {{ $displayOptions['locations'][0]['latitude'] ?? 0 }}, lng: {{ $displayOptions['locations'][0]['longitude'] ?? 0 }} }
+                        center: {
+                            lat: {{ $displayOptions['locations'][0]['latitude'] ?? 0 }},
+                            lng: {{ $displayOptions['locations'][0]['longitude'] ?? 0 }}
+                        }
                     });
 
                     const locations = @json($displayOptions['locations']);
@@ -299,7 +330,7 @@
                     locations.forEach(location => {
                         if (location.latitude && location.longitude) {
                             const marker = new google.maps.Marker({
-                                position: { lat: parseFloat(location.latitude), lng: parseFloat(location.longitude) },
+                                position: {lat: parseFloat(location.latitude), lng: parseFloat(location.longitude)},
                                 map: map,
                                 title: location.name
                             });
@@ -321,7 +352,8 @@
                     });
                 }
             </script>
-            <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ $displayOptions['map_api_key'] }}&callback=initStoreMap"></script>
+            <script async defer
+                    src="https://maps.googleapis.com/maps/api/js?key={{ $displayOptions['map_api_key'] }}&callback=initStoreMap"></script>
         @endif
     </div>
 </section>

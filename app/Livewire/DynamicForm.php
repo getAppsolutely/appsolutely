@@ -31,10 +31,10 @@ final class DynamicForm extends BaseBlock
     protected array $defaultDisplayOptions = [
         'title'                 => 'Test Drive Booking',
         'subtitle'              => 'Book your test drive today',
-        'description'           => 'Fill out the form below and we\'ll get back to you within 24 hours.',
+        'description'           => 'Fill out the form below and we\'ll get back to you as soon as possible.',
         'submit_text'           => 'Book Test Drive',
         'success_title'         => 'Thank You!',
-        'success_message'       => 'Your test drive booking has been submitted. We\'ll contact you soon to confirm your appointment.',
+        'success_message'       => '✅ Your test drive booking has been submitted. We\'ll contact you soon to confirm your appointment.',
         'layout'                => 'form', // form, modal
         'theme'                 => 'default',
         'columns'               => 1, // 1 or 2 columns
