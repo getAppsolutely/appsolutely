@@ -13,7 +13,7 @@
     <link rel="canonical" href="{{ url()->current() }}" />
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
 
     @vite([ themed_path(). '/sass/app.scss', themed_path() . '/js/app.js'], themed_build_path())
 </head>
