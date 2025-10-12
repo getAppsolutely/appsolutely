@@ -97,3 +97,36 @@
       }
   }
 }
+
+// Responsive: Reorder caption and image on smaller screens
+@include media-breakpoint-down(xxl) {
+    .hero-banner.default {
+        display: flex;
+        flex-direction: column;
+
+        // Put caption first
+        .hero-banner-caption {
+            position: static !important;
+            transform: none !important;
+            order: 1;
+            padding: 2rem 0;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+
+            &.in-view {
+                transform: none !important;
+            }
+        }
+
+        // Put image second
+        img,
+        .hero-image-container,
+        .hero-video-container {
+            order: 2;
+        }
+
+        // Overlay stays with image
+        .hero-overlay {
+            order: 2;
+        }
+    }
+}
