@@ -52,11 +52,13 @@
                     </div>
                 </div>
             </div>
-            <div class="swiper-button-prev" data-slider-id="{{ $sliderId }}">
-                <i class="bi bi-chevron-left"></i>
-            </div>
-            <div class="swiper-button-next" data-slider-id="{{ $sliderId }}">
-                <i class="bi bi-chevron-right"></i>
+            <div class="media-slider-buttons">
+                <div class="swiper-button-prev" data-slider-id="{{ $sliderId }}">
+                    <i class="bi bi-chevron-left"></i>
+                </div>
+                <div class="swiper-button-next" data-slider-id="{{ $sliderId }}">
+                    <i class="bi bi-chevron-right"></i>
+                </div>
             </div>
         </div>
     @endif

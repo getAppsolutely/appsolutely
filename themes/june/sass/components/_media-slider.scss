@@ -231,48 +231,81 @@
             }
         }
 
-        .swiper-button-next,
-        .swiper-button-prev {
-            position: static;
-            width: 30px;
-            height: 30px;
-            margin: 0;
-            color: var(--bs-secondary);
-            background: rgba(255, 255, 255, 0.95);
-            //border: 1px solid var(--bs-secondary);
-            border-radius: 50%;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            cursor: pointer;
+        .media-slider-buttons {
             display: flex;
-            align-items: center;
-            justify-content: center;
+            gap: 1rem;
 
-            &:hover {
-                background: var(--bs-secondary);
-                color: white;
-                transform: translateY(-1px);
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-            }
+            .swiper-button-next,
+            .swiper-button-prev {
+                position: static;
+                width: 30px;
+                height: 30px;
+                margin: 0;
+                color: var(--bs-secondary);
+                background: rgba(255, 255, 255, 0.95);
+                //border: 1px solid var(--bs-secondary);
+                border-radius: 50%;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+                transition: all 0.3s ease;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
 
-            &:active {
-                transform: translateY(0);
-            }
+                &:hover {
+                    background: var(--bs-secondary);
+                    color: white;
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+                }
 
-            // Remove default Swiper pseudo-element
-            &::after {
-                display: none;
-            }
+                &:active {
+                    transform: translateY(0);
+                }
 
-            i {
-                font-size: 14px;
-                font-weight: 600;
+                // Remove default Swiper pseudo-element
+                &::after {
+                    display: none;
+                }
+
+                i {
+                    font-size: 14px;
+                    font-weight: 600;
+                }
             }
         }
     }
 }
 
 // Responsive adjustments
+@include media-breakpoint-down(xxl) {
+    .media-slider-carousel-container {
+        .media-slider-controls {
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+
+            .media-slide-caption-container {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+
+            .media-slider-buttons {
+                display: flex;
+                gap: 1rem;
+                justify-content: center;
+
+                .swiper-button-next,
+                .swiper-button-prev {
+                    position: static;
+                    margin: 0;
+                }
+            }
+        }
+    }
+}
+
 @include media-breakpoint-down(lg) {
     .media-slider-carousel-container {
         .media-slider-header {
@@ -310,13 +343,15 @@
                 }
             }
 
-            .swiper-button-next,
-            .swiper-button-prev {
-                width: 36px;
-                height: 36px;
+            .media-slider-buttons {
+                .swiper-button-next,
+                .swiper-button-prev {
+                    width: 36px;
+                    height: 36px;
 
-                i {
-                    font-size: 12px;
+                    i {
+                        font-size: 12px;
+                    }
                 }
             }
         }
@@ -346,14 +381,7 @@
         }
 
         .media-slider-controls {
-            flex-direction: column;
-            align-items: stretch;
-            gap: 1rem;
-
             .media-slide-caption-container {
-                margin-right: 0;
-                margin-bottom: 1rem;
-
                 .title-slider {
                     min-height: 60px;
 
@@ -374,14 +402,15 @@
                 }
             }
 
-            .swiper-button-next,
-            .swiper-button-prev {
-                width: 32px;
-                height: 32px;
-                align-self: center;
+            .media-slider-buttons {
+                .swiper-button-next,
+                .swiper-button-prev {
+                    width: 32px;
+                    height: 32px;
 
-                i {
-                    font-size: 10px;
+                    i {
+                        font-size: 10px;
+                    }
                 }
             }
         }
