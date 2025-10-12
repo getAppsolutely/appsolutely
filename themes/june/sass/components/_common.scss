@@ -12,9 +12,17 @@
 .section-full {
     height: 100vh;
     overflow: hidden;
+
+    @include media-breakpoint-down(xxl) {
+        height: 50vh;
+    }
+
     img {
         height: 100vh;
         object-fit: cover;
+        @include media-breakpoint-down(xxl) {
+            height: 50vh;
+        }
     }
 }
 
