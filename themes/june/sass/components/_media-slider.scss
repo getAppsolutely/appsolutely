@@ -161,6 +161,7 @@
         justify-content: space-between;
         align-items: center;
         gap: 1rem;
+        margin-bottom: 1rem;
 
         .media-slide-caption-container {
             flex: 1;
@@ -169,7 +170,6 @@
             .title-slider {
                 position: relative;
                 overflow: hidden;
-                min-height: 60px;
                 display: flex;
                 align-items: center;
 
@@ -190,7 +190,7 @@
                         display: flex;
                         flex-direction: column;
                         justify-content: center;
-                        min-height: 60px;
+                        min-height: 20px;
 
                         &.active {
                             opacity: 1;
@@ -288,13 +288,13 @@
             .media-slide-caption-container {
                 width: 100%;
                 margin-right: 0;
-                margin-bottom: 1rem;
             }
 
             .media-slider-buttons {
                 display: flex;
                 gap: 1rem;
-                justify-content: center;
+                justify-content: flex-end;
+                width: 100%;
 
                 .swiper-button-next,
                 .swiper-button-prev {
@@ -329,7 +329,6 @@
         .media-slider-controls {
             .media-slide-caption-container {
                 .title-slider {
-                    min-height: 70px;
 
                     .title-slide {
                         .slide-title {
@@ -383,7 +382,6 @@
         .media-slider-controls {
             .media-slide-caption-container {
                 .title-slider {
-                    min-height: 60px;
 
                     .title-slide {
                         .slide-title {
