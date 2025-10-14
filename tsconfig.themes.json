@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["themes/*/js/*"]
+    }
+  },
+  "include": [
+    "themes/**/js/**/*.ts",
+    "themes/**/js/**/*.tsx",
+    "themes/**/js/**/*.vue"
+  ],
+  "exclude": ["node_modules", "vendor", "storage", "public"]
+}

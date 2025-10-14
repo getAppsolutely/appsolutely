@@ -20,7 +20,7 @@ if (!['build', 'dev'].includes(command)) {
 
 // Available themes
 const allThemes = readdirSync(THEMES_DIR).filter((dir) => {
-    const configPath = path.join(THEMES_DIR, dir, 'vite.config.js');
+    const configPath = path.join(THEMES_DIR, dir, 'vite.config.ts');
     return statSync(path.join(THEMES_DIR, dir)).isDirectory() && existsSync(configPath);
 });
 
@@ -68,10 +68,10 @@ async function getPortFromConfig(configPath: string): Promise<number | null> {
 async function runBuild() {
     cleanBuildDir();
     for (const theme of themes) {
-        const configPath = `themes/${theme}/vite.config.js`;
+        const configPath = `themes/${theme}/vite.config.ts`;
         console.log(`🚀 Building theme: ${theme}`);
         try {
-            await execAsync(`vite build --config ${configPath}`, { stdio: 'inherit' });
+            await execAsync(`vite build --config ${configPath}`);
         } catch (err) {
             console.error(`❌ Failed to build theme "${theme}"`, (err as any).message);
         }
@@ -83,7 +83,7 @@ async function runDev() {
     const devCommands: string[] = [];
 
     for (const theme of themes) {
-        const configPath = path.resolve(`themes/${theme}/vite.config.js`);
+        const configPath = path.resolve(`themes/${theme}/vite.config.ts`);
         const configImportPath = `file://${configPath}`;
         let desiredPort = await getPortFromConfig(configImportPath);
 
@@ -104,14 +104,14 @@ async function runDev() {
         }
 
         console.log(`🌍 ${theme} running at http://localhost:${port}`);
-        devCommands.push(`vite --config themes/${theme}/vite.config.js --port ${port}`);
+        devCommands.push(`vite --config themes/${theme}/vite.config.ts --port ${port}`);
     }
 
     const cmd = `concurrently -k -n "${themes.join(',')}" -c "cyan,magenta,green,yellow" ${devCommands
         .map((c) => `"${c}"`)
         .join(' ')}`;
 
-    await execAsync(cmd, { stdio: 'inherit', shell: true });
+    await execAsync(cmd, { shell: '/bin/sh' });
 }
 
 // 🏁 Run

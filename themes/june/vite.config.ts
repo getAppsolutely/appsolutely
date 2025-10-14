@@ -66,11 +66,12 @@ export default defineConfig({
         rollupOptions: {
             output: {
                 assetFileNames: (assetInfo) => {
+                    if (!assetInfo.name) return 'assets/[name].[hash][extname]';
                     const ext = assetInfo.name.split('.').pop();
-                    if (['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp'].includes(ext)) {
+                    if (ext && ['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp'].includes(ext)) {
                         return 'images/[name].[hash][extname]';
                     }
-                    if (['woff2', 'woff', 'ttf'].includes(ext)) {
+                    if (ext && ['woff2', 'woff', 'ttf'].includes(ext)) {
                         return 'fonts/[name].[hash][extname]';
                     }
                     return 'assets/[name].[hash][extname]';

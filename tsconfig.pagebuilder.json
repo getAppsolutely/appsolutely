@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["resources/page-builder/assets/*"]
+    }
+  },
+  "include": [
+    "resources/page-builder/assets/**/*.ts",
+    "resources/page-builder/assets/**/*.tsx",
+    "resources/page-builder/assets/**/*.vue"
+  ],
+  "exclude": ["node_modules", "vendor", "storage", "public"]
+}
