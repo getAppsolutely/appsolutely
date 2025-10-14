@@ -10,6 +10,13 @@ declare global {
         assets?: Record<string, any>;
         MediaSliderCarousel?: any;
         showSelectedLocation?: (locationIndex: string | number) => void;
+        pageBuilderData?: any;
+        pageBuilderConfig?: {
+            themedStyles?: string;
+            blockRegistryUrl?: string;
+            saveUrl?: string;
+            resetUrl?: string;
+        };
     }
 
   interface ImportMetaEnv {

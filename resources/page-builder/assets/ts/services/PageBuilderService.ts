@@ -2,7 +2,6 @@
 export class PageBuilderService {
   private editor: any;
   private blockRegistry: any[] = [];
-  private currentPageData: any = null;
   private initializationPromise: Promise<void>;
 
   constructor() {
@@ -163,8 +162,6 @@ export class PageBuilderService {
   }
 
   public async renderPageData(pageData: any): Promise<void> {
-    this.currentPageData = pageData;
-    
     // Wait for editor initialization to complete
     await this.initializationPromise;
     

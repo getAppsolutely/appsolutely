@@ -22,9 +22,10 @@ export class BlockManager {
     }
   }
 
-  public async registerCustomBlock(blockConfig: any): Promise<void> {
+  public async registerCustomBlock(_blockConfig: any): Promise<void> {
     // Method to register custom blocks dynamically
     // This would be used for theme-specific blocks
+    // TODO: Implement custom block registration logic
   }
 
   public getBlockCategories(): any[] {

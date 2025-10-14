@@ -6,7 +6,7 @@
 
 // Import Lodash for utility functions
 import _ from 'lodash';
-window._ = _;
+window._ = _ as any;
 
 /**
  * Bootstrap 5.3.0 JavaScript

@@ -82,7 +82,7 @@ export class ConfigManager {
     });
   }
 
-  private createDefaultForm(container: HTMLElement, block: any): void {
+  private createDefaultForm(container: HTMLElement, _block: any): void {
     const defaultFields = [
       { key: 'title', type: 'text', label: 'Title' },
       { key: 'content', type: 'textarea', label: 'Content' },

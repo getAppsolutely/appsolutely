@@ -90,8 +90,8 @@ export class PreviewManager {
     }
   }
 
-  public getPreviewContent(): { html: string; css: string } {
-    return this.service.getPreviewContent();
+  public async getPreviewContent(): Promise<{ html: string; css: string }> {
+    return await this.service.getPreviewContent();
   }
 }
 
