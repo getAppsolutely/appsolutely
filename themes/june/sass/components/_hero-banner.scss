@@ -41,7 +41,8 @@
 
     // Animate children with staggered delays
     img {
-        width: 20vw;
+        max-width: 20vw;
+        max-height: 40px;
         &[src$=".webp"] {
             width: 10vw;
         }
