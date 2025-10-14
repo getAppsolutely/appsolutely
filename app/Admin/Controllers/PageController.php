@@ -102,7 +102,7 @@ class PageController extends AdminBaseController
             abort(404);
         }
 
-        return view('page-builder::index', [
+        return view('page-builder::modern', [
             'page'      => $page,
             'reference' => $reference,
         ]);

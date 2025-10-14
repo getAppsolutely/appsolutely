@@ -2,14 +2,15 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "vite build && npm run build:themes",
+        "build": "vite build && npm run build:themes && npm run build:page-builder",
         "dev": "vite --port 5177",
         "build:themes": "tsx themes.ts build",
         "dev:themes": "tsx themes.ts dev",
         "build:all": "npm run build && npm run build:page-builder",
         "build:page-builder": "vite build --config vite.pagebuilder.config.js",
-        "dev:page-builder": "vite --config vite.pagebuilder.config.js",
-        "postbuild:page-builder": "cp public/build/page-builder/.vite/manifest.json public/build/page-builder/manifest.json"
+        "dev:page-builder": "vite --config vite.pagebuilder.config.js --port 5178",
+        "dev:all": "concurrently \"npm run dev\" \"npm run dev:themes\" \"npm run dev:page-builder\"",
+        "postbuild:page-builder": "echo 'Page builder build completed'"
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.7",
