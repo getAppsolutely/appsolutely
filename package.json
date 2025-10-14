@@ -10,7 +10,11 @@
         "build:page-builder": "vite build --config vite.pagebuilder.config.ts",
         "dev:page-builder": "vite --config vite.pagebuilder.config.ts --port 5178",
         "dev:all": "concurrently \"npm run dev\" \"npm run dev:themes\" \"npm run dev:page-builder\"",
-        "postbuild:page-builder": "echo 'Page builder build completed'"
+        "postbuild:page-builder": "echo 'Page builder build completed'",
+        "type-check": "tsc --noEmit",
+        "type-check:themes": "tsc --project tsconfig.themes.json --noEmit",
+        "type-check:pagebuilder": "tsc --project tsconfig.pagebuilder.json --noEmit",
+        "type-check:all": "npm run type-check && npm run type-check:themes && npm run type-check:pagebuilder"
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.7",

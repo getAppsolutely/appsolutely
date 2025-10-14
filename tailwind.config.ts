@@ -1,8 +1,8 @@
+import type { Config } from 'tailwindcss';
 import defaultTheme from 'tailwindcss/defaultTheme';
 import forms from '@tailwindcss/forms';
 import typography from '@tailwindcss/typography';
 
-/** @type {import('tailwindcss').Config} */
 export default {
     content: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
@@ -24,7 +24,7 @@ export default {
                 primary: '#6366f1',
                 secondary: '#8b5cf6',
                 dark: '#1e293b',
-                editor: '#f8fafc'
+                editor: '#f8fafc',
             },
             height: {
                 '11/12': '91.666667%',
@@ -33,4 +33,5 @@ export default {
     },
 
     plugins: [forms, typography],
-};
+} satisfies Config;
+
