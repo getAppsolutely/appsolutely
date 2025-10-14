@@ -102,7 +102,7 @@ class PageController extends AdminBaseController
             abort(404);
         }
 
-        return view('page-builder::grapes', [
+        return view('page-builder::index', [
             'page'      => $page,
             'reference' => $reference,
         ]);
