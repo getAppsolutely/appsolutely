@@ -12,7 +12,7 @@ export default defineConfig({
         laravel({
             input: [
                 "themes/june/sass/app.scss",
-                "themes/june/js/app.js"
+                "themes/june/js/app.ts"
             ],
             buildDirectory: "build/themes/june",
         }),

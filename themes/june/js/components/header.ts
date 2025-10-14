@@ -3,25 +3,33 @@
  * Handles scroll detection, hover effects, and mobile menu functionality
  */
 
-class Header {
+import type { HeaderInstance } from '../types';
+
+class Header implements HeaderInstance {
+    header: HTMLElement | null;
+    navbar: HTMLElement | null;
+    navbarToggler: HTMLElement | null;
+    navbarCollapse: HTMLElement | null;
+    submenuItems: NodeListOf<Element> | null;
+
     constructor() {
-        this.header = document.querySelector('#mainHeader');
-        this.navbar = this.header?.querySelector('.navbar');
-        this.navbarToggler = this.header?.querySelector('.navbar-toggler');
-        this.navbarCollapse = this.header?.querySelector('.navbar-collapse');
-        this.submenuItems = this.header?.querySelectorAll('.has-submenu');
+        this.header = document.querySelector<HTMLElement>('#mainHeader');
+        this.navbar = this.header?.querySelector<HTMLElement>('.navbar') ?? null;
+        this.navbarToggler = this.header?.querySelector<HTMLElement>('.navbar-toggler') ?? null;
+        this.navbarCollapse = this.header?.querySelector<HTMLElement>('.navbar-collapse') ?? null;
+        this.submenuItems = this.header?.querySelectorAll('.has-submenu') ?? null;
 
         this.init();
     }
 
-    init() {
+    init(): void {
         if (!this.header) return;
 
         this.bindEvents();
         this.checkScroll();
     }
 
-    bindEvents() {
+    bindEvents(): void {
         // Scroll event for header background change
         window.addEventListener('scroll', () => {
             this.checkScroll();
@@ -35,9 +43,9 @@ class Header {
         }
 
         // Close mobile menu when clicking outside
-        document.addEventListener('click', (e) => {
+        document.addEventListener('click', (e: MouseEvent) => {
             if (this.navbarCollapse?.classList.contains('show') &&
-                !this.navbar?.contains(e.target)) {
+                !this.navbar?.contains(e.target as Node)) {
                 this.closeMobileMenu();
             }
         });
@@ -46,38 +54,38 @@ class Header {
         this.handleDropdownHover();
     }
 
-    checkScroll() {
+    checkScroll(): void {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
         if (scrollTop > 50) {
-            this.header.classList.add('scrolled');
+            this.header?.classList.add('scrolled');
         } else {
-            this.header.classList.remove('scrolled');
+            this.header?.classList.remove('scrolled');
         }
     }
 
-    toggleMobileMenu() {
-        if (this.navbarCollapse) {
+    toggleMobileMenu(): void {
+        if (this.navbarCollapse && this.navbarToggler) {
             this.navbarCollapse.classList.toggle('show');
 
             // Update aria-expanded
             const isExpanded = this.navbarCollapse.classList.contains('show');
-            this.navbarToggler.setAttribute('aria-expanded', isExpanded);
+            this.navbarToggler.setAttribute('aria-expanded', String(isExpanded));
         }
     }
 
-    closeMobileMenu() {
-        if (this.navbarCollapse) {
+    closeMobileMenu(): void {
+        if (this.navbarCollapse && this.navbarToggler) {
             this.navbarCollapse.classList.remove('show');
             this.navbarToggler.setAttribute('aria-expanded', 'false');
         }
     }
 
-    handleDropdownHover() {
+    handleDropdownHover(): void {
         // Handle mega menu hover effects
-        this.submenuItems?.forEach(item => {
-            const submenu = item.querySelector('.submenu');
-            let hoverTimeout;
+        this.submenuItems?.forEach((item: Element) => {
+            const submenu = item.querySelector<HTMLElement>('.submenu');
+            let hoverTimeout: ReturnType<typeof setTimeout>;
 
             if (submenu) {
                 // Desktop hover effect
@@ -100,14 +108,14 @@ class Header {
 
                 // Mobile click effect
                 if (window.innerWidth < 1200) {
-                    const navLink = item.querySelector('.nav-link');
+                    const navLink = item.querySelector<HTMLElement>('.nav-link');
 
-                    navLink?.addEventListener('click', (e) => {
+                    navLink?.addEventListener('click', (e: Event) => {
                         e.preventDefault();
                         e.stopPropagation();
 
                         // Close other submenus
-                        this.submenuItems.forEach(otherItem => {
+                        this.submenuItems?.forEach((otherItem: Element) => {
                             if (otherItem !== item) {
                                 otherItem.classList.remove('show');
                             }
@@ -121,7 +129,7 @@ class Header {
         });
     }
 
-    showMegaMenu(submenu) {
+    showMegaMenu(submenu: HTMLElement): void {
         submenu.style.display = 'block';
         // Force reflow to ensure display:block takes effect
         submenu.offsetHeight;
@@ -130,7 +138,7 @@ class Header {
         submenu.style.transform = 'translateY(0)';
     }
 
-    hideMegaMenu(submenu) {
+    hideMegaMenu(submenu: HTMLElement): void {
         submenu.style.opacity = '0';
         submenu.style.pointerEvents = 'none';
         submenu.style.transform = 'translateY(-10px)';
@@ -161,10 +169,12 @@ window.addEventListener('resize', () => {
     const trigger = document.getElementById('scrollTrigger');
     const navbar = document.getElementById('mainHeader');
 
-    if (!trigger || !navbar) return console.warn('[navbar-scroll] Missing required elements');
+    if (!trigger || !navbar) {
+        console.warn('[navbar-scroll] Missing required elements');
+        return;
+    }
 
-    const observer = new IntersectionObserver(([entry]) => {
-
+    const observer = new IntersectionObserver(([entry]: IntersectionObserverEntry[]) => {
         if (!entry.isIntersecting) {
             navbar.classList.add('scrolled');
         } else {
@@ -172,8 +182,9 @@ window.addEventListener('resize', () => {
         }
     }, {
         rootMargin: '0px',
-        threshold: 0
+        threshold: 0,
     });
 
     observer.observe(trigger);
 })();
+

@@ -1,13 +1,16 @@
 import type { AxiosStatic } from 'axios';
 import type * as BootstrapNamespace from 'bootstrap';
+import type { LoDashStatic } from 'lodash';
 
 declare global {
-  interface Window {
-    axios: AxiosStatic;
-    bootstrap: typeof BootstrapNamespace;
-    _: typeof import('lodash');
-    assets?: Record<string, any>;
-  }
+    interface Window {
+        axios: AxiosStatic;
+        bootstrap: typeof BootstrapNamespace;
+        _: LoDashStatic;
+        assets?: Record<string, any>;
+        MediaSliderCarousel?: any;
+        showSelectedLocation?: (locationIndex: string | number) => void;
+    }
 
   interface ImportMetaEnv {
     VITE_PUSHER_APP_KEY: string;

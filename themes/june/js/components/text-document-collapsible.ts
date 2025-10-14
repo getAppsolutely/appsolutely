@@ -2,35 +2,36 @@
  * Text Document Collapsible Component
  * Enhances Bootstrap 5.3 collapse functionality
  */
+
 class TextDocumentCollapsible {
     constructor() {
         this.init();
     }
 
-    init() {
+    init(): void {
         this.bindEvents();
         this.setupAccessibility();
     }
 
-    bindEvents() {
+    bindEvents(): void {
         // Listen for Bootstrap collapse events
-        document.addEventListener('shown.bs.collapse', (event) => {
+        document.addEventListener('shown.bs.collapse', (event: Event) => {
             this.handleCollapseShown(event);
         });
 
-        document.addEventListener('hidden.bs.collapse', (event) => {
+        document.addEventListener('hidden.bs.collapse', (event: Event) => {
             this.handleCollapseHidden(event);
         });
 
         // Handle keyboard navigation
-        document.addEventListener('keydown', (event) => {
+        document.addEventListener('keydown', (event: KeyboardEvent) => {
             this.handleKeyboardNavigation(event);
         });
     }
 
-    handleCollapseShown(event) {
-        const target = event.target;
-        const header = target.previousElementSibling;
+    handleCollapseShown(event: Event): void {
+        const target = event.target as HTMLElement;
+        const header = target.previousElementSibling as HTMLElement | null;
         
         if (header && header.classList.contains('text-document-collapsible__header')) {
             // Update ARIA attributes
@@ -44,9 +45,9 @@ class TextDocumentCollapsible {
         }
     }
 
-    handleCollapseHidden(event) {
-        const target = event.target;
-        const header = target.previousElementSibling;
+    handleCollapseHidden(event: Event): void {
+        const target = event.target as HTMLElement;
+        const header = target.previousElementSibling as HTMLElement | null;
         
         if (header && header.classList.contains('text-document-collapsible__header')) {
             // Update ARIA attributes
@@ -57,8 +58,8 @@ class TextDocumentCollapsible {
         }
     }
 
-    handleKeyboardNavigation(event) {
-        const target = event.target;
+    handleKeyboardNavigation(event: KeyboardEvent): void {
+        const target = event.target as HTMLElement;
         
         // Only handle if target is a collapsible header
         if (!target.classList.contains('text-document-collapsible__header')) {
@@ -78,29 +79,34 @@ class TextDocumentCollapsible {
         }
     }
 
-    toggleCollapse(header) {
+    toggleCollapse(header: HTMLElement): void {
         const targetId = header.getAttribute('data-bs-target');
-        const target = document.querySelector(targetId);
+        if (!targetId) return;
         
-        if (target) {
-            const bsCollapse = new bootstrap.Collapse(target, {
-                toggle: true
+        const target = document.querySelector<HTMLElement>(targetId);
+        
+        if (target && window.bootstrap) {
+            new window.bootstrap.Collapse(target, {
+                toggle: true,
             });
         }
     }
 
-    collapseAll() {
-        const openCollapses = document.querySelectorAll('.text-document-collapsible__content.show');
+    collapseAll(): void {
+        const openCollapses = document.querySelectorAll<HTMLElement>('.text-document-collapsible__content.show');
         
-        openCollapses.forEach(collapse => {
-            const bsCollapse = new bootstrap.Collapse(collapse, {
-                hide: true
-            });
+        openCollapses.forEach((collapse: HTMLElement) => {
+            if (window.bootstrap) {
+                const bsCollapse = new window.bootstrap.Collapse(collapse, {
+                    toggle: false,
+                });
+                bsCollapse.hide();
+            }
         });
     }
 
-    focusFirstFocusableElement(container) {
-        const focusableElements = container.querySelectorAll(
+    focusFirstFocusableElement(container: HTMLElement): void {
+        const focusableElements = container.querySelectorAll<HTMLElement>(
             'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
         );
         
@@ -109,10 +115,10 @@ class TextDocumentCollapsible {
         }
     }
 
-    setupAccessibility() {
-        const headers = document.querySelectorAll('.text-document-collapsible__header');
+    setupAccessibility(): void {
+        const headers = document.querySelectorAll<HTMLElement>('.text-document-collapsible__header');
         
-        headers.forEach(header => {
+        headers.forEach((header: HTMLElement) => {
             // Ensure proper ARIA attributes
             if (!header.hasAttribute('aria-expanded')) {
                 header.setAttribute('aria-expanded', 'false');
@@ -129,44 +135,52 @@ class TextDocumentCollapsible {
     }
 
     // Public method to programmatically expand/collapse
-    static toggle(blockId) {
-        const header = document.querySelector(`[data-bs-target="#textDocumentCollapsible${blockId}"]`);
+    static toggle(blockId: string): void {
+        const header = document.querySelector<HTMLElement>(`[data-bs-target="#textDocumentCollapsible${blockId}"]`);
         if (header) {
             const targetId = header.getAttribute('data-bs-target');
-            const target = document.querySelector(targetId);
+            if (!targetId) return;
             
-            if (target) {
-                const bsCollapse = new bootstrap.Collapse(target, {
-                    toggle: true
+            const target = document.querySelector<HTMLElement>(targetId);
+            
+            if (target && window.bootstrap) {
+                new window.bootstrap.Collapse(target, {
+                    toggle: true,
                 });
             }
         }
     }
 
     // Public method to expand all
-    static expandAll() {
-        const headers = document.querySelectorAll('.text-document-collapsible__header[aria-expanded="false"]');
+    static expandAll(): void {
+        const headers = document.querySelectorAll<HTMLElement>('.text-document-collapsible__header[aria-expanded="false"]');
         
-        headers.forEach(header => {
+        headers.forEach((header: HTMLElement) => {
             const targetId = header.getAttribute('data-bs-target');
-            const target = document.querySelector(targetId);
+            if (!targetId) return;
             
-            if (target) {
-                const bsCollapse = new bootstrap.Collapse(target, {
-                    show: true
+            const target = document.querySelector<HTMLElement>(targetId);
+            
+            if (target && window.bootstrap) {
+                const bsCollapse = new window.bootstrap.Collapse(target, {
+                    toggle: false,
                 });
+                bsCollapse.show();
             }
         });
     }
 
     // Public method to collapse all
-    static collapseAll() {
-        const openCollapses = document.querySelectorAll('.text-document-collapsible__content.show');
+    static collapseAll(): void {
+        const openCollapses = document.querySelectorAll<HTMLElement>('.text-document-collapsible__content.show');
         
-        openCollapses.forEach(collapse => {
-            const bsCollapse = new bootstrap.Collapse(collapse, {
-                hide: true
-            });
+        openCollapses.forEach((collapse: HTMLElement) => {
+            if (window.bootstrap) {
+                const bsCollapse = new window.bootstrap.Collapse(collapse, {
+                    toggle: false,
+                });
+                bsCollapse.hide();
+            }
         });
     }
 }
@@ -177,6 +191,5 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Export for module usage
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = TextDocumentCollapsible;
-}
+export default TextDocumentCollapsible;
+

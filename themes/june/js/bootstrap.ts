@@ -5,7 +5,7 @@
  */
 
 // Import Lodash for utility functions
-import _ from "lodash";
+import _ from 'lodash';
 window._ = _;
 
 /**
@@ -14,7 +14,7 @@ window._ = _;
  * Bootstrap 5 is built on vanilla JavaScript and no longer requires jQuery.
  * All Bootstrap components are available through the bootstrap namespace.
  */
-import * as bootstrap from "bootstrap";
+import * as bootstrap from 'bootstrap';
 
 // Make Bootstrap available globally for debugging and manual initialization
 window.bootstrap = bootstrap;
@@ -26,11 +26,11 @@ window.bootstrap = bootstrap;
  * to our Laravel back-end. This library automatically handles sending the
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
-import axios from "axios";
+import axios from 'axios';
 window.axios = axios;
 
 // Set default headers for AJAX requests
-window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /**
  * CSRF Token Configuration
@@ -39,12 +39,12 @@ window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
  * managed by the application. This token is used to verify that the authenticated
  * user is the one actually making the requests to the application.
  */
-const token = document.head.querySelector('meta[name="csrf-token"]');
+const token = document.head.querySelector<HTMLMetaElement>('meta[name="csrf-token"]');
 
 if (token) {
-    window.axios.defaults.headers.common["X-CSRF-TOKEN"] = token.content;
+    window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
 } else {
-    console.error("CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token");
+    console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
 
 /**
@@ -76,22 +76,23 @@ if (token) {
  * Bootstrap 5 components are auto-initialized, but you can manually
  * initialize them here if needed.
  */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', (): void => {
     // Initialize tooltips
-    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
+    const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map((tooltipTriggerEl: Element) => {
+        return new bootstrap.Tooltip(tooltipTriggerEl as HTMLElement);
     });
 
     // Initialize popovers
-    const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
-    popoverTriggerList.map(function (popoverTriggerEl) {
-        return new bootstrap.Popover(popoverTriggerEl);
+    const popoverTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="popover"]'));
+    popoverTriggerList.map((popoverTriggerEl: Element) => {
+        return new bootstrap.Popover(popoverTriggerEl as HTMLElement);
     });
 
     // Initialize toasts
-    const toastElList = [].slice.call(document.querySelectorAll('.toast'));
-    toastElList.map(function (toastEl) {
-        return new bootstrap.Toast(toastEl);
+    const toastElList = Array.from(document.querySelectorAll('.toast'));
+    toastElList.map((toastEl: Element) => {
+        return new bootstrap.Toast(toastEl as HTMLElement);
     });
 });
+

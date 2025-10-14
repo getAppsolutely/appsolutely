@@ -4,18 +4,18 @@
  */
 
 (() => {
-    const heroBanners = document.querySelectorAll('.hero-banner');
+    const heroBanners = document.querySelectorAll<HTMLElement>('.hero-banner');
     
     if (!heroBanners.length) return;
 
-    const observerOptions = {
+    const observerOptions: IntersectionObserverInit = {
         root: null,
         rootMargin: '0px',
-        threshold: 0.3 // Trigger when 30% of the hero banner is visible
+        threshold: 0.3, // Trigger when 30% of the hero banner is visible
     };
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
+    const observer = new IntersectionObserver((entries: IntersectionObserverEntry[]) => {
+        entries.forEach((entry: IntersectionObserverEntry) => {
             if (entry.isIntersecting) {
                 // Add in-view class to trigger SCSS animations
                 entry.target.classList.add('in-view');
@@ -27,7 +27,8 @@
     }, observerOptions);
 
     // Observe all hero banners
-    heroBanners.forEach(banner => {
+    heroBanners.forEach((banner: HTMLElement) => {
         observer.observe(banner);
     });
-})(); 
+})();
+
