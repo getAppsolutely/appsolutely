@@ -19,6 +19,6 @@
     "forceConsistentCasingInFileNames": true,
     "types": ["vite/client", "node"]
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.vue"],
+  "include": ["**/*.ts", "**/*.tsx", "**/*.vue", "types/**/*.d.ts"],
   "exclude": ["node_modules", "vendor", "storage", "public"]
 }

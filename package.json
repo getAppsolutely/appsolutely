@@ -7,8 +7,8 @@
         "build:themes": "tsx themes.ts build",
         "dev:themes": "tsx themes.ts dev",
         "build:all": "npm run build && npm run build:page-builder",
-        "build:page-builder": "vite build --config vite.pagebuilder.config.js",
-        "dev:page-builder": "vite --config vite.pagebuilder.config.js --port 5178",
+        "build:page-builder": "vite build --config vite.pagebuilder.config.ts",
+        "dev:page-builder": "vite --config vite.pagebuilder.config.ts --port 5178",
         "dev:all": "concurrently \"npm run dev\" \"npm run dev:themes\" \"npm run dev:page-builder\"",
         "postbuild:page-builder": "echo 'Page builder build completed'"
     },
@@ -16,6 +16,7 @@
         "@tailwindcss/forms": "^0.5.7",
         "@tailwindcss/typography": "^0.5.10",
         "@tailwindcss/vite": "^4.0.0",
+        "@types/node": "^24.7.2",
         "@vitejs/plugin-vue": "^5.2.4",
         "autoprefixer": "^10.4.19",
         "axios": "^1.7.4",
