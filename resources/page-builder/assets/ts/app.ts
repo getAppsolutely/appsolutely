@@ -1,4 +1,12 @@
 // Page Builder Main TypeScript Entry Point
+
+// External Dependencies
+import grapesjs from 'grapesjs';
+
+// Make GrapesJS available globally
+(window as any).grapesjs = grapesjs;
+
+// Page Builder Components
 import './services/PageBuilderService';
 import './components/EditorManager';
 import './components/BlockManager';

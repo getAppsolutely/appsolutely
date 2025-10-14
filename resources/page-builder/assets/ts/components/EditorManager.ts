@@ -101,7 +101,7 @@ export class EditorManager {
       const response = await fetch(dataUrl);
       const result = await response.json();
       const content = result.data.page.content;
-      this.service.renderPageData(content);
+      await this.service.renderPageData(content);
     } catch (error) {
       console.error('Failed to load config:', error);
       this.showNotification('Failed to load config ❌', false);

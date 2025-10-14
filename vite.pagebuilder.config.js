@@ -64,12 +64,13 @@ export default defineConfig({
         rollupOptions: {
             output: {
                 manualChunks: {
+                    'grapesjs': ['grapesjs'],
                     'vendor': ['axios', 'lodash']
                 }
             }
         }
     },
     optimizeDeps: {
-        include: ['axios', 'lodash']
+        include: ['grapesjs', 'axios', 'lodash']
     }
 });

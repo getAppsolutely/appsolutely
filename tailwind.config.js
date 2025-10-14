@@ -10,12 +10,24 @@ export default {
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
         './resources/page-builder/assets/**/*.vue',
+        './resources/page-builder/**/*.blade.php',
+        './resources/page-builder/assets/**/*.ts',
+        './resources/page-builder/assets/**/*.scss',
     ],
 
     theme: {
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+            },
+            colors: {
+                primary: '#6366f1',
+                secondary: '#8b5cf6',
+                dark: '#1e293b',
+                editor: '#f8fafc'
+            },
+            height: {
+                '11/12': '91.666667%',
             },
         },
     },

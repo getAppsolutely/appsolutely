@@ -5,32 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Design your "{{ $page->name }}" Page - Page Builder</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <!-- External Dependencies -->
-    <link href="https://cdn.jsdelivr.net/npm/grapesjs/dist/css/grapes.min.css" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Page Builder Assets -->
+    
+    <!-- Page Builder Assets (includes GrapesJS, FontAwesome, TailwindCSS) -->
     @vite(['resources/page-builder/assets/scss/app.scss', 'resources/page-builder/assets/ts/app.ts'], 'build/page-builder')
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#6366f1',
-                        secondary: '#8b5cf6',
-                        dark: '#1e293b',
-                        editor: '#f8fafc'
-                    },
-                    height: {
-                        '11/12': '91.666667%',
-                    },
-                }
-            }
-        }
-    </script>
 </head>
 
 <body class="bg-slate-50 text-slate-800">
@@ -151,9 +128,6 @@
             </div>
         </div>
     </div>
-
-    <!-- External Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/grapesjs/dist/grapes.min.js"></script>
 
     <!-- Page Builder Initialization -->
     <script>

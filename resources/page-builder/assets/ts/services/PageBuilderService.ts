@@ -3,9 +3,10 @@ export class PageBuilderService {
   private editor: any;
   private blockRegistry: any[] = [];
   private currentPageData: any = null;
+  private initializationPromise: Promise<void>;
 
   constructor() {
-    this.initializeEditor();
+    this.initializationPromise = this.initializeEditor();
   }
 
   private async initializeEditor(): Promise<void> {
@@ -14,7 +15,8 @@ export class PageBuilderService {
       this.setupEditor();
     } else {
       // Retry after a short delay
-      setTimeout(() => this.initializeEditor(), 100);
+      await new Promise(resolve => setTimeout(resolve, 100));
+      return this.initializeEditor();
     }
   }
 
@@ -163,6 +165,9 @@ export class PageBuilderService {
   public async renderPageData(pageData: any): Promise<void> {
     this.currentPageData = pageData;
     
+    // Wait for editor initialization to complete
+    await this.initializationPromise;
+    
     if (!this.editor) {
       console.error('Editor not initialized yet');
       return;
@@ -184,7 +189,10 @@ export class PageBuilderService {
     }
   }
 
-  public savePageData(): Promise<any> {
+  public async savePageData(): Promise<any> {
+    // Wait for editor initialization to complete
+    await this.initializationPromise;
+    
     const projectData = this.editor.getProjectData();
     
     // Ensure all components have unique references
@@ -208,7 +216,10 @@ export class PageBuilderService {
     });
   }
 
-  public resetPageData(): Promise<any> {
+  public async resetPageData(): Promise<any> {
+    // Wait for editor initialization to complete
+    await this.initializationPromise;
+    
     this.editor.DomComponents.clear();
     const defaultHtml = `
       <h1 class="text-3xl mt-5 text-center">Hello, welcome to Page Builder<br/>Start dragging components from the right!</h1>
@@ -228,7 +239,10 @@ export class PageBuilderService {
     });
   }
 
-  public getPreviewContent(): { html: string; css: string } {
+  public async getPreviewContent(): Promise<{ html: string; css: string }> {
+    // Wait for editor initialization to complete
+    await this.initializationPromise;
+    
     return {
       html: this.editor.getHtml(),
       css: this.editor.getCss()
@@ -263,15 +277,21 @@ export class PageBuilderService {
     return meta ? meta.getAttribute('content') || '' : '';
   }
 
-  public undo(): void {
+  public async undo(): Promise<void> {
+    // Wait for editor initialization to complete
+    await this.initializationPromise;
     this.editor.UndoManager.undo();
   }
 
-  public redo(): void {
+  public async redo(): Promise<void> {
+    // Wait for editor initialization to complete
+    await this.initializationPromise;
     this.editor.UndoManager.redo();
   }
 
-  public setDevice(device: string): void {
+  public async setDevice(device: string): Promise<void> {
+    // Wait for editor initialization to complete
+    await this.initializationPromise;
     this.editor.setDevice(device);
   }
 }

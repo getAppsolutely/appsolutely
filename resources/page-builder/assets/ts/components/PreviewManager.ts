@@ -55,11 +55,11 @@ export class PreviewManager {
     });
   }
 
-  public showPreview(): void {
+  public async showPreview(): Promise<void> {
     if (!this.modal || !this.content) return;
 
     try {
-      const previewData = this.service.getPreviewContent();
+      const previewData = await this.service.getPreviewContent();
       
       this.content.innerHTML = `
         <style>${previewData.css}</style>
