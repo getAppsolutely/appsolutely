@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Build output
+public/build/
+public/vendor/
+public/hot
+
+# Storage and cache
+storage/
+bootstrap/cache/
+
+# IDE
+.idea/
+.vscode/
+.cursor/
+
+# Git
+.git/
+
+# Compiled files
+*.min.js
+*.min.css
+
+# Lock files
+package-lock.json
+composer.lock
+
+# Laravel specific
+_ide_helper.php
+_ide_helper_models.php
+dcat_admin_ide_helper.php
+
