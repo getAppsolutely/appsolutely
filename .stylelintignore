@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Build output
+public/build/
+public/vendor/
+public/hot
+
+# Storage and cache
+storage/
+bootstrap/cache/
+
+# IDE
+.idea/
+.vscode/
+.cursor/
+
+# Git
+.git/
+

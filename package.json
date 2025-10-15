@@ -16,7 +16,11 @@
         "type-check:pagebuilder": "tsc --project tsconfig.pagebuilder.json --noEmit",
         "type-check:all": "npm run type-check && npm run type-check:themes && npm run type-check:pagebuilder",
         "lint": "eslint .",
-        "lint:fix": "eslint . --fix"
+        "lint:fix": "eslint . --fix",
+        "lint:scss": "stylelint '**/*.scss' --allow-empty-input",
+        "lint:scss:fix": "stylelint '**/*.scss' --fix --allow-empty-input",
+        "lint:all": "npm run lint && npm run lint:scss",
+        "lint:all:fix": "npm run lint:fix && npm run lint:scss:fix"
     },
     "devDependencies": {
         "@eslint/js": "^9.37.0",
@@ -41,8 +45,12 @@
         "postcss": "^8.4.38",
         "postcss-import": "^16.1.0",
         "postcss-load-config": "^6.0.1",
+        "postcss-scss": "^4.0.9",
         "sass": "^1.78.0",
         "sass-loader": "^16.0.0",
+        "stylelint": "^16.25.0",
+        "stylelint-config-prettier-scss": "^1.0.0",
+        "stylelint-config-standard-scss": "^16.0.0",
         "tailwindcss": "^3.4.3",
         "tsx": "^4.20.3",
         "vite": "^6.3.5",
