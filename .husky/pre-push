@@ -1,0 +1,32 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Running pre-push checks..."
+
+# Run TypeScript type check
+echo "📝 Type checking TypeScript files..."
+npm run type-check:all
+if [ $? -ne 0 ]; then
+    echo "❌ TypeScript type check failed!"
+    exit 1
+fi
+
+# Run linters
+echo "🧹 Running linters..."
+npm run lint:all
+if [ $? -ne 0 ]; then
+    echo "❌ Linting failed!"
+    exit 1
+fi
+
+# Optional: Run PHP tests (uncomment if you want to run tests on push)
+# echo "🧪 Running PHP tests..."
+# ./vendor/bin/phpunit
+# if [ $? -ne 0 ]; then
+#     echo "❌ PHP tests failed!"
+#     exit 1
+# fi
+
+echo "✅ All pre-push checks passed!"
+exit 0
+

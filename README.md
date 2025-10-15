@@ -17,6 +17,7 @@ A Laravel 12 application with TypeScript-based frontend, featuring a modular the
 ### Well-organised structure
 
 ### TypeScript Frontend
+
 - Fully migrated to TypeScript with strict type checking
 - Multiple theme support (Default, June, Tabler)
 - Custom page builder with TypeScript
@@ -30,9 +31,36 @@ A Laravel 12 application with TypeScript-based frontend, featuring a modular the
 - **Build Tools**: Vite, TSC
 - **Package Manager**: Composer (PHP), npm (JavaScript/TypeScript)
 
+## Configuration Files
+
+All configuration files serve distinct, non-overlapping purposes:
+
+| Tool         | Config File          | Purpose         |
+| ------------ | -------------------- | --------------- |
+| EditorConfig | `.editorconfig`      | Editor settings |
+| Prettier     | `.prettierrc.json`   | Code formatting |
+| Stylelint    | `.stylelintrc.json`  | SCSS linting    |
+| ESLint       | `eslint.config.js`   | JS/TS linting   |
+| Pint         | `pint.json`          | PHP formatting  |
+| Tailwind     | `tailwind.config.ts` | CSS framework   |
+| PostCSS      | `postcss.config.js`  | CSS processing  |
+| Vite         | `vite.config.ts`     | Build tool      |
+| TypeScript   | `tsconfig.json`      | TS compiler     |
+| PHPUnit      | `phpunit.xml`        | Testing         |
+
+### Code Quality Workflow
+
+```
+1. Editor Settings → .editorconfig (4-space indent, LF endings)
+2. Code Formatting → Prettier (SCSS/TS/JS) + Pint (PHP)
+3. Code Linting → Stylelint (SCSS) + ESLint (JS/TS)
+4. Git Hooks → Husky + lint-staged (auto-format on commit)
+```
+
 ## Installation
 
 General Laravel Installation
+
 ```bash
 composer install
 
@@ -42,6 +70,7 @@ php artisan db:seed --class=AdminCoreSeeder
 ```
 
 Install hooks for local environment.
+
 ```
 composer install-hooks
 ```
@@ -106,6 +135,7 @@ TypeScript type checking runs automatically on commit. If type errors are found,
 - [Page Block Schema](docs/page-block-schema.md) - Block schema documentation
 
 ## Todo
+
 - Order management
 - Front-end: public site (homepage, articles, products and categories, checkout) and member center
 - Payment management

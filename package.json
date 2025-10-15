@@ -25,7 +25,12 @@
         "format:check": "prettier --check '**/*.{scss,css,ts,tsx,js,jsx,json,md,html,vue}'",
         "format:scss": "prettier --write '**/*.scss'",
         "format:all": "npm run format && npm run lint:all:fix",
-        "prepare": "husky"
+        "test": "npm run test:js && npm run test:php",
+        "test:js": "npm run type-check:all && npm run lint && npm run lint:scss",
+        "test:php": "./vendor/bin/phpunit",
+        "test:quick": "npm run lint && npm run type-check",
+        "prepare": "husky",
+        "validate": "npm run format:check && npm run lint:all && npm run type-check:all"
     },
     "devDependencies": {
         "@eslint/js": "^9.37.0",
@@ -83,7 +88,11 @@
             "prettier --write",
             "stylelint --fix"
         ],
-        "*.{css,ts,tsx,js,jsx,json,md,html,vue}": [
+        "*.{ts,tsx,js,jsx}": [
+            "prettier --write",
+            "eslint --fix"
+        ],
+        "*.{css,json,md,html,vue}": [
             "prettier --write"
         ]
     }
