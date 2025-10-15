@@ -23,3 +23,8 @@ yarn-error.log
 /.zed
 .DS_Store
 /routes/cache
+
+# IDE Helper files (auto-generated)
+_ide_helper*.php
+.phpstorm.meta.php
+dcat_admin_ide_helper.php
