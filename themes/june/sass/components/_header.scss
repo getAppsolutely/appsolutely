@@ -1,4 +1,4 @@
-#mainHeader {
+#main-header {
     background: transparent;
     color: $light;
     position: fixed;
@@ -26,10 +26,10 @@
     box-shadow: none !important;
 }
 
-#mainHeader .navbar,
-#mainHeader .navbar-nav .nav-link,
-#mainHeader .navbar-brand,
-#mainHeader .btn {
+#main-header .navbar,
+#main-header .navbar-nav .nav-link,
+#main-header .navbar-brand,
+#main-header .btn {
     color: $light;
     font-size: 1rem;
     font-weight: 600;
@@ -125,8 +125,8 @@
     }
 }
 
-#mainHeader.scrolled:has(.header-left a:hover),
-#mainHeader.scrolled:has(.header-center .navbar-nav .nav-item:hover) {
+#main-header.scrolled:has(.header-left a:hover),
+#main-header.scrolled:has(.header-center .navbar-nav .nav-item:hover) {
     color: $body-bg;
 
     .navbar,
@@ -137,8 +137,8 @@
     }
 }
 
-#mainHeader:has(.header-left a:hover),
-#mainHeader:has(.header-center .navbar-nav .nav-item:hover) {
+#main-header:has(.header-left a:hover),
+#main-header:has(.header-center .navbar-nav .nav-item:hover) {
     background: $body-bg;
     color: $body-color;
     box-shadow: 0 4px 20px rgb(0 0 0 / 15%);
@@ -180,10 +180,10 @@
     backdrop-filter: blur(10px);
     overflow-y: auto;
     padding: 0 1.5rem;
-    animation: slideIn 0.3s ease-out;
+    animation: slide-in 0.3s ease-out;
 }
 
-@keyframes slideIn {
+@keyframes slide-in {
     from {
         opacity: 0;
         transform: translateY(-20px);

@@ -14,6 +14,19 @@
             box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
             border-color: $gray-500;
         }
+
+        // Animation for smooth transitions
+        .collapse {
+            &:not(.show) {
+                display: none;
+            }
+        }
+
+        .collapsing {
+            height: 0;
+            overflow: hidden;
+            transition: height 0.3s ease;
+        }
     }
 
     &__header {
@@ -171,21 +184,6 @@
 
         &__content-body {
             color: $light;
-        }
-    }
-
-    // Animation for smooth transitions
-    &__container {
-        .collapse {
-            &:not(.show) {
-                display: none;
-            }
-        }
-
-        .collapsing {
-            height: 0;
-            overflow: hidden;
-            transition: height 0.3s ease;
         }
     }
 

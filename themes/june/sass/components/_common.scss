@@ -26,8 +26,8 @@
     }
 }
 
-// Shared button styles for Test Drive and MediaSlider buttons
-.btn-outline-light-primary {
+// Shared button styles placeholder
+%btn-outline-light-primary {
     color: $light;
     background: transparent;
     border: 2px solid $light;
@@ -52,8 +52,13 @@
     }
 }
 
-// Shared overlay caption styles for any media component
-.overlay-caption {
+// Class for HTML usage
+.btn-outline-light-primary {
+    @extend %btn-outline-light-primary;
+}
+
+// Shared overlay caption placeholder
+%overlay-caption {
     position: absolute;
     left: 50%;
     transform: translate(-50%, -40%);
@@ -75,10 +80,21 @@
     }
 }
 
-.overlay-btn {
-    @extend .btn-outline-light-primary;
+// Class for HTML usage
+.overlay-caption {
+    @extend %overlay-caption;
+}
+
+// Overlay button placeholder
+%overlay-btn {
+    @extend %btn-outline-light-primary;
 
     margin-top: 1.5rem;
+}
+
+// Class for HTML usage
+.overlay-btn {
+    @extend %overlay-btn;
 }
 
 .icon-rednote {

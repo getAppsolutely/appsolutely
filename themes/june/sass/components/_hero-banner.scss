@@ -31,7 +31,7 @@
 
 // Hero banner caption
 .hero-banner-caption {
-    @extend .overlay-caption;
+    @extend %overlay-caption;
 
     top: 25% !important;
 
@@ -70,7 +70,7 @@
 
 // Button styles
 .hero-banner-btn {
-    @extend .overlay-btn;
+    @extend %overlay-btn;
 }
 
 .hero-image-container {

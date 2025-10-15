@@ -56,19 +56,7 @@
 // Swiper CSS
 @import "swiper/css/bundle";
 
-// Custom styles
-body {
-    font-family: $font-family-sans-serif;
-    background-color: $body-bg;
-    color: $body-color;
-}
-
-// 6. Custom theme styles
-.text-nunito {
-    font-family: Montserrat, "Noto Sans Thai", sans-serif;
-}
-
-// 7. Component imports
+// 6. Component imports
 @import "components/mixins";
 @import "components/common";
 @import "components/header";
@@ -81,3 +69,15 @@ body {
 @import "components/features-fashionable";
 @import "components/specifications";
 @import "components/text-document-collapsible";
+
+// 7. Custom styles
+body {
+    font-family: $font-family-sans-serif;
+    background-color: $body-bg;
+    color: $body-color;
+}
+
+// 8. Custom theme styles
+.text-nunito {
+    font-family: Montserrat, "Noto Sans Thai", sans-serif;
+}

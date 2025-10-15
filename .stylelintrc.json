@@ -9,7 +9,16 @@
     "string-quotes": "single",
     "no-duplicate-selectors": true,
     "color-hex-length": "short",
-    "selector-class-pattern": null,
+    
+    "no-descending-specificity": true,
+    "scss/at-extend-no-missing-placeholder": true,
+    "scss/no-global-function-names": true,
+    "no-invalid-position-at-import-rule": true,
+    
+    "selector-class-pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*(__|--[a-z0-9]+(-[a-z0-9]+)*)?$",
+    "selector-id-pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+    "keyframes-name-pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+    
     "scss/at-import-partial-extension": null,
     "scss/dollar-variable-pattern": null,
     "scss/at-rule-no-unknown": [
@@ -17,7 +26,9 @@
       {
         "ignoreAtRules": ["tailwind", "apply", "variants", "responsive", "screen", "layer"]
       }
-    ]
+    ],
+    
+    "number-max-precision": 4
   }
 }
 
