@@ -1,15 +1,8 @@
 // Page Builder Main SCSS Entry Point
 
-// External Dependencies
+// 1. All @import statements must come first
 @import "grapesjs/dist/css/grapes.min.css";
 @import "@fortawesome/fontawesome-free/css/all.min.css";
-
-// TailwindCSS (if not already included globally)
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-// Page Builder Styles
 @import "variables";
 @import "base";
 @import "components/editor";
@@ -18,3 +11,8 @@
 @import "components/modals";
 @import "components/notifications";
 @import "utilities";
+
+// 2. TailwindCSS directives after all imports
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
