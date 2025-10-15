@@ -1,49 +1,49 @@
 // Page Builder Modals
 #preview-modal {
-  backdrop-filter: blur(4px);
-  
-  .modal-content {
-    background: white;
-    border-radius: var(--pb-radius-lg);
-    width: 91.666667%;
-    height: 91.666667%;
-    margin: auto;
-    overflow: hidden;
-    box-shadow: var(--pb-shadow-lg);
-  }
-  
-  .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--pb-spacing-lg) var(--pb-spacing-xl);
-    border-bottom: 1px solid #e2e8f0;
-    
-    h3 {
-      font-size: 1.125rem;
-      font-weight: 600;
-      color: var(--pb-dark);
+    backdrop-filter: blur(4px);
+
+    .modal-content {
+        background: white;
+        border-radius: var(--pb-radius-lg);
+        width: 91.666667%;
+        height: 91.666667%;
+        margin: auto;
+        overflow: hidden;
+        box-shadow: var(--pb-shadow-lg);
     }
-    
-    .close-btn {
-      color: #64748b;
-      transition: var(--pb-transition);
-      
-      &:hover {
-        color: var(--pb-dark);
-      }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--pb-spacing-lg) var(--pb-spacing-xl);
+        border-bottom: 1px solid #e2e8f0;
+
+        h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--pb-dark);
+        }
+
+        .close-btn {
+            color: #64748b;
+            transition: var(--pb-transition);
+
+            &:hover {
+                color: var(--pb-dark);
+            }
+        }
     }
-  }
-  
-  .modal-body {
-    height: calc(100% - 80px);
-    padding: var(--pb-spacing-lg);
-    overflow: auto;
-    
-    .preview-content {
-      max-width: 100%;
-      margin: 0 auto;
-      padding: var(--pb-spacing-lg);
+
+    .modal-body {
+        height: calc(100% - 80px);
+        padding: var(--pb-spacing-lg);
+        overflow: auto;
+
+        .preview-content {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: var(--pb-spacing-lg);
+        }
     }
-  }
 }

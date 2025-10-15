@@ -1,45 +1,45 @@
 // Page Builder Base Styles
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  line-height: 1.6;
-  color: var(--pb-dark);
-  background-color: #f8fafc;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--pb-dark);
+    background-color: #f8fafc;
 }
 
 // Reset some default styling
 .gjs-cv-canvas {
-  top: 0;
-  width: 100%;
-  height: 100%;
+    top: 0;
+    width: 100%;
+    height: 100%;
 }
 
 .gjs-block {
-  border-radius: var(--pb-radius-lg);
-  padding: var(--pb-spacing-lg);
-  box-shadow: var(--pb-shadow-sm);
-  transition: var(--pb-transition);
-  background: #ffffff !important;
-  width: 100%;
-  
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--pb-shadow-lg);
-  }
+    border-radius: var(--pb-radius-lg);
+    padding: var(--pb-spacing-lg);
+    box-shadow: var(--pb-shadow-sm);
+    transition: var(--pb-transition);
+    background: #ffffff !important;
+    width: 100%;
+
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--pb-shadow-lg);
+    }
 }
 
-.gjs-editor, 
-.gjs-title, 
-.gjs-blocks-c, 
+.gjs-editor,
+.gjs-title,
+.gjs-blocks-c,
 .gjs-cv-canvas-bg {
-  background-color: #ffffff !important;
-  color: var(--pb-dark) !important;
-  font-weight: bold;
+    background-color: #ffffff !important;
+    color: var(--pb-dark) !important;
+    font-weight: bold;
 }
 
 .gjs-block-category.gjs-open {
-  border-bottom: none;
+    border-bottom: none;
 }

@@ -3,7 +3,7 @@
         max-width: 94vw;
         padding: 0 3vw 0;
     }
-    @include media-breakpoint-between(xl,xxl){
+    @include media-breakpoint-between(xl, xxl) {
         max-width: 96vw;
         padding: 0 2vw 0;
     }
@@ -34,7 +34,10 @@
     font-weight: 600;
     font-size: 1.2rem;
     padding: 0.75rem 1.5rem;
-    transition: color 0.3s, border-color 0.3s, background 0.3s;
+    transition:
+        color 0.3s,
+        border-color 0.3s,
+        background 0.3s;
     min-width: 44px;
     min-height: 44px;
 
@@ -61,12 +64,12 @@
     h2 {
         font-size: 3rem;
         font-weight: 700;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
     }
     p.lead {
         font-size: 1rem;
         font-weight: 400;
-        text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
     }
 }
 
@@ -77,9 +80,9 @@
 
 .icon-rednote {
     display: inline-block;
-    width: 1.125rem !important;  // 18px to match Bootstrap Icons width
-    height: 1.125rem !important;  // 18px to match Bootstrap Icons height
-    vertical-align: -.125em;  // Match Bootstrap Icons vertical alignment
-    background: url('../images/rednote.svg') no-repeat center center;
+    width: 1.125rem !important; // 18px to match Bootstrap Icons width
+    height: 1.125rem !important; // 18px to match Bootstrap Icons height
+    vertical-align: -0.125em; // Match Bootstrap Icons vertical alignment
+    background: url("../images/rednote.svg") no-repeat center center;
     background-size: contain;
 }

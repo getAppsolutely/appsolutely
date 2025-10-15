@@ -1,8 +1,8 @@
 // Page Builder Main SCSS Entry Point
 
 // External Dependencies
-@import 'grapesjs/dist/css/grapes.min.css';
-@import '@fortawesome/fontawesome-free/css/all.min.css';
+@import "grapesjs/dist/css/grapes.min.css";
+@import "@fortawesome/fontawesome-free/css/all.min.css";
 
 // TailwindCSS (if not already included globally)
 @tailwind base;
@@ -10,11 +10,11 @@
 @tailwind utilities;
 
 // Page Builder Styles
-@import 'variables';
-@import 'base';
-@import 'components/editor';
-@import 'components/blocks';
-@import 'components/panels';
-@import 'components/modals';
-@import 'components/notifications';
-@import 'utilities';
+@import "variables";
+@import "base";
+@import "components/editor";
+@import "components/blocks";
+@import "components/panels";
+@import "components/modals";
+@import "components/notifications";
+@import "utilities";
