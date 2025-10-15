@@ -44,6 +44,7 @@ async function killPort(port: number) {
             await execAsync(`kill -9 ${pid}`);
         }
     } catch {
+        // Ignore errors if no process is running on the port
     }
 }
 
