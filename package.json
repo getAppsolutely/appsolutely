@@ -24,7 +24,8 @@
         "format": "prettier --write '**/*.{scss,css,ts,tsx,js,jsx,json,md,html,vue}'",
         "format:check": "prettier --check '**/*.{scss,css,ts,tsx,js,jsx,json,md,html,vue}'",
         "format:scss": "prettier --write '**/*.scss'",
-        "format:all": "npm run format && npm run lint:all:fix"
+        "format:all": "npm run format && npm run lint:all:fix",
+        "prepare": "husky"
     },
     "devDependencies": {
         "@eslint/js": "^9.37.0",
@@ -44,8 +45,10 @@
         "concurrently": "^9.2.0",
         "detect-port": "^2.1.0",
         "eslint": "^9.37.0",
+        "husky": "^9.1.7",
         "jquery": "^3.7.0",
         "laravel-vite-plugin": "^1.2.0",
+        "lint-staged": "^16.2.4",
         "postcss": "^8.4.38",
         "postcss-import": "^16.1.0",
         "postcss-load-config": "^6.0.1",
@@ -71,5 +74,17 @@
         "swiper": "^11.2.10",
         "typescript": "^5.8.3",
         "vuedraggable": "^4.1.0"
+    },
+    "lint-staged": {
+        "*.php": [
+            "./vendor/bin/pint"
+        ],
+        "*.scss": [
+            "prettier --write",
+            "stylelint --fix"
+        ],
+        "*.{css,ts,tsx,js,jsx,json,md,html,vue}": [
+            "prettier --write"
+        ]
     }
 }
