@@ -3,15 +3,15 @@
 
 .text-document-collapsible {
     &__container {
-        background: #ffffff;
+        background: #fff;
         border: 1px solid $gray-400;
         border-radius: $border-radius-lg;
-        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 7.5%);
         overflow: hidden;
         transition: all 0.3s ease;
 
         &:hover {
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
             border-color: $gray-500;
         }
     }
@@ -39,19 +39,19 @@
         // Active state when expanded
         &[aria-expanded="true"] {
             background: $gray-200;
-            color: #ffffff;
+            color: #fff;
             border-color: $gray-200;
 
             .text-document-collapsible__title,
             .text-document-collapsible__subtitle {
-                color: #ffffff;
+                color: #fff;
             }
 
             .text-document-collapsible__arrow {
                 transform: rotate(180deg);
 
                 i {
-                    color: #ffffff;
+                    color: #fff;
                 }
             }
         }
@@ -93,7 +93,7 @@
 
     &__body {
         padding: $spacer * 1.25;
-        background: #ffffff;
+        background: #fff;
     }
 
     &__meta {

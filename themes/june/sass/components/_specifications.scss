@@ -5,7 +5,7 @@
         background-color: white;
         border-radius: $border-radius-lg;
         padding: map-get($spacers, 5);
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 10px rgb(0 0 0 / 10%);
         height: 100%;
 
         @include media-breakpoint-down(md) {

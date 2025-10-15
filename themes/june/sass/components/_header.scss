@@ -12,7 +12,7 @@
 
     &.scrolled {
         background-color: $body-color !important;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 4px 20px rgb(0 0 0 / 15%);
     }
 }
 
@@ -58,7 +58,7 @@
     top: 64px !important;
     min-height: 350px;
     background: $body-bg !important;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 32px rgb(0 0 0 / 12%);
     z-index: 1050;
     opacity: 0;
     pointer-events: none;
@@ -78,14 +78,14 @@
         transition: all 0.3s ease;
 
         &:hover {
-            background-color: rgba(0, 0, 0, 0.05);
+            background-color: rgb(0 0 0 / 5%);
             transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 25px rgb(0 0 0 / 10%);
         }
 
         img {
             border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgb(0 0 0 / 10%);
             max-width: 200px;
             object-fit: cover;
         }
@@ -141,7 +141,7 @@
 #mainHeader:has(.header-center .navbar-nav .nav-item:hover) {
     background: $body-bg;
     color: $body-color;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 20px rgb(0 0 0 / 15%);
 
     .navbar,
     .navbar-nav .nav-link,
@@ -166,7 +166,7 @@
         font-weight: 600;
 
         &:hover {
-            //color: $primary;
+            // color: $primary;
         }
     }
 }
@@ -188,6 +188,7 @@
         opacity: 0;
         transform: translateY(-20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -220,7 +221,7 @@
 }
 
 .header-mobile-testdrive {
-    margin: 2rem 1.5rem 1.5rem 1.5rem;
+    margin: 2rem 1.5rem 1.5rem;
 }
 
 .header-mobile-testdrive .btn {
@@ -261,7 +262,7 @@
     transition: background-color 0.3s ease;
 
     &:hover {
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: rgb(255 255 255 / 10%);
     }
 
     &:focus {

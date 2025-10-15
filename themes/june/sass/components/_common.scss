@@ -1,11 +1,11 @@
 .container.container-responsive {
     @include media-breakpoint-down(xxl) {
         max-width: 94vw;
-        padding: 0 3vw 0;
+        padding: 0 3vw;
     }
     @include media-breakpoint-between(xl, xxl) {
         max-width: 96vw;
-        padding: 0 2vw 0;
+        padding: 0 2vw;
     }
 }
 
@@ -61,20 +61,23 @@
     width: 100%;
     color: $light;
     z-index: 10;
+
     h2 {
         font-size: 3rem;
         font-weight: 700;
-        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        text-shadow: 0 2px 8px rgb(0 0 0 / 40%);
     }
+
     p.lead {
         font-size: 1rem;
         font-weight: 400;
-        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+        text-shadow: 0 1px 4px rgb(0 0 0 / 30%);
     }
 }
 
 .overlay-btn {
     @extend .btn-outline-light-primary;
+
     margin-top: 1.5rem;
 }
 

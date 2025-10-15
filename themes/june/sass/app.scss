@@ -49,8 +49,9 @@
 // 5. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
 @import "~bootstrap/scss/utilities/api";
 @import "bootstrap-icons/font/bootstrap-icons";
+
 // Google Fonts
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans+Thai:wght@100..900&display=swap");
+@import "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans+Thai:wght@100..900&display=swap";
 
 // Swiper CSS
 @import "swiper/css/bundle";
@@ -64,7 +65,7 @@ body {
 
 // 6. Custom theme styles
 .text-nunito {
-    font-family: "Montserrat", "Noto Sans Thai", sans-serif;
+    font-family: Montserrat, "Noto Sans Thai", sans-serif;
 }
 
 // 7. Component imports

@@ -32,6 +32,7 @@
 // Hero banner caption
 .hero-banner-caption {
     @extend .overlay-caption;
+
     top: 25% !important;
 
     // Initial state
@@ -45,6 +46,7 @@
     img {
         max-width: 20vw;
         max-height: 40px;
+
         &[src$=".webp"] {
             width: 10vw;
         }
@@ -56,6 +58,7 @@
 
     p.lead.mb-4 {
         @include fade-in-up(0.4s);
+
         font-size: 2vw;
         font-weight: 500;
     }

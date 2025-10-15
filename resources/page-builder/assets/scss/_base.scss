@@ -22,7 +22,7 @@ body {
     padding: var(--pb-spacing-lg);
     box-shadow: var(--pb-shadow-sm);
     transition: var(--pb-transition);
-    background: #ffffff !important;
+    background: #fff !important;
     width: 100%;
 
     &:hover {
@@ -35,7 +35,7 @@ body {
 .gjs-title,
 .gjs-blocks-c,
 .gjs-cv-canvas-bg {
-    background-color: #ffffff !important;
+    background-color: #fff !important;
     color: var(--pb-dark) !important;
     font-weight: bold;
 }

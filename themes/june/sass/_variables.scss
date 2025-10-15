@@ -1,20 +1,21 @@
 // Override Bootstrap's default variables here
 $bootstrap-icons-font-dir: "bootstrap-icons/font/fonts";
+
 // Body
 $body-bg: #f8fafc;
 $body-color: #212529;
 
 // Typography
-//$font-family-sans-serif: 'Nunito', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+// $font-family-sans-serif: 'Nunito', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 $font-family-sans-serif:
     "Montserrat",
     "Noto Sans Thai",
     -apple-system,
-    BlinkMacSystemFont,
+    blinkmacsystemfont,
     "Segoe UI",
-    Roboto,
+    roboto,
     "Helvetica Neue",
-    Arial,
+    arial,
     sans-serif;
 $font-size-base: 0.9rem;
 $line-height-base: 1.6;
@@ -83,7 +84,7 @@ $navbar-nav-link-padding-x: 0.5rem;
 // Cards
 $card-border-width: 0;
 $card-border-radius: $border-radius;
-$card-cap-bg: rgba(0, 0, 0, 0.03);
+$card-cap-bg: rgb(0 0 0 / 3%);
 
 // Buttons
 $btn-border-radius: $border-radius;

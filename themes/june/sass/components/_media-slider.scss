@@ -6,12 +6,15 @@
 
 .media-slider-caption {
     @extend .overlay-caption;
+
     top: 40% !important;
+
     img {
         height: auto;
         width: 20vw;
         max-height: 40px;
         object-fit: contain !important;
+
         &[src$=".webp"] {
             width: 10vw;
         }
@@ -81,14 +84,16 @@
                 position: relative;
                 border-radius: 12px;
                 overflow: hidden;
-                //box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+                // box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
                 transition:
                     transform 0.3s ease,
                     box-shadow 0.3s ease;
 
                 &:hover {
                     transform: translateY(-4px);
-                    //box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+
+                    // box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
                 }
             }
 
@@ -112,7 +117,7 @@
                 bottom: 0;
                 left: 0;
                 right: 0;
-                background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+                background: linear-gradient(transparent, rgb(0 0 0 / 80%));
                 color: white;
                 padding: 2rem 1.5rem 1.5rem;
                 text-align: left;
@@ -241,10 +246,11 @@
                 height: 30px;
                 margin: 0;
                 color: var(--bs-secondary);
-                background: rgba(255, 255, 255, 0.95);
-                //border: 1px solid var(--bs-secondary);
+                background: rgb(255 255 255 / 95%);
+
+                // border: 1px solid var(--bs-secondary);
                 border-radius: 50%;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+                box-shadow: 0 2px 8px rgb(0 0 0 / 8%);
                 transition: all 0.3s ease;
                 cursor: pointer;
                 display: flex;
@@ -255,7 +261,7 @@
                     background: var(--bs-secondary);
                     color: white;
                     transform: translateY(-1px);
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+                    box-shadow: 0 4px 12px rgb(0 0 0 / 12%);
                 }
 
                 &:active {
@@ -479,9 +485,9 @@
             height: 40px;
             margin: 0;
             color: #fff;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgb(0 0 0 / 60%);
             border-radius: 50%;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 2px 8px rgb(0 0 0 / 30%);
             transition: all 0.3s ease;
             cursor: pointer;
             display: flex;
@@ -489,9 +495,9 @@
             justify-content: center;
 
             &:hover {
-                background: rgba(0, 0, 0, 0.8);
+                background: rgb(0 0 0 / 80%);
                 transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+                box-shadow: 0 4px 12px rgb(0 0 0 / 40%);
             }
 
             &:active {
