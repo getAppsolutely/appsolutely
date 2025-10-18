@@ -61,13 +61,7 @@ final class NotificationRuleRepository extends BaseRepository
     public function createRule(array $data): NotificationRule
     {
         // Ensure proper data types for JSON fields
-        if (isset($data['recipient_emails']) && is_string($data['recipient_emails'])) {
-            $data['recipient_emails'] = array_filter(array_map('trim', explode(',', $data['recipient_emails'])));
-        }
-
-        if (isset($data['conditions']) && is_string($data['conditions'])) {
-            $data['conditions'] = json_decode($data['conditions'], true);
-        }
+        $data = $this->getArr($data);
 
         return $this->create($data);
     }
@@ -78,13 +72,7 @@ final class NotificationRuleRepository extends BaseRepository
     public function updateRule(int $id, array $data): NotificationRule
     {
         // Ensure proper data types for JSON fields
-        if (isset($data['recipient_emails']) && is_string($data['recipient_emails'])) {
-            $data['recipient_emails'] = array_filter(array_map('trim', explode(',', $data['recipient_emails'])));
-        }
-
-        if (isset($data['conditions']) && is_string($data['conditions'])) {
-            $data['conditions'] = json_decode($data['conditions'], true);
-        }
+        $data = $this->getArr($data);
 
         $this->update($id, $data);
 
@@ -184,5 +172,18 @@ final class NotificationRuleRepository extends BaseRepository
     public function bulkUpdateStatus(array $ids, int $status): int
     {
         return $this->model->newQuery()->whereIn('id', $ids)->update(['status' => $status]);
+    }
+
+    public function getArr(array $data): array
+    {
+        if (isset($data['recipient_emails']) && is_string($data['recipient_emails'])) {
+            $data['recipient_emails'] = array_filter(array_map('trim', explode(',', $data['recipient_emails'])));
+        }
+
+        if (isset($data['conditions']) && is_string($data['conditions'])) {
+            $data['conditions'] = json_decode($data['conditions'], true);
+        }
+
+        return $data;
     }
 }

@@ -269,7 +269,7 @@ if (! function_exists('app_url')) {
         $baseUrl = config('appsolutely.url');
 
         if ($baseUrl) {
-            return rtrim($baseUrl, '/') . '/' . ltrim($uri, '/');
+            return path_join($baseUrl, $uri);
         }
 
         return url($uri);
@@ -285,7 +285,7 @@ if (! function_exists('dashboard_url')) {
         $baseUrl = config('admin.route.domain');
 
         if ($baseUrl) {
-            return URL::formatScheme('') . rtrim($baseUrl, '/') . '/' . ltrim($uri, '/');
+            return URL::formatScheme('') . path_join($baseUrl, $uri);
         }
 
         return url($uri);
@@ -334,7 +334,7 @@ if (! function_exists('asset_url')) {
         $hash = '?v=' . build_hash();
 
         if (! empty(config('appsolutely.asset_url'))) {
-            return rtrim(config('appsolutely.asset_url'), '/') . '/' . ltrim($uri, '/') . $hash;
+            return path_join(config('appsolutely.asset_url'), $uri) . $hash;
         }
 
         $uri = (config('appsolutely.storage.assets') ?? 'assets/') . $uri . $hash;
@@ -789,7 +789,7 @@ if (! function_exists('nested_url')) {
             return app_url($currentPath);
         }
 
-        $fullPath = rtrim($currentPath, '/') . '/' . ltrim($path, '/');
+        $fullPath = path_join($currentPath, $path);
 
         return app_url($fullPath);
     }

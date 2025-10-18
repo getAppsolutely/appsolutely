@@ -13,7 +13,7 @@ class Header implements HeaderInstance {
     submenuItems: NodeListOf<Element> | null;
 
     constructor() {
-        this.header = document.querySelector<HTMLElement>('#mainHeader');
+        this.header = document.querySelector<HTMLElement>('#main-header');
         this.navbar = this.header?.querySelector<HTMLElement>('.navbar') ?? null;
         this.navbarToggler = this.header?.querySelector<HTMLElement>('.navbar-toggler') ?? null;
         this.navbarCollapse = this.header?.querySelector<HTMLElement>('.navbar-collapse') ?? null;
@@ -44,8 +44,7 @@ class Header implements HeaderInstance {
 
         // Close mobile menu when clicking outside
         document.addEventListener('click', (e: MouseEvent) => {
-            if (this.navbarCollapse?.classList.contains('show') &&
-                !this.navbar?.contains(e.target as Node)) {
+            if (this.navbarCollapse?.classList.contains('show') && !this.navbar?.contains(e.target as Node)) {
                 this.closeMobileMenu();
             }
         });
@@ -142,7 +141,7 @@ class Header implements HeaderInstance {
         submenu.style.opacity = '0';
         submenu.style.pointerEvents = 'none';
         submenu.style.transform = 'translateY(-10px)';
-        
+
         // Hide after transition completes
         setTimeout(() => {
             if (submenu.style.opacity === '0') {
@@ -174,17 +173,19 @@ window.addEventListener('resize', () => {
         return;
     }
 
-    const observer = new IntersectionObserver(([entry]: IntersectionObserverEntry[]) => {
-        if (!entry.isIntersecting) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
+    const observer = new IntersectionObserver(
+        ([entry]: IntersectionObserverEntry[]) => {
+            if (!entry.isIntersecting) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        },
+        {
+            rootMargin: '0px',
+            threshold: 0,
         }
-    }, {
-        rootMargin: '0px',
-        threshold: 0,
-    });
+    );
 
     observer.observe(trigger);
 })();
-
