@@ -56,13 +56,9 @@
                 <!-- Logo -->
                 @if($displayOptions['logo'] ?? false)
                     <div class="mb-4">
-                        @if(config('appsolutely.general.logo'))
-                            <img src="{{ config('appsolutely.general.logo') }}"
-                                 alt="{{ config('appsolutely.general.site_name') }}"
-                                 height="40">
-                        @else
+                        @if(config('basic.title'))
                             <img src="{{ asset_server('assets/images/logo-dark.webp') }}"
-                                 alt="{{ config('basic.name') }}"
+                                 alt="{{ config('basic.title') }}"
                                  height="40">
                         @endif
                     </div>

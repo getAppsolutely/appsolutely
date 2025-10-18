@@ -8,11 +8,11 @@
                 <a href="{{ route('home') }}" class="navbar-brand m-0">
                     @if($displayOptions['logo'])
                         <img src="{{ asset_server('assets/images/logo-dark.webp') }}"
-                             alt="{{ config('appsolutely.general.site_name') }}" height="40" class="logo-dark">
+                             alt="{{ config('basic.title') }}" height="40" class="logo-dark">
                         <img src="{{ asset_server('assets/images/logo.webp') }}"
-                             alt="{{ config('appsolutely.general.site_name') }}" height="40" class="logo-light">
+                             alt="{{ config('basic.title') }}" height="40" class="logo-light">
                     @else
-                        <span>{{ config('appsolutely.general.site_name') }}</span>
+                        <span>{{ config('basic.title') }}</span>
                     @endif
                 </a>
             </div>

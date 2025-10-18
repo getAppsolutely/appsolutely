@@ -150,7 +150,7 @@ class GeneralPage
     {
         $title     = $this->content->title ?? '';
         $separator = config('appsolutely.seo.title_separator', ' | ');
-        $siteName  = config('appsolutely.general.site_name');
+        $siteName  = config('basic.title');
 
         // For nested pages, optionally append parent title
         if ($this->isNested()) {

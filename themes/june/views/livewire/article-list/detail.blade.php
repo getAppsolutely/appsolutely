@@ -3,7 +3,7 @@
         <div class="col-lg-10">
             <!-- Title -->
             @if($model->title ?? false)
-                <h1 class="display-4 fw-bold text-dark mb-3">
+                <h1 class="fw-bold text-dark mb-3">
                     {{ $model->title }}
                 </h1>
             @endif

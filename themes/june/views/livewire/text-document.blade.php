@@ -4,7 +4,7 @@
             <div class="col-lg-8">
                 <!-- Title -->
                 @if($displayOptions['title'] ?? false)
-                    <h1 class="display-4 fw-bold text-dark mb-3">
+                    <h1 class="fw-bold text-dark mb-3">
                         {{ $displayOptions['title'] }}
                     </h1>
                 @endif

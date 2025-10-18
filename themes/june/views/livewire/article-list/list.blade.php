@@ -2,7 +2,7 @@
     <!-- Header -->
     @if($displayOptions['title'] ?? false)
         <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold text-dark mb-3">
+            <h2 class="display-4 fw-bold text-dark mb-3">
                 {{ $displayOptions['title'] }}
             </h2>
             @if($displayOptions['subtitle'] ?? false)
