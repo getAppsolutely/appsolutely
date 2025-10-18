@@ -17,7 +17,7 @@ interface LazyLoadOptions {
 }
 
 class LazyLoadingManager {
-    private lazyLoadInstance: LazyLoad | null = null;
+    private lazyLoadInstance: any = null;
     private defaultOptions: LazyLoadOptions = {
         rootMargin: '50px 0px',
         threshold: 0.1,
@@ -39,20 +39,20 @@ class LazyLoadingManager {
 
         this.lazyLoadInstance = new LazyLoad({
             elements_selector: '.lazy',
-            rootMargin: config.rootMargin,
+            root_margin: config.rootMargin,
             threshold: config.threshold,
             enableAuto: config.enableAuto,
             class_loading: config.loadingClass,
             class_loaded: config.loadedClass,
             class_error: config.errorClass,
-            callback_loaded: (element) => {
+            callback_loaded: (element: HTMLElement) => {
                 this.onElementLoaded(element);
             },
-            callback_error: (element) => {
+            callback_error: (element: HTMLElement) => {
                 this.onElementError(element);
             },
             // Handle background images
-            callback_enter: (element) => {
+            callback_enter: (element: HTMLElement) => {
                 if (element.classList.contains('lazy-bg')) {
                     const bgSrc = element.getAttribute('data-bg');
                     if (bgSrc) {
@@ -60,7 +60,7 @@ class LazyLoadingManager {
                     }
                 }
             },
-        });
+        } as any);
 
         // Make instance available globally for debugging
         if (typeof window !== 'undefined') {
