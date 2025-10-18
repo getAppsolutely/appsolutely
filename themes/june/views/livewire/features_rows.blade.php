@@ -26,14 +26,14 @@
                             @if(!empty($feature['link']))
                                 <a href="{{ $feature['link'] }}" class="d-block">
                                     <img
-                                        src="{{ asset_server($feature['url']) }}"
+                                        src="{{ asset_url($feature['url']) }}"
                                         alt="{{ $feature['title'] ?? '' }}"
                                         class="w-100 h-100 object-fit-cover"
                                     >
                                 </a>
                             @else
                                 <img
-                                    src="{{ asset_server($feature['url']) }}"
+                                    src="{{ asset_url($feature['url']) }}"
                                     alt="{{ $feature['title'] ?? '' }}"
                                     class="w-100 h-100 object-fit-cover"
                                 >

@@ -53,7 +53,7 @@ final class TransitionSection extends BaseBlock
 
         // Background image
         if (! empty($config['image'])) {
-            $styles[] = 'background-image: url(' . asset_server($config['image']) . ')';
+            $styles[] = 'background-image: url(' . asset_url($config['image']) . ')';
             $styles[] = 'background-position: ' . $config['background_position'];
             $styles[] = 'background-size: ' . $config['background_size'];
             $styles[] = 'background-repeat: no-repeat';

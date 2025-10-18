@@ -304,13 +304,40 @@ if (! function_exists('upload_url')) {
     }
 }
 
+if (! function_exists('build_hash')) {
+    function build_hash(): string
+    {
+        // Generate cache-busting hash from build manifest
+        return cache()->remember('build_hash', 3600, function () {
+            $manifestPath = public_path('build/manifest.json');
+
+            if (file_exists($manifestPath)) {
+                // Use the manifest file's modification time and content hash
+                $mtime   = filemtime($manifestPath);
+                $content = file_get_contents($manifestPath);
+
+                return substr(md5($mtime . $content), 0, 8);
+            }
+
+            // Fallback to app version or timestamp
+            return substr(md5(config('app.version', time())), 0, 8);
+        });
+    }
+}
+
 if (! function_exists('asset_url')) {
     /**
      * files for dashboard viewing
      */
     function asset_url(string $uri = ''): string
     {
-        $uri = (config('appsolutely.storage.assets') ?? 'assets/') . $uri;
+        $hash = '?v=' . build_hash();
+
+        if (! empty(config('appsolutely.asset_url'))) {
+            return rtrim(config('appsolutely.asset_url'), '/') . '/' . ltrim($uri, '/') . $hash;
+        }
+
+        $uri = (config('appsolutely.storage.assets') ?? 'assets/') . $uri . $hash;
 
         return app_url($uri);
     }
@@ -639,31 +666,6 @@ if (! function_exists('themed_assets')) {
         }
 
         return asset(path_join($buildPath, $manifest[$key]['file']));
-    }
-}
-
-if (! function_exists('asset_server')) {
-    function asset_server(string $path): string
-    {
-        $baseUrl = rtrim(config('appsolutely.asset_url'), '/') . '/' . ltrim($path, '/');
-
-        // Generate cache-busting hash from build manifest
-        $hash = cache()->remember('asset_server_hash', 3600, function () {
-            $manifestPath = public_path('build/manifest.json');
-
-            if (file_exists($manifestPath)) {
-                // Use the manifest file's modification time and content hash
-                $mtime   = filemtime($manifestPath);
-                $content = file_get_contents($manifestPath);
-
-                return substr(md5($mtime . $content), 0, 8);
-            }
-
-            // Fallback to app version or timestamp
-            return substr(md5(config('app.version', time())), 0, 8);
-        });
-
-        return $baseUrl . '?v=' . $hash;
     }
 }
 

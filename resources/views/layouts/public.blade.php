@@ -13,8 +13,8 @@
     <link rel="canonical" href="{{ url()->current() }}" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ asset_server(config('basic.favicon')) }}">
-    <link rel="apple-touch-icon" href="{{ asset_server(config('basic.favicon')) }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset_url(config('basic.favicon')) }}">
+    <link rel="apple-touch-icon" href="{{ asset_url(config('basic.favicon')) }}">
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">

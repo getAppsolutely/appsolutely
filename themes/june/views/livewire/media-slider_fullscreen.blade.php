@@ -5,16 +5,16 @@
                 <div class="carousel-item @if($index === 0) active @endif">
                     @if(($slide['type'] ?? 'image') === 'video')
                         <video class="d-block w-100" controls>
-                            <source src="{{ asset_server($slide['url']) }}" type="video/mp4">
+                            <source src="{{ asset_url($slide['url']) }}" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
                     @else
-                        <img src="{{ asset_server($slide['url']) }}" class="d-block w-100"
+                        <img src="{{ asset_url($slide['url']) }}" class="d-block w-100"
                              alt="{{ $slide['title'] ?? '' }}">
                     @endif
                     <div class="carousel-caption d-none d-md-block media-slider-caption">
                         @if(!empty($slide['model']) && !empty($slide['title']))
-                            <img src="{{ asset_server($slide['model']) }}" alt="{{ $slide['title'] }}" class="mb-4">
+                            <img src="{{ asset_url($slide['model']) }}" alt="{{ $slide['title'] }}" class="mb-4">
                         @elseif(empty($slide['model']) && !empty($slide['title']))
                             <h2 class="display-6 fw-bold mb-3">{{ $slide['title'] }}</h2>
                         @endif

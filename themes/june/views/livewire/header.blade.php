@@ -7,9 +7,9 @@
             <div class="header-left d-flex align-items-center flex-shrink-0">
                 <a href="{{ route('home') }}" class="navbar-brand m-0">
                     @if($displayOptions['logo'])
-                        <img src="{{ asset_server('assets/images/logo-dark.webp') }}"
+                        <img src="{{ asset_url('assets/images/logo-dark.webp') }}"
                              alt="{{ config('basic.title') }}" height="40" class="logo-dark">
-                        <img src="{{ asset_server('assets/images/logo.webp') }}"
+                        <img src="{{ asset_url('assets/images/logo.webp') }}"
                              alt="{{ config('basic.title') }}" height="40" class="logo-light">
                     @else
                         <span>{{ config('basic.title') }}</span>
@@ -48,7 +48,7 @@
                                                                 @endif
                                                                 @if($child->thumbnail)
                                                                     <span class="d-inline-block position-relative">
-                                                                        <img class="img-fluid mb-2" src="{{ asset_server($child->thumbnail) }}" alt="{{ $child->title }}">
+                                                                        <img class="img-fluid mb-2" src="{{ asset_url($child->thumbnail) }}" alt="{{ $child->title }}">
                                                                         @if(($child->setting['flag_coming_soon'] ?? '') === 'true')
                                                                             <img src="{{ themed_assets('/images/coming.png') }}" alt="Coming soon" class="position-absolute coming-ribbon" style="top: 56px; right: 0; width: 56px;">
                                                                         @endif
@@ -114,7 +114,7 @@
                                                 @endif
                                                 @if($child->thumbnail)
                                                     <span class="d-block position-relative">
-                                                        <img class="" src="{{ asset_server($child->thumbnail) }}" alt="{{ $child->title }}" style="width: 100%">
+                                                        <img class="" src="{{ asset_url($child->thumbnail) }}" alt="{{ $child->title }}" style="width: 100%">
                                                         @if(($child->setting['flag_coming_soon'] ?? '') === 'true')
                                                             <img src="{{ themed_assets('/images/coming.png') }}" alt="Coming soon" class="position-absolute coming-ribbon" style="top: 48px; right: -6px; width: 48px;">
                                                         @endif

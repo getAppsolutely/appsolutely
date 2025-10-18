@@ -27,12 +27,12 @@
                                 <div class="features-fashionable__image-wrapper">
                                     @if($feature['link'])
                                         <a href="{{ $feature['link'] }}" class="features-fashionable__image-link">
-                                            <img src="{{ asset_server($feature['url']) }}"
+                                            <img src="{{ asset_url($feature['url']) }}"
                                                  alt="{{ $feature['title'] ?? '' }}"
                                                  class="features-fashionable__image">
                                         </a>
                                     @else
-                                        <img src="{{ asset_server($feature['url']) }}"
+                                        <img src="{{ asset_url($feature['url']) }}"
                                              alt="{{ $feature['title'] ?? '' }}"
                                              class="features-fashionable__image">
                                     @endif

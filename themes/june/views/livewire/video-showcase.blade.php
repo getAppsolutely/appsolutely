@@ -7,17 +7,17 @@
             @if($displayOptions['loop']) loop @endif
             @if($displayOptions['muted']) muted @endif
             @if(!$displayOptions['controls']) style="pointer-events: none;" @else controls @endif
-            @if($displayOptions['poster_image']) poster="{{ asset_server($displayOptions['poster_image']) }}" @endif
+            @if($displayOptions['poster_image']) poster="{{ asset_url($displayOptions['poster_image']) }}" @endif
             playsinline
         >
 
             @if($displayOptions['video_url'])
-                <source src="{{ asset_server($displayOptions['video_url']) }}" type="video/{{ $displayOptions['video_format'] }}">
+                <source src="{{ asset_url($displayOptions['video_url']) }}" type="video/{{ $displayOptions['video_format'] }}">
             @endif
 
             @if(!empty($displayOptions['fallback_videos']))
                 @foreach($displayOptions['fallback_videos'] as $fallback)
-                    <source src="{{ asset_server($fallback['url']) }}" type="video/{{ $fallback['format'] }}">
+                    <source src="{{ asset_url($fallback['url']) }}" type="video/{{ $fallback['format'] }}">
                 @endforeach
             @endif
 
@@ -31,7 +31,7 @@
     <!-- Mobile Fallback Image -->
     @if($displayOptions['mobile_fallback_image'])
         <div class="mobile-fallback d-block d-md-none position-absolute top-0 start-0 w-100 h-100" style="z-index: 1;">
-            <img src="{{ asset_server($displayOptions['mobile_fallback_image']) }}" alt="Video fallback" class="w-100 h-100 object-fit-cover">
+            <img src="{{ asset_url($displayOptions['mobile_fallback_image']) }}" alt="Video fallback" class="w-100 h-100 object-fit-cover">
         </div>
     @endif
 

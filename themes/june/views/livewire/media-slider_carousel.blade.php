@@ -73,13 +73,13 @@
                             @if(($slide['type'] ?? 'image') === 'video')
                                 <div class="media-slide-video">
                                     <video controls>
-                                        <source src="{{ asset_server($slide['url']) }}" type="video/mp4">
+                                        <source src="{{ asset_url($slide['url']) }}" type="video/mp4">
                                         Your browser does not support the video tag.
                                     </video>
                                 </div>
                             @else
                                 <div class="media-slide-image">
-                                    <img src="{{ asset_server($slide['url']) }}"
+                                    <img src="{{ asset_url($slide['url']) }}"
                                          alt="{{ $slide['title'] ?? 'Slide ' . ($index + 1) }}">
                                 </div>
                             @endif

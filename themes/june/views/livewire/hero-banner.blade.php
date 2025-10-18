@@ -5,17 +5,17 @@
                 @if(($hero['type'] ?? 'image') === 'video')
                     <div class="hero-video-container position-absolute top-0 start-0 w-100 h-100">
                         <video class="w-100 h-100 object-fit-cover" controls loading="lazy">
-                            <source src="{{ asset_server($hero['url']) }}" type="video/mp4">
+                            <source src="{{ asset_url($hero['url']) }}" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
                     </div>
                 @else
                     @if($style == 'fullscreen')
                         <div class="hero-image-container"
-                             style="background-image: url('{{ asset_server($hero['url']) }}');">
+                             style="background-image: url('{{ asset_url($hero['url']) }}');">
                         </div>
                     @else
-                        <img src="{{ asset_server($hero['url']) }}" class="w-100 h-auto d-block" alt="">
+                        <img src="{{ asset_url($hero['url']) }}" class="w-100 h-auto d-block" alt="">
                     @endif
                 @endif
 
@@ -25,7 +25,7 @@
                         <div class="row justify-content-center">
                             <div class="col-12 col-lg-8 col-xl-6">
                                 @if(!empty($hero['model']) && !empty($hero['title']))
-                                    <img src="{{ asset_server($hero['model']) }}" alt="{{ $hero['title'] }}" class="mb-4">
+                                    <img src="{{ asset_url($hero['model']) }}" alt="{{ $hero['title'] }}" class="mb-4">
                                 @elseif(empty($hero['model']) && !empty($hero['title']))
                                     <h4 class="display-6 fw-bold mb-3">{{ $hero['title'] }}</h4>
                                 @endif

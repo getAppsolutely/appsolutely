@@ -26,12 +26,12 @@
                             <div class="features-fullscreen__image-wrapper">
                                 @if($feature['link'])
                                     <a href="{{ $feature['link'] }}" class="features-fullscreen__image-link">
-                                        <img src="{{ asset_server($feature['url']) }}"
+                                        <img src="{{ asset_url($feature['url']) }}"
                                              alt="{{ $feature['title'] ?? '' }}"
                                              class="features-fullscreen__image">
                                     </a>
                                 @else
-                                    <img src="{{ asset_server($feature['url']) }}"
+                                    <img src="{{ asset_url($feature['url']) }}"
                                          alt="{{ $feature['title'] ?? '' }}"
                                          class="features-fullscreen__image">
                                 @endif

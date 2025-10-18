@@ -57,7 +57,7 @@
                 @if($displayOptions['logo'] ?? false)
                     <div class="mb-4">
                         @if(config('basic.title'))
-                            <img src="{{ asset_server('assets/images/logo-dark.webp') }}"
+                            <img src="{{ asset_url('assets/images/logo-dark.webp') }}"
                                  alt="{{ config('basic.title') }}"
                                  height="40">
                         @endif

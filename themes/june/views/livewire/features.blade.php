@@ -26,12 +26,12 @@
                             <div class="features__image-wrapper">
                                 @if($mainFeature['link'])
                                     <a href="{{ $mainFeature['link'] }}" class="features__image-link">
-                                        <img src="{{ asset_server($mainFeature['url']) }}"
+                                        <img src="{{ asset_url($mainFeature['url']) }}"
                                              alt="{{ $mainFeature['title'] ?? '' }}"
                                              class="features__image features__image--main">
                                     </a>
                                 @else
-                                    <img src="{{ asset_server($mainFeature['url']) }}"
+                                    <img src="{{ asset_url($mainFeature['url']) }}"
                                          alt="{{ $mainFeature['title'] ?? '' }}"
                                          class="features__image features__image--main">
                                 @endif
@@ -60,12 +60,12 @@
                                         <div class="features__image-wrapper">
                                             @if($feature['link'])
                                                 <a href="{{ $feature['link'] }}" class="features__image-link">
-                                                    <img src="{{ asset_server($feature['url']) }}"
+                                                    <img src="{{ asset_url($feature['url']) }}"
                                                          alt="{{ $feature['title'] ?? '' }}"
                                                          class="features__image features__image--secondary">
                                                 </a>
                                             @else
-                                                <img src="{{ asset_server($feature['url']) }}"
+                                                <img src="{{ asset_url($feature['url']) }}"
                                                      alt="{{ $feature['title'] ?? '' }}"
                                                      class="features__image features__image--secondary">
                                             @endif
