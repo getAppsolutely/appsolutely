@@ -50,6 +50,10 @@
         &[src$=".webp"] {
             width: 10vw;
         }
+
+        @include media-breakpoint-down(xxl) {
+            max-width: 50vw !important;
+        }
     }
 
     h4 {
@@ -61,6 +65,10 @@
 
         font-size: 2vw;
         font-weight: 500;
+
+        @include media-breakpoint-down(xxl) {
+            font-size: 1.25rem;
+        }
     }
 
     .hero-banner-btn {
