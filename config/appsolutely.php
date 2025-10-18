@@ -15,7 +15,7 @@ return [
     ],
     'general' => [
         'logo'             => env('APPSOLUTELY_LOGO', ''),
-        'site_name'        => env('APPSOLUTELY_SITE_NAME', config('app.name')),
+        'site_name'        => env('APPSOLUTELY_SITE_NAME', config('basic.title')),
         'site_description' => env('APPSOLUTELY_SITE_DESCRIPTION', ''),
     ],
     'currency' => [
