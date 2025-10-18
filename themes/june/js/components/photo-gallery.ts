@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Build category order based on first occurrence in photos array
     const categoryOrder: string[] = [];
     const seenCategories = new Set<string>();
-    
+
     photos.forEach((photo: Photo) => {
         const categories = toTags(photo);
         categories.forEach((category: string) => {
@@ -75,18 +75,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Use placeholder when url is empty or missing; also handle load errors
         if (img) {
-            img.src = (p.url && String(p.url).trim() !== '') ? p.url : PLACEHOLDER_URL;
+            img.setAttribute('data-src', p.url && String(p.url).trim() !== '' ? p.url : PLACEHOLDER_URL);
             img.alt = p.alt || p.title || '';
-            img.addEventListener('error', () => {
-                if (img.src !== PLACEHOLDER_URL) {
-                    img.src = PLACEHOLDER_URL;
-                }
-            }, { once: true });
+            img.addEventListener(
+                'error',
+                () => {
+                    if (img.getAttribute('data-src') !== PLACEHOLDER_URL) {
+                        img.setAttribute('data-src', PLACEHOLDER_URL);
+                        // Trigger lazy loading update if available
+                        if ((window as any).lazyManager) {
+                            (window as any).lazyManager.update();
+                        }
+                    }
+                },
+                { once: true }
+            );
         }
 
         if (title) title.textContent = p.title || '';
         if (subtitle) subtitle.textContent = p.subtitle || '';
-        
+
         // prefer description from JSON, fallback to caption
         if (text) text.innerHTML = p.description || p.caption || '';
 
@@ -124,18 +132,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const renderGrid = (filter: string = 'all'): void => {
         grid.innerHTML = '';
-        let list = filter === 'all' ? photos : photos.filter((p: Photo) => {
-            const t = toTags(p);
-            return t.includes(filter);
-        });
-        
+        let list =
+            filter === 'all'
+                ? photos
+                : photos.filter((p: Photo) => {
+                      const t = toTags(p);
+                      return t.includes(filter);
+                  });
+
         // Sort photos by category order when displaying
         list = list.sort((a: Photo, b: Photo) => {
             const aCategory = a.category || '';
             const bCategory = b.category || '';
             const aIndex = categoryOrder.indexOf(aCategory);
             const bIndex = categoryOrder.indexOf(bCategory);
-            
+
             // If both are in the defined order, sort by their position
             if (aIndex !== -1 && bIndex !== -1) {
                 return aIndex - bIndex;
@@ -146,13 +157,18 @@ document.addEventListener('DOMContentLoaded', () => {
             // If neither is in the defined order, sort alphabetically
             return aCategory.localeCompare(bCategory);
         });
-        
+
         list.forEach((p: Photo) => grid.appendChild(buildCard(p)));
+
+        // Update lazy loading for newly added images
+        if ((window as any).lazyManager) {
+            (window as any).lazyManager.update();
+        }
     };
 
     const renderFilters = (): void => {
         if (!filtersEl) return;
-        
+
         const makeBtn = (label: string, value: string, active: boolean): HTMLButtonElement => {
             const btn = document.createElement('button');
             btn.type = 'button';
@@ -182,4 +198,3 @@ document.addEventListener('DOMContentLoaded', () => {
     renderFilters();
     renderGrid('all');
 });
-

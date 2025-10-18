@@ -25,7 +25,7 @@
         <div class="col-12 col-sm-6 col-lg-4 gallery-card">
             <div class="card h-100 shadow-sm">
                 <div class="ratio ratio-4x3">
-                    <img class="card-img-top object-fit-cover" alt="">
+                    <img class="lazy card-img-top object-fit-cover" alt="">
                 </div>
                 <div class="card-body">
                     <h3 class="h5 card-title mb-1"></h3>

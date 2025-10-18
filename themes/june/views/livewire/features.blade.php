@@ -26,14 +26,14 @@
                             <div class="features__image-wrapper">
                                 @if($mainFeature['link'])
                                     <a href="{{ $mainFeature['link'] }}" class="features__image-link">
-                                        <img src="{{ asset_url($mainFeature['url']) }}"
-                                             alt="{{ $mainFeature['title'] ?? '' }}"
-                                             class="features__image features__image--main">
+                                        <img class="lazy features__image features__image--main"
+                                             data-src="{{ asset_url($mainFeature['url']) }}"
+                                             alt="{{ $mainFeature['title'] ?? '' }}">
                                     </a>
                                 @else
-                                    <img src="{{ asset_url($mainFeature['url']) }}"
-                                         alt="{{ $mainFeature['title'] ?? '' }}"
-                                         class="features__image features__image--main">
+                                    <img class="lazy features__image features__image--main"
+                                         data-src="{{ asset_url($mainFeature['url']) }}"
+                                         alt="{{ $mainFeature['title'] ?? '' }}">
                                 @endif
 
                                 @if($mainFeature['title'])
@@ -60,14 +60,14 @@
                                         <div class="features__image-wrapper">
                                             @if($feature['link'])
                                                 <a href="{{ $feature['link'] }}" class="features__image-link">
-                                                    <img src="{{ asset_url($feature['url']) }}"
-                                                         alt="{{ $feature['title'] ?? '' }}"
-                                                         class="features__image features__image--secondary">
+                                                    <img class="lazy features__image features__image--secondary"
+                                                         data-src="{{ asset_url($feature['url']) }}"
+                                                         alt="{{ $feature['title'] ?? '' }}">
                                                 </a>
                                             @else
-                                                <img src="{{ asset_url($feature['url']) }}"
-                                                     alt="{{ $feature['title'] ?? '' }}"
-                                                     class="features__image features__image--secondary">
+                                                <img class="lazy features__image features__image--secondary"
+                                                     data-src="{{ asset_url($feature['url']) }}"
+                                                     alt="{{ $feature['title'] ?? '' }}">
                                             @endif
 
                                             @if($feature['title'] || $feature['subtitle'])

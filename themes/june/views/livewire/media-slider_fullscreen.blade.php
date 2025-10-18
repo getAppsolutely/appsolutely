@@ -4,17 +4,17 @@
             @foreach($displayOptions['slides'] as $index => $slide)
                 <div class="carousel-item @if($index === 0) active @endif">
                     @if(($slide['type'] ?? 'image') === 'video')
-                        <video class="d-block w-100" controls>
-                            <source src="{{ asset_url($slide['url']) }}" type="video/mp4">
+                        <video class="lazy d-block w-100" data-src="{{ asset_url($slide['url']) }}" controls preload="none">
                             Your browser does not support the video tag.
                         </video>
                     @else
-                        <img src="{{ asset_url($slide['url']) }}" class="d-block w-100"
+                        <img class="lazy d-block w-100" 
+                             data-src="{{ asset_url($slide['url']) }}"
                              alt="{{ $slide['title'] ?? '' }}">
                     @endif
                     <div class="carousel-caption d-none d-md-block media-slider-caption">
                         @if(!empty($slide['model']) && !empty($slide['title']))
-                            <img src="{{ asset_url($slide['model']) }}" alt="{{ $slide['title'] }}" class="mb-4">
+                            <img class="lazy mb-4" data-src="{{ asset_url($slide['model']) }}" alt="{{ $slide['title'] }}">
                         @elseif(empty($slide['model']) && !empty($slide['title']))
                             <h2 class="display-6 fw-bold mb-3">{{ $slide['title'] }}</h2>
                         @endif

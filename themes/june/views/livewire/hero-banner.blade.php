@@ -4,18 +4,20 @@
             <div class="hero-banner {{ @$style }}">
                 @if(($hero['type'] ?? 'image') === 'video')
                     <div class="hero-video-container position-absolute top-0 start-0 w-100 h-100">
-                        <video class="w-100 h-100 object-fit-cover" controls loading="lazy">
-                            <source src="{{ asset_url($hero['url']) }}" type="video/mp4">
+                        <video class="lazy w-100 h-100 object-fit-cover" controls preload="none">
+                            <source data-src="{{ asset_url($hero['url']) }}" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
                     </div>
                 @else
                     @if($style == 'fullscreen')
-                        <div class="hero-image-container"
-                             style="background-image: url('{{ asset_url($hero['url']) }}');">
+                        <div class="lazy lazy-bg hero-image-container"
+                             data-bg="{{ asset_url($hero['url']) }}">
                         </div>
                     @else
-                        <img src="{{ asset_url($hero['url']) }}" class="w-100 h-auto d-block" alt="">
+                        <img class="lazy w-100 h-auto d-block" 
+                             data-src="{{ asset_url($hero['url']) }}" 
+                             alt="">
                     @endif
                 @endif
 

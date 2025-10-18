@@ -5,6 +5,7 @@
  */
 
 import './bootstrap';
+import './components/lazy-loading.ts';
 import './assets';
 
 // Import component JavaScript
@@ -16,4 +17,3 @@ import './components/features';
 import './components/text-document-collapsible';
 import './components/store-locations-dropdown';
 import './components/photo-gallery';
-

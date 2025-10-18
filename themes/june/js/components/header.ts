@@ -166,7 +166,7 @@ window.addEventListener('resize', () => {
 
 (() => {
     const trigger = document.getElementById('scrollTrigger');
-    const navbar = document.getElementById('mainHeader');
+    const navbar = document.getElementById('main-header');
 
     if (!trigger || !navbar) {
         console.warn('[navbar-scroll] Missing required elements');
