@@ -34,12 +34,12 @@ class MediaSliderCarousel {
     initializeSliders(): void {
         // Find all media slider carousels
         const sliders = document.querySelectorAll<HTMLElement>('.swiper[data-slider-id]');
-        
+
         sliders.forEach((sliderElement: HTMLElement) => {
             const sliderId = sliderElement.dataset.sliderId;
-            
+
             if (!sliderId) return;
-            
+
             // Skip if already initialized
             if (this.swipers.has(sliderId)) {
                 return;
@@ -62,14 +62,14 @@ class MediaSliderCarousel {
                     enabled: true,
                 },
                 on: {
-                    init: function(this: SwiperType) {
+                    init: function (this: SwiperType) {
                         console.log('Media slider initialized:', sliderId);
                         // Only update title slider if it exists
                         if (self.hasTitleSlider(sliderId)) {
                             self.updateTitleSlider(sliderId, 0);
                         }
                     },
-                    slideChange: function(this: SwiperType) {
+                    slideChange: function (this: SwiperType) {
                         // Handle slide change events if needed
                         self.pauseAllVideos();
                         // Only update title slider if it exists
@@ -107,7 +107,7 @@ class MediaSliderCarousel {
                     breakpoints: {
                         320: {
                             slidesPerView: 1,
-                            spaceBetween: 10,
+                            spaceBetween: 0,
                         },
                         768: {
                             slidesPerView: 'auto',
@@ -136,10 +136,10 @@ class MediaSliderCarousel {
         try {
             const sliderElement = document.querySelector(`[data-slider-id="${sliderId}"]`);
             if (!sliderElement) return false;
-            
+
             const container = sliderElement.closest('.media-slider-carousel-container');
             if (!container) return false;
-            
+
             const titleSlider = container.querySelector('.title-slider');
             return titleSlider !== null;
         } catch (error) {
@@ -152,10 +152,10 @@ class MediaSliderCarousel {
         try {
             const sliderElement = document.querySelector(`[data-slider-id="${sliderId}"]`);
             if (!sliderElement) return;
-            
+
             const container = sliderElement.closest('.media-slider-carousel-container');
             if (!container) return;
-            
+
             const titleSlider = container.querySelector('.title-slider');
             if (!titleSlider) return;
 
@@ -181,18 +181,18 @@ class MediaSliderCarousel {
 
     handleVideoSlides(sliderElement: HTMLElement, swiper: SwiperType): void {
         const videoSlides = sliderElement.querySelectorAll<HTMLVideoElement>('.swiper-slide video');
-        
+
         videoSlides.forEach((video: HTMLVideoElement) => {
             // Pause video when slide changes
-            swiper.on('slideChange', function() {
+            swiper.on('slideChange', function () {
                 video.pause();
             });
 
             // Auto-play video when slide becomes active
-            swiper.on('slideChangeTransitionEnd', function() {
+            swiper.on('slideChangeTransitionEnd', function () {
                 const activeSlide = sliderElement.querySelector('.swiper-slide-active');
                 const activeVideo = activeSlide?.querySelector<HTMLVideoElement>('video');
-                
+
                 if (activeVideo && activeVideo === video) {
                     // Optional: auto-play video in active slide
                     // activeVideo.play();
@@ -229,4 +229,3 @@ new MediaSliderCarousel();
 
 // Export for potential external use
 window.MediaSliderCarousel = MediaSliderCarousel;
-
