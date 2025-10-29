@@ -16,4 +16,5 @@ import './components/media-slider';
 import './components/features';
 import './components/text-document-collapsible';
 import './components/store-locations-dropdown';
+import './components/store-locations';
 import './components/photo-gallery';

@@ -54,7 +54,17 @@
                                             <div class="d-flex align-items-start mb-2">
                                                 <i class="fas bi bi-geo-alt-fill text-muted me-2"></i>
                                                 <div class="flex-grow-1">
-                                                    <div class="fw-medium">{{ $location['address'] }}</div>
+                                                    @if(isset($location['latitude']) && isset($location['longitude']))
+                                                        <a href="javascript:void(0)"
+                                                           class="text-decoration-none text-dark fw-medium"
+                                                           data-map-lat="{{ $location['latitude'] }}"
+                                                           data-map-lng="{{ $location['longitude'] }}"
+                                                           data-map-name="{{ $location['name'] ?? '' }}"
+                                                           aria-label="Open map for {{ $location['name'] }}">{{ $location['address'] }}</a>
+                                                    @else
+                                                        <div class="fw-medium">{{ $location['address'] }}</div>
+                                                    @endif
+
                                                     <div class="text-muted small d-none">
                                                         @if($location['city'] ?? false)
                                                             {{ $location['city'] }}
@@ -171,7 +181,16 @@
                                                     <div class="d-flex align-items-start mb-3">
                                                         <i class="fas fa-map-marker-alt text-muted me-3 mt-1"></i>
                                                         <div class="flex-grow-1">
-                                                            <div class="fw-medium">{{ $location['address'] }}</div>
+                                                            @if(isset($location['latitude']) && isset($location['longitude']))
+                                                                <a href="javascript:void(0)"
+                                                                   class="text-decoration-none text-dark fw-medium"
+                                                                   data-map-lat="{{ $location['latitude'] }}"
+                                                                   data-map-lng="{{ $location['longitude'] }}"
+                                                                   data-map-name="{{ $location['name'] ?? '' }}"
+                                                                   aria-label="Open map for {{ $location['name'] }}">{{ $location['address'] }}</a>
+                                                            @else
+                                                                <div class="fw-medium">{{ $location['address'] }}</div>
+                                                            @endif
                                                             <div class="text-muted small">
                                                                 @if($location['city'] ?? false)
                                                                     {{ $location['city'] }}
@@ -229,8 +248,6 @@
                                                         </div>
                                                     </div>
                                                 @endif
-
-
                                             </div>
                                         </div>
                                     </div>
@@ -267,7 +284,16 @@
                                             @endif
                                         </td>
                                         <td>
-                                            {{ $location['address'] }}
+                                            @if(isset($location['latitude']) && isset($location['longitude']))
+                                                <a href="javascript:void(0)"
+                                                   class="text-decoration-none text-dark"
+                                                   data-map-lat="{{ $location['latitude'] }}"
+                                                   data-map-lng="{{ $location['longitude'] }}"
+                                                   data-map-name="{{ $location['name'] ?? '' }}"
+                                                   aria-label="Open map for {{ $location['name'] }}">{{ $location['address'] }}</a>
+                                            @else
+                                                {{ $location['address'] }}
+                                            @endif
                                             @if($location['city'] ?? false)
                                                 <br><small
                                                     class="text-muted">{{ $location['city'] }}@if($location['state'] ?? false)
