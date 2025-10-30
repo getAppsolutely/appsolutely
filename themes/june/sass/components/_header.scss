@@ -1,6 +1,7 @@
 #main-header {
     background: transparent;
-    color: $light;
+    font-size: 1rem;
+    font-weight: 600;
     position: fixed;
     top: 0;
     left: 0;
@@ -31,8 +32,6 @@
 #main-header .navbar-brand,
 #main-header .btn {
     color: $light;
-    font-size: 1rem;
-    font-weight: 600;
 
     .submenu a.dropdown-item span.d-inline-block {
         display: block;
@@ -184,14 +183,6 @@
 
     .logo-light {
         display: inline-block;
-    }
-
-    .header-center .navbar-nav .nav-link {
-        font-weight: 600;
-
-        &:hover {
-            // color: $primary;
-        }
     }
 }
 

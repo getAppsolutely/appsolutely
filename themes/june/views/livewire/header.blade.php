@@ -37,7 +37,7 @@
                                     <!-- Submenu markup -->
                                     <ul class="submenu list-unstyled m-0 p-0 position-absolute">
                                         <li class="d-flex justify-content-center w-100">
-                                            <div class="container-xl">
+                                            <div class="container-xxl">
                                                 <div class="row justify-content-center g-4">
                                                     @foreach($item->children as $child)
                                                         <div class="col-auto submenu-item d-flex justify-content-center">
