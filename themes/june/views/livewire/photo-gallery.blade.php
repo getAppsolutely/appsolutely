@@ -22,7 +22,7 @@
     <div class="row g-3" id="gallery-grid" data-photos='@json($photos)'></div>
 
     <template id="gallery-card-template">
-        <div class="col-12 col-sm-6 col-lg-4 gallery-card">
+        <div class="col-6 col-lg-4 gallery-card">
             <div class="card h-100 shadow-sm">
                 <div class="ratio ratio-4x3">
                     <img class="lazy card-img-top object-fit-cover" alt="">

@@ -38,9 +38,9 @@
                                     <ul class="submenu list-unstyled m-0 p-0 position-absolute">
                                         <li class="d-flex justify-content-center w-100">
                                             <div class="container-xl">
-                                                <div class="row justify-content-center">
+                                                <div class="row justify-content-center g-4">
                                                     @foreach($item->children as $child)
-                                                        <div class="col-auto">
+                                                        <div class="col-auto submenu-item d-flex justify-content-center">
                                                             <a class="dropdown-item text-center d-block p-3"
                                                                href="{{ app_uri($child->url) }}" target="{{ $child->target->value }}">
                                                                 @if($child->icon)

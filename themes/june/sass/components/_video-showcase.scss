@@ -81,10 +81,10 @@
 /* Responsive adjustments for mobile */
 @include media-breakpoint-down(md) {
     .video-showcase {
-        min-height: 70vh !important;
+        min-height: auto !important;
 
         .content-overlay {
-            min-height: 70vh !important;
+            min-height: auto !important;
         }
 
         .display-1 {
