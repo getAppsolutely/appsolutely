@@ -1,4 +1,4 @@
-<section class="video-showcase position-relative overflow-hidden w-100" style="min-height: 100vh;">
+<section class="video-showcase position-relative overflow-hidden w-100">
     <!-- Background Video -->
     <div class="video-background position-absolute top-0 start-0 w-100 h-100" style="z-index: 1;">
         <video
@@ -31,8 +31,8 @@
     <!-- Mobile Fallback Image -->
     @if($displayOptions['mobile_fallback_image'])
         <div class="mobile-fallback d-block d-md-none position-absolute top-0 start-0 w-100 h-100" style="z-index: 1;">
-            <img class="lazy w-100 h-100 object-fit-cover" 
-                 data-src="{{ asset_url($displayOptions['mobile_fallback_image']) }}" 
+            <img class="lazy w-100 h-100 object-fit-cover"
+                 data-src="{{ asset_url($displayOptions['mobile_fallback_image']) }}"
                  alt="Video fallback">
         </div>
     @endif
@@ -44,7 +44,7 @@
     @endif
 
     <!-- Content Overlay -->
-    <div class="content-overlay position-relative d-flex align-items-center justify-content-center h-100" style="z-index: 3; min-height: 100vh;">
+    <div class="content-overlay position-relative d-flex align-items-center justify-content-center h-100">
         <div class="container-fluid px-4">
             <div class="row justify-content-{{ $displayOptions['text_position'] === 'left' ? 'start' : ($displayOptions['text_position'] === 'right' ? 'end' : 'center') }}">
                 <div class="col-12 col-lg-8 col-xl-6 text-{{ $displayOptions['text_position'] === 'center' ? 'center' : $displayOptions['text_position'] }}">

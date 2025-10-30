@@ -1,5 +1,7 @@
 /* Bootstrap 5.3 Video Showcase Component Styles */
 .video-showcase {
+    min-height: 100vh !important;
+
     video {
         min-width: 100%;
         min-height: 100%;
@@ -35,6 +37,7 @@
     .btn-primary {
         transition: all 0.3s ease;
         transform: translateY(0);
+        color: $body-bg !important;
 
         &:hover {
             transform: translateY(-2px);
@@ -43,8 +46,13 @@
     }
 
     /* Smooth animations */
-    .content-overlay > * {
-        animation: fade-in-up 1s ease-out;
+    .content-overlay {
+        z-index: 3 !important;
+        min-height: 100vh !important;
+
+        > * {
+            animation: fade-in-up 1s ease-out;
+        }
     }
 
     /* Stagger animation delays */
@@ -81,12 +89,6 @@
 /* Responsive adjustments for mobile */
 @include media-breakpoint-down(md) {
     .video-showcase {
-        min-height: auto !important;
-
-        .content-overlay {
-            min-height: auto !important;
-        }
-
         .display-1 {
             font-size: 3rem !important;
         }
