@@ -757,6 +757,20 @@ if (! function_exists('page_meta')) {
     }
 }
 
+if (! function_exists('site_meta')) {
+    function site_meta(): string
+    {
+        return config('basic.siteMeta') ?? '';
+    }
+}
+
+if (! function_exists('tracking_code')) {
+    function tracking_code(): string
+    {
+        return config('basic.trackingCode') ?? '';
+    }
+}
+
 if (! function_exists('current_uri')) {
     /**
      * Get the current request URI (path and query string).

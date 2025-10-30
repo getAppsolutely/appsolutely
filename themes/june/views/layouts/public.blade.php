@@ -10,6 +10,7 @@
     <title>@title($page)</title>
     <meta name="keywords" content="@keywords($page)">
     <meta name="description" content="@description($page)">
+    {!! site_meta() !!}
     <link rel="canonical" href="{{ url()->current() }}" />
 
     <!-- Favicon -->
@@ -25,4 +26,5 @@
 <div id="scrollTrigger" class="position-absolute top-0 w-100" style="height: 1px;"></div>
     @yield('content')
 </body>
+{!! tracking_code() !!}
 </html>
