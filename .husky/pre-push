@@ -1,11 +1,8 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 echo "🔍 Running pre-push checks..."
 
 # Run TypeScript type check
 echo "📝 Type checking TypeScript files..."
-npm run type-check:all
+npm run -s type-check:all
 if [ $? -ne 0 ]; then
     echo "❌ TypeScript type check failed!"
     exit 1
@@ -13,7 +10,7 @@ fi
 
 # Run linters
 echo "🧹 Running linters..."
-npm run lint:all
+npm run -s lint:all
 if [ $? -ne 0 ]; then
     echo "❌ Linting failed!"
     exit 1

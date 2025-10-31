@@ -39,4 +39,18 @@ class PageRepository extends BaseRepository
             }, 'blocks.block'])
             ->find($id);
     }
+
+    /**
+     * Get all published pages for sitemap generation
+     */
+    public function getPublishedPagesForSitemap(Carbon $datetime): \Illuminate\Database\Eloquent\Collection
+    {
+        return $this->model->newQuery()
+            ->status()
+            ->published($datetime)
+            ->whereNotNull('slug')
+            ->where('slug', '!=', '')
+            ->orderBy('published_at', 'desc')
+            ->get();
+    }
 }

@@ -58,6 +58,15 @@ class Page extends Model
                 $page->setting = self::generateDefaultSetting(self::getStructure());
             }
         });
+
+        // Clear sitemap cache when page is saved or deleted
+        static::saved(function () {
+            app(\App\Services\SitemapService::class)->clearCache();
+        });
+
+        static::deleted(function () {
+            app(\App\Services\SitemapService::class)->clearCache();
+        });
     }
 
     protected static function generateDefaultSetting(): array
