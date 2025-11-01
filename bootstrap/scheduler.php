@@ -13,4 +13,12 @@ return function (Schedule $schedule) {
             // Log failure if needed
             \Illuminate\Support\Facades\Log::error('Translation job failed to schedule');
         });
+
+    // Regenerate sitemap every hour
+    $schedule->command('sitemap:generate --force')
+        ->hourly()
+        ->withoutOverlapping()
+        ->onFailure(function () {
+            \Illuminate\Support\Facades\Log::error('Sitemap generation failed');
+        });
 };
