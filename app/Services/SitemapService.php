@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Models\Article;
 use App\Models\Page;
+use App\Models\Product;
+use App\Repositories\ArticleRepository;
 use App\Repositories\PageRepository;
+use App\Repositories\ProductRepository;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
@@ -26,32 +30,126 @@ final readonly class SitemapService
 
     private const CACHE_KEY = 'sitemap:xml';
 
+    private const CACHE_KEY_PAGE = 'sitemap:page:xml';
+
+    private const CACHE_KEY_ARTICLE = 'sitemap:article:xml';
+
+    private const CACHE_KEY_PRODUCT = 'sitemap:product:xml';
+
     public function __construct(
-        private PageRepository $pageRepository
+        private PageRepository $pageRepository,
+        private ArticleRepository $articleRepository,
+        private ProductRepository $productRepository
     ) {}
 
     /**
-     * Generate XML sitemap with caching
+     * Generate XML sitemap index with caching
+     * This is the main sitemap.xml that references sub-sitemaps
      */
     public function generateXml(): string
     {
         return Cache::remember(self::CACHE_KEY, self::CACHE_TTL, function () {
-            return $this->buildSitemap();
+            return $this->buildSitemapIndex();
         });
     }
 
     /**
-     * Clear sitemap cache (call after page updates)
+     * Generate page sitemap XML with caching
+     */
+    public function generatePageXml(): string
+    {
+        return Cache::remember(self::CACHE_KEY_PAGE, self::CACHE_TTL, function () {
+            return $this->buildPageSitemap();
+        });
+    }
+
+    /**
+     * Generate article sitemap XML with caching
+     */
+    public function generateArticleXml(): string
+    {
+        return Cache::remember(self::CACHE_KEY_ARTICLE, self::CACHE_TTL, function () {
+            return $this->buildArticleSitemap();
+        });
+    }
+
+    /**
+     * Generate product sitemap XML with caching
+     */
+    public function generateProductXml(): string
+    {
+        return Cache::remember(self::CACHE_KEY_PRODUCT, self::CACHE_TTL, function () {
+            return $this->buildProductSitemap();
+        });
+    }
+
+    /**
+     * Generate sitemap XML by type (page, article, or product) with caching
+     */
+    public function generateTypeXml(string $type): string
+    {
+        return match (strtolower($type)) {
+            'page'    => $this->generatePageXml(),
+            'article' => $this->generateArticleXml(),
+            'product' => $this->generateProductXml(),
+            default   => throw new \InvalidArgumentException("Invalid sitemap type: {$type}. Allowed types: page, article, product"),
+        };
+    }
+
+    /**
+     * Clear all sitemap cache (call after updates)
      */
     public function clearCache(): void
     {
         Cache::forget(self::CACHE_KEY);
+        Cache::forget(self::CACHE_KEY_PAGE);
+        Cache::forget(self::CACHE_KEY_ARTICLE);
+        Cache::forget(self::CACHE_KEY_PRODUCT);
     }
 
     /**
-     * Build the sitemap XML content using Blade template
+     * Build the sitemap index XML that references sub-sitemaps
+     * Only includes sitemaps that have content
      */
-    private function buildSitemap(): string
+    private function buildSitemapIndex(): string
+    {
+        $baseUrl  = rtrim(app_url(), '/');
+        $sitemaps = [];
+
+        // Only add page sitemap if there are published pages (home page is always included)
+        $pages = $this->getPublishedPages();
+        if ($pages->isNotEmpty()) {
+            $sitemaps[] = [
+                'loc'     => $baseUrl . '/sitemap-page.xml',
+                'lastmod' => now()->toAtomString(),
+            ];
+        }
+
+        // Only add article sitemap if there are published articles
+        $articles = $this->getPublishedArticles();
+        if ($articles->isNotEmpty()) {
+            $sitemaps[] = [
+                'loc'     => $baseUrl . '/sitemap-article.xml',
+                'lastmod' => now()->toAtomString(),
+            ];
+        }
+
+        // Only add product sitemap if there are published products
+        $products = $this->getPublishedProducts();
+        if ($products->isNotEmpty()) {
+            $sitemaps[] = [
+                'loc'     => $baseUrl . '/sitemap-product.xml',
+                'lastmod' => now()->toAtomString(),
+            ];
+        }
+
+        return View::make('sitemap-index', ['sitemaps' => $sitemaps])->render();
+    }
+
+    /**
+     * Build the page sitemap XML content using Blade template
+     */
+    private function buildPageSitemap(): string
     {
         $pages            = $this->getPublishedPages();
         $defaultLocale    = LaravelLocalization::getDefaultLocale();
@@ -83,11 +181,77 @@ final readonly class SitemapService
     }
 
     /**
+     * Build the article sitemap XML content using Blade template
+     */
+    private function buildArticleSitemap(): string
+    {
+        $articles          = $this->getPublishedArticles();
+        $defaultLocale     = LaravelLocalization::getDefaultLocale();
+        $supportedLocales  = supported_locales();
+        $baseUrl           = rtrim(app_url(), '/');
+
+        $urls = [];
+
+        foreach ($articles as $article) {
+            $slug = $this->getArticleSlug($article);
+
+            $lastMod    = $this->getArticleLastModDate($article);
+            $priority   = 0.8; // Articles get medium-high priority
+            $changeFreq = $this->getArticleChangeFreq($article);
+
+            $urls[] = $this->prepareUrlEntry('articles/' . $slug, $lastMod, $changeFreq, $priority, $supportedLocales, $defaultLocale, $baseUrl);
+        }
+
+        return View::make('sitemap', ['urls' => $urls])->render();
+    }
+
+    /**
+     * Build the product sitemap XML content using Blade template
+     */
+    private function buildProductSitemap(): string
+    {
+        $products          = $this->getPublishedProducts();
+        $defaultLocale     = LaravelLocalization::getDefaultLocale();
+        $supportedLocales  = supported_locales();
+        $baseUrl           = rtrim(app_url(), '/');
+
+        $urls = [];
+
+        foreach ($products as $product) {
+            $slug = $this->getProductSlug($product);
+
+            $lastMod    = $this->getProductLastModDate($product);
+            $priority   = 0.8; // Products get medium-high priority
+            $changeFreq = $this->getProductChangeFreq($product);
+
+            $urls[] = $this->prepareUrlEntry('products/' . $slug, $lastMod, $changeFreq, $priority, $supportedLocales, $defaultLocale, $baseUrl);
+        }
+
+        return View::make('sitemap', ['urls' => $urls])->render();
+    }
+
+    /**
      * Get all published pages
      */
     private function getPublishedPages(): \Illuminate\Database\Eloquent\Collection
     {
         return $this->pageRepository->getPublishedPagesForSitemap(now());
+    }
+
+    /**
+     * Get all published articles
+     */
+    private function getPublishedArticles(): \Illuminate\Database\Eloquent\Collection
+    {
+        return $this->articleRepository->getPublishedArticlesForSitemap(now());
+    }
+
+    /**
+     * Get all published products
+     */
+    private function getPublishedProducts(): \Illuminate\Database\Eloquent\Collection
+    {
+        return $this->productRepository->getPublishedProductsForSitemap(now());
     }
 
     /**
@@ -205,6 +369,78 @@ final readonly class SitemapService
         if ($daysSinceUpdate < 1) {
             return 'daily';
         }
+
+        if ($daysSinceUpdate < 7) {
+            return 'weekly';
+        }
+
+        if ($daysSinceUpdate < 30) {
+            return 'monthly';
+        }
+
+        return 'yearly';
+    }
+
+    /**
+     * Get article slug for sitemap
+     */
+    private function getArticleSlug(Article $article): string
+    {
+        return trim($article->slug ?? '', '/');
+    }
+
+    /**
+     * Get article last modification date
+     */
+    private function getArticleLastModDate(Article $article): Carbon
+    {
+        return $article->updated_at?->greaterThan($article->published_at ?? now())
+            ? $article->updated_at
+            : ($article->published_at ?? now());
+    }
+
+    /**
+     * Determine change frequency for articles
+     */
+    private function getArticleChangeFreq(Article $article): string
+    {
+        $daysSinceUpdate = now()->diffInDays($article->updated_at ?? $article->published_at ?? now());
+
+        if ($daysSinceUpdate < 7) {
+            return 'weekly';
+        }
+
+        if ($daysSinceUpdate < 30) {
+            return 'monthly';
+        }
+
+        return 'yearly';
+    }
+
+    /**
+     * Get product slug for sitemap
+     */
+    private function getProductSlug(Product $product): string
+    {
+        return trim($product->slug ?? '', '/');
+    }
+
+    /**
+     * Get product last modification date
+     */
+    private function getProductLastModDate(Product $product): Carbon
+    {
+        return $product->updated_at?->greaterThan($product->published_at ?? now())
+            ? $product->updated_at
+            : ($product->published_at ?? now());
+    }
+
+    /**
+     * Determine change frequency for products
+     */
+    private function getProductChangeFreq(Product $product): string
+    {
+        $daysSinceUpdate = now()->diffInDays($product->updated_at ?? $product->published_at ?? now());
 
         if ($daysSinceUpdate < 7) {
             return 'weekly';

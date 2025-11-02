@@ -76,6 +76,20 @@ class Product extends Model
         'price',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Clear sitemap cache when product is saved or deleted
+        static::saved(function () {
+            app(\App\Services\SitemapService::class)->clearCache();
+        });
+
+        static::deleted(function () {
+            app(\App\Services\SitemapService::class)->clearCache();
+        });
+    }
+
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(ProductCategory::class, 'product_category_pivot');

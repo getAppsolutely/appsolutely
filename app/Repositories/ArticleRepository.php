@@ -49,4 +49,18 @@ class ArticleRepository extends BaseRepository
             ->where('slug', $slug)
             ->first();
     }
+
+    /**
+     * Get all published articles for sitemap generation
+     */
+    public function getPublishedArticlesForSitemap(Carbon $datetime): \Illuminate\Database\Eloquent\Collection
+    {
+        return $this->model->newQuery()
+            ->status()
+            ->published($datetime)
+            ->whereNotNull('slug')
+            ->where('slug', '!=', '')
+            ->orderBy('published_at', 'desc')
+            ->get();
+    }
 }

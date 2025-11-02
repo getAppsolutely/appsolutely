@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Product;
+use Illuminate\Support\Carbon;
 
 class ProductRepository extends BaseRepository
 {
@@ -25,5 +26,19 @@ class ProductRepository extends BaseRepository
             ->orderBy('title')
             ->pluck('title', 'id')
             ->toArray();
+    }
+
+    /**
+     * Get all published products for sitemap generation
+     */
+    public function getPublishedProductsForSitemap(Carbon $datetime): \Illuminate\Database\Eloquent\Collection
+    {
+        return $this->model->newQuery()
+            ->status()
+            ->published($datetime)
+            ->whereNotNull('slug')
+            ->where('slug', '!=', '')
+            ->orderBy('published_at', 'desc')
+            ->get();
     }
 }

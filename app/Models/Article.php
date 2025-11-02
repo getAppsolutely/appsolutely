@@ -48,6 +48,20 @@ class Article extends Model
         'expired_at'   => 'datetime',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Clear sitemap cache when article is saved or deleted
+        static::saved(function () {
+            app(\App\Services\SitemapService::class)->clearCache();
+        });
+
+        static::deleted(function () {
+            app(\App\Services\SitemapService::class)->clearCache();
+        });
+    }
+
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(ArticleCategory::class, 'article_category_pivot');

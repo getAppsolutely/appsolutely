@@ -23,7 +23,7 @@ final class SitemapController extends BaseController
     ) {}
 
     /**
-     * Generate and return sitemap.xml
+     * Generate and return sitemap.xml (sitemap index)
      *
      * Query parameter: ?force_update=1 to force cache regeneration
      */
@@ -35,6 +35,26 @@ final class SitemapController extends BaseController
         }
 
         $xml = $this->sitemapService->generateXml();
+
+        return response($xml, 200, [
+            'Content-Type'  => 'application/xml; charset=UTF-8',
+            'Cache-Control' => 'public, max-age=3600',
+        ]);
+    }
+
+    /**
+     * Generate and return sitemap for a specific type (article or product)
+     *
+     * Query parameter: ?force_update=1 to force cache regeneration
+     */
+    public function type(Request $request, string $type): Response
+    {
+        // Check for force_update parameter
+        if ($request->query('force_update') === '1') {
+            $this->sitemapService->clearCache();
+        }
+
+        $xml = $this->sitemapService->generateTypeXml($type);
 
         return response($xml, 200, [
             'Content-Type'  => 'application/xml; charset=UTF-8',
