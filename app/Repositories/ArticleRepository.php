@@ -60,6 +60,9 @@ class ArticleRepository extends BaseRepository
             ->published($datetime)
             ->whereNotNull('slug')
             ->where('slug', '!=', '')
+            ->with(['categories' => function ($query) {
+                $query->status()->published(now())->whereNotNull('slug')->where('slug', '!=', '');
+            }])
             ->orderBy('published_at', 'desc')
             ->get();
     }

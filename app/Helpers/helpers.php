@@ -754,7 +754,12 @@ if (! function_exists('page_meta')) {
             return $value;
         }
 
-        return get_property($page->getContent(), $key, '');
+        $value = get_property($page->getContent(), $key);
+        if (! empty($value)) {
+            return $value;
+        }
+
+        return $page->toArray()[$key] ?? '';
     }
 }
 

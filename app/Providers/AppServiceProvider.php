@@ -48,7 +48,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Page meta
         Blade::directive('title', function ($expression) {
-            return "<?php echo page_meta($expression, 'title'); ?>";
+            return "<?php echo page_meta($expression, 'meta_title'); ?>";
         });
 
         Blade::directive('keywords', function ($expression) {

@@ -38,6 +38,9 @@ class ProductRepository extends BaseRepository
             ->published($datetime)
             ->whereNotNull('slug')
             ->where('slug', '!=', '')
+            ->with(['categories' => function ($query) use ($datetime) {
+                $query->status()->published($datetime)->whereNotNull('slug')->where('slug', '!=', '');
+            }])
             ->orderBy('published_at', 'desc')
             ->get();
     }

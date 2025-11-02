@@ -193,13 +193,26 @@ final readonly class SitemapService
         $urls = [];
 
         foreach ($articles as $article) {
-            $slug = $this->getArticleSlug($article);
+            $articleSlug = $this->getArticleSlug($article);
+            $lastMod     = $this->getArticleLastModDate($article);
+            $priority    = 0.8; // Articles get medium-high priority
+            $changeFreq  = $this->getArticleChangeFreq($article);
 
-            $lastMod    = $this->getArticleLastModDate($article);
-            $priority   = 0.8; // Articles get medium-high priority
-            $changeFreq = $this->getArticleChangeFreq($article);
+            // Get all categories for this article
+            $categories = $article->categories;
 
-            $urls[] = $this->prepareUrlEntry('articles/' . $slug, $lastMod, $changeFreq, $priority, $supportedLocales, $defaultLocale, $baseUrl);
+            if ($categories->isEmpty()) {
+                // If no categories, use simple path (fallback)
+                $urls[] = $this->prepareUrlEntry('articles/' . $articleSlug, $lastMod, $changeFreq, $priority, $supportedLocales, $defaultLocale, $baseUrl);
+            } else {
+                // Generate one URL per category path
+                foreach ($categories as $category) {
+                    $categoryPath = $this->buildCategoryPath($category);
+                    $fullPath     = path_join($categoryPath, $articleSlug);
+
+                    $urls[] = $this->prepareUrlEntry($fullPath, $lastMod, $changeFreq, $priority, $supportedLocales, $defaultLocale, $baseUrl);
+                }
+            }
         }
 
         return View::make('sitemap', ['urls' => $urls])->render();
@@ -218,13 +231,26 @@ final readonly class SitemapService
         $urls = [];
 
         foreach ($products as $product) {
-            $slug = $this->getProductSlug($product);
+            $productSlug = $this->getProductSlug($product);
+            $lastMod     = $this->getProductLastModDate($product);
+            $priority    = 0.8; // Products get medium-high priority
+            $changeFreq  = $this->getProductChangeFreq($product);
 
-            $lastMod    = $this->getProductLastModDate($product);
-            $priority   = 0.8; // Products get medium-high priority
-            $changeFreq = $this->getProductChangeFreq($product);
+            // Get all categories for this product
+            $categories = $product->categories;
 
-            $urls[] = $this->prepareUrlEntry('products/' . $slug, $lastMod, $changeFreq, $priority, $supportedLocales, $defaultLocale, $baseUrl);
+            if ($categories->isEmpty()) {
+                // If no categories, use simple path (fallback)
+                $urls[] = $this->prepareUrlEntry('products/' . $productSlug, $lastMod, $changeFreq, $priority, $supportedLocales, $defaultLocale, $baseUrl);
+            } else {
+                // Generate one URL per category path
+                foreach ($categories as $category) {
+                    $categoryPath = $this->buildCategoryPath($category);
+                    $fullPath     = path_join($categoryPath, $productSlug);
+
+                    $urls[] = $this->prepareUrlEntry($fullPath, $lastMod, $changeFreq, $priority, $supportedLocales, $defaultLocale, $baseUrl);
+                }
+            }
         }
 
         return View::make('sitemap', ['urls' => $urls])->render();
@@ -451,5 +477,37 @@ final readonly class SitemapService
         }
 
         return 'yearly';
+    }
+
+    /**
+     * Build category path from root to the given category
+     * Returns path like: root-slug/category-slug/category-slug
+     */
+    private function buildCategoryPath($category): string
+    {
+        if (! $category || ! $category->slug) {
+            return '';
+        }
+
+        // Get all ancestors from root to this category (including the category itself if method exists)
+        $pathParts = [];
+
+        // Try to get ancestors including self, otherwise get ancestors and add self
+        if (method_exists($category, 'ancestorsAndSelf')) {
+            $categoryChain = $category->ancestorsAndSelf;
+        } else {
+            $categoryChain = $category->ancestors;
+            // Add the category itself at the end
+            $categoryChain->push($category);
+        }
+
+        // Build path from root to category
+        foreach ($categoryChain as $cat) {
+            if ($cat->slug) {
+                $pathParts[] = trim($cat->slug, '/');
+            }
+        }
+
+        return implode('/', $pathParts);
     }
 }

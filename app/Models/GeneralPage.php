@@ -144,9 +144,17 @@ class GeneralPage
     }
 
     /**
+     * Get title
+     */
+    protected function getTitle(): ?string
+    {
+        return $this->content->title ?? $this->parentPage?->title ?? null;
+    }
+
+    /**
      * Get the title with optional parent page prefix for nested pages
      */
-    protected function getTitle(): string
+    protected function getMetaTitle(): string
     {
         $title     = $this->content->title ?? '';
         $separator = config('appsolutely.seo.title_separator', ' | ');
@@ -341,6 +349,7 @@ class GeneralPage
             'parent_page_id' => $this->parentPage?->id,
             'child_slug'     => $this->childSlug,
             'title'          => $this->getTitle(),
+            'meta_title'     => $this->getMetaTitle(),
             'slug'           => $this->getSlug(),
             'model'          => $this->getContent(),
             'ancestors'      => $ancestors,
