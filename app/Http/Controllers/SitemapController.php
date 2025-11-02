@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Services\SitemapService;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 /**
@@ -23,9 +24,16 @@ final class SitemapController extends BaseController
 
     /**
      * Generate and return sitemap.xml
+     *
+     * Query parameter: ?force_update=1 to force cache regeneration
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        // Check for force_update parameter
+        if ($request->query('force_update') === '1') {
+            $this->sitemapService->clearCache();
+        }
+
         $xml = $this->sitemapService->generateXml();
 
         return response($xml, 200, [
