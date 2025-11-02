@@ -8,6 +8,7 @@ use App\Models\Page;
 use App\Repositories\PageRepository;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\View;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /**
@@ -48,21 +49,19 @@ final readonly class SitemapService
     }
 
     /**
-     * Build the sitemap XML content
+     * Build the sitemap XML content using Blade template
      */
     private function buildSitemap(): string
     {
         $pages            = $this->getPublishedPages();
-        $supportedLocales = LaravelLocalization::getSupportedLocales();
         $defaultLocale    = LaravelLocalization::getDefaultLocale();
+        $supportedLocales = supported_locales();
+        $baseUrl          = rtrim(app_url(), '/');
 
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' . PHP_EOL;
-        $xml .= '        xmlns:xhtml="http://www.w3.org/1999/xhtml">' . PHP_EOL;
+        $urls = [];
 
-        // Add home page (empty slug or '/')
-        $homeSlug = '';
-        $xml .= $this->buildUrlEntry($homeSlug, now(), 'daily', 1.0, $supportedLocales, $defaultLocale);
+        // Add home page
+        $urls[] = $this->prepareUrlEntry('', now(), 'daily', 1.0, $supportedLocales, $defaultLocale, $baseUrl);
 
         // Add all published pages (skip if already added as home)
         foreach ($pages as $page) {
@@ -73,16 +72,14 @@ final readonly class SitemapService
                 continue;
             }
 
-            $lastmod    = $this->getLastModDate($page);
+            $lastMod    = $this->getLastModDate($page);
             $priority   = $this->calculatePriority($page);
-            $changefreq = $this->getChangeFreq($page);
+            $changeFreq = $this->getChangeFreq($page);
 
-            $xml .= $this->buildUrlEntry($slug, $lastmod, $changefreq, $priority, $supportedLocales, $defaultLocale, $page);
+            $urls[] = $this->prepareUrlEntry($slug, $lastMod, $changeFreq, $priority, $supportedLocales, $defaultLocale, $baseUrl);
         }
 
-        $xml .= '</urlset>';
-
-        return $xml;
+        return View::make('sitemap', ['urls' => $urls])->render();
     }
 
     /**
@@ -94,53 +91,55 @@ final readonly class SitemapService
     }
 
     /**
-     * Build a URL entry with optional hreflang support
+     * Prepare URL entry data for Blade template
      */
-    private function buildUrlEntry(
+    private function prepareUrlEntry(
         string $slug,
-        Carbon $lastmod,
-        string $changefreq,
+        Carbon $lastMod,
+        string $changeFreq,
         float $priority,
         array $supportedLocales,
         string $defaultLocale,
-        ?Page $page = null
-    ): string {
-        $baseUrl = rtrim(app_url(), '/');
-        $slug    = ltrim($slug, '/');
+        string $baseUrl
+    ): array {
+        $slug = ltrim($slug, '/');
         // For home page (empty slug), don't add trailing slash
         $loc = $slug === '' ? $baseUrl : $baseUrl . '/' . $slug;
 
-        $xml = '  <url>' . PHP_EOL;
-        $xml .= '    <loc>' . htmlspecialchars($loc, ENT_XML1, 'UTF-8') . '</loc>' . PHP_EOL;
-        $xml .= '    <lastmod>' . $lastmod->toAtomString() . '</lastmod>' . PHP_EOL;
-        $xml .= '    <changefreq>' . $changefreq . '</changefreq>' . PHP_EOL;
-        $xml .= '    <priority>' . number_format($priority, 1, '.', '') . '</priority>' . PHP_EOL;
+        $entry = [
+            'loc'        => htmlspecialchars($loc, ENT_XML1, 'UTF-8'),
+            'lastmod'    => $lastMod->toAtomString(),
+            'changefreq' => $changeFreq,
+            'priority'   => number_format($priority, 1, '.', ''),
+            'hreflang'   => [],
+        ];
 
         // Add hreflang alternatives if multi-language (more than 1 locale)
         if (count($supportedLocales) > 1) {
-            $xml .= $this->buildHreflangEntries($slug, $supportedLocales, $defaultLocale, $baseUrl);
+            $entry['hreflang'] = $this->prepareHreflangEntries($slug, $supportedLocales, $defaultLocale, $baseUrl);
         }
 
-        $xml .= '  </url>' . PHP_EOL;
-
-        return $xml;
+        return $entry;
     }
 
     /**
-     * Build hreflang alternative links for multi-language support
+     * Prepare hreflang alternative links data for Blade template
      */
-    private function buildHreflangEntries(
+    private function prepareHreflangEntries(
         string $slug,
         array $supportedLocales,
         string $defaultLocale,
         string $baseUrl
-    ): string {
-        $xml = '';
+    ): array {
+        $hreflang = [];
 
         // Add x-default pointing to default locale
         $defaultSlug = ($slug === '') ? '' : '/' . $slug;
         $defaultUrl  = $baseUrl . $defaultSlug;
-        $xml .= '    <xhtml:link rel="alternate" hreflang="x-default" href="' . htmlspecialchars($defaultUrl, ENT_XML1, 'UTF-8') . '"/>' . PHP_EOL;
+        $hreflang[]  = [
+            'lang' => 'x-default',
+            'href' => htmlspecialchars($defaultUrl, ENT_XML1, 'UTF-8'),
+        ];
 
         // Add each locale variant
         foreach ($supportedLocales as $localeKey => $locale) {
@@ -150,10 +149,13 @@ final readonly class SitemapService
             } else {
                 $localeUrl = $baseUrl . '/' . $localeKey . '/' . $slug;
             }
-            $xml .= '    <xhtml:link rel="alternate" hreflang="' . htmlspecialchars($localeKey, ENT_XML1, 'UTF-8') . '" href="' . htmlspecialchars($localeUrl, ENT_XML1, 'UTF-8') . '"/>' . PHP_EOL;
+            $hreflang[] = [
+                'lang' => htmlspecialchars($localeKey, ENT_XML1, 'UTF-8'),
+                'href' => htmlspecialchars($localeUrl, ENT_XML1, 'UTF-8'),
+            ];
         }
 
-        return $xml;
+        return $hreflang;
     }
 
     /**

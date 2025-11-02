@@ -12,6 +12,7 @@ use League\CommonMark\CommonMarkConverter;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Exception\CommonMarkException;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Qirolab\Theme\Theme;
 
 if (! function_exists('appsolutely')) {
@@ -837,5 +838,12 @@ if (! function_exists('blade_content')) {
 
             return '';
         }
+    }
+}
+
+if (! function_exists('supported_locales')) {
+    function supported_locales(): array
+    {
+        return config('appsolutely.multiple_locales') ? LaravelLocalization::getSupportedLocales() : [LaravelLocalization::getDefaultLocale()];
     }
 }
