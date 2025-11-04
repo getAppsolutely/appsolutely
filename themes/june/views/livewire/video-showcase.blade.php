@@ -1,4 +1,4 @@
-<section class="video-showcase position-relative overflow-hidden w-100">
+<section class="video-showcase position-relative overflow-hidden w-100 {{ $style }}">
     <!-- Background Video -->
     <div class="video-background position-absolute top-0 start-0 w-100 h-100" style="z-index: 1;">
         <video

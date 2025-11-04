@@ -1,4 +1,4 @@
-<section class="video-showcase bg-black pt-5">
+<section class="video-showcase bg-black pt-5 {{ $style }}">
     <!-- Background Video -->
     <div class="container">
         <video

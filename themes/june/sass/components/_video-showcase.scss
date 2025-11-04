@@ -2,6 +2,10 @@
 .video-showcase {
     min-height: 100vh !important;
 
+    &.simple {
+        min-height: auto !important;
+    }
+
     video {
         min-width: 100%;
         min-height: 100%;
