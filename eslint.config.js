@@ -78,8 +78,15 @@ export default [
                 IntersectionObserver: 'readonly',
                 IntersectionObserverEntry: 'readonly',
                 IntersectionObserverInit: 'readonly',
+                ResizeObserver: 'readonly',
 
-                // Node.js globals (for config files)
+                // Fetch API types
+                Response: 'readonly',
+                Request: 'readonly',
+                Headers: 'readonly',
+
+                // Node.js globals (for config files and test files)
+                global: 'readonly',
                 process: 'readonly',
                 __dirname: 'readonly',
                 __filename: 'readonly',

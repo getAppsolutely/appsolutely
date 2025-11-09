@@ -21,6 +21,5 @@ export const assets: AssetPaths = {
 
 // Make assets available globally for debugging
 if (typeof window !== 'undefined') {
-    window.assets = assets;
+    window.assets = assets as unknown as Record<string, unknown>;
 }
-

@@ -5,7 +5,7 @@
 
 import type { HeaderInstance } from '../types';
 
-class Header implements HeaderInstance {
+export class Header implements HeaderInstance {
     header: HTMLElement | null;
     navbar: HTMLElement | null;
     navbarToggler: HTMLElement | null;
