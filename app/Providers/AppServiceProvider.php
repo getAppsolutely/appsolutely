@@ -5,7 +5,15 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Repositories\TranslationRepository;
+use App\Services\Contracts\NotificationRuleServiceInterface;
+use App\Services\Contracts\NotificationTemplateServiceInterface;
+use App\Services\Contracts\PageBlockSchemaServiceInterface;
+use App\Services\Contracts\PageServiceInterface;
+use App\Services\NotificationRuleService;
+use App\Services\NotificationTemplateService;
+use App\Services\PageBlockSchemaService;
 use App\Services\PageBlockService;
+use App\Services\PageService;
 use App\Services\TranslationService;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +31,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(TranslationRepository::class);
         $this->app->singleton(TranslationService::class);
 
+        // Bind service interfaces to their implementations
+        $this->app->bind(PageServiceInterface::class, PageService::class);
+        $this->app->bind(PageBlockSchemaServiceInterface::class, PageBlockSchemaService::class);
+        $this->app->bind(NotificationTemplateServiceInterface::class, NotificationTemplateService::class);
+        $this->app->bind(NotificationRuleServiceInterface::class, NotificationRuleService::class);
     }
 
     /**

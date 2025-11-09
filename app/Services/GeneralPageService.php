@@ -8,6 +8,8 @@ use App\Models\GeneralPage;
 use App\Models\Page;
 use App\Repositories\PageRepository;
 use App\Services\Contracts\GeneralPageServiceInterface;
+use App\Services\Contracts\PageServiceInterface;
+use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
