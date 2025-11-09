@@ -55,4 +55,12 @@ final class PageRepository extends BaseRepository
             ->orderBy('published_at', 'desc')
             ->get();
     }
+
+    /**
+     * Update page setting
+     */
+    public function updateSetting(int $id, array $setting): Page
+    {
+        return $this->update($id, ['setting' => $setting]);
+    }
 }

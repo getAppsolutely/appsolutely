@@ -72,4 +72,15 @@ final class PageBlockSettingRepository extends BaseRepository
             ->where('id', $id)
             ->update($data);
     }
+
+    /**
+     * Update status and sort for a page block setting
+     */
+    public function updateStatusAndSort(int $id, int $status, int $sort): PageBlockSetting
+    {
+        return $this->update($id, [
+            'status' => $status,
+            'sort'   => $sort,
+        ]);
+    }
 }

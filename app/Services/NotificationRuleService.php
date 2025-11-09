@@ -52,7 +52,7 @@ final readonly class NotificationRuleService implements NotificationRuleServiceI
      */
     public function createRule(array $data): Model
     {
-        return NotificationRule::create($data);
+        return $this->ruleRepository->createRule($data);
     }
 
     /**
@@ -60,9 +60,7 @@ final readonly class NotificationRuleService implements NotificationRuleServiceI
      */
     public function updateRule(NotificationRule $rule, array $data): NotificationRule
     {
-        $rule->update($data);
-
-        return $rule->fresh();
+        return $this->ruleRepository->updateRule($rule->id, $data);
     }
 
     /**

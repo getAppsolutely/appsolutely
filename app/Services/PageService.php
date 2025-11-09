@@ -47,10 +47,10 @@ final readonly class PageService implements PageServiceInterface
     public function resetSetting(string $reference): Model
     {
         $page = $this->findByReference($reference);
-        $page->update(['setting' => []]);
+        $this->pageRepository->updateSetting($page->id, []);
         $this->pageBlockSettingRepository->resetSetting($page->id);
 
-        return $page;
+        return $this->pageRepository->find($page->id);
     }
 
     public function saveSetting(string $reference, array $data): Model
@@ -65,9 +65,9 @@ final readonly class PageService implements PageServiceInterface
         $this->pageBlockSettingRepository->resetSetting($page->id);
         $this->syncSettings($blockData, $page->id);
 
-        $page->update(['setting' => $data]);
+        $this->pageRepository->updateSetting($page->id, $data);
 
-        return $page;
+        return $this->pageRepository->find($page->id);
     }
 
     public function syncSettings(array $data, int $pageId): array
@@ -136,7 +136,11 @@ final readonly class PageService implements PageServiceInterface
 
         $found = $this->pageBlockSettingRepository->findBy($pageId, $blockId, $reference);
         if ($found) {
-            $found->update(['status' => Status::ACTIVE->value, 'sort' => $sort]);
+            $this->pageBlockSettingRepository->updateStatusAndSort(
+                $found->id,
+                Status::ACTIVE->value,
+                $sort
+            );
 
             return [];
         }
