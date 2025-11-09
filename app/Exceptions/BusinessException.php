@@ -4,23 +4,22 @@ declare(strict_types=1);
 
 namespace App\Exceptions;
 
-use Exception;
-
-class BusinessException extends Exception
+/**
+ * Generic business logic exception
+ *
+ * Use specific business exceptions when possible.
+ * This is a fallback for general business rule violations.
+ */
+class BusinessException extends BaseBusinessException
 {
-    public $code;
-
-    public array $errors;
-
-    public function __construct(string $message = 'Business Error', int $code = 1000, array $errors = [])
-    {
-        parent::__construct($message, $code);
-        $this->code   = $code;
-        $this->errors = $errors;
-    }
-
-    public function getErrors(): array
-    {
-        return $this->errors;
+    public function __construct(
+        string $message = 'A business rule violation occurred',
+        int $code = 1000,
+        array $errors = [],
+        ?string $userMessage = null,
+        ?\Throwable $previous = null,
+        array $context = []
+    ) {
+        parent::__construct($message, $code, $errors, $userMessage, $previous, $context);
     }
 }

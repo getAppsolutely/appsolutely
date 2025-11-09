@@ -33,7 +33,12 @@ class AdminBaseController extends AdminController
             $message = "Model class '{$model}' not found for controller '{$controller}'. " .
                        'Please override getModelClass() method in ' . get_class($this);
             log_error($message);
-            throw new NotFoundException($message);
+            throw new NotFoundException(
+                $model,
+                'The requested model could not be found.',
+                null,
+                ['controller' => $controller, 'model' => $model]
+            );
         }
 
         return $model;

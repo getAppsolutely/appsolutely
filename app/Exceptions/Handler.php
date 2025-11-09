@@ -50,12 +50,13 @@ class Handler extends ExceptionHandler
                 ], 401);
             }
 
-            // Not found (custom exceptions)
-            if ($e instanceof NotFoundException) {
+            // Not found (custom exceptions - BaseNotFoundException and its children)
+            if ($e instanceof BaseNotFoundException) {
                 return response()->json([
                     'status'  => false,
                     'code'    => $e->getCode(),
-                    'message' => $e->getMessage(),
+                    'message' => $e->getUserMessage(),
+                    'context' => config('app.debug') ? $e->getContext() : [],
                 ], 404);
             }
 
@@ -78,12 +79,26 @@ class Handler extends ExceptionHandler
             }
 
             if ($e instanceof BusinessException) {
+                $userMessage = method_exists($e, 'getUserMessage') ? $e->getUserMessage() : $e->getMessage();
+
                 return response()->json([
                     'status'  => false,
                     'code'    => $e->getCode(),
-                    'message' => $e->getMessage(),
+                    'message' => $userMessage,
                     'errors'  => $e->getErrors(),
                 ], 200);
+            }
+
+            // System exceptions (BaseSystemException)
+            if ($e instanceof BaseSystemException) {
+                $userMessage = $e->getUserMessage();
+
+                return response()->json([
+                    'status'  => false,
+                    'code'    => $e->getCode(),
+                    'message' => $userMessage,
+                    'context' => config('app.debug') ? $e->getContext() : [],
+                ], $e->getCode());
             }
 
             // Fallback for unexpected errors

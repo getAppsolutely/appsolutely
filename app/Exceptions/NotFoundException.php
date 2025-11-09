@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace App\Exceptions;
 
-use Exception;
-
-final class NotFoundException extends Exception
+/**
+ * Generic resource not found exception
+ *
+ * Use specific exceptions (FormNotFoundException, etc.) when possible.
+ * This is a fallback for general "not found" scenarios.
+ */
+final class NotFoundException extends BaseNotFoundException
 {
-    public function __construct(string $message = 'Resource not found', int $code = 404, ?\Throwable $previous = null)
+    public function __construct(string $identifier, ?string $userMessage = null, ?\Throwable $previous = null, array $context = [])
     {
-        parent::__construct($message, $code, $previous);
+        parent::__construct($identifier, 'Resource', $userMessage, $previous, $context);
     }
 }

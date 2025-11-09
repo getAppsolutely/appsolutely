@@ -57,14 +57,20 @@ final readonly class StorageService implements StorageServiceInterface
 
             if (! $result) {
                 throw new StorageException(
-                    "Failed to upload file '{$originalFilename}' to S3 storage. Path: {$filePath}"
+                    "Failed to upload file '{$originalFilename}' to S3 storage. Path: {$filePath}",
+                    'Unable to upload the file. Please try again.',
+                    null,
+                    ['filename' => $originalFilename, 'path' => $filePath]
                 );
             }
 
             // Verify file exists
             if (! Storage::disk('s3')->exists($filePath)) {
                 throw new StorageException(
-                    "File '{$originalFilename}' was not found in S3 storage after upload. Expected path: {$filePath}"
+                    "File '{$originalFilename}' was not found in S3 storage after upload. Expected path: {$filePath}",
+                    'The uploaded file could not be verified. Please try uploading again.',
+                    null,
+                    ['filename' => $originalFilename, 'path' => $filePath]
                 );
             }
 
@@ -89,8 +95,9 @@ final readonly class StorageService implements StorageServiceInterface
             ]);
             throw new StorageException(
                 "Failed to store file '{$originalFilename}': {$e->getMessage()}",
-                0,
-                $e
+                'Unable to store the file. Please try again.',
+                $e,
+                ['filename' => $originalFilename, 'path' => $path]
             );
         }
     }

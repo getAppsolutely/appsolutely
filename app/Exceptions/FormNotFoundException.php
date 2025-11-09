@@ -4,10 +4,19 @@ declare(strict_types=1);
 
 namespace App\Exceptions;
 
-final class FormNotFoundException extends NotFoundException
+/**
+ * Exception thrown when a form cannot be found
+ */
+final class FormNotFoundException extends BaseNotFoundException
 {
-    public function __construct(string $identifier, ?\Throwable $previous = null)
+    public function __construct(string $identifier, ?string $userMessage = null, ?\Throwable $previous = null, array $context = [])
     {
-        parent::__construct("Form not found: {$identifier}", 404, $previous);
+        parent::__construct(
+            $identifier,
+            'Form',
+            $userMessage ?? 'The form you are looking for could not be found.',
+            $previous,
+            $context
+        );
     }
 }

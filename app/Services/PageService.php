@@ -99,8 +99,9 @@ final readonly class PageService implements PageServiceInterface
             );
             throw new TransactionException(
                 "Failed to sync page block settings for page ID {$pageId}: {$exception->getMessage()}",
-                0,
-                $exception
+                'Unable to save page settings. Please try again.',
+                $exception,
+                ['pageId' => $pageId]
             );
         } catch (\Exception $exception) {
             log_error(
@@ -115,8 +116,9 @@ final readonly class PageService implements PageServiceInterface
             );
             throw new TransactionException(
                 "Failed to sync page block settings for page ID {$pageId}: {$exception->getMessage()}",
-                0,
-                $exception
+                'Unable to save page settings. Please try again.',
+                $exception,
+                ['pageId' => $pageId]
             );
         }
     }

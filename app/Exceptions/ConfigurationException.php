@@ -4,12 +4,24 @@ declare(strict_types=1);
 
 namespace App\Exceptions;
 
-use Exception;
-
-final class ConfigurationException extends Exception
+/**
+ * Exception for configuration errors
+ */
+final class ConfigurationException extends BaseSystemException
 {
-    public function __construct(string $message = 'Configuration error', int $code = 500, ?\Throwable $previous = null)
-    {
-        parent::__construct($message, $code, $previous);
+    public function __construct(
+        string $message = 'Configuration error',
+        ?string $userMessage = null,
+        ?\Throwable $previous = null,
+        array $context = []
+    ) {
+        parent::__construct(
+            $message,
+            'Configuration',
+            500,
+            $userMessage ?? 'A configuration error occurred. Please contact support.',
+            $previous,
+            $context
+        );
     }
 }

@@ -4,10 +4,24 @@ declare(strict_types=1);
 
 namespace App\Exceptions;
 
-final class CacheException extends BusinessException
+/**
+ * Exception for cache operation errors
+ */
+final class CacheException extends BaseSystemException
 {
-    public function __construct(string $message = 'Cache operation failed', array $errors = [])
-    {
-        parent::__construct($message, 1005, $errors);
+    public function __construct(
+        string $message = 'Cache operation failed',
+        ?string $userMessage = null,
+        ?\Throwable $previous = null,
+        array $context = []
+    ) {
+        parent::__construct(
+            $message,
+            'Cache',
+            500,
+            $userMessage ?? 'A caching error occurred. Please try again.',
+            $previous,
+            $context
+        );
     }
 }

@@ -4,10 +4,19 @@ declare(strict_types=1);
 
 namespace App\Exceptions;
 
-final class NotificationTemplateNotFoundException extends NotFoundException
+/**
+ * Exception thrown when a notification template cannot be found
+ */
+final class NotificationTemplateNotFoundException extends BaseNotFoundException
 {
-    public function __construct(string $templateSlug, ?\Throwable $previous = null)
+    public function __construct(string $identifier, ?string $userMessage = null, ?\Throwable $previous = null, array $context = [])
     {
-        parent::__construct("Notification template not found: {$templateSlug}", 404, $previous);
+        parent::__construct(
+            $identifier,
+            'Notification Template',
+            $userMessage ?? 'The notification template could not be found.',
+            $previous,
+            $context
+        );
     }
 }

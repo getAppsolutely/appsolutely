@@ -90,7 +90,10 @@ final readonly class NotificationRuleService implements NotificationRuleServiceI
         $rule = $this->ruleRepository->find($id);
 
         if (! $rule) {
-            throw new NotFoundException("Notification rule with ID {$id} not found");
+            throw new NotFoundException(
+                (string) $id,
+                'The notification rule could not be found.'
+            );
         }
 
         // Generate sample data based on trigger type
