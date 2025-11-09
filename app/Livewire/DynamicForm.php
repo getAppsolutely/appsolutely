@@ -51,13 +51,15 @@ final class DynamicForm extends BaseBlock
 
             if (! $this->form) {
                 \Log::warning("Form not found for slug: {$formSlug}. Using legacy fallback.");
-                $this->form = null;
+                $this->form       = null;
+                $this->formFields = [];
+            } else {
+                $this->formFields = $formService->getFields($this->form);
             }
-
-            $this->formFields = $formService->getFields($this->form);
         } catch (\Exception $e) {
             \Log::error("Error loading form with slug {$formSlug}: " . $e->getMessage());
-            $this->form = null;
+            $this->form       = null;
+            $this->formFields = [];
         }
     }
 

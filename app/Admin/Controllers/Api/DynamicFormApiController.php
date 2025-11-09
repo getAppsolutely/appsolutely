@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace App\Admin\Controllers\Api;
 
 use App\Repositories\FormEntryRepository;
+use App\Services\DynamicFormExportService;
 
 final class DynamicFormApiController extends AdminBaseApiController
 {
     public function __construct(
         protected FormEntryRepository $entryRepository,
+        protected DynamicFormExportService $exportService
     ) {}
 
     /**
@@ -45,46 +47,6 @@ final class DynamicFormApiController extends AdminBaseApiController
      */
     public function exportCsv(?int $formId = null): \Symfony\Component\HttpFoundation\StreamedResponse
     {
-        $entries  = $this->entryRepository->getValidEntriesForExport($formId);
-        $filename = 'form-entries-' . date('Y-m-d-H-i-s') . '.csv';
-
-        return response()->streamDownload(function () use ($entries) {
-            $handle = fopen('php://output', 'w');
-
-            // Add CSV headers
-            fputcsv($handle, [
-                'ID',
-                'Form',
-                'First Name',
-                'Last Name',
-                'Email',
-                'Mobile',
-                'User',
-                'Form Data',
-                'Submitted At',
-                'IP Address',
-            ]);
-
-            // Add data rows
-            foreach ($entries as $entry) {
-                fputcsv($handle, [
-                    $entry->id,
-                    $entry->form->name,
-                    $entry->first_name,
-                    $entry->last_name,
-                    $entry->email,
-                    $entry->mobile,
-                    $entry->user ? $entry->user->name : 'Guest',
-                    json_encode($entry->data),
-                    $entry->submitted_at->format('Y-m-d H:i:s'),
-                    $entry->ip_address,
-                ]);
-            }
-
-            fclose($handle);
-        }, $filename, [
-            'Content-Type'        => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
-        ]);
+        return $this->exportService->exportFormEntriesForApi($formId);
     }
 }
