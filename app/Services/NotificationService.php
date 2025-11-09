@@ -136,41 +136,13 @@ final class NotificationService implements NotificationServiceInterface
     }
 
     /**
-     * Process pending notifications
+     * Process pending notifications (delegates to NotificationQueueService)
      */
     public function processPendingNotifications(): int
     {
-        $processed     = 0;
-        $notifications = $this->queueRepository->getPendingToSend()->take(100);
+        $queueService = app(\App\Services\NotificationQueueService::class);
 
-        foreach ($notifications as $notification) {
-            try {
-                // Dispatch individual email job for better queue management
-                dispatch(new SendNotificationEmail(
-                    $notification->recipient_email,
-                    $notification->subject,
-                    $notification->body_html,
-                    $notification->body_text
-                ))->afterResponse();
-
-                $this->queueRepository->updateStatus($notification->id, 'sent');
-                $processed++;
-            } catch (MaxAttemptsExceededException $e) {
-                $this->queueRepository->updateStatus($notification->id, 'failed', $e->getMessage());
-                $this->logger->error('Failed to dispatch queued notification: max attempts exceeded', [
-                    'notification_id' => $notification->id,
-                    'error'           => $e->getMessage(),
-                ]);
-            } catch (\Exception $e) {
-                $this->queueRepository->updateStatus($notification->id, 'failed', $e->getMessage());
-                $this->logger->error('Failed to dispatch queued notification: unexpected error', [
-                    'notification_id' => $notification->id,
-                    'error'           => $e->getMessage(),
-                ]);
-            }
-        }
-
-        return $processed;
+        return $queueService->processPending(100);
     }
 
     /**

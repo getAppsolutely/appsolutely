@@ -1,0 +1,56 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Services;
+
+use App\Jobs\SendNotificationEmail;
+use App\Repositories\NotificationQueueRepository;
+use Illuminate\Queue\MaxAttemptsExceededException;
+use Psr\Log\LoggerInterface;
+
+final readonly class NotificationQueueService
+{
+    public function __construct(
+        protected NotificationQueueRepository $queueRepository,
+        protected LoggerInterface $logger
+    ) {}
+
+    /**
+     * Process pending notifications
+     */
+    public function processPending(int $limit = 100): int
+    {
+        $processed     = 0;
+        $notifications = $this->queueRepository->getPendingToSend()->take($limit);
+
+        foreach ($notifications as $notification) {
+            try {
+                // Dispatch individual email job for better queue management
+                dispatch(new SendNotificationEmail(
+                    $notification->recipient_email,
+                    $notification->subject,
+                    $notification->body_html,
+                    $notification->body_text
+                ))->afterResponse();
+
+                $this->queueRepository->updateStatus($notification->id, 'sent');
+                $processed++;
+            } catch (MaxAttemptsExceededException $e) {
+                $this->queueRepository->updateStatus($notification->id, 'failed', $e->getMessage());
+                $this->logger->error('Failed to dispatch queued notification: max attempts exceeded', [
+                    'notification_id' => $notification->id,
+                    'error'           => $e->getMessage(),
+                ]);
+            } catch (\Exception $e) {
+                $this->queueRepository->updateStatus($notification->id, 'failed', $e->getMessage());
+                $this->logger->error('Failed to dispatch queued notification: unexpected error', [
+                    'notification_id' => $notification->id,
+                    'error'           => $e->getMessage(),
+                ]);
+            }
+        }
+
+        return $processed;
+    }
+}
