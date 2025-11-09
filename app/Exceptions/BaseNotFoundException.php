@@ -33,7 +33,7 @@ abstract class BaseNotFoundException extends BaseException
         $this->resourceType = $resourceType;
 
         $technicalMessage  = "{$resourceType} not found: {$identifier}";
-        $userMessage       = $userMessage ?? $this->getDefaultUserMessage($resourceType);
+        $userMessage       = $userMessage ?? $this->getDefaultUserMessage();
 
         parent::__construct(
             $technicalMessage,
@@ -66,8 +66,8 @@ abstract class BaseNotFoundException extends BaseException
     /**
      * Get default user-friendly message
      */
-    protected function getDefaultUserMessage(string $resourceType): string
+    protected function getDefaultUserMessage(): string
     {
-        return "The requested {$resourceType} could not be found.";
+        return "The requested {$this->resourceType} could not be found.";
     }
 }
