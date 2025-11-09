@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Admin\Extensions\Grid;
 
 use Dcat\Admin\Grid\Displayers\AbstractDisplayer;

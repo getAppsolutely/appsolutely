@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Admin\Controllers\Api\AttributeGroupController as AttributeGroupApiController;
 use App\Admin\Controllers\Api\CommonController;
 use App\Admin\Controllers\Api\DynamicFormApiController;

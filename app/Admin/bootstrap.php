@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Admin\Extensions\Grid\QuickEditColumn;
 use App\Admin\Extensions\Grid\SwitchableColumn;
 use Dcat\Admin\Admin;
