@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Jobs\SendNotificationEmail;
 use App\Models\NotificationQueue;
 use App\Models\NotificationRule;
 use App\Repositories\NotificationQueueRepository;
@@ -45,7 +46,7 @@ final class NotificationService
     }
 
     /**
-     * Send notification immediately
+     * Send notification immediately (dispatches to queue for async processing)
      */
     public function sendImmediate(string $templateSlug, string $email, array $data): bool
     {
@@ -60,9 +61,17 @@ final class NotificationService
 
             $rendered = $template->render($data);
 
-            return $this->sendEmail($email, $rendered['subject'], $rendered['body_html'], $rendered['body_text']);
+            // Dispatch to queue for async processing
+            dispatch(new SendNotificationEmail(
+                $email,
+                $rendered['subject'],
+                $rendered['body_html'],
+                $rendered['body_text']
+            ));
+
+            return true;
         } catch (\Exception $e) {
-            Log::error('Failed to send immediate notification', [
+            Log::error('Failed to dispatch notification email', [
                 'template_slug' => $templateSlug,
                 'email'         => $email,
                 'error'         => $e->getMessage(),
@@ -106,22 +115,19 @@ final class NotificationService
 
         foreach ($notifications as $notification) {
             try {
-                $success = $this->sendEmail(
+                // Dispatch individual email job for better queue management
+                dispatch(new SendNotificationEmail(
                     $notification->recipient_email,
                     $notification->subject,
                     $notification->body_html,
                     $notification->body_text
-                );
+                ))->afterResponse();
 
-                if ($success) {
-                    $this->queueRepository->updateStatus($notification->id, 'sent');
-                    $processed++;
-                } else {
-                    $this->queueRepository->updateStatus($notification->id, 'failed', 'Email sending failed');
-                }
+                $this->queueRepository->updateStatus($notification->id, 'sent');
+                $processed++;
             } catch (\Exception $e) {
                 $this->queueRepository->updateStatus($notification->id, 'failed', $e->getMessage());
-                Log::error('Failed to send queued notification', [
+                Log::error('Failed to dispatch queued notification', [
                     'notification_id' => $notification->id,
                     'error'           => $e->getMessage(),
                 ]);
