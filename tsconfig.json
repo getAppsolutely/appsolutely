@@ -20,9 +20,12 @@
         "types": ["vite/client", "node"],
         "baseUrl": ".",
         "paths": {
-            "@/*": ["./resources/page-builder/assets/*"]
+            "@/*": ["./resources/page-builder/assets/*"],
+            "@themes/*": ["./themes/*"],
+            "@resources/*": ["./resources/*"],
+            "types/*": ["./types/*"]
         }
     },
-    "include": ["**/*.ts", "**/*.tsx", "**/*.vue", "types/**/*.d.ts"],
+    "include": ["**/*.ts", "**/*.tsx", "**/*.vue", "types/**/*.d.ts", "tests/**/*.ts"],
     "exclude": ["node_modules", "vendor", "storage", "public"]
 }

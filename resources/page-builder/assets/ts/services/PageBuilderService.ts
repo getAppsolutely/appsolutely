@@ -1,6 +1,6 @@
 // Page Builder Service - Core functionality
-import type { Editor } from '../../../types/grapesjs';
-import type { BlockRegistryCategory, BlockDefinition, PreviewContent } from '../../../types/pagebuilder';
+import type { Editor } from 'types/grapesjs';
+import type { BlockRegistryCategory, BlockDefinition, PreviewContent } from 'types/pagebuilder';
 
 export class PageBuilderService {
     private editor: Editor | null = null;

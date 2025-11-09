@@ -2,7 +2,7 @@
 
 // External Dependencies
 import grapesjs from 'grapesjs';
-import type { GrapesJS } from '../../../types/grapesjs';
+import type { GrapesJS } from 'types/grapesjs';
 
 // Make GrapesJS available globally
 if (typeof window !== 'undefined') {

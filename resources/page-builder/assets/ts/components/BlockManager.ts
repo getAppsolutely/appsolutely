@@ -1,6 +1,6 @@
 // Block Manager - Handles block-related functionality
 import { pageBuilderService } from '../services/PageBuilderService';
-import type { BlockRegistryCategory, BlockDefinition } from '../../../../types/pagebuilder';
+import type { BlockRegistryCategory, BlockDefinition } from 'types/pagebuilder';
 
 export class BlockManager {
     private service: typeof pageBuilderService;

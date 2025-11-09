@@ -1,5 +1,5 @@
 // Config Manager - Handles configuration panel functionality
-import type { BlockDefinition, BlockConfig, BlockSchema, SchemaOption } from '../../../../types/pagebuilder';
+import type { BlockDefinition, BlockConfig, BlockSchema, SchemaOption } from 'types/pagebuilder';
 
 export class ConfigManager {
     private currentBlock: BlockDefinition | null = null;
@@ -85,14 +85,18 @@ export class ConfigManager {
     }
 
     private createDefaultForm(container: HTMLElement, _block: BlockDefinition): void {
-        const defaultFields = [
+        const defaultFields: Array<{
+            key: string;
+            type: 'text' | 'textarea' | 'select' | 'number' | 'boolean' | 'color';
+            label: string;
+        }> = [
             { key: 'title', type: 'text', label: 'Title' },
             { key: 'content', type: 'textarea', label: 'Content' },
             { key: 'style', type: 'text', label: 'Style' },
         ];
 
         defaultFields.forEach((field) => {
-            const formGroup = this.createFormGroup(field.key, field);
+            const formGroup = this.createFormGroup(field.key, field as BlockSchema[string]);
             container.appendChild(formGroup);
         });
     }
@@ -130,7 +134,8 @@ export class ConfigManager {
 
         input.setAttribute('id', key);
         input.setAttribute('name', key);
-        input.setAttribute('value', field.default || '');
+        const defaultValue = field.default !== undefined ? String(field.default) : '';
+        input.setAttribute('value', defaultValue);
 
         if (field.placeholder) {
             input.setAttribute('placeholder', field.placeholder);
@@ -171,7 +176,18 @@ export class ConfigManager {
         const config: BlockConfig = {};
 
         for (const [key, value] of formData.entries()) {
-            config[key] = value;
+            // Skip File entries, only process string values
+            if (typeof value === 'string') {
+                // Try to parse as number or boolean if possible
+                const numValue = Number(value);
+                if (!isNaN(numValue) && value.trim() !== '') {
+                    config[key] = numValue;
+                } else if (value === 'true' || value === 'false') {
+                    config[key] = value === 'true';
+                } else {
+                    config[key] = value;
+                }
+            }
         }
 
         return config;

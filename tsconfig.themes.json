@@ -1,14 +1,19 @@
 {
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "baseUrl": "."
-  },
-  "include": [
-    "types/**/*.d.ts",
-    "themes/**/js/**/*.ts",
-    "themes/**/js/**/*.tsx",
-    "themes/**/js/**/*.vue",
-    "themes/**/*.ts"
-  ],
-  "exclude": ["node_modules", "vendor", "storage", "public"]
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["./resources/page-builder/assets/*"],
+            "@themes/*": ["./themes/*"],
+            "@resources/*": ["./resources/*"]
+        }
+    },
+    "include": [
+        "types/**/*.d.ts",
+        "themes/**/js/**/*.ts",
+        "themes/**/js/**/*.tsx",
+        "themes/**/js/**/*.vue",
+        "themes/**/*.ts"
+    ],
+    "exclude": ["node_modules", "vendor", "storage", "public"]
 }
