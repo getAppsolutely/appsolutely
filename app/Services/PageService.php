@@ -16,6 +16,8 @@ use App\Repositories\PageRepository;
 use App\Services\Contracts\PageServiceInterface;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\QueryException;
+use PDOException;
 
 final class PageService implements PageServiceInterface
 {
@@ -84,9 +86,25 @@ final class PageService implements PageServiceInterface
             });
 
             return $result;
+        } catch (QueryException|PDOException $exception) {
+            log_error(
+                'Failed to sync page block settings: database error',
+                [
+                    'pageId' => $pageId,
+                    'data'   => $data,
+                    'error'  => $exception->getMessage(),
+                ],
+                __CLASS__,
+                __METHOD__
+            );
+            throw new TransactionException(
+                "Failed to sync page block settings for page ID {$pageId}: {$exception->getMessage()}",
+                0,
+                $exception
+            );
         } catch (\Exception $exception) {
             log_error(
-                'Failed to sync page block settings',
+                'Failed to sync page block settings: unexpected error',
                 [
                     'pageId' => $pageId,
                     'data'   => $data,

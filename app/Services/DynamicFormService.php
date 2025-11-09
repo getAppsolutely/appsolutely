@@ -12,10 +12,12 @@ use App\Repositories\FormEntryRepository;
 use App\Repositories\FormFieldRepository;
 use App\Repositories\FormRepository;
 use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use PDOException;
 use Psr\Log\LoggerInterface;
 
 final class DynamicFormService
@@ -493,10 +495,18 @@ final class DynamicFormService
                 'form_entry_id' => $formEntry->id,
                 'target_table'  => $form->target_table,
             ]);
-        } catch (\Exception $e) {
-            $this->logger->error("Failed to insert into target table '{$form->target_table}': " . $e->getMessage(), [
+        } catch (QueryException|PDOException $e) {
+            $this->logger->error("Failed to insert into target table '{$form->target_table}': database error", [
                 'form_id'       => $form->id,
                 'form_entry_id' => $formEntry->id,
+                'target_table'  => $form->target_table,
+                'error'         => $e->getMessage(),
+            ]);
+        } catch (\Exception $e) {
+            $this->logger->error("Failed to insert into target table '{$form->target_table}': unexpected error", [
+                'form_id'       => $form->id,
+                'form_entry_id' => $formEntry->id,
+                'target_table'  => $form->target_table,
                 'error'         => $e->getMessage(),
             ]);
         }
@@ -511,8 +521,18 @@ final class DynamicFormService
             $columns = $this->db->getSchemaBuilder()->getColumnListing($tableName);
 
             return $columns;
+        } catch (QueryException|PDOException $e) {
+            $this->logger->error("Failed to get columns for table '{$tableName}': database error", [
+                'table_name' => $tableName,
+                'error'      => $e->getMessage(),
+            ]);
+
+            return [];
         } catch (\Exception $e) {
-            $this->logger->error("Failed to get columns for table '{$tableName}': " . $e->getMessage());
+            $this->logger->error("Failed to get columns for table '{$tableName}': unexpected error", [
+                'table_name' => $tableName,
+                'error'      => $e->getMessage(),
+            ]);
 
             return [];
         }
@@ -594,7 +614,7 @@ final class DynamicFormService
 
             $notificationService->trigger('form_submission', $form->slug, $notificationData);
         } catch (\Exception $e) {
-            $this->logger->error('Failed to trigger form submission notifications', [
+            $this->logger->error('Failed to trigger form submission notifications: unexpected error', [
                 'form_id'  => $form->id,
                 'entry_id' => $formEntry->id,
                 'error'    => $e->getMessage(),

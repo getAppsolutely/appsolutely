@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Exceptions\NotFoundException;
 use App\Jobs\SendNotificationEmail;
 use App\Models\NotificationQueue;
 use App\Models\NotificationRule;
@@ -14,6 +15,8 @@ use App\Services\Contracts\NotificationRuleServiceInterface;
 use App\Services\Contracts\NotificationServiceInterface;
 use App\Services\Contracts\NotificationTemplateServiceInterface;
 use Illuminate\Contracts\Mail\Mailer;
+use Illuminate\Mail\MailException;
+use Illuminate\Queue\MaxAttemptsExceededException;
 use Psr\Log\LoggerInterface;
 
 final class NotificationService implements NotificationServiceInterface
@@ -41,8 +44,14 @@ final class NotificationService implements NotificationServiceInterface
                     $this->processRule($rule, $data);
                 }
             }
+        } catch (NotFoundException $e) {
+            $this->logger->warning('Failed to trigger notifications: resource not found', [
+                'trigger_type' => $triggerType,
+                'reference'    => $reference,
+                'error'        => $e->getMessage(),
+            ]);
         } catch (\Exception $e) {
-            $this->logger->error('Failed to trigger notifications', [
+            $this->logger->error('Failed to trigger notifications: unexpected error', [
                 'trigger_type' => $triggerType,
                 'reference'    => $reference,
                 'error'        => $e->getMessage(),
@@ -75,8 +84,24 @@ final class NotificationService implements NotificationServiceInterface
             ));
 
             return true;
+        } catch (NotFoundException $e) {
+            $this->logger->warning('Failed to dispatch notification email: template not found', [
+                'template_slug' => $templateSlug,
+                'email'         => $email,
+                'error'         => $e->getMessage(),
+            ]);
+
+            return false;
+        } catch (MaxAttemptsExceededException $e) {
+            $this->logger->error('Failed to dispatch notification email: queue max attempts exceeded', [
+                'template_slug' => $templateSlug,
+                'email'         => $email,
+                'error'         => $e->getMessage(),
+            ]);
+
+            return false;
         } catch (\Exception $e) {
-            $this->logger->error('Failed to dispatch notification email', [
+            $this->logger->error('Failed to dispatch notification email: unexpected error', [
                 'template_slug' => $templateSlug,
                 'email'         => $email,
                 'error'         => $e->getMessage(),
@@ -130,9 +155,15 @@ final class NotificationService implements NotificationServiceInterface
 
                 $this->queueRepository->updateStatus($notification->id, 'sent');
                 $processed++;
+            } catch (MaxAttemptsExceededException $e) {
+                $this->queueRepository->updateStatus($notification->id, 'failed', $e->getMessage());
+                $this->logger->error('Failed to dispatch queued notification: max attempts exceeded', [
+                    'notification_id' => $notification->id,
+                    'error'           => $e->getMessage(),
+                ]);
             } catch (\Exception $e) {
                 $this->queueRepository->updateStatus($notification->id, 'failed', $e->getMessage());
-                $this->logger->error('Failed to dispatch queued notification', [
+                $this->logger->error('Failed to dispatch queued notification: unexpected error', [
                     'notification_id' => $notification->id,
                     'error'           => $e->getMessage(),
                 ]);
@@ -208,8 +239,16 @@ final class NotificationService implements NotificationServiceInterface
             });
 
             return true;
+        } catch (MailException $e) {
+            $this->logger->error('Email sending failed: mail error', [
+                'email'   => $email,
+                'subject' => $subject,
+                'error'   => $e->getMessage(),
+            ]);
+
+            return false;
         } catch (\Exception $e) {
-            $this->logger->error('Email sending failed', [
+            $this->logger->error('Email sending failed: unexpected error', [
                 'email'   => $email,
                 'subject' => $subject,
                 'error'   => $e->getMessage(),

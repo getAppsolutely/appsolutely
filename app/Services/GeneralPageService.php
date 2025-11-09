@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Exceptions\NotFoundException;
 use App\Models\GeneralPage;
 use App\Models\Page;
 use App\Repositories\PageRepository;
@@ -116,8 +117,15 @@ final readonly class GeneralPageService implements GeneralPageServiceInterface
 
             return $page;
 
+        } catch (NotFoundException $e) {
+            log_error('Failed to resolve page: resource not found', [
+                'slug'  => $fullSlug,
+                'error' => $e->getMessage(),
+            ]);
+
+            return null;
         } catch (\Exception $e) {
-            log_error('Error resolving page', [
+            log_error('Failed to resolve page: unexpected error', [
                 'slug'  => $fullSlug,
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
@@ -281,9 +289,20 @@ final readonly class GeneralPageService implements GeneralPageServiceInterface
                     'repository' => $repositoryClass,
                 ];
             }
+        } catch (NotFoundException $e) {
+            // Log the error but don't break the flow
+            \log_warning("Failed to find nested content using repository {$repositoryClass}: resource not found", [
+                'repository' => $repositoryClass,
+                'slug'       => $childSlug,
+                'error'      => $e->getMessage(),
+            ]);
         } catch (\Exception $e) {
             // Log the error but don't break the flow
-            \log_warning("Failed to find nested content using repository {$repositoryClass}: " . $e->getMessage());
+            \log_warning("Failed to find nested content using repository {$repositoryClass}: unexpected error", [
+                'repository' => $repositoryClass,
+                'slug'       => $childSlug,
+                'error'      => $e->getMessage(),
+            ]);
         }
 
         return null;
@@ -310,7 +329,17 @@ final readonly class GeneralPageService implements GeneralPageServiceInterface
                     if ($content && $this->isContentValid($content, $now)) {
                         return $content;
                     }
+                } catch (NotFoundException|\InvalidArgumentException $e) {
+                    // Expected exceptions when method doesn't exist or content not found
+                    continue;
                 } catch (\Exception $e) {
+                    // Log unexpected errors but continue trying other methods
+                    \log_warning('Unexpected error while finding content by slug', [
+                        'method' => $method,
+                        'slug'   => $slug,
+                        'error'  => $e->getMessage(),
+                    ]);
+
                     continue;
                 }
             }
