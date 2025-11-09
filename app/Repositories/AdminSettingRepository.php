@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Models\AdminSetting;
 
-class AdminSettingRepository extends BaseRepository
+final class AdminSettingRepository extends BaseRepository
 {
     public function model(): string
     {

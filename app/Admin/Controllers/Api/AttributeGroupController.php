@@ -7,7 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class AttributeGroupController extends AdminBaseApiController
+final class AttributeGroupController extends AdminBaseApiController
 {
     public function __construct(protected ProductAttributeService $service) {}
 

@@ -7,7 +7,7 @@ use App\Repositories\TranslationRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 
-class TranslationService
+final class TranslationService
 {
     protected string $cacheKey;
 

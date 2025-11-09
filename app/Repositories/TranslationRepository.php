@@ -6,7 +6,7 @@ use App\Models\Translation;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
-class TranslationRepository extends BaseRepository
+final class TranslationRepository extends BaseRepository
 {
     public function model(): string
     {

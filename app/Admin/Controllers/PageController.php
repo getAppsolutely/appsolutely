@@ -7,7 +7,7 @@ use App\Services\PageService;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 
-class PageController extends AdminBaseController
+final class PageController extends AdminBaseController
 {
     public function __construct(protected PageService $pageService) {}
 

@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class RegisteredUserController extends BaseController
+final class RegisteredUserController extends BaseController
 {
     /**
      * Display the registration view.

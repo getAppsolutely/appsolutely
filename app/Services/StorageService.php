@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class StorageService
+final class StorageService
 {
     public function __construct(protected AdminSettingRepository $adminSettingRepository,
         protected FileRepository $fileRepository) {}

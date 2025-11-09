@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 
-class UserRepository extends BaseRepository
+final class UserRepository extends BaseRepository
 {
     public function model(): string
     {

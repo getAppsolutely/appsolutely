@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Models\OrderItem;
 
-class OrderItemRepository extends BaseRepository
+final class OrderItemRepository extends BaseRepository
 {
     public function model(): string
     {

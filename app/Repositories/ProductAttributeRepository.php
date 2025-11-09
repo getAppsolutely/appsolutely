@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Models\ProductAttribute;
 
-class ProductAttributeRepository extends BaseRepository
+final class ProductAttributeRepository extends BaseRepository
 {
     public function model(): string
     {

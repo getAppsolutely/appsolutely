@@ -6,7 +6,7 @@ use App\Http\Controllers\BaseController;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
-class VerifyEmailController extends BaseController
+final class VerifyEmailController extends BaseController
 {
     /**
      * Mark the authenticated user's email address as verified.

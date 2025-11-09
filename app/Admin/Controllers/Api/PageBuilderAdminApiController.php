@@ -9,7 +9,7 @@ use App\Services\PageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class PageBuilderAdminApiController extends AdminBaseApiController
+final class PageBuilderAdminApiController extends AdminBaseApiController
 {
     public function __construct(protected PageService $pageService,
         protected PageBlockService $pageBlockService,

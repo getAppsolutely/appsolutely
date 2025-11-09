@@ -7,7 +7,7 @@ use App\Repositories\ProductRepository;
 use App\Repositories\ProductSkuRepository;
 use Illuminate\Support\Collection;
 
-class ProductService
+final class ProductService
 {
     public function __construct(
         protected ProductRepository $productRepository,

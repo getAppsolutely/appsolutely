@@ -7,7 +7,7 @@ use App\Repositories\Traits\Reference;
 use App\Repositories\Traits\Status;
 use Illuminate\Support\Carbon;
 
-class PageRepository extends BaseRepository
+final class PageRepository extends BaseRepository
 {
     use Reference;
     use Status;

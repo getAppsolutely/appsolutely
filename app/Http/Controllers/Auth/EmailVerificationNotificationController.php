@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\BaseController;
 use Illuminate\Http\Request;
 
-class EmailVerificationNotificationController extends BaseController
+final class EmailVerificationNotificationController extends BaseController
 {
     /**
      * Send a new email verification notification.

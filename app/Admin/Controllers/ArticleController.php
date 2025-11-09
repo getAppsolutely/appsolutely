@@ -8,7 +8,7 @@ use App\Repositories\ArticleCategoryRepository;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 
-class ArticleController extends AdminBaseController
+final class ArticleController extends AdminBaseController
 {
     public function __construct(protected ArticleCategoryRepository $articleCategoryRepository) {}
 

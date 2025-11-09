@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\Product;
 use Illuminate\Support\Carbon;
 
-class ProductRepository extends BaseRepository
+final class ProductRepository extends BaseRepository
 {
     public function model(): string
     {

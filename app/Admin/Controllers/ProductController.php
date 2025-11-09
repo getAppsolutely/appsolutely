@@ -13,7 +13,7 @@ use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Widgets\Modal;
 
-class ProductController extends AdminBaseController
+final class ProductController extends AdminBaseController
 {
     public function __construct(protected ProductCategoryRepository $productCategoryRepository) {}
 

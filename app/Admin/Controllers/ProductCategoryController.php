@@ -12,7 +12,7 @@ use Dcat\Admin\Layout\Row;
 use Dcat\Admin\Tree;
 use Illuminate\Support\Facades\Request;
 
-class ProductCategoryController extends AdminBaseController
+final class ProductCategoryController extends AdminBaseController
 {
     public function __construct(protected ProductCategoryRepository $productCategoryRepository) {}
 

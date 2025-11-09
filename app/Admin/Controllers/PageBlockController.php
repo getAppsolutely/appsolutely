@@ -18,7 +18,7 @@ use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Widgets\Modal;
 use Dcat\Admin\Widgets\Tab;
 
-class PageBlockController extends AdminBaseController
+final class PageBlockController extends AdminBaseController
 {
     public function __construct(
         protected PageBlockRepository $blockRepository,

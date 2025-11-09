@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Models\ProductSku;
 
-class ProductSkuRepository extends BaseRepository
+final class ProductSkuRepository extends BaseRepository
 {
     public function model(): string
     {

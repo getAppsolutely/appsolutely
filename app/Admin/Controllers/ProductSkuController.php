@@ -9,7 +9,7 @@ use App\Repositories\ProductRepository;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Widgets\Modal;
 
-class ProductSkuController extends AdminBaseController
+final class ProductSkuController extends AdminBaseController
 {
     public function __construct(protected ProductRepository $productRepository) {}
 

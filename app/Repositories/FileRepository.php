@@ -8,7 +8,7 @@ use App\Models\File;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class FileRepository extends BaseRepository
+final class FileRepository extends BaseRepository
 {
     public function model(): string
     {

@@ -16,7 +16,7 @@ use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Widgets\Modal;
 use Dcat\Admin\Widgets\Tab;
 
-class ProductAttributeController extends AdminBaseController
+final class ProductAttributeController extends AdminBaseController
 {
     public function index(Content $content): Content
     {

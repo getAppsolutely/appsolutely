@@ -4,7 +4,7 @@ namespace App\Services\Translation;
 
 use DeepSeek\DeepSeekClient;
 
-class DeepSeekTranslator implements TranslatorInterface
+final class DeepSeekTranslator implements TranslatorInterface
 {
     /**
      * DeepSeek client instance.

@@ -12,7 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class FileController extends AdminBaseController
+final class FileController extends AdminBaseController
 {
     /**
      * Make a grid builder.

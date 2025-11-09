@@ -15,7 +15,7 @@ use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Widgets\Modal;
 use Dcat\Admin\Widgets\Tab;
 
-class ReleaseController extends AdminBaseController
+final class ReleaseController extends AdminBaseController
 {
     public function index(Content $content): Content
     {

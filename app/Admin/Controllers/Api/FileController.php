@@ -13,7 +13,7 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Storage;
 
-class FileController extends AdminBaseApiController
+final class FileController extends AdminBaseApiController
 {
     use HasUploadedFile;
 

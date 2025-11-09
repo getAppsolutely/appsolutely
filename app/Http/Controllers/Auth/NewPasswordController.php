@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 
-class NewPasswordController extends BaseController
+final class NewPasswordController extends BaseController
 {
     /**
      * Display the password reset view.

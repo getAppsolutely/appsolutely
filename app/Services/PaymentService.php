@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Repositories\OrderPaymentRepository;
 use App\Repositories\PaymentRepository;
 
-class PaymentService
+final class PaymentService
 {
     public function __construct(
         protected PaymentRepository $paymentRepository,

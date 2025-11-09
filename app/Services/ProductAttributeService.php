@@ -6,11 +6,11 @@ use App\Repositories\ProductAttributeGroupRepository;
 use App\Repositories\ProductAttributeRepository;
 use App\Repositories\ProductAttributeValueRepository;
 
-class ProductAttributeService
+final class ProductAttributeService
 {
     public function __construct(
         protected ProductAttributeGroupRepository $attributeGroupRepository,
-        protected ProductAttributeRepository      $attributeRepository,
+        protected ProductAttributeRepository $attributeRepository,
         protected ProductAttributeValueRepository $attributeValueRepository,
     ) {}
 

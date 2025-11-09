@@ -7,7 +7,7 @@ use App\Services\OrderService;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 
-class OrderController extends AdminBaseController
+final class OrderController extends AdminBaseController
 {
     public function __construct(protected OrderService $orderService) {}
 

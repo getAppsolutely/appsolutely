@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Models\OrderPayment;
 
-class OrderPaymentRepository extends BaseRepository
+final class OrderPaymentRepository extends BaseRepository
 {
     public function model(): string
     {

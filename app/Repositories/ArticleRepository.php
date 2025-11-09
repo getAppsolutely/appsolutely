@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\Article;
 use Carbon\Carbon;
 
-class ArticleRepository extends BaseRepository
+final class ArticleRepository extends BaseRepository
 {
     public function model(): string
     {

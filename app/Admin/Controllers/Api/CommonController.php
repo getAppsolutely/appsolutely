@@ -4,7 +4,7 @@ namespace App\Admin\Controllers\Api;
 
 use Illuminate\Http\Request;
 
-class CommonController extends AdminBaseApiController
+final class CommonController extends AdminBaseApiController
 {
     public function quickEdit(Request $request)
     {
