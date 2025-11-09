@@ -14,13 +14,24 @@ use Illuminate\Support\Facades\View;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /**
- * Service to generate XML sitemap for SEO
+ * Orchestrator service for sitemap generation with caching
  *
- * Follows architecture patterns:
- * - Repository pattern for data access
- * - Caching for performance
- * - Multi-language support via LaravelLocalization
- * - Respects published/expired dates
+ * This service coordinates sitemap XML generation by composing:
+ *
+ * - PageRepository, ArticleRepository, ProductRepository: Data access for published content
+ * - SitemapBuilderService: Handles URL entry building, metadata calculation, and hreflang generation
+ * - CacheRepository: Provides caching layer for performance (24-hour TTL)
+ *
+ * Composition pattern:
+ * 1. Retrieves published content from repositories
+ * 2. Delegates URL entry building to SitemapBuilderService
+ * 3. Caches generated XML to reduce database load
+ * 4. Clears cache when content is updated (via observers)
+ *
+ * This separation provides:
+ * - Clear separation: Data access vs. URL building vs. caching
+ * - Reusability: SitemapBuilderService can be used independently
+ * - Performance: Caching reduces computation on each request
  */
 final readonly class SitemapService implements SitemapServiceInterface
 {

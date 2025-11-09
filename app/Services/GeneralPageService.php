@@ -13,13 +13,24 @@ use App\Services\Contracts\PageServiceInterface;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
 /**
- * Service to handle all page resolution including regular pages and nested URLs
+ * Orchestrator service for page resolution with caching
  *
- * Consolidates logic for:
- * 1. Regular page lookup by slug
- * 2. Nested URL resolution using dynamic block configuration
- * 3. Content discovery through block repositories
- * 4. GeneralPage creation for unified page interface
+ * This service coordinates page resolution by composing:
+ *
+ * - PageServiceInterface: Handles regular page lookup and page-related operations
+ * - NestedUrlResolverService: Resolves nested URLs and finds content through block configurations
+ * - CacheRepository: Provides caching layer for performance
+ *
+ * Composition pattern:
+ * 1. First attempts regular page lookup via PageService
+ * 2. If not found, delegates to NestedUrlResolverService for nested URL resolution
+ * 3. Caches results for performance optimization
+ * 4. Provides unified GeneralPage interface regardless of resolution method
+ *
+ * This separation allows:
+ * - Clear responsibility boundaries (resolution vs. caching vs. nested logic)
+ * - Independent testing of resolution strategies
+ * - Easy extension of resolution methods without affecting caching
  */
 final readonly class GeneralPageService implements GeneralPageServiceInterface
 {
@@ -150,6 +161,17 @@ final readonly class GeneralPageService implements GeneralPageServiceInterface
         }
 
         // If no exact match, try to handle as nested URL
+        return $this->resolveNestedUrl($fullSlug);
+    }
+
+    /**
+     * Resolve nested URL (delegates to NestedUrlResolverService)
+     *
+     * @param  string  $fullSlug  The complete URL slug
+     * @return GeneralPage|null The resolved nested page or null if not found
+     */
+    public function resolveNestedUrl(string $fullSlug): ?GeneralPage
+    {
         $nestedResult = $this->nestedUrlResolver->resolveNestedUrl($fullSlug);
 
         if ($nestedResult) {

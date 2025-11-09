@@ -21,6 +21,21 @@ use Illuminate\Mail\MailException;
 use Illuminate\Queue\MaxAttemptsExceededException;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Orchestrator service for notification operations
+ *
+ * This service coordinates multiple notification-related services to provide
+ * a unified interface for sending and managing notifications. It composes:
+ *
+ * - NotificationTemplateServiceInterface: Manages notification templates
+ * - NotificationRuleServiceInterface: Handles rule evaluation and recipient resolution
+ * - NotificationQueueServiceInterface: Processes queued notifications
+ *
+ * This composition pattern provides:
+ * - Centralized notification logic: Single entry point for all notification operations
+ * - Separation of concerns: Each service handles its specific domain
+ * - Coordinated workflows: Orchestrates complex notification flows (trigger → evaluate → queue → send)
+ */
 final readonly class NotificationService implements NotificationServiceInterface
 {
     public function __construct(

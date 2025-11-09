@@ -18,6 +18,26 @@ use Illuminate\Http\Request;
 use PDOException;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Service for processing form submissions
+ *
+ * This service coordinates form submission workflow by composing:
+ *
+ * - DynamicFormValidationService: Validates form data against field rules
+ * - NotificationServiceInterface: Triggers notifications after successful submission
+ * - ConnectionInterface: Handles database operations for target table insertion
+ *
+ * Composition pattern:
+ * 1. Validates submission using DynamicFormValidationService
+ * 2. Creates form entry and performs spam checking
+ * 3. Optionally inserts data into target table
+ * 4. Triggers notifications via NotificationServiceInterface
+ *
+ * This composition provides:
+ * - Separation of validation, storage, and notification concerns
+ * - Reusable validation logic across different submission contexts
+ * - Decoupled notification system (can be swapped or extended)
+ */
 final readonly class DynamicFormSubmissionService implements DynamicFormSubmissionServiceInterface
 {
     const FORM_WRAPPER = 'formData';

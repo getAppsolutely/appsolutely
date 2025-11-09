@@ -14,6 +14,22 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * Facade/Orchestrator service for dynamic form operations
+ *
+ * This service composes multiple specialized services to provide a unified interface
+ * for form management. It delegates to:
+ *
+ * - DynamicFormRenderService: Handles form HTML rendering and field configuration
+ * - DynamicFormValidationService: Manages validation rules, messages, and attributes
+ * - DynamicFormSubmissionService: Processes form submissions and triggers notifications
+ * - DynamicFormExportService: Handles CSV export of form entries
+ *
+ * This composition pattern allows for:
+ * - Single Responsibility: Each composed service handles one aspect of forms
+ * - Testability: Services can be tested independently
+ * - Flexibility: Services can be swapped or extended without affecting the facade
+ */
 final readonly class DynamicFormService implements DynamicFormServiceInterface
 {
     public function __construct(
