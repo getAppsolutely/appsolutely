@@ -7,8 +7,9 @@ namespace App\Services;
 use App\Models\ReleaseBuild;
 use App\Repositories\ReleaseBuildRepository;
 use App\Repositories\ReleaseVersionRepository;
+use App\Services\Contracts\ReleaseServiceInterface;
 
-final readonly class ReleaseService
+final readonly class ReleaseService implements ReleaseServiceInterface
 {
     public function __construct(
         protected ReleaseVersionRepository $versionRepository,

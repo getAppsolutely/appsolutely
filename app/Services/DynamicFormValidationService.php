@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\Form;
+use App\Services\Contracts\DynamicFormValidationServiceInterface;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-final class DynamicFormValidationService
+final class DynamicFormValidationService implements DynamicFormValidationServiceInterface
 {
     const FORM_WRAPPER = 'formData';
 

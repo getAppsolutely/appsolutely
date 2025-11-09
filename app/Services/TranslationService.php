@@ -6,10 +6,11 @@ namespace App\Services;
 
 use App\Models\Translation;
 use App\Repositories\TranslationRepository;
+use App\Services\Contracts\TranslationServiceInterface;
 use Carbon\Carbon;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
-final class TranslationService
+final class TranslationService implements TranslationServiceInterface
 {
     protected string $cacheKey;
 

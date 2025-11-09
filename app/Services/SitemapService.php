@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Repositories\ArticleRepository;
 use App\Repositories\PageRepository;
 use App\Repositories\ProductRepository;
+use App\Services\Contracts\SitemapServiceInterface;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\View;
@@ -24,7 +25,7 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
  * - Multi-language support via LaravelLocalization
  * - Respects published/expired dates
  */
-final readonly class SitemapService
+final readonly class SitemapService implements SitemapServiceInterface
 {
     private const CACHE_TTL = 86400; // 24 hours
 

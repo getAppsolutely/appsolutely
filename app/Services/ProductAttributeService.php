@@ -7,9 +7,10 @@ namespace App\Services;
 use App\Repositories\ProductAttributeGroupRepository;
 use App\Repositories\ProductAttributeRepository;
 use App\Repositories\ProductAttributeValueRepository;
+use App\Services\Contracts\ProductAttributeServiceInterface;
 use Illuminate\Database\Eloquent\Collection;
 
-final class ProductAttributeService
+final class ProductAttributeService implements ProductAttributeServiceInterface
 {
     public function __construct(
         protected ProductAttributeGroupRepository $attributeGroupRepository,

@@ -12,6 +12,7 @@ use App\Models\Model;
 use App\Models\ReleaseBuild;
 use App\Repositories\AdminSettingRepository;
 use App\Repositories\FileRepository;
+use App\Services\Contracts\StorageServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -20,7 +21,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-final class StorageService
+final class StorageService implements StorageServiceInterface
 {
     public function __construct(protected AdminSettingRepository $adminSettingRepository,
         protected FileRepository $fileRepository) {}

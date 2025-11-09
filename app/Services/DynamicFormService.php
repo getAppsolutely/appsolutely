@@ -9,11 +9,12 @@ use App\Models\FormEntry;
 use App\Repositories\FormEntryRepository;
 use App\Repositories\FormFieldRepository;
 use App\Repositories\FormRepository;
+use App\Services\Contracts\DynamicFormServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
-final class DynamicFormService
+final class DynamicFormService implements DynamicFormServiceInterface
 {
     public function __construct(
         protected FormRepository $formRepository,

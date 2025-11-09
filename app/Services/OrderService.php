@@ -8,8 +8,9 @@ use App\Repositories\OrderItemRepository;
 use App\Repositories\OrderPaymentRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\OrderShipmentRepository;
+use App\Services\Contracts\OrderServiceInterface;
 
-final readonly class OrderService
+final readonly class OrderService implements OrderServiceInterface
 {
     public function __construct(
         protected OrderRepository $orderRepository,

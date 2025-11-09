@@ -6,10 +6,11 @@ namespace App\Services;
 
 use App\Jobs\SendNotificationEmail;
 use App\Repositories\NotificationQueueRepository;
+use App\Services\Contracts\NotificationQueueServiceInterface;
 use Illuminate\Queue\MaxAttemptsExceededException;
 use Psr\Log\LoggerInterface;
 
-final readonly class NotificationQueueService
+final readonly class NotificationQueueService implements NotificationQueueServiceInterface
 {
     public function __construct(
         protected NotificationQueueRepository $queueRepository,

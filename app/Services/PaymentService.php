@@ -6,9 +6,10 @@ namespace App\Services;
 
 use App\Repositories\OrderPaymentRepository;
 use App\Repositories\PaymentRepository;
+use App\Services\Contracts\PaymentServiceInterface;
 use Illuminate\Database\Eloquent\Collection;
 
-final readonly class PaymentService
+final readonly class PaymentService implements PaymentServiceInterface
 {
     public function __construct(
         protected PaymentRepository $paymentRepository,

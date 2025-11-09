@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\GeneralPage;
+use App\Services\Contracts\BlockRendererServiceInterface;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\Livewire;
 
-final readonly class BlockRendererService
+final readonly class BlockRendererService implements BlockRendererServiceInterface
 {
     /**
      * Validate and render a block safely
