@@ -8,6 +8,7 @@ use App\Models\GeneralPage;
 use App\Repositories\PageBlockGroupRepository;
 use App\Repositories\PageBlockRepository;
 use App\Repositories\PageBlockSettingRepository;
+use App\Services\Contracts\PageBlockSchemaServiceInterface;
 use App\Services\Contracts\PageBlockServiceInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
@@ -20,7 +21,7 @@ final readonly class PageBlockService implements PageBlockServiceInterface
         protected PageBlockGroupRepository $groupRepository,
         protected PageBlockRepository $blockRepository,
         protected PageBlockSettingRepository $settingRepository,
-        protected PageBlockSchemaService $schemaService
+        protected PageBlockSchemaServiceInterface $schemaService
     ) {}
 
     public function getCategorisedBlocks(): Collection

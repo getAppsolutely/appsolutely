@@ -13,10 +13,10 @@ use App\Repositories\FormFieldRepository;
 use App\Repositories\FormRepository;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Psr\Log\LoggerInterface;
 
 final class DynamicFormService
 {
@@ -26,7 +26,8 @@ final class DynamicFormService
         protected FormRepository $formRepository,
         protected FormFieldRepository $fieldRepository,
         protected FormEntryRepository $entryRepository,
-        protected ConnectionInterface $db
+        protected ConnectionInterface $db,
+        protected LoggerInterface $logger
     ) {}
 
     /**
@@ -469,7 +470,7 @@ final class DynamicFormService
         $tableColumns = $this->getTableColumns($form->target_table);
 
         if (empty($tableColumns)) {
-            Log::warning("Target table '{$form->target_table}' does not exist or has no columns");
+            $this->logger->warning("Target table '{$form->target_table}' does not exist or has no columns");
 
             return;
         }
@@ -478,7 +479,7 @@ final class DynamicFormService
         $targetData = $this->prepareTargetTableData($validatedData, $tableColumns, $formEntry);
 
         if (empty($targetData)) {
-            Log::warning("No matching columns found for target table '{$form->target_table}'");
+            $this->logger->warning("No matching columns found for target table '{$form->target_table}'");
 
             return;
         }
@@ -487,13 +488,13 @@ final class DynamicFormService
             // Insert into target table using injected connection
             $this->db->table($form->target_table)->insert($targetData);
 
-            Log::info("Successfully inserted form data into target table '{$form->target_table}'", [
+            $this->logger->info("Successfully inserted form data into target table '{$form->target_table}'", [
                 'form_id'       => $form->id,
                 'form_entry_id' => $formEntry->id,
                 'target_table'  => $form->target_table,
             ]);
         } catch (\Exception $e) {
-            Log::error("Failed to insert into target table '{$form->target_table}': " . $e->getMessage(), [
+            $this->logger->error("Failed to insert into target table '{$form->target_table}': " . $e->getMessage(), [
                 'form_id'       => $form->id,
                 'form_entry_id' => $formEntry->id,
                 'error'         => $e->getMessage(),
@@ -511,7 +512,7 @@ final class DynamicFormService
 
             return $columns;
         } catch (\Exception $e) {
-            Log::error("Failed to get columns for table '{$tableName}': " . $e->getMessage());
+            $this->logger->error("Failed to get columns for table '{$tableName}': " . $e->getMessage());
 
             return [];
         }
@@ -593,7 +594,7 @@ final class DynamicFormService
 
             $notificationService->trigger('form_submission', $form->slug, $notificationData);
         } catch (\Exception $e) {
-            Log::error('Failed to trigger form submission notifications', [
+            $this->logger->error('Failed to trigger form submission notifications', [
                 'form_id'  => $form->id,
                 'entry_id' => $formEntry->id,
                 'error'    => $e->getMessage(),

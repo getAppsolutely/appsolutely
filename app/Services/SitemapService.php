@@ -10,8 +10,8 @@ use App\Models\Product;
 use App\Repositories\ArticleRepository;
 use App\Repositories\PageRepository;
 use App\Repositories\ProductRepository;
+use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
@@ -39,7 +39,8 @@ final readonly class SitemapService
     public function __construct(
         private PageRepository $pageRepository,
         private ArticleRepository $articleRepository,
-        private ProductRepository $productRepository
+        private ProductRepository $productRepository,
+        private CacheRepository $cache
     ) {}
 
     /**
@@ -48,7 +49,7 @@ final readonly class SitemapService
      */
     public function generateXml(): string
     {
-        return Cache::remember(self::CACHE_KEY, self::CACHE_TTL, function () {
+        return $this->cache->remember(self::CACHE_KEY, self::CACHE_TTL, function () {
             return $this->buildSitemapIndex();
         });
     }
@@ -58,7 +59,7 @@ final readonly class SitemapService
      */
     public function generatePageXml(): string
     {
-        return Cache::remember(self::CACHE_KEY_PAGE, self::CACHE_TTL, function () {
+        return $this->cache->remember(self::CACHE_KEY_PAGE, self::CACHE_TTL, function () {
             return $this->buildPageSitemap();
         });
     }
@@ -68,7 +69,7 @@ final readonly class SitemapService
      */
     public function generateArticleXml(): string
     {
-        return Cache::remember(self::CACHE_KEY_ARTICLE, self::CACHE_TTL, function () {
+        return $this->cache->remember(self::CACHE_KEY_ARTICLE, self::CACHE_TTL, function () {
             return $this->buildArticleSitemap();
         });
     }
@@ -78,7 +79,7 @@ final readonly class SitemapService
      */
     public function generateProductXml(): string
     {
-        return Cache::remember(self::CACHE_KEY_PRODUCT, self::CACHE_TTL, function () {
+        return $this->cache->remember(self::CACHE_KEY_PRODUCT, self::CACHE_TTL, function () {
             return $this->buildProductSitemap();
         });
     }
@@ -101,10 +102,10 @@ final readonly class SitemapService
      */
     public function clearCache(): void
     {
-        Cache::forget(self::CACHE_KEY);
-        Cache::forget(self::CACHE_KEY_PAGE);
-        Cache::forget(self::CACHE_KEY_ARTICLE);
-        Cache::forget(self::CACHE_KEY_PRODUCT);
+        $this->cache->forget(self::CACHE_KEY);
+        $this->cache->forget(self::CACHE_KEY_PAGE);
+        $this->cache->forget(self::CACHE_KEY_ARTICLE);
+        $this->cache->forget(self::CACHE_KEY_PRODUCT);
     }
 
     /**

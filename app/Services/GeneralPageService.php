@@ -10,7 +10,6 @@ use App\Repositories\PageRepository;
 use App\Services\Contracts\GeneralPageServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
 
 /**
  * Service to handle all page resolution including regular pages and nested URLs
@@ -29,7 +28,8 @@ final readonly class GeneralPageService implements GeneralPageServiceInterface
 
     public function __construct(
         private PageRepository $pageRepository,
-        private PageService $pageService
+        private PageServiceInterface $pageService,
+        private CacheRepository $cache
     ) {}
 
     /**
@@ -50,7 +50,7 @@ final readonly class GeneralPageService implements GeneralPageServiceInterface
 
         $cacheKey = self::CACHE_PREFIX . md5($fullSlug);
 
-        return Cache::remember($cacheKey, self::CACHE_TTL, function () use ($fullSlug) {
+        return $this->cache->remember($cacheKey, self::CACHE_TTL, function () use ($fullSlug) {
             return $this->performPageResolution($fullSlug);
         });
     }
@@ -448,7 +448,7 @@ final readonly class GeneralPageService implements GeneralPageServiceInterface
     {
         $normalizedSlug = $this->normalizeSlug($slug);
         $cacheKey       = self::CACHE_PREFIX . md5($normalizedSlug);
-        Cache::forget($cacheKey);
+        $this->cache->forget($cacheKey);
 
         log_info('Page cache cleared', ['slug' => $normalizedSlug]);
     }
@@ -461,7 +461,7 @@ final readonly class GeneralPageService implements GeneralPageServiceInterface
     {
         // For a more sophisticated implementation, you would use cache tags
         // For now, we'll clear by pattern (if supported by cache driver)
-        if (method_exists(Cache::getStore(), 'flush')) {
+        if (method_exists($this->cache, 'flush')) {
             // This is a simple approach - in production you'd want cache tagging
             log_warning('Full cache flush requested - consider implementing cache tagging for selective clearing');
         }

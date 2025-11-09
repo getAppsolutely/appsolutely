@@ -8,9 +8,10 @@ use App\Exceptions\NotFoundException;
 use App\Models\Model;
 use App\Models\NotificationRule;
 use App\Repositories\NotificationRuleRepository;
+use App\Services\Contracts\NotificationRuleServiceInterface;
 use Illuminate\Database\Eloquent\Collection;
 
-final class NotificationRuleService
+final class NotificationRuleService implements NotificationRuleServiceInterface
 {
     public function __construct(
         private readonly NotificationRuleRepository $ruleRepository

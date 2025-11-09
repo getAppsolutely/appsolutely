@@ -7,14 +7,16 @@ namespace App\Services;
 use App\Models\Translation;
 use App\Repositories\TranslationRepository;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
 final class TranslationService
 {
     protected string $cacheKey;
 
-    public function __construct(protected TranslationRepository $translationRepository)
-    {
+    public function __construct(
+        protected TranslationRepository $translationRepository,
+        protected CacheRepository $cache
+    ) {
         $this->cacheKey = appsolutely() . '.translations';
     }
 
@@ -43,7 +45,7 @@ final class TranslationService
 
         // Check cache first
         $cacheKey       = $this->getCacheKey($text, $locale);
-        $translatedText = Cache::get($cacheKey);
+        $translatedText = $this->cache->get($cacheKey);
 
         if ($translatedText !== null) {
             return $translatedText;
@@ -94,7 +96,7 @@ final class TranslationService
     public function cacheTranslation(string $original, string $translated, string $locale): void
     {
         $cacheKey = $this->getCacheKey($original, $locale);
-        Cache::put($cacheKey, $translated, now()->addDay());
+        $this->cache->put($cacheKey, $translated, now()->addDay());
     }
 
     /**
@@ -102,7 +104,7 @@ final class TranslationService
      */
     public function clearCache(): void
     {
-        Cache::forget($this->cacheKey);
+        $this->cache->forget($this->cacheKey);
     }
 
     /**

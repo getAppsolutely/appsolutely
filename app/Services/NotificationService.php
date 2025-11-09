@@ -10,9 +10,11 @@ use App\Models\NotificationRule;
 use App\Repositories\NotificationQueueRepository;
 use App\Repositories\NotificationRuleRepository;
 use App\Repositories\NotificationTemplateRepository;
+use App\Services\Contracts\NotificationRuleServiceInterface;
 use App\Services\Contracts\NotificationServiceInterface;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
+use App\Services\Contracts\NotificationTemplateServiceInterface;
+use Illuminate\Contracts\Mail\Mailer;
+use Psr\Log\LoggerInterface;
 
 final class NotificationService implements NotificationServiceInterface
 {
@@ -20,8 +22,10 @@ final class NotificationService implements NotificationServiceInterface
         private readonly NotificationTemplateRepository $templateRepository,
         private readonly NotificationRuleRepository $ruleRepository,
         private readonly NotificationQueueRepository $queueRepository,
-        protected NotificationTemplateService $templateService,
-        protected NotificationRuleService $ruleService
+        protected NotificationTemplateServiceInterface $templateService,
+        protected NotificationRuleServiceInterface $ruleService,
+        protected LoggerInterface $logger,
+        protected Mailer $mailer
     ) {}
 
     /**
@@ -38,7 +42,7 @@ final class NotificationService implements NotificationServiceInterface
                 }
             }
         } catch (\Exception $e) {
-            Log::error('Failed to trigger notifications', [
+            $this->logger->error('Failed to trigger notifications', [
                 'trigger_type' => $triggerType,
                 'reference'    => $reference,
                 'error'        => $e->getMessage(),
@@ -55,7 +59,7 @@ final class NotificationService implements NotificationServiceInterface
             $template = $this->templateRepository->findBySlug($templateSlug);
 
             if (! $template) {
-                Log::warning("Template not found: {$templateSlug}");
+                $this->logger->warning("Template not found: {$templateSlug}");
 
                 return false;
             }
@@ -72,7 +76,7 @@ final class NotificationService implements NotificationServiceInterface
 
             return true;
         } catch (\Exception $e) {
-            Log::error('Failed to dispatch notification email', [
+            $this->logger->error('Failed to dispatch notification email', [
                 'template_slug' => $templateSlug,
                 'email'         => $email,
                 'error'         => $e->getMessage(),
@@ -128,7 +132,7 @@ final class NotificationService implements NotificationServiceInterface
                 $processed++;
             } catch (\Exception $e) {
                 $this->queueRepository->updateStatus($notification->id, 'failed', $e->getMessage());
-                Log::error('Failed to dispatch queued notification', [
+                $this->logger->error('Failed to dispatch queued notification', [
                     'notification_id' => $notification->id,
                     'error'           => $e->getMessage(),
                 ]);
@@ -193,7 +197,7 @@ final class NotificationService implements NotificationServiceInterface
     protected function sendEmail(string $email, string $subject, string $bodyHtml, ?string $bodyText = null): bool
     {
         try {
-            Mail::send([], [], function ($message) use ($email, $subject, $bodyHtml, $bodyText) {
+            $this->mailer->send([], [], function ($message) use ($email, $subject, $bodyHtml, $bodyText) {
                 $message->to($email)
                     ->subject($subject)
                     ->html($bodyHtml);
@@ -205,7 +209,7 @@ final class NotificationService implements NotificationServiceInterface
 
             return true;
         } catch (\Exception $e) {
-            Log::error('Email sending failed', [
+            $this->logger->error('Email sending failed', [
                 'email'   => $email,
                 'subject' => $subject,
                 'error'   => $e->getMessage(),

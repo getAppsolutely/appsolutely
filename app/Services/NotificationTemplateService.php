@@ -6,8 +6,9 @@ namespace App\Services;
 
 use App\Models\NotificationTemplate;
 use App\Repositories\NotificationTemplateRepository;
+use App\Services\Contracts\NotificationTemplateServiceInterface;
 
-final class NotificationTemplateService
+final class NotificationTemplateService implements NotificationTemplateServiceInterface
 {
     public function __construct(
         private readonly NotificationTemplateRepository $templateRepository

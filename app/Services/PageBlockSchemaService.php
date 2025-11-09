@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\PageBlock;
+use App\Services\Contracts\PageBlockSchemaServiceInterface;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-final class PageBlockSchemaService
+final class PageBlockSchemaService implements PageBlockSchemaServiceInterface
 {
     /**
      * Get schema for a block
