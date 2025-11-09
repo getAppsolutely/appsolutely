@@ -17,6 +17,29 @@ class AdminBaseController extends AdminController
     protected function form() {}
 
     /**
+     * Get the model class name for this controller.
+     * Override this method in child controllers to explicitly define the model.
+     *
+     * @return string Fully qualified model class name
+     */
+    protected function getModelClass(): string
+    {
+        // Fallback to reflection-based resolution for backward compatibility
+        // Child controllers should override this method for explicit definition
+        $controller = Str::before(class_basename($this), 'Controller');
+        $model      = (new \ReflectionClass(Model::class))->getNamespaceName() . '\\' . $controller;
+
+        if (! class_exists($model)) {
+            $message = "Model class '{$model}' not found for controller '{$controller}'. " .
+                       'Please override getModelClass() method in ' . get_class($this);
+            log_error($message);
+            throw new NotFoundException($message);
+        }
+
+        return $model;
+    }
+
+    /**
      * @throws \Exception
      */
     public function update($id)
@@ -26,14 +49,8 @@ class AdminBaseController extends AdminController
         }
 
         $data       = request()->all();
-        $controller = Str::before(class_basename($this), 'Controller');
-        $model      = (new \ReflectionClass(Model::class))->getNamespaceName() . '\\' . $controller;
-        if (! class_exists($model)) {
-            $message = "Model class '{$model}' not found for controller '{$controller}'";
-            log_error($message);
-            throw new NotFoundException($message);
-        }
-        $object     = (new $model())->find($id);
+        $modelClass = $this->getModelClass();
+        $object     = (new $modelClass())->find($id);
         $filterData = \Arr::except($data, self::UPDATE_TO_IGNORE_FIELDS);
         $object->update($filterData);
 
