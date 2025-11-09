@@ -11,13 +11,17 @@ use App\Admin\Forms\ProductSkuGeneratorForm;
 use App\Models\Product;
 use App\Models\ProductSku;
 use App\Repositories\ProductCategoryRepository;
+use App\Services\Contracts\ProductServiceInterface;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Widgets\Modal;
 
 final class ProductController extends AdminBaseController
 {
-    public function __construct(protected ProductCategoryRepository $productCategoryRepository) {}
+    public function __construct(
+        protected ProductCategoryRepository $productCategoryRepository,
+        protected ProductServiceInterface $productService
+    ) {}
 
     protected function grid(): Grid
     {
@@ -28,7 +32,9 @@ final class ProductController extends AdminBaseController
             $grid->column('skus', __t('SKUs'))->display(column_count());
 
             $grid->column('type', __t('Type'))->display(function ($type) {
-                return Product::getProductTypes()[$type] ?? $type;
+                $productTypes = $this->productService->getProductTypes();
+
+                return $productTypes[$type] ?? $type;
             })->label();
 
             $grid->column('published_at', __t('Published At'))->display(column_time_format())->sortable();
@@ -41,7 +47,7 @@ final class ProductController extends AdminBaseController
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id')->width(3);
                 $filter->like('title')->width(3);
-                $filter->equal('type')->select(Product::getProductTypes())->width(3);
+                $filter->equal('type')->select($this->productService->getProductTypes())->width(3);
             });
 
             $grid->actions(function (Grid\Displayers\Actions $actions) {
@@ -68,22 +74,22 @@ final class ProductController extends AdminBaseController
     protected function basicForm(Form $form): Form
     {
         $form->display('id', __t('ID'));
-        $form->radio('type', __t('Type'))->options(Product::getProductTypes())
+        $form->radio('type', __t('Type'))->options($this->productService->getProductTypes())
             ->default(Product::TYPE_PHYSICAL_PRODUCT)
             ->when(Product::TYPE_PHYSICAL_PRODUCT, function (Form $form) {
-                $shipmentMethods = associative_array(Product::getShipmentMethodForPhysicalProduct());
+                $shipmentMethods = associative_array($this->productService->getShipmentMethodForPhysicalProduct());
                 $form->multipleSelect('shipment_methods', __t('Shipment Methods'))
                     ->options($shipmentMethods)
                     ->default(array_shift($shipmentMethods));
             })
             ->when(Product::TYPE_AUTO_DELIVERABLE_VIRTUAL_PRODUCT, function (Form $form) {
-                $shipmentMethods = associative_array(Product::getShipmentMethodForAutoVirtualProduct());
+                $shipmentMethods = associative_array($this->productService->getShipmentMethodForAutoVirtualProduct());
                 $form->multipleSelect('shipment_methods', __t('Shipment Methods'))
                     ->options($shipmentMethods)
                     ->default(array_shift($shipmentMethods));
             })
             ->when(Product::TYPE_MANUAL_DELIVERABLE_VIRTUAL_PRODUCT, function (Form $form) {
-                $shipmentMethods = associative_array(Product::getShipmentMethodForManualVirtualProduct());
+                $shipmentMethods = associative_array($this->productService->getShipmentMethodForManualVirtualProduct());
                 $form->multipleSelect('shipment_methods', __t('Shipment Methods'))
                     ->options($shipmentMethods)
                     ->default(array_shift($shipmentMethods));

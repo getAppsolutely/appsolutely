@@ -4,8 +4,16 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Models\Article;
+use App\Models\Page;
+use App\Models\Product;
+use App\Observers\ArticleObserver;
+use App\Observers\PageObserver;
+use App\Observers\ProductObserver;
 use App\Repositories\TranslationRepository;
+use App\Services\ArticleService;
 use App\Services\BlockRendererService;
+use App\Services\Contracts\ArticleServiceInterface;
 use App\Services\Contracts\BlockRendererServiceInterface;
 use App\Services\Contracts\DynamicFormExportServiceInterface;
 use App\Services\Contracts\DynamicFormRenderServiceInterface;
@@ -73,6 +81,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Bind service interfaces to their implementations
         // Organized alphabetically for maintainability
+        $this->app->bind(ArticleServiceInterface::class, ArticleService::class);
         $this->app->bind(BlockRendererServiceInterface::class, BlockRendererService::class);
         $this->app->bind(DynamicFormExportServiceInterface::class, DynamicFormExportService::class);
         $this->app->bind(DynamicFormRenderServiceInterface::class, DynamicFormRenderService::class);
@@ -105,6 +114,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Register model observers
+        Page::observe(PageObserver::class);
+        Product::observe(ProductObserver::class);
+        Article::observe(ArticleObserver::class);
+
         // Register Page Builder view namespace
         View::addNamespace('page-builder', resource_path('page-builder'));
 

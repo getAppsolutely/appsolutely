@@ -43,4 +43,9 @@ interface PageServiceInterface
      * Get block value ID for a block
      */
     public function getBlockValueId(int $blockId): int;
+
+    /**
+     * Generate default page setting structure
+     */
+    public function generateDefaultPageSetting(): array;
 }

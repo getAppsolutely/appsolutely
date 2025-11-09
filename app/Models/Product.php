@@ -78,19 +78,7 @@ class Product extends Model
         'price',
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        // Clear sitemap cache when product is saved or deleted
-        static::saved(function () {
-            app(\App\Services\SitemapService::class)->clearCache();
-        });
-
-        static::deleted(function () {
-            app(\App\Services\SitemapService::class)->clearCache();
-        });
-    }
+    // Boot method removed - sitemap cache clearing moved to ProductObserver
 
     public function categories(): BelongsToMany
     {
@@ -102,27 +90,5 @@ class Product extends Model
         return $this->hasMany(ProductSku::class);
     }
 
-    public static function getProductTypes(): array
-    {
-        return [
-            self::TYPE_PHYSICAL_PRODUCT                   => __t('Physical Product'),
-            self::TYPE_AUTO_DELIVERABLE_VIRTUAL_PRODUCT   => __t('Auto Deliverable Virtual Product'),
-            self::TYPE_MANUAL_DELIVERABLE_VIRTUAL_PRODUCT => __t('Manual Deliverable Virtual Product'),
-        ];
-    }
-
-    public static function getShipmentMethodForManualVirtualProduct(): array
-    {
-        return self::SHIPMENT_METHOD_MANUAL_DELIVERABLE_VIRTUAL_PRODUCT;
-    }
-
-    public static function getShipmentMethodForAutoVirtualProduct(): array
-    {
-        return self::SHIPMENT_METHOD_AUTO_DELIVERABLE_VIRTUAL_PRODUCT;
-    }
-
-    public static function getShipmentMethodForPhysicalProduct(): array
-    {
-        return self::SHIPMENT_METHOD_PHYSICAL_PRODUCT;
-    }
+    // Business logic methods moved to ProductService for better separation of concerns
 }

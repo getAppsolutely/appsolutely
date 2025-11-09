@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Constants\BasicConstant;
+use App\Enums\BlockScope;
 use App\Enums\Status;
 use App\Exceptions\TransactionException;
 use App\Models\Page;
+use App\Models\PageBlock;
 use App\Models\PageBlockSetting;
 use App\Repositories\PageBlockRepository;
 use App\Repositories\PageBlockSettingRepository;
@@ -17,6 +19,8 @@ use App\Services\Contracts\PageServiceInterface;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use PDOException;
 
 final readonly class PageService implements PageServiceInterface
@@ -178,5 +182,95 @@ final readonly class PageService implements PageServiceInterface
         $value = $this->pageBlockValueRepository->create($value);
 
         return $value->id;
+    }
+
+    /**
+     * Generate default page setting structure
+     * Moved from Page model to service for better separation of concerns
+     */
+    public function generateDefaultPageSetting(): array
+    {
+        $structure  = $this->getPageStructure();
+        $components = $this->attachGlobalBlocks();
+        Arr::set($structure, BasicConstant::PAGE_GRAPESJS_KEY, $components);
+
+        return $structure;
+    }
+
+    /**
+     * Get the basic page builder structure without components
+     * Moved from Page model to service
+     */
+    protected function getPageStructure(): array
+    {
+        return [
+            'pages' => [
+                [
+                    'id'     => Str::random(16),
+                    'type'   => 'main',
+                    'frames' => [
+                        [
+                            'id'        => Str::random(16),
+                            'component' => [
+                                'head' => [
+                                    'type' => 'head',
+                                ],
+                                'type'  => 'wrapper',
+                                'docEl' => [
+                                    'tagName' => 'html',
+                                ],
+                                'stylable' => [
+                                    'background',
+                                    'background-color',
+                                    'background-image',
+                                    'background-repeat',
+                                    'background-attachment',
+                                    'background-position',
+                                    'background-size',
+                                ],
+                                'reference'  => 'wrapper-' . Str::random(7),
+                                'components' => [],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'assets'      => [],
+            'styles'      => [],
+            'symbols'     => [],
+            'dataSources' => [],
+        ];
+    }
+
+    /**
+     * Attach global blocks to the page structure
+     * Moved from Page model to service
+     */
+    protected function attachGlobalBlocks(): array
+    {
+        $blockIds = PageBlockSetting::query()
+            ->whereHas('block', function ($query) {
+                $query->where('scope', BlockScope::Global->value)->status();
+            })
+            ->status()
+            ->orderBy('sort')
+            ->pluck('block_id')
+            ->unique();
+
+        $globalBlocks = PageBlock::query()
+            ->where('scope', BlockScope::Global->value)
+            ->whereIn('id', $blockIds)
+            ->status()
+            ->orderBy('sort')
+            ->get();
+
+        return $globalBlocks->map(function ($block) {
+            return [
+                'type'      => $block->reference,
+                'block_id'  => $block->id,
+                'droppable' => $block->droppable ?? 0,
+                'reference' => $block->reference . '-' . Str::random(7),
+            ];
+        })->toArray();
     }
 }
