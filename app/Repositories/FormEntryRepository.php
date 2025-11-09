@@ -196,34 +196,40 @@ final class FormEntryRepository extends BaseRepository
 
     /**
      * Basic spam detection
+     *
+     * Performs simple pattern matching to identify potential spam entries.
+     * Can be enhanced with more sophisticated detection (e.g., machine learning, third-party services).
      */
     private function detectSpam(array $data): bool
     {
-        // Basic spam detection logic
-        // This can be enhanced with more sophisticated detection
-
-        // Check for common spam patterns
+        // Step 1: Check for common spam keywords in all text fields
+        // Combine all text content from form fields for keyword scanning
         $spamKeywords = ['viagra', 'casino', 'lottery', 'prize', 'winner'];
         $content      = implode(' ', array_filter([
             $data['first_name'] ?? '',
             $data['last_name'] ?? '',
             $data['email'] ?? '',
+            // Extract all values from nested data array if present
             is_array($data['data']) ? implode(' ', array_values($data['data'])) : '',
         ]));
 
+        // Normalize content to lowercase for case-insensitive matching
         $content = strtolower($content);
 
+        // Check if any spam keyword appears in the content
         foreach ($spamKeywords as $keyword) {
             if (str_contains($content, $keyword)) {
                 return true;
             }
         }
 
-        // Check for suspicious patterns
+        // Step 2: Validate email format
+        // Invalid email addresses are often a sign of spam
         if (isset($data['email']) && ! filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             return true;
         }
 
+        // No spam indicators found
         return false;
     }
 

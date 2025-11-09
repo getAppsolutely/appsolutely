@@ -200,33 +200,44 @@ final class NotificationRuleService implements NotificationRuleServiceInterface
 
     /**
      * Extract user emails from data
+     *
+     * Searches for email addresses in common field names and validates them.
+     * Returns unique list of valid email addresses found in the data.
      */
     protected function getUserEmails(array $data): array
     {
         $emails = [];
 
-        // Try different possible email field names
+        // Try different possible email field names that might be used in various contexts
+        // This handles different data structures (forms, orders, registrations, etc.)
         $emailFields = ['email', 'user_email', 'customer_email', 'contact_email'];
 
         foreach ($emailFields as $field) {
+            // Only add valid email addresses to prevent invalid data
             if (isset($data[$field]) && filter_var($data[$field], FILTER_VALIDATE_EMAIL)) {
                 $emails[] = $data[$field];
             }
         }
 
+        // Remove duplicates in case multiple fields contain the same email
         return array_unique($emails);
     }
 
     /**
      * Get conditional emails based on rule conditions
+     *
+     * Returns recipient emails only if the rule's conditions are satisfied by the provided data.
+     * This allows dynamic recipient selection based on form/event data.
      */
     protected function getConditionalEmails(NotificationRule $rule, array $data): array
     {
-        // Start with custom emails if conditions are met
+        // Only return emails if rule conditions are met
+        // This enables conditional notifications (e.g., only notify if order amount > $100)
         if ($rule->evaluateConditions($data)) {
             return $rule->recipient_emails_list;
         }
 
+        // Return empty array if conditions are not met
         return [];
     }
 

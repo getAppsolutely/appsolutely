@@ -174,12 +174,20 @@ final class NotificationRuleRepository extends BaseRepository
         return $this->model->newQuery()->whereIn('id', $ids)->update(['status' => $status]);
     }
 
+    /**
+     * Normalize and transform rule data for storage
+     * Converts string formats to proper array/JSON structures
+     */
     public function getArr(array $data): array
     {
+        // Convert comma-separated email string to array
+        // Example: "email1@test.com, email2@test.com" => ["email1@test.com", "email2@test.com"]
         if (isset($data['recipient_emails']) && is_string($data['recipient_emails'])) {
             $data['recipient_emails'] = array_filter(array_map('trim', explode(',', $data['recipient_emails'])));
         }
 
+        // Convert JSON string to array for conditions field
+        // Handles cases where conditions come from form inputs as JSON strings
         if (isset($data['conditions']) && is_string($data['conditions'])) {
             $data['conditions'] = json_decode($data['conditions'], true);
         }

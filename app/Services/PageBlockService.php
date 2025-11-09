@@ -106,30 +106,39 @@ final readonly class PageBlockService implements PageBlockServiceInterface
 
     private function getPossibleParameters(array $originalParameters, array $normalisedParameters, string $className): array
     {
-        // Assuming final parameters
+        // Start with normalised parameters as the default
         $parameters = $normalisedParameters;
 
-        // Get all properties from Livewire
+        // Get all array-type properties from the Livewire component class
+        // These are the properties that can accept parameter data
         $propertyKeys = $this->getArrayClassVars($className);
 
-        // try to match normalised parameters
+        // Step 1: Try to match normalised parameter keys with component properties
         $normalisedKeys         = array_unique(array_keys($normalisedParameters));
         $normalisedIntersection = array_intersect($normalisedKeys, $propertyKeys);
+
+        // If no match found in normalised parameters, try original parameters
         if (empty($normalisedIntersection)) {
             $log                  = "{$className} properties are not in normalized parameters, trying to check if it is in original parameters. ";
             $originalKeys         = array_unique(array_keys($originalParameters));
             $originalIntersection = array_intersect($originalKeys, $propertyKeys);
             $possibleKeys         = $originalIntersection;
 
+            // If still no match, fallback to 'data' key as default
+            // This handles cases where parameters don't match any component property
             if (empty($originalIntersection)) {
                 $log .= "Not in original parameters either. guessing the key would be the first property of $className";
                 $possibleKeys = ['data'];
             }
+
+            // Log the mismatch for debugging (only in debug mode)
             local_debug($log, [
                 'className'            => $className,
                 'propertyKeys'         => $propertyKeys,
                 'originalParameters'   => $originalParameters,
                 'normalisedParameters' => $normalisedParameters]);
+
+            // Use the first matching key (or 'data' fallback) and wrap original parameters
             $key        = \Arr::first($possibleKeys);
             $parameters = [$key => $originalParameters];
         }
@@ -139,8 +148,11 @@ final readonly class PageBlockService implements PageBlockServiceInterface
 
     private function getArrayClassVars(string $className): array
     {
+        // Get all class variables (properties) from the Livewire component
         $vars = get_class_vars($className);
 
+        // Filter to only return property names that have array-type default values
+        // This identifies which properties can accept array parameters
         return array_unique(array_keys(array_filter($vars, function ($value) {
             return is_array($value);
         })));
