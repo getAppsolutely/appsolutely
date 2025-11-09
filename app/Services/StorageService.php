@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Exceptions\StorageException;
 use App\Helpers\FileHelper;
 use App\Models\AdminSetting;
 use App\Models\File;
@@ -54,12 +55,16 @@ final class StorageService
             );
 
             if (! $result) {
-                throw new \Exception('Failed to upload file to S3');
+                throw new StorageException(
+                    "Failed to upload file '{$originalFilename}' to S3 storage. Path: {$filePath}"
+                );
             }
 
             // Verify file exists
             if (! Storage::disk('s3')->exists($filePath)) {
-                throw new \Exception('File not found after upload');
+                throw new StorageException(
+                    "File '{$originalFilename}' was not found in S3 storage after upload. Expected path: {$filePath}"
+                );
             }
 
             // Create database record using FileRepository
@@ -72,13 +77,20 @@ final class StorageService
                 'size'              => $size,
                 'hash'              => $hash,
             ]);
+        } catch (StorageException $e) {
+            // Re-throw StorageException as-is
+            throw $e;
         } catch (\Exception $e) {
-            log_error('S3 Upload failed: ' . $e->getMessage(), [
+            log_error('S3 Upload failed', [
                 'file'  => $originalFilename,
                 'path'  => $path,
                 'error' => $e->getMessage(),
             ]);
-            throw $e;
+            throw new StorageException(
+                "Failed to store file '{$originalFilename}': {$e->getMessage()}",
+                0,
+                $e
+            );
         }
     }
 

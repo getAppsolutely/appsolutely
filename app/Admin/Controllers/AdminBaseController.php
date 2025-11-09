@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Exceptions\NotFoundException;
 use App\Models\Model;
 use Dcat\Admin\Form;
 use Dcat\Admin\Http\Controllers\AdminController;
@@ -26,9 +27,9 @@ class AdminBaseController extends AdminController
         $controller = Str::before(class_basename($this), 'Controller');
         $model      = (new \ReflectionClass(Model::class))->getNamespaceName() . '\\' . $controller;
         if (! class_exists($model)) {
-            $message = $model . __t(' Model not found');
+            $message = "Model class '{$model}' not found for controller '{$controller}'";
             log_error($message);
-            throw new \Exception($message);
+            throw new NotFoundException($message);
         }
         $object     = (new $model())->find($id);
         $filterData = \Arr::except($data, self::UPDATE_TO_IGNORE_FIELDS);

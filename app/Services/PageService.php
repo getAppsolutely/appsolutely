@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Constants\BasicConstant;
 use App\Enums\Status;
+use App\Exceptions\TransactionException;
 use App\Models\Page;
 use App\Models\PageBlockSetting;
 use App\Repositories\PageBlockRepository;
@@ -82,8 +83,21 @@ final class PageService
 
             return $result;
         } catch (\Exception $exception) {
-            log_error($exception->getMessage(), ['pageId' => $pageId, 'data' => $data], __CLASS__, __METHOD__);
-            throw new \Exception($exception->getMessage());
+            log_error(
+                'Failed to sync page block settings',
+                [
+                    'pageId' => $pageId,
+                    'data'   => $data,
+                    'error'  => $exception->getMessage(),
+                ],
+                __CLASS__,
+                __METHOD__
+            );
+            throw new TransactionException(
+                "Failed to sync page block settings for page ID {$pageId}: {$exception->getMessage()}",
+                0,
+                $exception
+            );
         }
     }
 

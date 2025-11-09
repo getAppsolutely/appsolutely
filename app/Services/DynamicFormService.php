@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Exceptions\NotFoundException;
 use App\Models\Form;
 use App\Models\FormEntry;
 use App\Models\FormField;
@@ -57,7 +58,7 @@ final class DynamicFormService
         $form = $this->getFormBySlug($slug);
 
         if (! $form) {
-            throw new \Exception('Form not found');
+            throw new NotFoundException("Form with slug '{$slug}' not found");
         }
 
         // Validate the submission

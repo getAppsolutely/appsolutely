@@ -152,6 +152,7 @@ final class PageBlockService
             return ''; // Return empty string in production
         }
 
-        throw new \Exception($message);
+        // In debug mode, throw exception to show error details
+        throw new \RuntimeException("Page block error: {$message}");
     }
 }

@@ -6,7 +6,6 @@ use App\Helpers\FileHelper;
 use App\Models\GeneralPage;
 use App\Services\TranslationService;
 use Carbon\Carbon;
-use Illuminate\Container\Attributes\Database;
 use Illuminate\Support\Facades\Log;
 use League\CommonMark\CommonMarkConverter;
 use League\CommonMark\Environment\Environment;
@@ -639,7 +638,9 @@ if (! function_exists('themed_view')) {
     function themed_view($view, $data = [], $mergeData = [])
     {
         if (! view()->exists($view)) {
-            throw new Exception(sprintf('View %s in %s theme not found.', $view, Qirolab\Theme\Theme::active()));
+            throw new \RuntimeException(
+                sprintf('View "%s" not found in theme "%s".', $view, Qirolab\Theme\Theme::active())
+            );
         }
 
         return view($view, $data, $mergeData);
@@ -663,7 +664,9 @@ if (! function_exists('themed_assets')) {
         $key = path_join(themed_path(), $path);
 
         if (! isset($manifest[$key])) {
-            throw new \Exception("Image [{$key}] not found in Vite manifest.");
+            throw new \RuntimeException(
+                "Image asset '{$key}' not found in Vite manifest. Build path: {$buildPath}"
+            );
         }
 
         return asset(path_join($buildPath, $manifest[$key]['file']));
@@ -685,7 +688,9 @@ if (! function_exists('load_vite_manifest')) {
     {
         $manifestPath    = public_path(path_join($path, 'manifest.json'));
         if (! file_exists($manifestPath)) {
-            throw new \Exception('Vite manifest.json not found.');
+            throw new \RuntimeException(
+                "Vite manifest.json not found at path: {$manifestPath}. Ensure Vite build has been run."
+            );
         }
 
         return json_decode(file_get_contents($manifestPath), true);

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Exceptions\NotFoundException;
+use App\Models\Model;
 use App\Models\NotificationRule;
 use App\Repositories\NotificationRuleRepository;
 use Illuminate\Database\Eloquent\Collection;
@@ -47,7 +49,7 @@ final class NotificationRuleService
     /**
      * Create new notification rule
      */
-    public function createRule(array $data): NotificationRule
+    public function createRule(array $data): Model
     {
         return NotificationRule::create($data);
     }
@@ -89,7 +91,7 @@ final class NotificationRuleService
         $rule = $this->ruleRepository->find($id);
 
         if (! $rule) {
-            throw new \Exception('Rule not found');
+            throw new NotFoundException("Notification rule with ID {$id} not found");
         }
 
         // Generate sample data based on trigger type
