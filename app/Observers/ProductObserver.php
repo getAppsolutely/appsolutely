@@ -4,27 +4,33 @@ declare(strict_types=1);
 
 namespace App\Observers;
 
+use App\Events\ProductCreated;
+use App\Events\ProductDeleted;
+use App\Events\ProductUpdated;
 use App\Models\Product;
-use App\Services\Contracts\SitemapServiceInterface;
 
 /**
  * Observer for Product model events
  *
- * Handles side effects when products are created, updated, or deleted.
- * Separates concerns from the model itself.
+ * Dispatches domain events when products are created, updated, or deleted.
+ * Listeners handle side effects like cache clearing.
  */
 final class ProductObserver
 {
-    public function __construct(
-        private readonly SitemapServiceInterface $sitemapService
-    ) {}
+    /**
+     * Handle the Product "created" event.
+     */
+    public function created(Product $product): void
+    {
+        event(new ProductCreated($product));
+    }
 
     /**
-     * Handle the Product "saved" event (fires for both create and update).
+     * Handle the Product "updated" event.
      */
-    public function saved(Product $product): void
+    public function updated(Product $product): void
     {
-        $this->clearSitemapCache();
+        event(new ProductUpdated($product));
     }
 
     /**
@@ -32,14 +38,6 @@ final class ProductObserver
      */
     public function deleted(Product $product): void
     {
-        $this->clearSitemapCache();
-    }
-
-    /**
-     * Clear sitemap cache after product changes
-     */
-    private function clearSitemapCache(): void
-    {
-        $this->sitemapService->clearCache();
+        event(new ProductDeleted($product));
     }
 }

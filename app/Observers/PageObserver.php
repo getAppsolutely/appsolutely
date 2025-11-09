@@ -4,27 +4,33 @@ declare(strict_types=1);
 
 namespace App\Observers;
 
+use App\Events\PageCreated;
+use App\Events\PageDeleted;
+use App\Events\PageUpdated;
 use App\Models\Page;
-use App\Services\Contracts\SitemapServiceInterface;
 
 /**
  * Observer for Page model events
  *
- * Handles side effects when pages are created, updated, or deleted.
- * Separates concerns from the model itself.
+ * Dispatches domain events when pages are created, updated, or deleted.
+ * Listeners handle side effects like cache clearing.
  */
 final class PageObserver
 {
-    public function __construct(
-        private readonly SitemapServiceInterface $sitemapService
-    ) {}
+    /**
+     * Handle the Page "created" event.
+     */
+    public function created(Page $page): void
+    {
+        event(new PageCreated($page));
+    }
 
     /**
-     * Handle the Page "saved" event (fires for both create and update).
+     * Handle the Page "updated" event.
      */
-    public function saved(Page $page): void
+    public function updated(Page $page): void
     {
-        $this->clearSitemapCache();
+        event(new PageUpdated($page));
     }
 
     /**
@@ -32,14 +38,6 @@ final class PageObserver
      */
     public function deleted(Page $page): void
     {
-        $this->clearSitemapCache();
-    }
-
-    /**
-     * Clear sitemap cache after page changes
-     */
-    private function clearSitemapCache(): void
-    {
-        $this->sitemapService->clearCache();
+        event(new PageDeleted($page));
     }
 }

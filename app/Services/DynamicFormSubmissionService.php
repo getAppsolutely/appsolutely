@@ -94,8 +94,8 @@ final readonly class DynamicFormSubmissionService implements DynamicFormSubmissi
             $this->insertIntoTargetTable($form, $validatedData, $formEntry);
         }
 
-        // Trigger notifications
-        $this->triggerNotifications($form, $formEntry, $validatedData);
+        // Dispatch form submitted event (listeners will handle notifications)
+        event(new \App\Events\FormSubmitted($form, $formEntry, $validatedData));
 
         return $formEntry;
     }
