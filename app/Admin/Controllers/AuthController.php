@@ -4,4 +4,4 @@ namespace App\Admin\Controllers;
 
 use Dcat\Admin\Http\Controllers\AuthController as BaseAuthController;
 
-class AuthController extends BaseAuthController {}
+final class AuthController extends BaseAuthController {}
