@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
+use App\Services\Contracts\ThemeServiceInterface;
 use Closure;
 use Illuminate\Http\Request;
-use Qirolab\Theme\Theme;
-use Qirolab\Theme\ThemeViewFinder;
 use Symfony\Component\HttpFoundation\Response;
 
-class SetThemeMiddleware
+final class SetThemeMiddleware
 {
+    public function __construct(
+        protected ThemeServiceInterface $themeService
+    ) {}
+
     /**
      * Handle an incoming request.
      *
@@ -19,33 +22,11 @@ class SetThemeMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Force theme setup for every request
-        $themeName = ! empty(config('basic.theme')) && file_exists(themed_absolute_path(config('basic.theme'), 'views'))
-            ? config('basic.theme') : config('theme.active');
-        $parentTheme = config('theme.parent');
+        $themeName = $this->themeService->resolveThemeName();
 
-        if ($themeName && ! request()->is(config('admin.route.prefix') . '*')) {
-            // Create new theme finder if needed
-            if (! (app('view')->getFinder() instanceof ThemeViewFinder)) {
-                // Force the view finder to be the theme finder
-                app('view')->setFinder(app('theme.finder'));
-            }
-
-            // Set the active theme
-            Theme::set($themeName, $parentTheme);
-
-            // Ensure the view finder is properly set
-            $viewFinder = app('view')->getFinder();
-            $paths      = $viewFinder->getPaths();
-
-            // Verify the paths include the theme path
-            $themePath = themed_absolute_path($themeName, 'views');
-
-            // Make sure the theme path is the first path in the list
-            if (! in_array($themePath, $paths) || array_search($themePath, $paths) !== 0) {
-                $newPaths = array_merge([$themePath], array_diff($paths, [$themePath]));
-                $viewFinder->setPaths($newPaths);
-            }
+        if ($themeName && $this->themeService->shouldApplyTheme($request->path())) {
+            $parentTheme = $this->themeService->getParentTheme();
+            $this->themeService->setupTheme($themeName, $parentTheme);
         }
 
         return $next($request);

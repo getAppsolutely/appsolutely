@@ -4,24 +4,22 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
+use App\Services\Contracts\RouteRestrictionServiceInterface;
 use Closure;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 final class RestrictRoutePrefixes
 {
-    public function handle(Request $request, Closure $next)
-    {
-        // Get disabled prefixes from config
-        $disabled = config('appsolutely.features.disabled');
-        if (is_string($disabled)) {
-            $disabled = array_filter(array_map('trim', explode(',', $disabled)));
-        }
-        if (! is_array($disabled)) {
-            $disabled = [];
-        }
+    public function __construct(
+        protected RouteRestrictionServiceInterface $routeRestrictionService
+    ) {}
 
+    public function handle(Request $request, Closure $next): Response
+    {
         $firstSegment = $request->segment(1);
-        if ($firstSegment && in_array($firstSegment, $disabled, true)) {
+
+        if ($firstSegment && $this->routeRestrictionService->isPrefixDisabled($firstSegment)) {
             abort(404);
         }
 

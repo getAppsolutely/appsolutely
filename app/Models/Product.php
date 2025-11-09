@@ -78,8 +78,6 @@ class Product extends Model
         'price',
     ];
 
-    // Boot method removed - sitemap cache clearing moved to ProductObserver
-
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(ProductCategory::class, 'product_category_pivot');
@@ -89,6 +87,4 @@ class Product extends Model
     {
         return $this->hasMany(ProductSku::class);
     }
-
-    // Business logic methods moved to ProductService for better separation of concerns
 }

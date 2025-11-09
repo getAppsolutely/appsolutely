@@ -45,13 +45,8 @@ class Article extends Model
         'expired_at'   => 'datetime',
     ];
 
-    // Boot method removed - sitemap cache clearing moved to ArticleObserver
-
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(ArticleCategory::class, 'article_category_pivot');
     }
-
-    // Business logic methods moved to ArticleService for better separation of concerns
-    // Use ArticleService::getContentSummary() and ArticleService::getFormattedContent()
 }
