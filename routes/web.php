@@ -1,35 +1,22 @@
 <?php
 
-use App\Http\Controllers\FileController;
-use App\Http\Controllers\PageController;
-use App\Http\Controllers\SitemapController;
-use Illuminate\Support\Facades\Route;
-use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+declare(strict_types=1);
 
-// Localization group
-Route::prefix(LaravelLocalization::setLocale())->middleware(['localeCookieRedirect', 'localizationRedirect', 'localeViewPath'])->group(function () {
-    // Route::get('/{slug?}', [PageController::class, 'show'])->name('pages.show');
-});
+/**
+ * Main web routes file
+ *
+ * Routes are organized by feature/domain:
+ * - web/sitemap.php - Sitemap routes
+ * - web/files.php - File and asset routes
+ * - web/dashboard.php - Authenticated user routes
+ * - auth.php - Authentication routes
+ * - fallback.php - Page routes (catch-all, loaded last)
+ */
 
-// Non-localization group
-Route::middleware([])->group(function () {
-    Route::get('sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
-    Route::get('sitemap-{type}.xml', [SitemapController::class, 'type'])
-        ->where('type', 'page|article|product')
-        ->name('sitemap.type');
-    Route::get('assets/{path?}', [FileController::class, 'retrieve'])->where('path', '(.*)')->name('file.public.assets');
-    Route::get('storage/{path?}', [FileController::class, 'retrieve'])->where('path', '(.*)')->name('book');
+// Load feature-based route files
+require __DIR__ . '/web/sitemap.php';
+require __DIR__ . '/web/files.php';
+require __DIR__ . '/web/dashboard.php';
 
-});
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-});
-
+// Load authentication routes
 require __DIR__ . '/auth.php';

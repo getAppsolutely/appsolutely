@@ -1,11 +1,21 @@
 <?php
 
-use App\Http\Controllers\Api\ReleaseController;
+declare(strict_types=1);
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+/**
+ * Main API routes file
+ *
+ * Routes are organized by feature/domain:
+ * - api/releases.php - Release API routes
+ */
+
+// User authentication route
 Route::get('/user', function (Request $request) {
     return $request->user();
-})->middleware('auth:sanctum');
+})->middleware('auth:sanctum')->name('api.user');
 
-Route::get('releases/latest', [ReleaseController::class, 'latest']);
+// Load feature-based route files
+require __DIR__ . '/api/releases.php';
