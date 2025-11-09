@@ -35,4 +35,10 @@ return [
     'seo' => [
         'title_separator' => ' | ',
     ],
+    'security' => [
+        // Content Security Policy
+        // Set to null to use default, or provide custom CSP string
+        // Example: "default-src 'self'; script-src 'self' 'unsafe-inline';"
+        'csp' => env('APPSOLUTELY_SECURITY_CSP', null),
+    ],
 ];
