@@ -74,6 +74,6 @@ final readonly class PageBlockService implements PageBlockServiceInterface
         }
 
         // In debug mode, throw exception to show error details
-        throw new \RuntimeException("Page block error: {$message}");
+        throw new \App\Exceptions\PageBlockRenderException($message);
     }
 }

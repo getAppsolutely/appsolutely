@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Exceptions\NotFoundException;
+use App\Exceptions\FormNotFoundException;
 use App\Models\Form;
 use App\Models\FormEntry;
 use App\Models\FormField;
@@ -37,7 +37,7 @@ final readonly class DynamicFormSubmissionService implements DynamicFormSubmissi
         $form = $this->formRepository->findBySlug($slug);
 
         if (! $form) {
-            throw new NotFoundException("Form with slug '{$slug}' not found");
+            throw new FormNotFoundException($slug);
         }
 
         // Validate the submission

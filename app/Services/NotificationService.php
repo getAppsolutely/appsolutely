@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Exceptions\NotFoundException;
+use App\Exceptions\NotificationTemplateNotFoundException;
 use App\Jobs\SendNotificationEmail;
 use App\Models\NotificationQueue;
 use App\Models\NotificationRule;
@@ -118,7 +119,7 @@ final readonly class NotificationService implements NotificationServiceInterface
     {
         $template = $this->templateRepository->findBySlug($templateSlug);
         if (! $template) {
-            throw new \InvalidArgumentException("Template not found: {$templateSlug}");
+            throw new NotificationTemplateNotFoundException($templateSlug);
         }
 
         $rendered = $template->render($data);

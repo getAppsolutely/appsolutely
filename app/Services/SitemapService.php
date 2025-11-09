@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Exceptions\InvalidSitemapTypeException;
 use App\Models\Article;
 use App\Models\Page;
 use App\Models\Product;
@@ -94,7 +95,7 @@ final readonly class SitemapService implements SitemapServiceInterface
             'page'    => $this->generatePageXml(),
             'article' => $this->generateArticleXml(),
             'product' => $this->generateProductXml(),
-            default   => throw new \InvalidArgumentException("Invalid sitemap type: {$type}. Allowed types: page, article, product"),
+            default   => throw new InvalidSitemapTypeException($type, ['page', 'article', 'product']),
         };
     }
 

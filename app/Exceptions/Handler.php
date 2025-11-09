@@ -50,7 +50,16 @@ class Handler extends ExceptionHandler
                 ], 401);
             }
 
-            // Not found
+            // Not found (custom exceptions)
+            if ($e instanceof NotFoundException) {
+                return response()->json([
+                    'status'  => false,
+                    'code'    => $e->getCode(),
+                    'message' => $e->getMessage(),
+                ], 404);
+            }
+
+            // Not found (HTTP)
             if ($e instanceof NotFoundHttpException) {
                 return response()->json([
                     'status'  => false,
