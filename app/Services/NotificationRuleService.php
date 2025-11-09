@@ -191,11 +191,15 @@ final class NotificationRuleService implements NotificationRuleServiceInterface
      */
     protected function getAdminEmails(): array
     {
-        // Default admin emails - could be moved to config or settings table
-        return [
-            config('mail.from.address', 'admin@example.com'),
-            // Add more admin emails as needed
-        ];
+        // Get admin emails from notifications config, fallback to mail config
+        $adminEmails = config('notifications.admin_emails', []);
+
+        // If no admin emails in config, use default mail address
+        if (empty($adminEmails)) {
+            $adminEmails = [config('mail.from.address', 'admin@example.com')];
+        }
+
+        return $adminEmails;
     }
 
     /**
@@ -210,7 +214,8 @@ final class NotificationRuleService implements NotificationRuleServiceInterface
 
         // Try different possible email field names that might be used in various contexts
         // This handles different data structures (forms, orders, registrations, etc.)
-        $emailFields = ['email', 'user_email', 'customer_email', 'contact_email'];
+        // Field names are configurable via notifications.email_field_names config
+        $emailFields = config('notifications.email_field_names', ['email', 'user_email', 'customer_email', 'contact_email']);
 
         foreach ($emailFields as $field) {
             // Only add valid email addresses to prevent invalid data

@@ -18,8 +18,11 @@ final class FormEntryRepository extends BaseRepository
     /**
      * Get entries for a specific form
      */
-    public function getEntriesByForm(int $formId, bool $includeSpam = true): Collection
+    public function getEntriesByForm(int $formId, ?bool $includeSpam = null): Collection
     {
+        // Default to excluding spam unless explicitly requested
+        $includeSpam = $includeSpam ?? config('forms.export.include_spam', false);
+
         $query = $this->model->newQuery()
             ->where('form_id', $formId)
             ->with(['form', 'user'])
@@ -35,9 +38,10 @@ final class FormEntryRepository extends BaseRepository
     /**
      * Get paginated entries for a form
      */
-    public function getPaginatedEntriesByForm(int $formId, int $perPage = 15, bool $includeSpam = true): LengthAwarePaginator
+    public function getPaginatedEntriesByForm(int $formId, ?int $perPage = null, bool $includeSpam = true): LengthAwarePaginator
     {
-        $query = $this->model->newQuery()
+        $perPage = $perPage ?? config('forms.default_per_page', 15);
+        $query   = $this->model->newQuery()
             ->where('form_id', $formId)
             ->with(['form', 'user'])
             ->orderBy('submitted_at', 'desc');
@@ -204,7 +208,7 @@ final class FormEntryRepository extends BaseRepository
     {
         // Step 1: Check for common spam keywords in all text fields
         // Combine all text content from form fields for keyword scanning
-        $spamKeywords = ['viagra', 'casino', 'lottery', 'prize', 'winner'];
+        $spamKeywords = config('forms.spam_detection.keywords', ['viagra', 'casino', 'lottery', 'prize', 'winner']);
         $content      = implode(' ', array_filter([
             $data['first_name'] ?? '',
             $data['last_name'] ?? '',
@@ -223,9 +227,9 @@ final class FormEntryRepository extends BaseRepository
             }
         }
 
-        // Step 2: Validate email format
+        // Step 2: Validate email format (if enabled in config)
         // Invalid email addresses are often a sign of spam
-        if (isset($data['email']) && ! filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+        if (config('forms.spam_detection.validate_email', true) && isset($data['email']) && ! filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             return true;
         }
 
@@ -238,16 +242,24 @@ final class FormEntryRepository extends BaseRepository
      */
     public function getValidEntriesForExport(?int $formId = null): Collection
     {
+        $includeSpam = config('forms.export.include_spam', false);
+        $maxEntries  = config('forms.export.max_entries', 10000);
+
         $query = $this->model->newQuery()
             ->with(['form', 'user'])
-            ->where('is_spam', false)
             ->orderBy('submitted_at', 'desc');
+
+        // Filter spam based on config
+        if (! $includeSpam) {
+            $query->where('is_spam', false);
+        }
 
         if ($formId) {
             $query->where('form_id', $formId);
         }
 
-        return $query->get();
+        // Limit results to prevent memory issues with large exports
+        return $query->limit($maxEntries)->get();
     }
 
     /**

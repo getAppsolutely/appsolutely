@@ -20,10 +20,12 @@ final class NotificationQueueRepository extends BaseRepository
      */
     public function getPendingToSend(): Collection
     {
+        $maxRetries = config('notifications.max_retry_attempts', 3);
+
         return $this->model->newQuery()->where('status', 'pending')
             ->where('scheduled_at', '<=', now())
-            ->where(function ($query) {
-                $query->where('retry_count', '<', 3)
+            ->where(function ($query) use ($maxRetries) {
+                $query->where('retry_count', '<', $maxRetries)
                     ->orWhereNull('retry_count');
             })
             ->with(['rule', 'template'])
@@ -36,8 +38,10 @@ final class NotificationQueueRepository extends BaseRepository
      */
     public function getRetryable(): Collection
     {
+        $maxRetries = config('notifications.max_retry_attempts', 3);
+
         return $this->model->newQuery()->where('status', 'failed')
-            ->where('retry_count', '<', 3)
+            ->where('retry_count', '<', $maxRetries)
             ->with(['rule', 'template'])
             ->orderBy('updated_at', 'desc')
             ->get();
@@ -46,8 +50,10 @@ final class NotificationQueueRepository extends BaseRepository
     /**
      * Get queue items by status with pagination
      */
-    public function getByStatus(string $status, int $perPage = 20): LengthAwarePaginator
+    public function getByStatus(string $status, ?int $perPage = null): LengthAwarePaginator
     {
+        $perPage = $perPage ?? config('notifications.default_per_page', 20);
+
         return $this->model->newQuery()->where('status', $status)
             ->with(['rule', 'template'])
             ->orderBy('created_at', 'desc')
@@ -57,9 +63,10 @@ final class NotificationQueueRepository extends BaseRepository
     /**
      * Get all queue items with pagination and filtering
      */
-    public function getPaginated(array $filters = [], int $perPage = 20): LengthAwarePaginator
+    public function getPaginated(array $filters = [], ?int $perPage = null): LengthAwarePaginator
     {
-        $query = $this->model->newQuery()->with(['rule', 'template']);
+        $perPage = $perPage ?? config('notifications.default_per_page', 20);
+        $query   = $this->model->newQuery()->with(['rule', 'template']);
 
         if (! empty($filters['status'])) {
             $query->where('status', $filters['status']);
@@ -133,12 +140,13 @@ final class NotificationQueueRepository extends BaseRepository
      */
     public function incrementRetry(int $id): NotificationQueue
     {
+        $maxRetries = config('notifications.max_retry_attempts', 3);
         $item       = $this->find($id);
         $retryCount = ($item->retry_count ?? 0) + 1;
 
         $this->update($id, [
             'retry_count' => $retryCount,
-            'status'      => $retryCount >= 3 ? 'failed' : 'pending',
+            'status'      => $retryCount >= $maxRetries ? 'failed' : 'pending',
         ]);
 
         return $this->find($id);
@@ -239,8 +247,9 @@ final class NotificationQueueRepository extends BaseRepository
      */
     public function retryFailed(array $ids = []): int
     {
-        $query = $this->model->newQuery()->where('status', 'failed')
-            ->where('retry_count', '<', 3);
+        $maxRetries = config('notifications.max_retry_attempts', 3);
+        $query      = $this->model->newQuery()->where('status', 'failed')
+            ->where('retry_count', '<', $maxRetries);
 
         if (! empty($ids)) {
             $query->whereIn('id', $ids);
@@ -258,9 +267,10 @@ final class NotificationQueueRepository extends BaseRepository
      */
     public function retry(int $id): bool
     {
-        $updated = $this->model->newQuery()->where('id', $id)
+        $maxRetries = config('notifications.max_retry_attempts', 3);
+        $updated    = $this->model->newQuery()->where('id', $id)
             ->where('status', 'failed')
-            ->where('retry_count', '<', 3)
+            ->where('retry_count', '<', $maxRetries)
             ->update([
                 'status'        => 'pending',
                 'scheduled_at'  => now(),
@@ -285,8 +295,10 @@ final class NotificationQueueRepository extends BaseRepository
     /**
      * Clean old sent items
      */
-    public function cleanOldSent(int $daysOld = 90): int
+    public function cleanOldSent(?int $daysOld = null): int
     {
+        $daysOld = $daysOld ?? config('notifications.cleanup_sent_after_days', 90);
+
         return $this->model->newQuery()->where('status', 'sent')
             ->where('sent_at', '<', now()->subDays($daysOld))
             ->delete();
