@@ -36,16 +36,19 @@ interface PageServiceInterface
 
     /**
      * Sync page block settings
+     * Delegates to PageBlockSettingService for implementation
      */
     public function syncSettings(array $data, int $pageId): array;
 
     /**
      * Get block value ID for a block
+     * Delegates to PageBlockSettingService for implementation
      */
     public function getBlockValueId(int $blockId): int;
 
     /**
      * Generate default page setting structure
+     * Delegates to PageStructureService for implementation
      */
     public function generateDefaultPageSetting(): array;
 }
