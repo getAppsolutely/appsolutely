@@ -10,7 +10,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-final class PageBlockSchemaService implements PageBlockSchemaServiceInterface
+final readonly class PageBlockSchemaService implements PageBlockSchemaServiceInterface
 {
     /**
      * Get schema for a block

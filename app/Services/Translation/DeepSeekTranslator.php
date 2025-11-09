@@ -6,12 +6,12 @@ namespace App\Services\Translation;
 
 use DeepSeek\DeepSeekClient;
 
-final class DeepSeekTranslator implements TranslatorInterface
+final readonly class DeepSeekTranslator implements TranslatorInterface
 {
     /**
      * DeepSeek client instance.
      */
-    protected DeepSeekClient $client;
+    protected readonly DeepSeekClient $client;
 
     /**
      * Constructor.

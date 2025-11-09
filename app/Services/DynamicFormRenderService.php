@@ -8,7 +8,7 @@ use App\Models\Form;
 use App\Models\FormField;
 use App\Services\Contracts\DynamicFormRenderServiceInterface;
 
-final class DynamicFormRenderService implements DynamicFormRenderServiceInterface
+final readonly class DynamicFormRenderService implements DynamicFormRenderServiceInterface
 {
     /**
      * Generate HTML for form rendering

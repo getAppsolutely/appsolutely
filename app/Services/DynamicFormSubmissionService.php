@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 use PDOException;
 use Psr\Log\LoggerInterface;
 
-final class DynamicFormSubmissionService implements DynamicFormSubmissionServiceInterface
+final readonly class DynamicFormSubmissionService implements DynamicFormSubmissionServiceInterface
 {
     const FORM_WRAPPER = 'formData';
 

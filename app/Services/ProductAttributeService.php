@@ -10,7 +10,7 @@ use App\Repositories\ProductAttributeValueRepository;
 use App\Services\Contracts\ProductAttributeServiceInterface;
 use Illuminate\Database\Eloquent\Collection;
 
-final class ProductAttributeService implements ProductAttributeServiceInterface
+final readonly class ProductAttributeService implements ProductAttributeServiceInterface
 {
     public function __construct(
         protected ProductAttributeGroupRepository $attributeGroupRepository,

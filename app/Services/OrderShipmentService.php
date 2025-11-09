@@ -7,7 +7,7 @@ namespace App\Services;
 use App\Repositories\OrderShipmentRepository;
 use App\Services\Contracts\OrderShipmentServiceInterface;
 
-final class OrderShipmentService implements OrderShipmentServiceInterface
+final readonly class OrderShipmentService implements OrderShipmentServiceInterface
 {
     public function __construct(protected OrderShipmentRepository $orderShipmentRepository) {}
 }

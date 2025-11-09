@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
-final class DynamicFormService implements DynamicFormServiceInterface
+final readonly class DynamicFormService implements DynamicFormServiceInterface
 {
     public function __construct(
         protected FormRepository $formRepository,

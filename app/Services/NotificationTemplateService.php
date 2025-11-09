@@ -8,7 +8,7 @@ use App\Models\NotificationTemplate;
 use App\Repositories\NotificationTemplateRepository;
 use App\Services\Contracts\NotificationTemplateServiceInterface;
 
-final class NotificationTemplateService implements NotificationTemplateServiceInterface
+final readonly class NotificationTemplateService implements NotificationTemplateServiceInterface
 {
     public function __construct(
         private readonly NotificationTemplateRepository $templateRepository

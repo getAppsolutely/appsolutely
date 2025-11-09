@@ -9,7 +9,7 @@ use App\Services\Contracts\DynamicFormValidationServiceInterface;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-final class DynamicFormValidationService implements DynamicFormValidationServiceInterface
+final readonly class DynamicFormValidationService implements DynamicFormValidationServiceInterface
 {
     const FORM_WRAPPER = 'formData';
 

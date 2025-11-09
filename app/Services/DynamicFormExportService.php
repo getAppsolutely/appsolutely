@@ -9,7 +9,7 @@ use App\Repositories\FormEntryRepository;
 use App\Repositories\FormRepository;
 use App\Services\Contracts\DynamicFormExportServiceInterface;
 
-final class DynamicFormExportService implements DynamicFormExportServiceInterface
+final readonly class DynamicFormExportService implements DynamicFormExportServiceInterface
 {
     public function __construct(
         protected FormRepository $formRepository,

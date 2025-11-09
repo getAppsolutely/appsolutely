@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\QueryException;
 use PDOException;
 
-final class PageService implements PageServiceInterface
+final readonly class PageService implements PageServiceInterface
 {
     public function __construct(
         protected PageRepository $pageRepository,

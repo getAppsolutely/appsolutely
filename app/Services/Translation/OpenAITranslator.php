@@ -7,7 +7,7 @@ namespace App\Services\Translation;
 use Illuminate\Support\Facades\Log;
 use OpenAI\Laravel\Facades\OpenAI;
 
-final class OpenAITranslator implements TranslatorInterface
+final readonly class OpenAITranslator implements TranslatorInterface
 {
     /**
      * Translate text using OpenAI's API.

@@ -19,7 +19,7 @@ use Illuminate\Mail\MailException;
 use Illuminate\Queue\MaxAttemptsExceededException;
 use Psr\Log\LoggerInterface;
 
-final class NotificationService implements NotificationServiceInterface
+final readonly class NotificationService implements NotificationServiceInterface
 {
     public function __construct(
         private readonly NotificationTemplateRepository $templateRepository,
