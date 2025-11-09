@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repositories;
 
 use App\Models\Product;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 
 final class ProductRepository extends BaseRepository
@@ -14,7 +15,7 @@ final class ProductRepository extends BaseRepository
         return Product::class;
     }
 
-    public function getActiveProducts()
+    public function getActiveProducts(): Collection
     {
         return $this->model->status()->orderBy('sort')->get();
     }
@@ -33,7 +34,7 @@ final class ProductRepository extends BaseRepository
     /**
      * Get all published products for sitemap generation
      */
-    public function getPublishedProductsForSitemap(Carbon $datetime): \Illuminate\Database\Eloquent\Collection
+    public function getPublishedProductsForSitemap(Carbon $datetime): Collection
     {
         return $this->model->newQuery()
             ->status()

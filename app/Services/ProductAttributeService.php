@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Repositories\ProductAttributeGroupRepository;
 use App\Repositories\ProductAttributeRepository;
 use App\Repositories\ProductAttributeValueRepository;
+use Illuminate\Database\Eloquent\Collection;
 
 final class ProductAttributeService
 {
@@ -21,7 +22,7 @@ final class ProductAttributeService
         return sprintf('%s.attributes.%s_%s', appsolutely(), $groupId, $key);
     }
 
-    public function findAttributesByGroupId($groupId): array
+    public function findAttributesByGroupId(int|string $groupId): array
     {
         $data         = $this->attributeGroupRepository->with(['attributes.values'])->find($groupId);
         $attributes   =  $data?->attributes;
@@ -31,8 +32,12 @@ final class ProductAttributeService
         return self::formattedCombination($combinations, $groupId);
     }
 
-    protected function collection2Array($attributes): array
+    protected function collection2Array(?Collection $attributes): array
     {
+        if ($attributes === null) {
+            return [];
+        }
+
         return $attributes->map(function ($attribute) {
             $item           = $attribute->toArray();
             $item['values'] = collect($item['values'])->map(function ($value) use ($attribute) {

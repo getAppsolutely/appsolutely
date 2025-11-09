@@ -10,17 +10,17 @@ use Illuminate\Database\Eloquent\Collection;
 
 trait Reference
 {
-    public function reference($reference): Builder
+    public function reference(string $reference): Builder
     {
         return $this->model->reference($reference);
     }
 
-    public function findByReference($reference): Model
+    public function findByReference(string $reference): Model
     {
         return $this->model->reference($reference)->firstOrFail();
     }
 
-    public function getByReference($reference): Collection
+    public function getByReference(string $reference): Collection
     {
         return $this->model->reference($reference)->get();
     }

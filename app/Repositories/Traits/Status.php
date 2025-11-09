@@ -10,18 +10,18 @@ use Illuminate\Database\Eloquent\Collection;
 
 trait Status
 {
-    public function status($reference): Builder
+    public function status(?string $value = null): Builder
     {
-        return $this->model->status($reference);
+        return $this->model->status($value);
     }
 
-    public function findByStatus($reference): Model
+    public function findByStatus(string $value): Model
     {
-        return $this->model->status($reference)->firstOrFail();
+        return $this->model->status($value)->firstOrFail();
     }
 
-    public function getByStatus($reference): Collection
+    public function getByStatus(string $value): Collection
     {
-        return $this->model->status($reference)->get();
+        return $this->model->status($value)->get();
     }
 }

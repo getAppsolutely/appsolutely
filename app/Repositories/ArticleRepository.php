@@ -43,7 +43,7 @@ final class ArticleRepository extends BaseRepository
         return $query;
     }
 
-    public function findActiveBySlug($slug, ?Carbon $datetime)
+    public function findActiveBySlug(string $slug, ?Carbon $datetime): ?Article
     {
         return $this->model->newQuery()
             ->status()

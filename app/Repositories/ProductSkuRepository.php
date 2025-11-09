@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repositories;
 
 use App\Models\ProductSku;
+use Illuminate\Database\Eloquent\Collection;
 
 final class ProductSkuRepository extends BaseRepository
 {
@@ -13,7 +14,7 @@ final class ProductSkuRepository extends BaseRepository
         return ProductSku::class;
     }
 
-    public function getActiveSkusByProduct(int $productId)
+    public function getActiveSkusByProduct(int $productId): Collection
     {
         return $this->model->where('product_id', $productId)
             ->status()
@@ -21,7 +22,7 @@ final class ProductSkuRepository extends BaseRepository
             ->get();
     }
 
-    public function getSkusBySkuKey(string $attributeKey, string $productId)
+    public function getSkusBySkuKey(string $attributeKey, string $productId): ?ProductSku
     {
         return $this->model->where('product_id', $productId)
             ->where(function ($query) use ($attributeKey) {

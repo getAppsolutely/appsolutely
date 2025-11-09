@@ -13,14 +13,14 @@ trait ActiveTreeList
     /**
      * @return array|string[]
      */
-    public function getActiveList($parentId = null): array
+    public function getActiveList(?int $parentId = null): array
     {
         $tree = $this->getTree($parentId);
 
         return NestedSetModel::formatTreeArray($tree);
     }
 
-    public function getTree($parentId, $all = false): mixed
+    public function getTree(?int $parentId = null, bool $all = false): mixed
     {
         /** @var NestedSetModel $model */
         $model = $this->model;

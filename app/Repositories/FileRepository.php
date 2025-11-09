@@ -25,7 +25,7 @@ final class FileRepository extends BaseRepository
         return $this->model->newQuery()->where('filename', $filename)->first();
     }
 
-    public function findByAssessable($filePath): ?Assessable
+    public function findByAssessable(string $filePath): ?Assessable
     {
         return Assessable::query()->with(['file'])->whereFilePath($filePath)->first();
     }

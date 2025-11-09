@@ -17,7 +17,7 @@ class BaseRepository extends Repository
     {
         throw new \RuntimeException(
             'BaseRepository::model() must be implemented by child repository classes. ' .
-            'Return the fully qualified model class name (e.g., return Page::class;).'
+                'Return the fully qualified model class name (e.g., return Page::class;).'
         );
     }
 }

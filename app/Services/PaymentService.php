@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Repositories\OrderPaymentRepository;
 use App\Repositories\PaymentRepository;
+use Illuminate\Database\Eloquent\Collection;
 
 final class PaymentService
 {
@@ -14,7 +15,7 @@ final class PaymentService
         protected OrderPaymentRepository $orderPaymentRepository,
     ) {}
 
-    public function getPayments()
+    public function getPayments(): Collection
     {
         return $this->paymentRepository->all();
     }

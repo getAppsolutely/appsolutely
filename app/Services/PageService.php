@@ -6,13 +6,14 @@ namespace App\Services;
 
 use App\Constants\BasicConstant;
 use App\Enums\Status;
-use App\Models\Model;
 use App\Models\Page;
+use App\Models\PageBlockSetting;
 use App\Repositories\PageBlockRepository;
 use App\Repositories\PageBlockSettingRepository;
 use App\Repositories\PageBlockValueRepository;
 use App\Repositories\PageRepository;
 use DB;
+use Illuminate\Database\Eloquent\Model;
 
 final class PageService
 {
@@ -47,7 +48,7 @@ final class PageService
         return $page;
     }
 
-    public function saveSetting($reference, $data): Model
+    public function saveSetting(string $reference, array $data): Model
     {
         $page = $this->findByReference($reference);
 
@@ -82,11 +83,11 @@ final class PageService
             return $result;
         } catch (\Exception $exception) {
             log_error($exception->getMessage(), ['pageId' => $pageId, 'data' => $data], __CLASS__, __METHOD__);
-            throw new \Exception($exception);
+            throw new \Exception($exception->getMessage());
         }
     }
 
-    protected function syncBlockSettingItem($blockSetting, $sort, $pageId)
+    protected function syncBlockSettingItem(array $blockSetting, int $sort, int $pageId): array|PageBlockSetting
     {
         $blockId   = $blockSetting['block_id'];
         $reference = $blockSetting['reference'];
@@ -119,7 +120,7 @@ final class PageService
         return $this->pageBlockSettingRepository->create($data);
     }
 
-    public function getBlockValueId(int $blockId)
+    public function getBlockValueId(int $blockId): int
     {
         // try to get value from the same block used in other blocks
         $setting = $this->pageBlockSettingRepository->findByBlockId($blockId);
