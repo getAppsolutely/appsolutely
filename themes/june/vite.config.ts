@@ -1,7 +1,8 @@
-import {defineConfig} from "vite";
-import laravel from "laravel-vite-plugin";
-import path from "path";
+import { defineConfig } from 'vite';
+import laravel from 'laravel-vite-plugin';
+import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -10,19 +11,16 @@ export default defineConfig({
     base: `/build/themes/june`,
     plugins: [
         laravel({
-            input: [
-                "themes/june/sass/app.scss",
-                "themes/june/js/app.ts"
-            ],
-            buildDirectory: "build/themes/june",
+            input: ['themes/june/sass/app.scss', 'themes/june/js/app.ts'],
+            buildDirectory: 'build/themes/june',
         }),
         {
-            name: "blade",
-            handleHotUpdate({file, server}) {
-                if (file.endsWith(".blade.php")) {
+            name: 'blade',
+            handleHotUpdate({ file, server }) {
+                if (file.endsWith('.blade.php')) {
                     server.ws.send({
-                        type: "full-reload",
-                        path: "*",
+                        type: 'full-reload',
+                        path: '*',
                     });
                 }
             },
@@ -32,7 +30,7 @@ export default defineConfig({
         alias: {
             '@june': path.resolve(__dirname, 'resources/themes/june'),
             '~bootstrap': path.resolve('node_modules/bootstrap'),
-        }
+        },
     },
     server: {
         host: '0.0.0.0', // Docker-safe
@@ -40,24 +38,23 @@ export default defineConfig({
         strictPort: true,
         hmr: {
             host: 'localhost', // or your Docker host domain
-            protocol: 'ws',
+            protocol: 'wss', // ws if http
             clientPort: 5177,
         },
         cors: {
             origin: true,
             methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-            credentials: true
-        }
+            credentials: true,
+        },
+        https: {
+            key: fs.readFileSync('storage/ssl/appsolutely.key.pem'), // comment if http
+            cert: fs.readFileSync('storage/ssl/appsolutely.pem'), // comment if http
+        },
     },
     css: {
         preprocessorOptions: {
             scss: {
-                silenceDeprecations: [
-                    'import',
-                    'mixed-decls',
-                    'color-functions',
-                    'global-builtin',
-                ],
+                silenceDeprecations: ['import', 'mixed-decls', 'color-functions', 'global-builtin'],
             },
         },
     },
