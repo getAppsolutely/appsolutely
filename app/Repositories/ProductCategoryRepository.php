@@ -15,4 +15,27 @@ final class ProductCategoryRepository extends BaseRepository
     {
         return ProductCategory::class;
     }
+
+    /**
+     * Find category by slug
+     */
+    public function findBySlug(string $slug): ?ProductCategory
+    {
+        return $this->model->newQuery()
+            ->where('slug', $slug)
+            ->status()
+            ->first();
+    }
+
+    /**
+     * Get categories with product count
+     */
+    public function getWithProductCount(): \Illuminate\Database\Eloquent\Collection
+    {
+        return $this->model->newQuery()
+            ->status()
+            ->withCount('products')
+            ->orderBy('sort')
+            ->get();
+    }
 }

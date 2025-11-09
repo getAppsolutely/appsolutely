@@ -47,4 +47,71 @@ final class ProductRepository extends BaseRepository
             ->orderBy('published_at', 'desc')
             ->get();
     }
+
+    /**
+     * Find published products by category slug
+     */
+    public function findByCategorySlug(string $categorySlug, ?Carbon $datetime = null): Collection
+    {
+        $datetime = $datetime ?? now();
+
+        return $this->model->newQuery()
+            ->status()
+            ->published($datetime)
+            ->whereHas('categories', function ($query) use ($categorySlug) {
+                $query->where('slug', $categorySlug)->status();
+            })
+            ->orderBy('published_at', 'desc')
+            ->get();
+    }
+
+    /**
+     * Get recent published products
+     */
+    public function getRecentProducts(int $limit = 10, ?Carbon $datetime = null): Collection
+    {
+        $datetime = $datetime ?? now();
+
+        return $this->model->newQuery()
+            ->status()
+            ->published($datetime)
+            ->with(['categories'])
+            ->orderBy('published_at', 'desc')
+            ->limit($limit)
+            ->get();
+    }
+
+    /**
+     * Get published products with categories eager loaded
+     */
+    public function getPublishedWithCategories(?Carbon $datetime = null): Collection
+    {
+        $datetime = $datetime ?? now();
+
+        return $this->model->newQuery()
+            ->status()
+            ->published($datetime)
+            ->with(['categories' => function ($query) {
+                $query->status()->orderBy('sort');
+            }])
+            ->orderBy('published_at', 'desc')
+            ->get();
+    }
+
+    /**
+     * Find product by slug with categories
+     */
+    public function findBySlugWithCategories(string $slug, ?Carbon $datetime = null): ?Product
+    {
+        $datetime = $datetime ?? now();
+
+        return $this->model->newQuery()
+            ->status()
+            ->published($datetime)
+            ->where('slug', $slug)
+            ->with(['categories' => function ($query) {
+                $query->status()->orderBy('sort');
+            }])
+            ->first();
+    }
 }

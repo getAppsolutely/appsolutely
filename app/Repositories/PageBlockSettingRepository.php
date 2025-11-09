@@ -83,4 +83,19 @@ final class PageBlockSettingRepository extends BaseRepository
             'sort'   => $sort,
         ]);
     }
+
+    /**
+     * Get block IDs for global blocks that are active and have sort order
+     */
+    public function getGlobalBlockIds(): \Illuminate\Support\Collection
+    {
+        return $this->model->newQuery()
+            ->whereHas('block', function ($query) {
+                $query->where('scope', \App\Enums\BlockScope::Global->value)->status();
+            })
+            ->status()
+            ->orderBy('sort')
+            ->pluck('block_id')
+            ->unique();
+    }
 }

@@ -30,4 +30,29 @@ final class PageBlockRepository extends BaseRepository
             ->orderBy('id')
             ->get();
     }
+
+    /**
+     * Get global blocks by IDs with status and sort ordering
+     */
+    public function getGlobalBlocksByIds(array $blockIds): Collection
+    {
+        return $this->model->newQuery()
+            ->where('scope', BlockScope::Global->value)
+            ->whereIn('id', $blockIds)
+            ->status()
+            ->orderBy('sort')
+            ->get();
+    }
+
+    /**
+     * Get blocks by scope
+     */
+    public function getBlocksByScope(BlockScope $scope): Collection
+    {
+        return $this->model->newQuery()
+            ->where('scope', $scope->value)
+            ->status()
+            ->orderBy('sort')
+            ->get();
+    }
 }

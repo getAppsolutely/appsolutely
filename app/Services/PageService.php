@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Constants\BasicConstant;
-use App\Enums\BlockScope;
 use App\Enums\Status;
 use App\Exceptions\TransactionException;
 use App\Models\Page;
-use App\Models\PageBlock;
 use App\Models\PageBlockSetting;
 use App\Repositories\PageBlockRepository;
 use App\Repositories\PageBlockSettingRepository;
@@ -248,21 +246,8 @@ final readonly class PageService implements PageServiceInterface
      */
     protected function attachGlobalBlocks(): array
     {
-        $blockIds = PageBlockSetting::query()
-            ->whereHas('block', function ($query) {
-                $query->where('scope', BlockScope::Global->value)->status();
-            })
-            ->status()
-            ->orderBy('sort')
-            ->pluck('block_id')
-            ->unique();
-
-        $globalBlocks = PageBlock::query()
-            ->where('scope', BlockScope::Global->value)
-            ->whereIn('id', $blockIds)
-            ->status()
-            ->orderBy('sort')
-            ->get();
+        $blockIds     = $this->pageBlockSettingRepository->getGlobalBlockIds();
+        $globalBlocks = $this->pageBlockRepository->getGlobalBlocksByIds($blockIds->toArray());
 
         return $globalBlocks->map(function ($block) {
             return [

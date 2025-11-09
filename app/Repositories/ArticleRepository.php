@@ -68,4 +68,54 @@ final class ArticleRepository extends BaseRepository
             ->orderBy('published_at', 'desc')
             ->get();
     }
+
+    /**
+     * Find published articles by category slug
+     */
+    public function findByCategorySlug(string $categorySlug, ?Carbon $datetime = null): \Illuminate\Database\Eloquent\Collection
+    {
+        $datetime = $datetime ?? now();
+
+        return $this->model->newQuery()
+            ->status()
+            ->published($datetime)
+            ->whereHas('categories', function ($query) use ($categorySlug) {
+                $query->where('slug', $categorySlug)->status();
+            })
+            ->orderBy('published_at', 'desc')
+            ->get();
+    }
+
+    /**
+     * Get recent published articles
+     */
+    public function getRecentArticles(int $limit = 10, ?Carbon $datetime = null): \Illuminate\Database\Eloquent\Collection
+    {
+        $datetime = $datetime ?? now();
+
+        return $this->model->newQuery()
+            ->status()
+            ->published($datetime)
+            ->with(['categories'])
+            ->orderBy('published_at', 'desc')
+            ->limit($limit)
+            ->get();
+    }
+
+    /**
+     * Get published articles with categories eager loaded
+     */
+    public function getPublishedWithCategories(?Carbon $datetime = null): \Illuminate\Database\Eloquent\Collection
+    {
+        $datetime = $datetime ?? now();
+
+        return $this->model->newQuery()
+            ->status()
+            ->published($datetime)
+            ->with(['categories' => function ($query) {
+                $query->status()->orderBy('sort');
+            }])
+            ->orderBy('published_at', 'desc')
+            ->get();
+    }
 }

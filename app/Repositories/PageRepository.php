@@ -63,4 +63,47 @@ final class PageRepository extends BaseRepository
     {
         return $this->update($id, ['setting' => $setting]);
     }
+
+    /**
+     * Find page by slug without datetime filtering (for admin use)
+     */
+    public function findBySlug(string $slug): ?Page
+    {
+        return $this->model->newQuery()
+            ->where('slug', $slug)
+            ->first();
+    }
+
+    /**
+     * Get pages by parent ID
+     */
+    public function getByParentId(?int $parentId, ?Carbon $datetime = null): \Illuminate\Database\Eloquent\Collection
+    {
+        $query = $this->model->newQuery()
+            ->where('parent_id', $parentId)
+            ->status();
+
+        if ($datetime !== null) {
+            $query->published($datetime);
+        }
+
+        return $query->orderBy('sort')->get();
+    }
+
+    /**
+     * Get published pages with blocks eager loaded
+     */
+    public function getPublishedWithBlocks(?Carbon $datetime = null): \Illuminate\Database\Eloquent\Collection
+    {
+        $datetime = $datetime ?? now();
+
+        return $this->model->newQuery()
+            ->status()
+            ->published($datetime)
+            ->with(['blocks' => function ($query) {
+                $query->status()->whereNotNull('sort')->orderBy('sort');
+            }, 'blocks.block'])
+            ->orderBy('published_at', 'desc')
+            ->get();
+    }
 }

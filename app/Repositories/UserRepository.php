@@ -24,4 +24,28 @@ final class UserRepository extends BaseRepository
                 ->orWhere('email', 'like', "%{$term}%");
         });
     }
+
+    /**
+     * Find user by email
+     */
+    public function findByEmail(string $email): ?User
+    {
+        return $this->model->where('email', $email)->first();
+    }
+
+    /**
+     * Get active users (with verified email)
+     */
+    public function getActiveUsers(): \Illuminate\Database\Eloquent\Collection
+    {
+        return $this->model->whereNotNull('email_verified_at')->get();
+    }
+
+    /**
+     * Get users with pagination
+     */
+    public function getPaginated(int $perPage = 15): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    {
+        return $this->model->orderBy('created_at', 'desc')->paginate($perPage);
+    }
 }

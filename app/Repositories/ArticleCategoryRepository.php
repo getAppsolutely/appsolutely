@@ -15,4 +15,27 @@ final class ArticleCategoryRepository extends BaseRepository
     {
         return ArticleCategory::class;
     }
+
+    /**
+     * Find category by slug
+     */
+    public function findBySlug(string $slug): ?ArticleCategory
+    {
+        return $this->model->newQuery()
+            ->where('slug', $slug)
+            ->status()
+            ->first();
+    }
+
+    /**
+     * Get categories with article count
+     */
+    public function getWithArticleCount(): \Illuminate\Database\Eloquent\Collection
+    {
+        return $this->model->newQuery()
+            ->status()
+            ->withCount('articles')
+            ->orderBy('sort')
+            ->get();
+    }
 }
