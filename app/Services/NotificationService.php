@@ -10,10 +10,11 @@ use App\Models\NotificationRule;
 use App\Repositories\NotificationQueueRepository;
 use App\Repositories\NotificationRuleRepository;
 use App\Repositories\NotificationTemplateRepository;
+use App\Services\Contracts\NotificationServiceInterface;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
-final class NotificationService
+final class NotificationService implements NotificationServiceInterface
 {
     public function __construct(
         private readonly NotificationTemplateRepository $templateRepository,

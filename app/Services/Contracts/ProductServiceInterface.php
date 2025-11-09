@@ -1,0 +1,21 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Services\Contracts;
+
+use App\Models\Product;
+use Illuminate\Support\Collection;
+
+interface ProductServiceInterface
+{
+    /**
+     * Get all active products
+     */
+    public function getActiveProducts(): Collection;
+
+    /**
+     * Get active SKUs for a product
+     */
+    public function getActiveSkus(Product $product): Collection;
+}

@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Models\GeneralPage;
 use App\Models\Page;
 use App\Repositories\PageRepository;
+use App\Services\Contracts\GeneralPageServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -20,7 +21,7 @@ use Illuminate\Support\Facades\Cache;
  * 3. Content discovery through block repositories
  * 4. GeneralPage creation for unified page interface
  */
-final readonly class GeneralPageService
+final readonly class GeneralPageService implements GeneralPageServiceInterface
 {
     private const CACHE_TTL = 3600; // 1 hour
 

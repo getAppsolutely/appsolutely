@@ -13,10 +13,11 @@ use App\Repositories\PageBlockRepository;
 use App\Repositories\PageBlockSettingRepository;
 use App\Repositories\PageBlockValueRepository;
 use App\Repositories\PageRepository;
+use App\Services\Contracts\PageServiceInterface;
 use DB;
 use Illuminate\Database\Eloquent\Model;
 
-final class PageService
+final class PageService implements PageServiceInterface
 {
     public function __construct(
         protected PageRepository $pageRepository,

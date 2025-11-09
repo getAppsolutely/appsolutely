@@ -8,11 +8,12 @@ use App\Models\GeneralPage;
 use App\Repositories\PageBlockGroupRepository;
 use App\Repositories\PageBlockRepository;
 use App\Repositories\PageBlockSettingRepository;
+use App\Services\Contracts\PageBlockServiceInterface;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\Livewire;
 
-final class PageBlockService
+final class PageBlockService implements PageBlockServiceInterface
 {
     public function __construct(
         protected PageBlockGroupRepository $groupRepository,

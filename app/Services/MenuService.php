@@ -6,10 +6,11 @@ namespace App\Services;
 
 use App\Models\Menu;
 use App\Repositories\MenuRepository;
+use App\Services\Contracts\MenuServiceInterface;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 
-final class MenuService
+final class MenuService implements MenuServiceInterface
 {
     public function __construct(
         protected MenuRepository $menuRepository

@@ -7,9 +7,10 @@ namespace App\Services;
 use App\Models\Product;
 use App\Repositories\ProductRepository;
 use App\Repositories\ProductSkuRepository;
+use App\Services\Contracts\ProductServiceInterface;
 use Illuminate\Support\Collection;
 
-final class ProductService
+final class ProductService implements ProductServiceInterface
 {
     public function __construct(
         protected ProductRepository $productRepository,
