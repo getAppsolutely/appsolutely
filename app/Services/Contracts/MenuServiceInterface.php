@@ -14,12 +14,12 @@ interface MenuServiceInterface
     /**
      * Get active menu tree
      */
-    public function getActiveMenuTree($menuId, ?Carbon $datetime = null): Collection;
+    public function getActiveMenuTree(int $menuId, ?Carbon $datetime = null): Collection;
 
     /**
      * Get active menus
      */
-    public function getActiveMenus($menuId, ?Carbon $datetime = null): Collection;
+    public function getActiveMenus(int $menuId, ?Carbon $datetime = null): Collection;
 
     /**
      * Find menu by reference

@@ -10,7 +10,7 @@ use App\Repositories\ProductSkuRepository;
 use App\Services\Contracts\ProductServiceInterface;
 use Illuminate\Support\Collection;
 
-final class ProductService implements ProductServiceInterface
+final readonly class ProductService implements ProductServiceInterface
 {
     public function __construct(
         protected ProductRepository $productRepository,

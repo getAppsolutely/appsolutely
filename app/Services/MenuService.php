@@ -10,18 +10,18 @@ use App\Services\Contracts\MenuServiceInterface;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 
-final class MenuService implements MenuServiceInterface
+final readonly class MenuService implements MenuServiceInterface
 {
     public function __construct(
         protected MenuRepository $menuRepository
     ) {}
 
-    public function getActiveMenuTree($menuId, ?Carbon $datetime = null): Collection
+    public function getActiveMenuTree(int $menuId, ?Carbon $datetime = null): Collection
     {
         return $this->menuRepository->getActiveMenuTree($menuId, $datetime);
     }
 
-    public function getActiveMenus($menuId, ?Carbon $datetime = null): Collection
+    public function getActiveMenus(int $menuId, ?Carbon $datetime = null): Collection
     {
         return $this->menuRepository->getActiveMenus($menuId, $datetime);
     }
@@ -35,6 +35,6 @@ final class MenuService implements MenuServiceInterface
     {
         $menu = $this->menuRepository->findByReference($reference);
 
-        return $menu->children ?? collect();
+        return $menu?->children ?? collect();
     }
 }

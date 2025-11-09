@@ -5,18 +5,19 @@ declare(strict_types=1);
 namespace App\Services\Contracts;
 
 use App\Models\GeneralPage;
+use Illuminate\Database\Eloquent\Collection;
 
 interface PageBlockServiceInterface
 {
     /**
      * Get categorised blocks
      */
-    public function getCategorisedBlocks();
+    public function getCategorisedBlocks(): Collection;
 
     /**
      * Get published block settings for a page
      */
-    public function getPublishedBlockSettings(int $pageId): \Illuminate\Database\Eloquent\Collection;
+    public function getPublishedBlockSettings(int $pageId): Collection;
 
     /**
      * Update block setting publish status

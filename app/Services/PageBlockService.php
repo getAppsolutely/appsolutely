@@ -9,11 +9,12 @@ use App\Repositories\PageBlockGroupRepository;
 use App\Repositories\PageBlockRepository;
 use App\Repositories\PageBlockSettingRepository;
 use App\Services\Contracts\PageBlockServiceInterface;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\Livewire;
 
-final class PageBlockService implements PageBlockServiceInterface
+final readonly class PageBlockService implements PageBlockServiceInterface
 {
     public function __construct(
         protected PageBlockGroupRepository $groupRepository,
@@ -22,12 +23,12 @@ final class PageBlockService implements PageBlockServiceInterface
         protected PageBlockSchemaService $schemaService
     ) {}
 
-    public function getCategorisedBlocks()
+    public function getCategorisedBlocks(): Collection
     {
         return $this->groupRepository->getCategorisedBlocks();
     }
 
-    public function getPublishedBlockSettings(int $pageId): \Illuminate\Database\Eloquent\Collection
+    public function getPublishedBlockSettings(int $pageId): Collection
     {
         return $this->settingRepository->getActivePublishedSettings($pageId);
     }

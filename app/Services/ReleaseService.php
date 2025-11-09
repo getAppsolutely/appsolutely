@@ -8,7 +8,7 @@ use App\Models\ReleaseBuild;
 use App\Repositories\ReleaseBuildRepository;
 use App\Repositories\ReleaseVersionRepository;
 
-final class ReleaseService
+final readonly class ReleaseService
 {
     public function __construct(
         protected ReleaseVersionRepository $versionRepository,

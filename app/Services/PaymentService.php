@@ -8,7 +8,7 @@ use App\Repositories\OrderPaymentRepository;
 use App\Repositories\PaymentRepository;
 use Illuminate\Database\Eloquent\Collection;
 
-final class PaymentService
+final readonly class PaymentService
 {
     public function __construct(
         protected PaymentRepository $paymentRepository,

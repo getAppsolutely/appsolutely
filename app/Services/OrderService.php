@@ -9,7 +9,7 @@ use App\Repositories\OrderPaymentRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\OrderShipmentRepository;
 
-final class OrderService
+final readonly class OrderService
 {
     public function __construct(
         protected OrderRepository $orderRepository,
