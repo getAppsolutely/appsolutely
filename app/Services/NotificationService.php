@@ -12,6 +12,7 @@ use App\Models\NotificationRule;
 use App\Repositories\NotificationQueueRepository;
 use App\Repositories\NotificationRuleRepository;
 use App\Repositories\NotificationTemplateRepository;
+use App\Services\Contracts\NotificationQueueServiceInterface;
 use App\Services\Contracts\NotificationRuleServiceInterface;
 use App\Services\Contracts\NotificationServiceInterface;
 use App\Services\Contracts\NotificationTemplateServiceInterface;
@@ -28,6 +29,7 @@ final readonly class NotificationService implements NotificationServiceInterface
         private readonly NotificationQueueRepository $queueRepository,
         protected NotificationTemplateServiceInterface $templateService,
         protected NotificationRuleServiceInterface $ruleService,
+        protected NotificationQueueServiceInterface $queueService,
         protected LoggerInterface $logger,
         protected Mailer $mailer
     ) {}
@@ -141,9 +143,7 @@ final readonly class NotificationService implements NotificationServiceInterface
      */
     public function processPendingNotifications(): int
     {
-        $queueService = app(\App\Services\NotificationQueueService::class);
-
-        return $queueService->processPending(100);
+        return $this->queueService->processPending(100);
     }
 
     /**

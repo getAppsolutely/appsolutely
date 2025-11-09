@@ -11,6 +11,7 @@ use App\Models\FormField;
 use App\Repositories\FormEntryRepository;
 use App\Repositories\FormRepository;
 use App\Services\Contracts\DynamicFormSubmissionServiceInterface;
+use App\Services\Contracts\NotificationServiceInterface;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -25,6 +26,7 @@ final readonly class DynamicFormSubmissionService implements DynamicFormSubmissi
         protected FormRepository $formRepository,
         protected FormEntryRepository $entryRepository,
         protected DynamicFormValidationService $validationService,
+        protected NotificationServiceInterface $notificationService,
         protected ConnectionInterface $db,
         protected LoggerInterface $logger
     ) {}
@@ -265,8 +267,6 @@ final readonly class DynamicFormSubmissionService implements DynamicFormSubmissi
     protected function triggerNotifications(Form $form, FormEntry $formEntry, array $validatedData): void
     {
         try {
-            $notificationService = app(\App\Services\NotificationService::class);
-
             $notificationData = [
                 'form_name'        => $form->name,
                 'form_description' => $form->description,
@@ -279,7 +279,7 @@ final readonly class DynamicFormSubmissionService implements DynamicFormSubmissi
                 'admin_link'       => url('/admin/dynamic-forms?tab=form-entries&form_id=' . $form->id),
             ];
 
-            $notificationService->trigger('form_submission', $form->slug, $notificationData);
+            $this->notificationService->trigger('form_submission', $form->slug, $notificationData);
         } catch (\Exception $e) {
             $this->logger->error('Failed to trigger form submission notifications: unexpected error', [
                 'form_id'  => $form->id,

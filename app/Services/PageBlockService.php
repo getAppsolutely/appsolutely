@@ -8,6 +8,7 @@ use App\Models\GeneralPage;
 use App\Repositories\PageBlockGroupRepository;
 use App\Repositories\PageBlockRepository;
 use App\Repositories\PageBlockSettingRepository;
+use App\Services\Contracts\BlockRendererServiceInterface;
 use App\Services\Contracts\PageBlockSchemaServiceInterface;
 use App\Services\Contracts\PageBlockServiceInterface;
 use Illuminate\Database\Eloquent\Collection;
@@ -18,7 +19,8 @@ final readonly class PageBlockService implements PageBlockServiceInterface
         protected PageBlockGroupRepository $groupRepository,
         protected PageBlockRepository $blockRepository,
         protected PageBlockSettingRepository $settingRepository,
-        protected PageBlockSchemaServiceInterface $schemaService
+        protected PageBlockSchemaServiceInterface $schemaService,
+        protected BlockRendererServiceInterface $blockRendererService
     ) {}
 
     public function getCategorisedBlocks(): Collection
@@ -59,9 +61,7 @@ final readonly class PageBlockService implements PageBlockServiceInterface
      */
     public function renderBlockSafely($block, GeneralPage $page): string
     {
-        $rendererService = app(\App\Services\BlockRendererService::class);
-
-        return $rendererService->renderBlockSafely($block, $page);
+        return $this->blockRendererService->renderBlockSafely($block, $page);
     }
 
     /**
