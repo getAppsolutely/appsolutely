@@ -84,7 +84,7 @@ Route::group([
     });
 
     // API Routes
-    Route::prefix('api/')->name('api.')->group(function () {
+    Route::prefix('api/')->name('api.')->middleware('throttle:admin-api')->group(function () {
         Route::get('file-library', [FileApiController::class, 'library'])->name('file-library');
         Route::post('common/quick-edit', [CommonController::class, 'quickEdit'])->name('common.quick-edit');
         Route::get('products/attribute-groups', [AttributeGroupApiController::class, 'query'])->name('attribute-groups');

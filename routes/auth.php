@@ -31,7 +31,7 @@ Route::prefix('member')->name('member.')->middleware([])->group(function () {
         ->name('password.request');
 
     Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
-        ->middleware('guest')
+        ->middleware(['guest', 'throttle:password-reset'])
         ->name('password.email');
 
     Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
@@ -47,11 +47,11 @@ Route::prefix('member')->name('member.')->middleware([])->group(function () {
         ->name('verification.notice');
 
     Route::get('/verify-email/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
-        ->middleware(['auth', 'signed', 'throttle:6,1'])
+        ->middleware(['auth', 'signed', 'throttle:email-verification'])
         ->name('verification.verify');
 
     Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
-        ->middleware(['auth', 'throttle:6,1'])
+        ->middleware(['auth', 'throttle:email-verification'])
         ->name('verification.send');
 
     Route::get('/confirm-password', [ConfirmablePasswordController::class, 'show'])

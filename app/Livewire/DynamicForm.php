@@ -6,6 +6,7 @@ namespace App\Livewire;
 
 use App\Models\Form;
 use App\Services\DynamicFormService;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
 
 final class DynamicForm extends BaseBlock
@@ -68,6 +69,15 @@ final class DynamicForm extends BaseBlock
      */
     public function submit(): void
     {
+        // Apply rate limiting to prevent spam (5 submissions per minute per IP)
+        $key = 'form-submission:' . request()->ip();
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            $seconds = RateLimiter::availableIn($key);
+            throw ValidationException::withMessages([
+                'form' => "Too many submission attempts. Please try again in {$seconds} seconds.",
+            ]);
+        }
+
         try {
             $request = request();
             $request->merge([
@@ -77,6 +87,9 @@ final class DynamicForm extends BaseBlock
             ]);
             $formService = app(DynamicFormService::class);
             $formService->submitForm($this->form->slug, $this->formData, $request);
+
+            // Hit rate limiter on successful submission (60 second decay)
+            RateLimiter::hit($key, 60);
 
             // Set success state
             $this->submitted      = true;

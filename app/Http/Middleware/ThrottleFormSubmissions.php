@@ -1,0 +1,31 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Middleware\ThrottleRequests;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * Middleware to throttle form submissions
+ *
+ * Applies rate limiting to prevent spam and abuse of form endpoints.
+ * Uses the 'form-submission' rate limiter configured in AppServiceProvider.
+ */
+final class ThrottleFormSubmissions
+{
+    /**
+     * Handle an incoming request.
+     */
+    public function handle(Request $request, Closure $next): Response
+    {
+        return app(ThrottleRequests::class)->handle(
+            $request,
+            $next,
+            'form-submission'
+        );
+    }
+}

@@ -71,7 +71,10 @@ use App\Services\StorageService;
 use App\Services\ThemeService;
 use App\Services\TranslationService;
 use App\Services\UserAddressService;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -126,6 +129,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Configure rate limiting
+        $this->configureRateLimiting();
+
         // Register model observers
         Page::observe(PageObserver::class);
         Product::observe(ProductObserver::class);
@@ -178,6 +184,59 @@ class AppServiceProvider extends ServiceProvider
                 // No localization when disabled
                 Route::group([], $callback);
             }
+        });
+    }
+
+    /**
+     * Configure the rate limiters for the application.
+     */
+    protected function configureRateLimiting(): void
+    {
+        // API rate limiting - 60 requests per minute per IP
+        RateLimiter::for('api', function (Request $request) {
+            return Limit::perMinute(60)->by($request->ip());
+        });
+
+        // Authenticated API rate limiting - 120 requests per minute per user
+        RateLimiter::for('api:authenticated', function (Request $request) {
+            return $request->user()
+                ? Limit::perMinute(120)->by($request->user()->id)
+                : Limit::perMinute(60)->by($request->ip());
+        });
+
+        // Form submission rate limiting - 5 submissions per minute per IP
+        // Prevents spam and abuse of form endpoints
+        RateLimiter::for('form-submission', function (Request $request) {
+            return Limit::perMinute(5)->by($request->ip());
+        });
+
+        // Admin API rate limiting - 100 requests per minute per authenticated user
+        // More lenient for admin operations but still protected
+        RateLimiter::for('admin-api', function (Request $request) {
+            return $request->user()
+                ? Limit::perMinute(100)->by($request->user()->id)
+                : Limit::perMinute(10)->by($request->ip());
+        });
+
+        // Password reset rate limiting - 3 requests per hour per email
+        RateLimiter::for('password-reset', function (Request $request) {
+            $email = $request->input('email');
+            $key   = $email ? strtolower($email) : $request->ip();
+
+            return Limit::perHour(3)->by($key);
+        });
+
+        // Email verification rate limiting - 5 requests per hour per user
+        RateLimiter::for('email-verification', function (Request $request) {
+            return $request->user()
+                ? Limit::perHour(5)->by($request->user()->id)
+                : Limit::perHour(3)->by($request->ip());
+        });
+
+        // General web rate limiting - 100 requests per minute per IP
+        // Applied to public web routes to prevent abuse
+        RateLimiter::for('web', function (Request $request) {
+            return Limit::perMinute(100)->by($request->ip());
         });
     }
 }

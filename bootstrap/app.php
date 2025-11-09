@@ -36,6 +36,9 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\RestrictRoutePrefixes::class,
         ]);
 
+        // Apply rate limiting to API routes
+        $middleware->throttleApi('api');
+
         $middleware->group('appsolutely_middleware', [
             \App\Http\Middleware\SetThemeMiddleware::class,
         ]);
@@ -50,6 +53,8 @@ return Application::configure(basePath: dirname(__DIR__))
             // Theme middleware
             'theme'              => \App\Http\Middleware\SetThemeMiddleware::class,
             'doNotCacheResponse' => \Spatie\ResponseCache\Middlewares\DoNotCacheResponse::class,
+            // Rate limiting middleware
+            'throttle.form' => \App\Http\Middleware\ThrottleFormSubmissions::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
