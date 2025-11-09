@@ -54,15 +54,17 @@ abstract class BaseBlock extends Component
         $this->queryOptions   =  $this->mergeByKey($this->defaultQueryOptions, $queryOptions);
         $this->displayOptions =  $this->mergeByKey($this->defaultDisplayOptions, $displayOptions);
         $this->style          = $displayOptions['style'] ?? $this->style;
-        $this->initializeComponent();
+        $this->initializeComponent(app());
         $this->initializePublishDates();
     }
 
     /**
      * Initialize the component after mounting.
      * Override this method in child classes to add custom initialization logic.
+     *
+     * @param  \Illuminate\Contracts\Container\Container  $container  The service container for dependency resolution
      */
-    protected function initializeComponent(): void
+    protected function initializeComponent(\Illuminate\Contracts\Container\Container $container): void
     {
         // Override in child classes if needed
     }

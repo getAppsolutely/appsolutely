@@ -17,12 +17,16 @@ use Symfony\Component\HttpFoundation\Response;
  */
 final class ThrottleFormSubmissions
 {
+    public function __construct(
+        private readonly ThrottleRequests $throttleRequests
+    ) {}
+
     /**
      * Handle an incoming request.
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return app(ThrottleRequests::class)->handle(
+        return $this->throttleRequests->handle(
             $request,
             $next,
             'form-submission'

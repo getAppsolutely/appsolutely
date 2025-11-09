@@ -57,7 +57,7 @@ class ProcessMissingTranslations implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(TranslationRepository $repository): void
+    public function handle(TranslationRepository $repository, TranslationService $translationService): void
     {
         log_info('ProcessMissingTranslations job started', [
             'provider'  => $this->provider,
@@ -130,7 +130,7 @@ class ProcessMissingTranslations implements ShouldQueue
 
                     if ($isUpdated) {
                         // Update the cache with the new translation
-                        app(TranslationService::class)->cacheTranslation(
+                        $translationService->cacheTranslation(
                             $translation['original_text'],
                             $translatedText,
                             $translation['locale']

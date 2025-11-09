@@ -6,7 +6,7 @@ namespace App\Admin\Controllers;
 
 use App\Helpers\DashboardHelper;
 use App\Models\File;
-use App\Services\StorageService;
+use App\Services\Contracts\StorageServiceInterface;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
@@ -16,6 +16,10 @@ use Illuminate\Http\Response;
 
 final class FileController extends AdminBaseController
 {
+    public function __construct(
+        private readonly StorageServiceInterface $storageService
+    ) {}
+
     /**
      * Make a grid builder.
      */
@@ -128,8 +132,7 @@ final class FileController extends AdminBaseController
         if (empty($filePath)) {
             abort(404);
         }
-        $storageService = app(StorageService::class);
 
-        return $storageService->response($request, $filePath);
+        return $this->storageService->response($request, $filePath);
     }
 }

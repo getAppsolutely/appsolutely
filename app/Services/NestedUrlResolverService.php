@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Exceptions\NotFoundException;
 use App\Models\Page;
 use App\Repositories\PageRepository;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -19,7 +20,8 @@ use Illuminate\Support\Carbon;
 final readonly class NestedUrlResolverService
 {
     public function __construct(
-        private PageRepository $pageRepository
+        private PageRepository $pageRepository,
+        private Container $container
     ) {}
 
     /**
@@ -160,8 +162,8 @@ final readonly class NestedUrlResolverService
     protected function findContentUsingRepository(string $repositoryClass, string $childSlug): ?array
     {
         try {
-            // Instantiate the repository
-            $repository = app($repositoryClass);
+            // Instantiate the repository using container
+            $repository = $this->container->make($repositoryClass);
 
             // Find content using the repository
             $content = $this->findContentBySlug($repository, $childSlug);

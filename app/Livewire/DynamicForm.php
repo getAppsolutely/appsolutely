@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace App\Livewire;
 
 use App\Models\Form;
-use App\Services\DynamicFormService;
+use App\Services\Contracts\DynamicFormServiceInterface;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
 
@@ -23,6 +24,8 @@ final class DynamicForm extends BaseBlock
     public string $successMessage = '';
 
     public ?Form $form = null;
+
+    protected ?DynamicFormServiceInterface $formService = null;
 
     protected array $defaultQueryOptions = [
         'form_slug' => 'test-drive-booking', // Database form slug to load
@@ -42,20 +45,22 @@ final class DynamicForm extends BaseBlock
         'redirect_after_submit' => '', // URL to redirect after successful submission
     ];
 
-    protected function initializeComponent(): void
+    protected function initializeComponent(Container $container): void
     {
+        // Resolve DynamicFormService from container (Livewire doesn't support constructor injection)
+        $this->formService = $container->make(DynamicFormServiceInterface::class);
+
         $formSlug = $this->queryOptions['form_slug'] ?? 'test-drive-booking';
 
         try {
-            $formService = app(DynamicFormService::class);
-            $this->form  = $formService->getFormBySlug($formSlug);
+            $this->form = $this->formService->getFormBySlug($formSlug);
 
             if (! $this->form) {
                 \Log::warning("Form not found for slug: {$formSlug}. Using legacy fallback.");
                 $this->form       = null;
                 $this->formFields = [];
             } else {
-                $this->formFields = $formService->getFields($this->form);
+                $this->formFields = $this->formService->getFields($this->form);
             }
         } catch (\Exception $e) {
             \Log::error("Error loading form with slug {$formSlug}: " . $e->getMessage());
@@ -85,8 +90,11 @@ final class DynamicForm extends BaseBlock
                 'user_agent' => $request->userAgent(),
                 'referer'    => $request->header('referer'),
             ]);
-            $formService = app(DynamicFormService::class);
-            $formService->submitForm($this->form->slug, $this->formData, $request);
+            // Ensure formService is resolved
+            if (! $this->formService) {
+                $this->formService = app(DynamicFormServiceInterface::class);
+            }
+            $this->formService->submitForm($this->form->slug, $this->formData, $request);
 
             // Hit rate limiter on successful submission (60 second decay)
             RateLimiter::hit($key, 60);

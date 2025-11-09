@@ -8,6 +8,7 @@ use App\Events\PageCreated;
 use App\Events\PageDeleted;
 use App\Events\PageUpdated;
 use App\Models\Page;
+use App\Services\Contracts\PageServiceInterface;
 
 /**
  * Observer for Page model events
@@ -17,6 +18,21 @@ use App\Models\Page;
  */
 final class PageObserver
 {
+    public function __construct(
+        private readonly PageServiceInterface $pageService
+    ) {}
+
+    /**
+     * Handle the Page "creating" event.
+     */
+    public function creating(Page $page): void
+    {
+        // Initialize default page setting if not provided
+        if (empty($page->setting)) {
+            $page->setting = $this->pageService->generateDefaultPageSetting();
+        }
+    }
+
     /**
      * Handle the Page "created" event.
      */

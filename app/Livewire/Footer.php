@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
-use App\Services\MenuService;
+use App\Services\Contracts\MenuServiceInterface;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Collection;
 
 final class Footer extends BaseBlock
@@ -39,9 +40,10 @@ final class Footer extends BaseBlock
         'policy_menu'  => 'policy-menu',
     ];
 
-    protected function initializeComponent(): void
+    protected function initializeComponent(Container $container): void
     {
-        $menuService = app(MenuService::class);
+        // Resolve MenuService from container (Livewire doesn't support constructor injection)
+        $menuService = $container->make(MenuServiceInterface::class);
 
         $this->footerMenuItems  = $menuService->getMenusByReference($this->queryOptions['footer_menu']);
         $this->socialMediaItems = $menuService->getMenusByReference($this->queryOptions['social_media']);

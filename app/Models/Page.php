@@ -47,17 +47,7 @@ class Page extends Model
         'structured_data' => 'array',
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($page) {
-            if (empty($page->setting)) {
-                $pageService   = app(\App\Services\Contracts\PageServiceInterface::class);
-                $page->setting = $pageService->generateDefaultPageSetting();
-            }
-        });
-    }
+    // Page setting initialization is handled by PageObserver
 
     public function blocks(): HasMany
     {

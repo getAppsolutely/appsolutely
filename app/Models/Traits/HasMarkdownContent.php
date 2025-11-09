@@ -36,7 +36,7 @@ trait HasMarkdownContent
         $model->saveQuietly();
     }
 
-    protected function processMarkdownImages(string $field): array
+    protected function processMarkdownImages(string $field, ?FileRepository $fileRepository = null): array
     {
         $content = $this->{$field};
 
@@ -44,8 +44,9 @@ trait HasMarkdownContent
         $images = parse_markdown_images($content);
 
         // Collect all file IDs with their details
-        $syncData       = [];
-        $fileRepository = app(FileRepository::class);
+        $syncData = [];
+        // Use injected repository or resolve from container as fallback
+        $fileRepository = $fileRepository ?? app(FileRepository::class);
         $searches       = $replaces = [];
 
         foreach ($images as $image) {

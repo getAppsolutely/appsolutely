@@ -6,6 +6,7 @@ namespace App\Livewire;
 
 use App\Enums\PageType;
 use App\Repositories\ArticleRepository;
+use Illuminate\Contracts\Container\Container;
 use Livewire\WithPagination;
 
 final class ArticleList extends BaseBlock
@@ -45,7 +46,9 @@ final class ArticleList extends BaseBlock
             return collect();
         }
 
-        $query = app(ArticleRepository::class)->getPublishedArticles($this->queryOptions);
+        // Resolve ArticleRepository from container (Livewire doesn't support constructor injection)
+        $articleRepository = app(ArticleRepository::class);
+        $query             = $articleRepository->getPublishedArticles($this->queryOptions);
 
         return $query->paginate($this->queryOptions['posts_per_page']);
     }
