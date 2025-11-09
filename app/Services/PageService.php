@@ -76,10 +76,14 @@ final readonly class PageService implements PageServiceInterface
     {
         try {
             $result = [];
+            // Wrap all operations in a transaction to ensure data consistency
+            // If any block setting fails, the entire operation is rolled back
             $this->db->transaction(function () use ($data, &$result, $pageId) {
+                // Process each block setting in order (sort order is based on array index)
                 foreach ($data as $index => $setting) {
-                    $sort      = $index + 1;
-                    $item      = $this->syncBlockSettingItem($setting, $sort, $pageId);
+                    $sort = $index + 1; // Sort order starts at 1, not 0
+                    $item = $this->syncBlockSettingItem($setting, $sort, $pageId);
+                    // Skip invalid or duplicate items (empty array returned)
                     if (empty($item)) {
                         continue;
                     }
@@ -127,32 +131,39 @@ final readonly class PageService implements PageServiceInterface
 
     protected function syncBlockSettingItem(array $blockSetting, int $sort, int $pageId): array|PageBlockSetting
     {
+        // Extract required identifiers from block setting data
         $blockId   = $blockSetting['block_id'];
         $reference = $blockSetting['reference'];
+
+        // Validate required fields - both block_id and reference are mandatory
         if (empty($blockId) || empty($reference)) {
             log_warning('Invalid block id and reference', [
                 'block_id'  => $blockId,
                 'reference' => $reference,
             ]);
 
-            return [];
+            return []; // Return empty array to skip this item
         }
 
+        // Check if this block setting already exists for this page
         $found = $this->pageBlockSettingRepository->findBy($pageId, $blockId, $reference);
         if ($found) {
+            // Update existing setting: reactivate it and update sort order
+            // This handles cases where blocks are reordered or reactivated
             $this->pageBlockSettingRepository->updateStatusAndSort(
                 $found->id,
                 Status::ACTIVE->value,
                 $sort
             );
 
-            return [];
+            return []; // Return empty array since we updated, not created
         }
 
+        // Create new block setting with all required data
         $data = [
             'page_id'        => $pageId,
             'block_id'       => $blockId,
-            'block_value_id' => $this->getBlockValueId($blockId),
+            'block_value_id' => $this->getBlockValueId($blockId), // Get or create block value
             'reference'      => $reference,
             'status'         => Status::ACTIVE->value,
             'sort'           => $sort,
@@ -164,18 +175,22 @@ final readonly class PageService implements PageServiceInterface
 
     public function getBlockValueId(int $blockId): int
     {
-        // try to get value from the same block used in other blocks
+        // Try to reuse existing block value if this block is already used elsewhere
+        // This prevents duplicate block values for the same block type
         $setting = $this->pageBlockSettingRepository->findByBlockId($blockId);
         if (! empty($setting->block_value_id)) {
+            // Reuse existing block value ID to maintain data consistency
             return $setting->block_value_id;
         }
 
-        // create if not used on all active pages
+        // No existing block value found - create a new one
+        // This happens when a block is used for the first time
         $block = $this->pageBlockRepository->find($blockId);
 
+        // Create new block value with schema values from the block definition
         $value = [
             'block_id'      => $blockId,
-            'schema_values' => $block->schema_values,
+            'schema_values' => $block->schema_values, // Copy schema structure from block
         ];
         $value = $this->pageBlockValueRepository->create($value);
 
@@ -198,25 +213,31 @@ final readonly class PageService implements PageServiceInterface
     /**
      * Get the basic page builder structure without components
      * Moved from Page model to service
+     *
+     * This creates the initial GrapesJS structure with:
+     * - A single page with main type
+     * - One frame containing the root wrapper component
+     * - Empty arrays for assets, styles, symbols, and data sources
      */
     protected function getPageStructure(): array
     {
         return [
             'pages' => [
                 [
-                    'id'     => Str::random(16),
-                    'type'   => 'main',
+                    'id'     => Str::random(16), // Unique page identifier
+                    'type'   => 'main', // Main page type (GrapesJS convention)
                     'frames' => [
                         [
-                            'id'        => Str::random(16),
+                            'id'        => Str::random(16), // Unique frame identifier
                             'component' => [
                                 'head' => [
-                                    'type' => 'head',
+                                    'type' => 'head', // HTML head section
                                 ],
-                                'type'  => 'wrapper',
+                                'type'  => 'wrapper', // Root wrapper component type
                                 'docEl' => [
-                                    'tagName' => 'html',
+                                    'tagName' => 'html', // Root HTML element
                                 ],
+                                // CSS properties that can be styled in the editor
                                 'stylable' => [
                                     'background',
                                     'background-color',
@@ -226,17 +247,17 @@ final readonly class PageService implements PageServiceInterface
                                     'background-position',
                                     'background-size',
                                 ],
-                                'reference'  => 'wrapper-' . Str::random(7),
-                                'components' => [],
+                                'reference'  => 'wrapper-' . Str::random(7), // Unique reference for this wrapper
+                                'components' => [], // Empty - components will be added later
                             ],
                         ],
                     ],
                 ],
             ],
-            'assets'      => [],
-            'styles'      => [],
-            'symbols'     => [],
-            'dataSources' => [],
+            'assets'      => [], // Media assets (images, videos, etc.)
+            'styles'      => [], // Custom CSS styles
+            'symbols'     => [], // Reusable component symbols
+            'dataSources' => [], // External data source configurations
         ];
     }
 

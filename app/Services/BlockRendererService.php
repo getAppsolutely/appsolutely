@@ -62,35 +62,45 @@ final readonly class BlockRendererService implements BlockRendererServiceInterfa
 
     /**
      * Get possible parameters by matching with component properties
+     *
+     * This method intelligently matches block parameters to Livewire component properties.
+     * It tries multiple strategies:
+     * 1. Match normalized (camelCase) parameter keys
+     * 2. Match original parameter keys
+     * 3. Fallback to 'data' key if no matches found
      */
     private function getPossibleParameters(array $originalParameters, array $normalisedParameters, string $className): array
     {
-        // Start with normalised parameters as the default
+        // Start with normalised parameters as the default (preferred approach)
         $parameters = $normalisedParameters;
 
         // Get all array-type properties from the Livewire component class
-        // These are the properties that can accept parameter data
+        // These are the properties that can accept parameter data (e.g., public array $data = [])
         $propertyKeys = $this->getArrayClassVars($className);
 
-        // Step 1: Try to match normalised parameter keys with component properties
+        // Step 1: Try to match normalised (camelCase) parameter keys with component properties
+        // This is the most common case - parameters match component property names
         $normalisedKeys         = array_unique(array_keys($normalisedParameters));
         $normalisedIntersection = array_intersect($normalisedKeys, $propertyKeys);
 
-        // If no match found in normalised parameters, try original parameters
+        // Step 2: If no match found in normalised parameters, try original parameters
+        // This handles cases where parameters use snake_case or other formats
         if (empty($normalisedIntersection)) {
             $log                  = "{$className} properties are not in normalized parameters, trying to check if it is in original parameters. ";
             $originalKeys         = array_unique(array_keys($originalParameters));
             $originalIntersection = array_intersect($originalKeys, $propertyKeys);
             $possibleKeys         = $originalIntersection;
 
-            // If still no match, fallback to 'data' key as default
+            // Step 3: If still no match, fallback to 'data' key as default
             // This handles cases where parameters don't match any component property
+            // Most Livewire components have a 'data' property for flexible data passing
             if (empty($originalIntersection)) {
                 $log .= "Not in original parameters either. guessing the key would be the first property of $className";
-                $possibleKeys = ['data'];
+                $possibleKeys = ['data']; // Common default property name
             }
 
             // Log the mismatch for debugging (only in debug mode)
+            // This helps developers understand why parameters aren't matching
             local_debug($log, [
                 'className'            => $className,
                 'propertyKeys'         => $propertyKeys,
@@ -98,6 +108,7 @@ final readonly class BlockRendererService implements BlockRendererServiceInterfa
                 'normalisedParameters' => $normalisedParameters]);
 
             // Use the first matching key (or 'data' fallback) and wrap original parameters
+            // Wrapping ensures all parameters are passed even if key doesn't match
             $key        = \Arr::first($possibleKeys);
             $parameters = [$key => $originalParameters];
         }

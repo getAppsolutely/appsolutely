@@ -82,33 +82,41 @@ final readonly class NestedUrlResolverService
     public function findNestedContent(Page $parentPage, string $childSlug): ?array
     {
         // Get the blocks configuration from appsolutely config
+        // This maps block classes to their associated repository classes
         $blocksConfig = config('appsolutely.blocks', []);
         $nestedBlocks = array_keys($blocksConfig);
 
+        // If no blocks are configured for nested content, nothing to search
         if (empty($blocksConfig)) {
             return null;
         }
 
         $possibleBlocks = [];
-        // Check each block in the parent page
+        // Check each block in the parent page to find which ones support nested content
         foreach ($parentPage->blocks as $blockSetting) {
             $blockClass = $blockSetting->block->class ?? null;
             $blockValue = $blockSetting->blockValue ?? null;
 
+            // Extract repository class from block's schema values
+            // Repository is configured in the block's schema_values JSON field
             $schemaValues    = json_decode($blockValue->schema_values ?? '{}', true) ?? [];
             $repositoryClass = $schemaValues['repository'] ?? null;
 
+            // Skip blocks that don't have values or aren't configured for nested content
             if (! $blockValue || ! in_array($blockClass, $nestedBlocks)) {
                 continue;
             }
 
+            // If no repository is explicitly configured in this block's schema,
+            // add it to possible blocks to check later using default repositories
             if (! $repositoryClass) {
                 $possibleBlocks[] = $blockClass;
 
                 continue;
             }
 
-            // Found a matching repository, try to find content
+            // Found a matching repository configured in this block, try to find content
+            // This is the preferred path - explicit repository configuration
             $content = $this->findContentUsingRepository($repositoryClass, $childSlug);
 
             if ($content) {
@@ -116,6 +124,8 @@ final readonly class NestedUrlResolverService
             }
         }
 
+        // If no explicit repository matches were found, try default repositories
+        // for blocks that support nested content but don't have explicit repository config
         $result = $this->getPossibleContent($possibleBlocks, $childSlug);
 
         return $result ?? null;
@@ -193,20 +203,31 @@ final readonly class NestedUrlResolverService
         $now = now();
 
         // Try different common method names that repositories might have
-        $methods = ['findBySlug', 'getBySlug', 'findActiveBySlug'];
+        // Different repositories may use different naming conventions, so we try multiple
+        $methods = [
+            'findBySlug',        // Most common: findBySlug($slug, $datetime)
+            'getBySlug',         // Alternative: getBySlug($slug, $datetime)
+            'findActiveBySlug',  // Explicit active check: findActiveBySlug($slug, $datetime)
+        ];
 
         foreach ($methods as $method) {
             if (method_exists($repository, $method)) {
                 try {
+                    // Call the repository method with slug and current datetime
+                    // Datetime is used for published/expired date checks
                     $content = $repository->$method($slug, $now);
+
+                    // Validate that content is actually valid (published, not expired, etc.)
                     if ($content && $this->isContentValid($content, $now)) {
                         return $content;
                     }
                 } catch (NotFoundException|\InvalidArgumentException $e) {
-                    // Expected exceptions when method doesn't exist or content not found
+                    // Expected exceptions when content not found or invalid arguments
+                    // Continue to next method - this repository doesn't have the content
                     continue;
                 } catch (\Exception $e) {
                     // Log unexpected errors but continue trying other methods
+                    // This handles cases where repository methods have different signatures
                     \log_warning('Unexpected error while finding content by slug', [
                         'method' => $method,
                         'slug'   => $slug,
@@ -218,6 +239,7 @@ final readonly class NestedUrlResolverService
             }
         }
 
+        // No repository method found the content
         return null;
     }
 
