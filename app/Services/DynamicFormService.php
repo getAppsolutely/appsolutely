@@ -11,8 +11,8 @@ use App\Models\FormField;
 use App\Repositories\FormEntryRepository;
 use App\Repositories\FormFieldRepository;
 use App\Repositories\FormRepository;
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -25,7 +25,8 @@ final class DynamicFormService
     public function __construct(
         protected FormRepository $formRepository,
         protected FormFieldRepository $fieldRepository,
-        protected FormEntryRepository $entryRepository
+        protected FormEntryRepository $entryRepository,
+        protected ConnectionInterface $db
     ) {}
 
     /**
@@ -483,8 +484,8 @@ final class DynamicFormService
         }
 
         try {
-            // Insert into target table using DB::table
-            DB::table($form->target_table)->insert($targetData);
+            // Insert into target table using injected connection
+            $this->db->table($form->target_table)->insert($targetData);
 
             Log::info("Successfully inserted form data into target table '{$form->target_table}'", [
                 'form_id'       => $form->id,
@@ -506,7 +507,7 @@ final class DynamicFormService
     protected function getTableColumns(string $tableName): array
     {
         try {
-            $columns = DB::getSchemaBuilder()->getColumnListing($tableName);
+            $columns = $this->db->getSchemaBuilder()->getColumnListing($tableName);
 
             return $columns;
         } catch (\Exception $e) {

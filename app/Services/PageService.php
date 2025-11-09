@@ -14,7 +14,7 @@ use App\Repositories\PageBlockSettingRepository;
 use App\Repositories\PageBlockValueRepository;
 use App\Repositories\PageRepository;
 use App\Services\Contracts\PageServiceInterface;
-use DB;
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Eloquent\Model;
 
 final class PageService implements PageServiceInterface
@@ -23,7 +23,8 @@ final class PageService implements PageServiceInterface
         protected PageRepository $pageRepository,
         protected PageBlockRepository $pageBlockRepository,
         protected PageBlockValueRepository $pageBlockValueRepository,
-        protected PageBlockSettingRepository $pageBlockSettingRepository
+        protected PageBlockSettingRepository $pageBlockSettingRepository,
+        protected ConnectionInterface $db
     ) {}
 
     public function findPublishedPage(string $slug): ?Page
@@ -71,7 +72,7 @@ final class PageService implements PageServiceInterface
     {
         try {
             $result = [];
-            DB::transaction(function () use ($data, &$result, $pageId) {
+            $this->db->transaction(function () use ($data, &$result, $pageId) {
                 foreach ($data as $index => $setting) {
                     $sort      = $index + 1;
                     $item      = $this->syncBlockSettingItem($setting, $sort, $pageId);
