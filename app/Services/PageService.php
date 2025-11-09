@@ -12,7 +12,7 @@ use App\Repositories\PageBlockValueRepository;
 use App\Repositories\PageRepository;
 use DB;
 
-class PageService
+final class PageService
 {
     public function __construct(
         protected PageRepository $pageRepository,
