@@ -125,7 +125,7 @@ final readonly class BlockRendererService implements BlockRendererServiceInterfa
      */
     private function getBlockErrorHtml(string $message): string
     {
-        if (app()->environment() !== 'production') {
+        if (! app()->isProduction()) {
             return "<div class='alert alert-danger'><strong>Block Error:</strong> {$message}</div>";
         }
 

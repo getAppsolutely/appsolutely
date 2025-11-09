@@ -56,13 +56,25 @@ if (! function_exists('themed_absolute_path')) {
 }
 
 if (! function_exists('themed_build_path')) {
+    /**
+     * Get the build path for a theme's assets.
+     *
+     * @param  string  $themeName  The name of the theme
+     * @return string The build path for the theme
+     */
     function themed_build_path(string $themeName = ''): string
     {
-        return 'build/' . themed_path();
+        return 'build/' . themed_path($themeName);
     }
 }
 
 if (! function_exists('themed_path')) {
+    /**
+     * Get the relative path to a theme directory.
+     *
+     * @param  string  $themeName  The name of the theme (defaults to active theme)
+     * @return string The relative path to the theme directory
+     */
     function themed_path(string $themeName = ''): string
     {
         if (empty($themeName)) {
@@ -168,7 +180,14 @@ if (! function_exists('__tv')) {
 }
 
 if (! function_exists('string_concat')) {
-    function string_concat(string $string, $prefix = null): string
+    /**
+     * Concatenate a string with an optional prefix.
+     *
+     * @param  string  $string  The string to concatenate
+     * @param  string|null  $prefix  Optional prefix (defaults to appsolutely prefix)
+     * @return string The concatenated string
+     */
+    function string_concat(string $string, ?string $prefix = null): string
     {
         return ($prefix ?? appsolutely()) . ' - ' . $string;
     }
@@ -229,9 +248,15 @@ if (! function_exists('log_message')) {
 }
 
 if (! function_exists('local_debug')) {
+    /**
+     * Log debug message only in non-production environments.
+     *
+     * @param  string  $message  The debug message
+     * @param  array  $context  Additional context data
+     */
     function local_debug(string $message, ?array $context = []): void
     {
-        if (app()->environment() !== 'production') {
+        if (! app()->isProduction()) {
             log_debug($message, $context);
         }
     }
@@ -653,7 +678,7 @@ if (! function_exists('themed_assets')) {
         $theme           = $theme ?? config('appsolutely.theme.name');
         $buildPath       = themed_build_path($theme);
 
-        if (app()->environment('production')) {
+        if (app()->isProduction()) {
             $manifest = cache()->rememberForever("vite_manifest_{$theme}", function () use ($buildPath) {
                 return load_vite_manifest($buildPath);
             });
