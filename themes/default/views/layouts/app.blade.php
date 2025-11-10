@@ -12,7 +12,7 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
-        @vite(['themes/default/css/app.css', 'themes/default/js/app.js'])
+        @vite(['themes/default/css/app.css', 'themes/default/js/app.ts'])
 
         <!-- Styles -->
         @livewireStyles
