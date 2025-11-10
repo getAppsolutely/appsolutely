@@ -14,6 +14,7 @@ describe('Header Component', () => {
     beforeEach(() => {
         // Setup DOM
         document.body.innerHTML = `
+      <div id="scrollTrigger"></div>
       <header id="main-header">
         <nav class="navbar">
           <button class="navbar-toggler" aria-expanded="false">Toggle</button>

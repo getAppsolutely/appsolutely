@@ -164,11 +164,35 @@ fi
 
 # Optional: Run PHP tests
 # Set SKIP_PHP_TESTS=1 to skip PHP tests during pre-push
-if [ -z "$SKIP_PHP_TESTS" ] && [ -f "./vendor/bin/phpunit" ]; then
+if [ -z "$SKIP_PHP_TESTS" ]; then
     echo "🧪 Running PHP tests..."
-    # Use --testdox for better output, but limit to last 30 lines to keep it concise
-    PHP_TEST_OUTPUT=$(./vendor/bin/phpunit --testdox 2>&1)
-    PHP_TEST_EXIT=$?
+    
+    # Detect Docker container name (try common Laradock workspace container names)
+    WORKSPACE_CONTAINER=""
+    if docker ps --format '{{.Names}}' | grep -q "^laradock-workspace-1$"; then
+        WORKSPACE_CONTAINER="laradock-workspace-1"
+    elif docker ps --format '{{.Names}}' | grep -q "^laradock_workspace_1$"; then
+        WORKSPACE_CONTAINER="laradock_workspace_1"
+    elif docker ps --format '{{.Names}}' | grep -qE "^.*workspace.*$"; then
+        WORKSPACE_CONTAINER=$(docker ps --format '{{.Names}}' | grep -E "^.*workspace.*$" | head -1)
+    fi
+    
+    if [ -n "$WORKSPACE_CONTAINER" ]; then
+        # Run tests inside Docker container
+        PHP_TEST_OUTPUT=$(docker exec "$WORKSPACE_CONTAINER" bash -c "cd /var/www/appsolutely/site && php artisan test --testdox" 2>&1)
+        PHP_TEST_EXIT=$?
+    else
+        # Fallback: try to run on host (may fail if PHP/dependencies not available)
+        if [ -f "./vendor/bin/phpunit" ]; then
+            print_warning "Docker container not found. Running PHP tests on host (may fail if dependencies are missing)."
+            PHP_TEST_OUTPUT=$(./vendor/bin/phpunit --testdox 2>&1)
+            PHP_TEST_EXIT=$?
+        else
+            print_warning "Docker container not found and PHPUnit not available on host."
+            print_warning "Skipping PHP tests. Run tests manually: docker exec laradock-workspace-1 bash -c 'cd /var/www/appsolutely/site && php artisan test'"
+            PHP_TEST_EXIT=0  # Don't fail the hook if we can't run tests
+        fi
+    fi
     
     if [ $PHP_TEST_EXIT -eq 0 ]; then
         print_success "PHP tests passed"
@@ -180,16 +204,17 @@ if [ -z "$SKIP_PHP_TESTS" ] && [ -f "./vendor/bin/phpunit" ]; then
         # Show test output (last 30 lines for context)
         echo "$PHP_TEST_OUTPUT" | tail -30
         echo ""
-        echo "💡 Run './vendor/bin/phpunit' to see full test results."
+        if [ -n "$WORKSPACE_CONTAINER" ]; then
+            echo "💡 Run 'docker exec $WORKSPACE_CONTAINER bash -c \"cd /var/www/appsolutely/site && php artisan test\"' to see full test results."
+        else
+            echo "💡 Run './vendor/bin/phpunit' to see full test results."
+        fi
         echo "💡 Or set SKIP_PHP_TESTS=1 to skip PHP tests during pre-push."
         FAILED=1
     fi
     echo ""
 elif [ -n "$SKIP_PHP_TESTS" ]; then
     print_info "Skipping PHP tests (SKIP_PHP_TESTS is set)"
-    echo ""
-elif [ ! -f "./vendor/bin/phpunit" ]; then
-    print_warning "PHPUnit not found. Run 'composer install' to install dependencies."
     echo ""
 fi
 
