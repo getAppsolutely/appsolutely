@@ -106,7 +106,7 @@ final readonly class StorageService implements StorageServiceInterface
     {
         // Delete from S3
         if (Storage::disk('s3')->delete($this->getFilePath($file))) {
-            return $this->fileRepository->delete($file);
+            return $this->fileRepository->delete($file->id);
         }
 
         return false;

@@ -32,7 +32,7 @@ class ProductFactory extends Factory
             'subtitle'           => fake()->sentence(),
             'cover'              => null,
             'keywords'           => fake()->words(5, true),
-            'description'        => fake()->paragraph(),
+            'description'        => Str::limit(fake()->sentence(20), 255),
             'content'            => fake()->paragraphs(3, true),
             'original_price'     => fake()->numberBetween(10000, 100000),
             'price'              => fake()->numberBetween(5000, 50000),

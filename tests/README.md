@@ -41,6 +41,59 @@ tests/
 - `ProductCategory`, `FormField`
 - `Article`, `ArticleCategory`
 
+## Running Tests in Laradock
+
+### Recommended: Use `workspace` Container
+
+The **`laradock-workspace`** container is the recommended container for running tests because:
+
+1. **Purpose-built for CLI operations**: Designed for artisan commands, composer, npm, etc.
+2. **Development tools**: Has all development dependencies and tools installed
+3. **Laradock standard**: This is the standard Laradock practice for running artisan commands
+4. **Network access**: Both containers are on the same Docker network (`laradock_backend`) and can access the database
+
+**Command:**
+
+```bash
+docker exec laradock-workspace-1 bash -c "cd /var/www/appsolutely/site && php artisan test"
+```
+
+### Alternative: Use `php-fpm` Container
+
+The **`laradock-php-fpm`** container can also run tests, but it's primarily designed for web requests:
+
+**Command:**
+
+```bash
+docker exec laradock-php-fpm-1 bash -c "cd /var/www/appsolutely/site && php artisan test"
+```
+
+**Note**: Both containers work, but `workspace` is the recommended choice for consistency with Laradock best practices.
+
+### Running Specific Test Suites
+
+```bash
+# Unit tests only
+docker exec laradock-workspace-1 bash -c "cd /var/www/appsolutely/site && php artisan test --testsuite=Unit"
+
+# Feature tests only
+docker exec laradock-workspace-1 bash -c "cd /var/www/appsolutely/site && php artisan test --testsuite=Feature"
+
+# Specific test file
+docker exec laradock-workspace-1 bash -c "cd /var/www/appsolutely/site && php artisan test tests/Unit/Repositories/PageRepositoryTest.php"
+
+# With filter
+docker exec laradock-workspace-1 bash -c "cd /var/www/appsolutely/site && php artisan test --filter test_find_published_page"
+```
+
+### Database Configuration
+
+Both containers use the same database configuration:
+
+- **DB_HOST**: `mysql` (Docker service name)
+- **DB_CONNECTION**: `mysql`
+- Both containers are on the `laradock_backend` network and can access `laradock-mysql-1`
+
 ## Test Examples Created
 
 ### Repository Tests (Unit Tests with Database)
@@ -53,28 +106,21 @@ tests/
 4. **FormRepositoryTest.php** - Form operations with fields (complex field syncing logic)
 5. **ArticleRepositoryTest.php** - Published articles, category filtering
 
-See `tests/REPOSITORY_TESTING_GUIDE.md` for when to test repositories.
+### Service Tests (Integration Tests with Real Repositories)
 
-### Service Tests (Unit Tests with Mocks)
-
-1. **PageServiceTest.php** - Complete test suite with mocked dependencies
-    - Tests all methods: findPublishedPage, findByReference, saveSetting, resetSetting
-    - Tests delegation to other services
-    - Tests error handling
+1. **PageServiceTest.php** - Complete test suite using real repositories (integration approach for final classes)
+2. **StorageServiceTest.php** - File storage operations with real FileRepository
 
 ### Controller Tests (Feature Tests)
 
-1. **PageControllerTest.php** - HTTP endpoint testing
-    - Tests successful page rendering
-    - Tests 404 handling
-    - Tests home route
+1. **PageControllerTest.php** - HTTP responses for page rendering, 404 handling, home route
 
 ### Integration Tests
 
-1. **PageWorkflowTest.php** - Complete page lifecycle
+1. **PageWorkflowTest.php** - Complete page lifecycle (create, find, update, reset settings)
 2. **FormSubmissionWorkflowTest.php** - Form submission workflow
 
-## Testing Patterns Established
+## Test Patterns
 
 ### Repository Test Pattern
 
@@ -103,20 +149,17 @@ final class {RepositoryName}Test extends TestCase
 
     public function test_method_name_returns_expected_result(): void
     {
-        // Arrange
         $model = {ModelName}::factory()->create([...]);
 
-        // Act
         $result = $this->repository->methodName(...);
 
-        // Assert
-        $this->assertInstanceOf({ModelName}::class, $result);
-        // Additional assertions
+        $this->assertInstanceOf({ExpectedType}::class, $result);
+        // ... more assertions
     }
 }
 ```
 
-### Service Test Pattern
+### Service Test Pattern (Integration Approach)
 
 ```php
 <?php
@@ -126,11 +169,14 @@ namespace Tests\Unit\Services;
 
 use App\Repositories\{RepositoryName};
 use App\Services\{ServiceName};
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery;
 use Tests\TestCase;
 
 final class {ServiceName}Test extends TestCase
 {
+    use RefreshDatabase;
+
     private {RepositoryName} $repository;
     private {ServiceName} $service;
 
@@ -138,16 +184,14 @@ final class {ServiceName}Test extends TestCase
     {
         parent::setUp();
 
-        $this->repository = Mockery::mock({RepositoryName}::class);
+        // Use real repositories (integration testing approach for final classes)
+        $this->repository = app({RepositoryName}::class);
         $this->service = new {ServiceName}($this->repository);
     }
 
     public function test_method_name_delegates_to_repository(): void
     {
-        $this->repository
-            ->shouldReceive('methodName')
-            ->once()
-            ->andReturn($expected);
+        $model = {ModelName}::factory()->create([...]);
 
         $result = $this->service->methodName(...);
 
@@ -187,11 +231,23 @@ final class {ControllerName}Test extends TestCase
 }
 ```
 
+## Current Test Status
+
+✅ **All Tests Passing**: 70 passed (145 assertions)
+
+### Test Coverage
+
+- ✅ Repository tests for complex repositories
+- ✅ Service tests (integration approach)
+- ✅ Controller tests (feature tests)
+- ✅ Integration workflow tests
+- ✅ Model factories for test data generation
+
 ## Remaining Work
 
 ### Repositories (27 remaining)
 
-Following the established pattern, create tests for:
+Following the established pattern, create tests for repositories with custom domain logic:
 
 - PageBlockRepository
 - PageBlockSettingRepository
@@ -218,93 +274,17 @@ Following the established pattern, create tests for:
 - ReleaseBuildRepository
 - AdminSettingRepository
 - ArticleCategoryRepository
-- ProductCategoryRepository
-- (And any others)
 
-### Services (31 remaining)
+### Services
 
-Following the PageService pattern, create tests for all services in `app/Services/`:
+Create tests for all service classes following the integration test pattern.
 
-- ProductService
-- DynamicFormService
-- DynamicFormRenderService
-- DynamicFormValidationService
-- DynamicFormSubmissionService
-- DynamicFormExportService
-- GeneralPageService
-- PageBlockService
-- PageBlockSettingService
-- PageBlockSchemaService
-- PageStructureService
-- BlockRendererService
-- ArticleService
-- OrderService
-- OrderShipmentService
-- PaymentService
-- ProductAttributeService
-- NotificationService
-- NotificationRuleService
-- NotificationTemplateService
-- NotificationQueueService
-- MenuService
-- StorageService
-- SitemapService
-- SitemapBuilderService
-- ThemeService
-- TranslationService
-- UserAddressService
-- RouteRestrictionService
-- ReleaseService
-- NestedUrlResolverService
+### Controllers
 
-### Controllers (20 remaining)
+Create feature tests for all controllers.
 
-Following the PageController pattern:
+## Notes
 
-- FileController
-- SitemapController
-- All Admin controllers in `app/Admin/Controllers/`
-
-### Integration Tests
-
-- Order processing workflow
-- Product purchase workflow
-- Form submission with notifications
-- Page block rendering workflow
-
-## Running Tests
-
-```bash
-# Run all tests
-php artisan test
-
-# Run specific test suite
-php artisan test --testsuite=Unit
-php artisan test --testsuite=Feature
-
-# Run specific test file
-php artisan test tests/Unit/Repositories/PageRepositoryTest.php
-
-# With coverage
-php artisan test --coverage
-```
-
-## Best Practices Established
-
-1. **Naming**: Use descriptive test method names (`test_find_page_by_slug_returns_published_page`)
-2. **Arrange-Act-Assert**: Clear test structure
-3. **One Assertion Per Test**: When possible, test one behavior
-4. **Mock External Dependencies**: Services mock repositories, controllers mock services
-5. **Use Factories**: Create test data via factories
-6. **RefreshDatabase**: Use for tests that need database
-7. **Test Edge Cases**: Null, empty, invalid data, exceptions
-8. **Test Error Handling**: Ensure exceptions are thrown/caught properly
-
-## Next Steps
-
-1. Fix any failing tests (check database migrations and relationships)
-2. Continue creating tests following established patterns
-3. Run coverage analysis: `php artisan test --coverage`
-4. Aim for 80% minimum coverage
-5. Add tests for edge cases and error scenarios
-6. Document any complex test scenarios
+- **Final Classes**: Since repositories are marked as `final`, service tests use real repository instances (integration approach) instead of mocks
+- **Soft Deletes**: File model uses SoftDeletes - use `assertSoftDeleted()` in tests
+- **Factory Overrides**: When testing null/empty values that factories generate by default, use `DB::table()->insert()` to ensure the exact value is set

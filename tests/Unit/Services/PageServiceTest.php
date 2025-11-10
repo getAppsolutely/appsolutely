@@ -12,12 +12,14 @@ use App\Services\Contracts\PageBlockSettingServiceInterface;
 use App\Services\Contracts\PageStructureServiceInterface;
 use App\Services\PageService;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery;
 use Tests\TestCase;
 
 final class PageServiceTest extends TestCase
 {
+    use RefreshDatabase;
+
     private PageRepository $pageRepository;
 
     private PageBlockSettingRepository $pageBlockSettingRepository;
@@ -32,8 +34,9 @@ final class PageServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->pageRepository             = Mockery::mock(PageRepository::class);
-        $this->pageBlockSettingRepository = Mockery::mock(PageBlockSettingRepository::class);
+        // Use real repositories (integration testing approach for final classes)
+        $this->pageRepository             = app(PageRepository::class);
+        $this->pageBlockSettingRepository = app(PageBlockSettingRepository::class);
         $this->blockSettingService        = Mockery::mock(PageBlockSettingServiceInterface::class);
         $this->structureService           = Mockery::mock(PageStructureServiceInterface::class);
 
@@ -47,192 +50,86 @@ final class PageServiceTest extends TestCase
 
     public function test_find_published_page_by_slug_returns_page(): void
     {
-        $slug = 'test-page';
-        $page = new Page(['slug' => $slug, 'title' => 'Test Page']);
+        $page = Page::factory()->create([
+            'slug'         => 'test-page',
+            'status'       => 1,
+            'published_at' => now()->subDay(),
+        ]);
 
-        $this->pageRepository
-            ->shouldReceive('findPageBySlug')
-            ->once()
-            ->with($slug, Mockery::type(Carbon::class))
-            ->andReturn($page);
-
-        $result = $this->pageService->findPublishedPage($slug);
+        $result = $this->pageService->findPublishedPage('test-page');
 
         $this->assertInstanceOf(Page::class, $result);
-        $this->assertEquals($slug, $result->slug);
+        $this->assertEquals($page->id, $result->id);
+        $this->assertEquals('test-page', $result->slug);
     }
 
     public function test_find_published_page_by_slug_returns_null_when_not_found(): void
     {
-        $slug = 'non-existent';
-
-        $this->pageRepository
-            ->shouldReceive('findPageBySlug')
-            ->once()
-            ->with($slug, Mockery::type(Carbon::class))
-            ->andReturn(null);
-
-        $result = $this->pageService->findPublishedPage($slug);
+        $result = $this->pageService->findPublishedPage('non-existent');
 
         $this->assertNull($result);
     }
 
     public function test_find_published_page_by_id_returns_page(): void
     {
-        $id   = 1;
-        $page = new Page(['id' => $id, 'title' => 'Test Page']);
+        $page = Page::factory()->create([
+            'status'       => 1,
+            'published_at' => now()->subDay(),
+        ]);
 
-        $this->pageRepository
-            ->shouldReceive('findPageById')
-            ->once()
-            ->with($id, Mockery::type(Carbon::class))
-            ->andReturn($page);
-
-        $result = $this->pageService->findPublishedPageById($id);
+        $result = $this->pageService->findPublishedPageById($page->id);
 
         $this->assertInstanceOf(Page::class, $result);
-        $this->assertEquals($id, $result->id);
+        $this->assertEquals($page->id, $result->id);
     }
 
     public function test_find_published_page_by_id_returns_null_when_not_found(): void
     {
-        $id = 999;
-
-        $this->pageRepository
-            ->shouldReceive('findPageById')
-            ->once()
-            ->with($id, Mockery::type(Carbon::class))
-            ->andReturn(null);
-
-        $result = $this->pageService->findPublishedPageById($id);
+        $result = $this->pageService->findPublishedPageById(999);
 
         $this->assertNull($result);
     }
 
     public function test_find_by_reference_returns_page(): void
     {
-        $reference = 'test-reference';
-        $page      = new Page(['reference' => $reference, 'title' => 'Test Page']);
+        $page = Page::factory()->create([
+            'title' => 'Test Page',
+        ]);
 
-        $queryBuilder = Mockery::mock();
-        $queryBuilder->shouldReceive('reference')
-            ->once()
-            ->with($reference)
-            ->andReturnSelf();
-        $queryBuilder->shouldReceive('firstOrFail')
-            ->once()
-            ->andReturn($page);
-
-        $this->pageRepository
-            ->shouldReceive('with')
-            ->once()
-            ->with(['blocks'])
-            ->andReturn($queryBuilder);
-
-        $result = $this->pageService->findByReference($reference);
+        $result = $this->pageService->findByReference($page->reference);
 
         $this->assertInstanceOf(Model::class, $result);
-        $this->assertEquals($reference, $result->reference);
+        $this->assertEquals($page->reference, $result->reference);
     }
 
     public function test_find_by_reference_throws_exception_when_not_found(): void
     {
-        $reference = 'non-existent';
-
-        $queryBuilder = Mockery::mock();
-        $queryBuilder->shouldReceive('reference')
-            ->once()
-            ->with($reference)
-            ->andReturnSelf();
-        $queryBuilder->shouldReceive('firstOrFail')
-            ->once()
-            ->andThrow(new \Illuminate\Database\Eloquent\ModelNotFoundException());
-
-        $this->pageRepository
-            ->shouldReceive('with')
-            ->once()
-            ->with(['blocks'])
-            ->andReturn($queryBuilder);
-
         $this->expectException(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
 
-        $this->pageService->findByReference($reference);
+        $this->pageService->findByReference('non-existent-reference');
     }
 
     public function test_reset_setting_resets_page_and_block_settings(): void
     {
-        $reference = 'test-reference';
-        $page      = new Page(['id' => 1, 'reference' => $reference]);
+        $page = Page::factory()->create([
+            'setting' => ['key' => 'value'],
+        ]);
 
-        $queryBuilder = Mockery::mock();
-        $queryBuilder->shouldReceive('reference')
-            ->once()
-            ->with($reference)
-            ->andReturnSelf();
-        $queryBuilder->shouldReceive('firstOrFail')
-            ->once()
-            ->andReturn($page);
-
-        $this->pageRepository
-            ->shouldReceive('with')
-            ->once()
-            ->with(['blocks'])
-            ->andReturn($queryBuilder);
-
-        $this->pageRepository
-            ->shouldReceive('updateSetting')
-            ->once()
-            ->with($page->id, [])
-            ->andReturn($page);
-
-        $this->pageBlockSettingRepository
-            ->shouldReceive('resetSetting')
-            ->once()
-            ->with($page->id)
-            ->andReturn(1);
-
-        $this->pageRepository
-            ->shouldReceive('find')
-            ->once()
-            ->with($page->id)
-            ->andReturn($page);
-
-        $result = $this->pageService->resetSetting($reference);
+        $result = $this->pageService->resetSetting($page->reference);
 
         $this->assertInstanceOf(Model::class, $result);
+        $this->assertEmpty($result->setting);
     }
 
     public function test_save_setting_saves_page_and_syncs_block_settings(): void
     {
-        $reference = 'test-reference';
-        $page      = new Page(['id' => 1, 'reference' => $reference]);
-        $data      = [
+        $page = Page::factory()->create();
+        $data = [
             'title'                          => 'Updated Title',
             BasicConstant::PAGE_GRAPESJS_KEY => [
                 ['id' => 'block-1', 'type' => 'text'],
             ],
         ];
-
-        $queryBuilder = Mockery::mock();
-        $queryBuilder->shouldReceive('reference')
-            ->once()
-            ->with($reference)
-            ->andReturnSelf();
-        $queryBuilder->shouldReceive('firstOrFail')
-            ->once()
-            ->andReturn($page);
-
-        $this->pageRepository
-            ->shouldReceive('with')
-            ->once()
-            ->with(['blocks'])
-            ->andReturn($queryBuilder);
-
-        $this->pageBlockSettingRepository
-            ->shouldReceive('resetSetting')
-            ->once()
-            ->with($page->id)
-            ->andReturn(1);
 
         $this->blockSettingService
             ->shouldReceive('syncSettings')
@@ -240,49 +137,16 @@ final class PageServiceTest extends TestCase
             ->with([['id' => 'block-1', 'type' => 'text']], $page->id)
             ->andReturn([]);
 
-        $this->pageRepository
-            ->shouldReceive('updateSetting')
-            ->once()
-            ->with($page->id, $data)
-            ->andReturn($page);
-
-        $this->pageRepository
-            ->shouldReceive('find')
-            ->once()
-            ->with($page->id)
-            ->andReturn($page);
-
-        $result = $this->pageService->saveSetting($reference, $data);
+        $result = $this->pageService->saveSetting($page->reference, $data);
 
         $this->assertInstanceOf(Model::class, $result);
+        $this->assertEquals('Updated Title', $result->setting['title']);
     }
 
     public function test_save_setting_handles_empty_block_data(): void
     {
-        $reference = 'test-reference';
-        $page      = new Page(['id' => 1, 'reference' => $reference]);
-        $data      = ['title' => 'Updated Title'];
-
-        $queryBuilder = Mockery::mock();
-        $queryBuilder->shouldReceive('reference')
-            ->once()
-            ->with($reference)
-            ->andReturnSelf();
-        $queryBuilder->shouldReceive('firstOrFail')
-            ->once()
-            ->andReturn($page);
-
-        $this->pageRepository
-            ->shouldReceive('with')
-            ->once()
-            ->with(['blocks'])
-            ->andReturn($queryBuilder);
-
-        $this->pageBlockSettingRepository
-            ->shouldReceive('resetSetting')
-            ->once()
-            ->with($page->id)
-            ->andReturn(1);
+        $page = Page::factory()->create();
+        $data = ['title' => 'Updated Title'];
 
         $this->blockSettingService
             ->shouldReceive('syncSettings')
@@ -290,52 +154,19 @@ final class PageServiceTest extends TestCase
             ->with([], $page->id)
             ->andReturn([]);
 
-        $this->pageRepository
-            ->shouldReceive('updateSetting')
-            ->once()
-            ->with($page->id, $data)
-            ->andReturn($page);
-
-        $this->pageRepository
-            ->shouldReceive('find')
-            ->once()
-            ->with($page->id)
-            ->andReturn($page);
-
-        $result = $this->pageService->saveSetting($reference, $data);
+        $result = $this->pageService->saveSetting($page->reference, $data);
 
         $this->assertInstanceOf(Model::class, $result);
+        $this->assertEquals('Updated Title', $result->setting['title']);
     }
 
     public function test_save_setting_handles_non_array_block_data(): void
     {
-        $reference = 'test-reference';
-        $page      = new Page(['id' => 1, 'reference' => $reference]);
-        $data      = [
+        $page = Page::factory()->create();
+        $data = [
             'title'                          => 'Updated Title',
             BasicConstant::PAGE_GRAPESJS_KEY => 'not-an-array',
         ];
-
-        $queryBuilder = Mockery::mock();
-        $queryBuilder->shouldReceive('reference')
-            ->once()
-            ->with($reference)
-            ->andReturnSelf();
-        $queryBuilder->shouldReceive('firstOrFail')
-            ->once()
-            ->andReturn($page);
-
-        $this->pageRepository
-            ->shouldReceive('with')
-            ->once()
-            ->with(['blocks'])
-            ->andReturn($queryBuilder);
-
-        $this->pageBlockSettingRepository
-            ->shouldReceive('resetSetting')
-            ->once()
-            ->with($page->id)
-            ->andReturn(1);
 
         $this->blockSettingService
             ->shouldReceive('syncSettings')
@@ -343,19 +174,7 @@ final class PageServiceTest extends TestCase
             ->with([], $page->id)
             ->andReturn([]);
 
-        $this->pageRepository
-            ->shouldReceive('updateSetting')
-            ->once()
-            ->with($page->id, $data)
-            ->andReturn($page);
-
-        $this->pageRepository
-            ->shouldReceive('find')
-            ->once()
-            ->with($page->id)
-            ->andReturn($page);
-
-        $result = $this->pageService->saveSetting($reference, $data);
+        $result = $this->pageService->saveSetting($page->reference, $data);
 
         $this->assertInstanceOf(Model::class, $result);
     }

@@ -77,8 +77,8 @@ final class FormRepositoryTest extends TestCase
     {
         $formData   = ['name' => 'Test Form', 'slug' => 'test-form', 'status' => 1];
         $fieldsData = [
-            ['name' => 'Name', 'type' => 'text', 'sort' => 1],
-            ['name' => 'Email', 'type' => 'email', 'sort' => 2],
+            ['label' => 'Name', 'name' => 'name', 'type' => 'text', 'sort' => 1],
+            ['label' => 'Email', 'name' => 'email', 'type' => 'email', 'sort' => 2],
         ];
 
         $result = $this->repository->createWithFields($formData, $fieldsData);
@@ -97,8 +97,8 @@ final class FormRepositoryTest extends TestCase
 
         $formData   = ['name' => 'Updated Form'];
         $fieldsData = [
-            ['id' => $field1->id, 'name' => 'Updated Field 1', 'sort' => 1],
-            ['name' => 'New Field', 'type' => 'text', 'sort' => 2],
+            ['id' => $field1->id, 'label' => 'Updated Field 1', 'name' => 'updated_field_1', 'type' => 'text', 'sort' => 1],
+            ['label' => 'New Field', 'name' => 'new_field', 'type' => 'text', 'sort' => 2],
         ];
 
         $result = $this->repository->updateWithFields($form->id, $formData, $fieldsData);

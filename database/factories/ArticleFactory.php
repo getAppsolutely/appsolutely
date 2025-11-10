@@ -28,7 +28,7 @@ class ArticleFactory extends Factory
             'title'        => $title,
             'slug'         => Str::slug($title) . '-' . fake()->unique()->numberBetween(1000, 9999),
             'keywords'     => fake()->words(5, true),
-            'description'  => fake()->paragraph(),
+            'description'  => Str::limit(fake()->paragraph(), 255),
             'content'      => fake()->paragraphs(5, true),
             'cover'        => null,
             'setting'      => [],

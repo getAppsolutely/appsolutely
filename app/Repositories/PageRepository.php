@@ -61,7 +61,7 @@ final class PageRepository extends BaseRepository
      */
     public function updateSetting(int $id, array $setting): Page
     {
-        return $this->update($id, ['setting' => $setting]);
+        return $this->update(['setting' => $setting], $id);
     }
 
     /**
@@ -87,7 +87,7 @@ final class PageRepository extends BaseRepository
             $query->published($datetime);
         }
 
-        return $query->orderBy('sort')->get();
+        return $query->orderBy('published_at', 'desc')->get();
     }
 
     /**

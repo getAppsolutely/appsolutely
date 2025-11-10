@@ -163,10 +163,16 @@ final class PageRepositoryTest extends TestCase
             'published_at' => now()->subDay(),
         ]);
 
-        Page::factory()->create([
-            'slug'         => null, // No slug
+        // Create page without slug - use DB to ensure slug is actually null
+        \DB::table('pages')->insert([
+            'reference'    => (string) \Illuminate\Support\Str::ulid(),
+            'title'        => 'No Slug Page',
+            'name'         => 'No Slug Page',
+            'slug'         => null,
             'status'       => 1,
             'published_at' => now()->subDay(),
+            'created_at'   => now(),
+            'updated_at'   => now(),
         ]);
 
         $result = $this->repository->getPublishedPagesForSitemap(now());
@@ -184,10 +190,16 @@ final class PageRepositoryTest extends TestCase
             'published_at' => now()->subDay(),
         ]);
 
-        Page::factory()->create([
-            'slug'         => '', // Empty slug
+        // Create page with empty slug - use DB to ensure slug is actually empty
+        \DB::table('pages')->insert([
+            'reference'    => (string) \Illuminate\Support\Str::ulid(),
+            'title'        => 'Empty Slug Page',
+            'name'         => 'Empty Slug Page',
+            'slug'         => '',
             'status'       => 1,
             'published_at' => now()->subDay(),
+            'created_at'   => now(),
+            'updated_at'   => now(),
         ]);
 
         $result = $this->repository->getPublishedPagesForSitemap(now());

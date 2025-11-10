@@ -83,7 +83,7 @@ final class FormRepository extends BaseRepository
      */
     public function updateWithFields(int $id, array $formData, array $fieldsData): Form
     {
-        $form = $this->update($id, $formData);
+        $form = $this->update($formData, $id);
 
         // Delete existing fields not in the new data
         $existingFieldIds = collect($fieldsData)

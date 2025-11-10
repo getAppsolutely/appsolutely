@@ -6,7 +6,7 @@ namespace Tests\Feature\Controllers;
 
 use App\Models\GeneralPage;
 use App\Models\Page;
-use App\Services\GeneralPageService;
+use App\Services\Contracts\GeneralPageServiceInterface;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery;
 use Tests\TestCase;
@@ -25,13 +25,13 @@ final class PageControllerTest extends TestCase
 
         $generalPage = new GeneralPage($page);
 
-        $generalPageService = Mockery::mock(GeneralPageService::class);
+        $generalPageService = Mockery::mock(GeneralPageServiceInterface::class);
         $generalPageService->shouldReceive('resolvePageWithCaching')
             ->once()
             ->with('test-page')
             ->andReturn($generalPage);
 
-        $this->app->instance(GeneralPageService::class, $generalPageService);
+        $this->app->instance(GeneralPageServiceInterface::class, $generalPageService);
 
         $response = $this->get('/test-page');
 
@@ -44,13 +44,13 @@ final class PageControllerTest extends TestCase
 
     public function test_show_returns_404_for_non_existent_page(): void
     {
-        $generalPageService = Mockery::mock(GeneralPageService::class);
+        $generalPageService = Mockery::mock(GeneralPageServiceInterface::class);
         $generalPageService->shouldReceive('resolvePageWithCaching')
             ->once()
             ->with('non-existent-page')
             ->andReturn(null);
 
-        $this->app->instance(GeneralPageService::class, $generalPageService);
+        $this->app->instance(GeneralPageServiceInterface::class, $generalPageService);
 
         $response = $this->get('/non-existent-page');
 
@@ -67,13 +67,13 @@ final class PageControllerTest extends TestCase
 
         $generalPage = new GeneralPage($page);
 
-        $generalPageService = Mockery::mock(GeneralPageService::class);
+        $generalPageService = Mockery::mock(GeneralPageServiceInterface::class);
         $generalPageService->shouldReceive('resolvePageWithCaching')
             ->once()
             ->with(null)
             ->andReturn($generalPage);
 
-        $this->app->instance(GeneralPageService::class, $generalPageService);
+        $this->app->instance(GeneralPageServiceInterface::class, $generalPageService);
 
         $response = $this->get('/');
 
@@ -91,13 +91,13 @@ final class PageControllerTest extends TestCase
 
         $generalPage = new GeneralPage($page);
 
-        $generalPageService = Mockery::mock(GeneralPageService::class);
+        $generalPageService = Mockery::mock(GeneralPageServiceInterface::class);
         $generalPageService->shouldReceive('resolvePageWithCaching')
             ->once()
             ->with('')
             ->andReturn($generalPage);
 
-        $this->app->instance(GeneralPageService::class, $generalPageService);
+        $this->app->instance(GeneralPageServiceInterface::class, $generalPageService);
 
         $response = $this->get('');
 

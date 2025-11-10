@@ -82,10 +82,22 @@ final class ArticleRepositoryTest extends TestCase
             'published_at' => now()->subDay(),
         ]);
 
+        // Create unpublished article (should be excluded)
         Article::factory()->create([
+            'slug'         => 'article-2',
+            'status'       => 0, // Unpublished
+            'published_at' => now()->subDay(),
+        ]);
+
+        // Create article with null slug - use DB to ensure slug is actually null
+        \DB::table('articles')->insert([
+            'title'        => 'No Slug Article',
             'slug'         => null,
+            'content'      => 'Test content',
             'status'       => 1,
             'published_at' => now()->subDay(),
+            'created_at'   => now(),
+            'updated_at'   => now(),
         ]);
 
         $result = $this->repository->getPublishedArticlesForSitemap(now());

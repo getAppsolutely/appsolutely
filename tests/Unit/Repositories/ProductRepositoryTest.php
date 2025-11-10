@@ -70,17 +70,15 @@ final class ProductRepositoryTest extends TestCase
             'published_at' => now()->subDay(),
         ]);
 
+        // Create unpublished product (should be excluded)
         Product::factory()->create([
             'slug'         => 'product-2',
             'status'       => 0,
             'published_at' => now()->subDay(),
         ]);
 
-        Product::factory()->create([
-            'slug'         => null,
-            'status'       => 1,
-            'published_at' => now()->subDay(),
-        ]);
+        // Products table requires unique slug and doesn't allow null/empty
+        // So we test exclusion by status only (unpublished product above)
 
         $result = $this->repository->getPublishedProductsForSitemap(now());
 

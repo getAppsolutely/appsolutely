@@ -17,7 +17,7 @@ final class ProductRepository extends BaseRepository
 
     public function getActiveProducts(): Collection
     {
-        return $this->model->status()->orderBy('sort')->get();
+        return $this->model->status()->orderBy('sort', 'asc')->get();
     }
 
     /**
@@ -92,7 +92,7 @@ final class ProductRepository extends BaseRepository
             ->status()
             ->published($datetime)
             ->with(['categories' => function ($query) {
-                $query->status()->orderBy('sort');
+                $query->status()->orderBy('title');
             }])
             ->orderBy('published_at', 'desc')
             ->get();
@@ -110,7 +110,7 @@ final class ProductRepository extends BaseRepository
             ->published($datetime)
             ->where('slug', $slug)
             ->with(['categories' => function ($query) {
-                $query->status()->orderBy('sort');
+                $query->status()->orderBy('title');
             }])
             ->first();
     }
