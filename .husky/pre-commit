@@ -1,1 +1,38 @@
+echo "🔍 Running pre-commit checks..."
+
+# Check if npx is available
+if ! command -v npx >/dev/null 2>&1; then
+    echo "❌ Error: npx is not available. Please install Node.js and npm."
+    exit 1
+fi
+
+# Check if lint-staged is installed
+if ! npm list lint-staged >/dev/null 2>&1; then
+    echo "❌ Error: lint-staged is not installed."
+    echo "💡 Run: npm install"
+    exit 1
+fi
+
+# Check if there are staged files
+if git diff --cached --quiet 2>/dev/null; then
+    echo "ℹ️  No staged files. Skipping pre-commit checks."
+    exit 0
+fi
+
+# Run lint-staged
+echo "🧹 Formatting and linting staged files..."
 npx lint-staged
+
+# Capture exit code
+EXIT_CODE=$?
+
+if [ $EXIT_CODE -ne 0 ]; then
+    echo ""
+    echo "❌ Pre-commit checks failed!"
+    echo "💡 Fix the errors above and try committing again."
+    echo "💡 Or use 'git commit --no-verify' to skip (not recommended)."
+    exit $EXIT_CODE
+fi
+
+echo "✅ Pre-commit checks passed!"
+exit 0

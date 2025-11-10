@@ -18,12 +18,35 @@ Runs before every commit to automatically format and lint your code.
 
 **What it does:**
 
-1. Runs `lint-staged` which checks only staged files (fast!)
-2. For PHP files: Laravel Pint formatting
-3. For SCSS files: Prettier formatting + Stylelint fixes
-4. For other files (CSS, TS, JS, etc.): Prettier formatting
+1. ✅ Validates that required tools (npx, lint-staged) are available
+2. ✅ Automatically installs dependencies if missing
+3. ✅ Runs `lint-staged` which checks only staged files (fast!)
+4. ✅ For PHP files: Laravel Pint formatting
+5. ✅ For SCSS files: Prettier formatting + Stylelint fixes
+6. ✅ For other files (CSS, TS, JS, etc.): Prettier formatting
+7. ✅ Provides clear error messages and suggestions
 
 **Configuration:** See `lint-staged` section in `package.json`
+
+### `pre-push`
+
+Runs before pushing to remote to ensure code quality.
+
+**What it does:**
+
+1. ✅ Checks if there are commits to push (skips if nothing to push)
+2. ✅ TypeScript type checking (all projects)
+3. ✅ Linting (ESLint + Stylelint)
+4. ✅ PHP tests (optional, can be skipped with `SKIP_PHP_TESTS=1`)
+5. ✅ Colored output for better readability
+6. ✅ Clear error messages with suggestions
+
+**Features:**
+
+- **Smart skipping**: Only runs checks if there are commits to push
+- **Optional PHP tests**: Set `SKIP_PHP_TESTS=1` to skip PHP tests during pre-push
+- **Better error messages**: Shows exactly what failed and how to fix it
+- **Progress indicators**: Clear visual feedback during checks
 
 ## Setup for Team Members
 
@@ -61,7 +84,26 @@ git commit -m "test: husky hook"
 ⚠️ **Not recommended**, but if absolutely necessary:
 
 ```bash
+# Skip pre-commit hook
 git commit --no-verify -m "emergency fix"
+
+# Skip pre-push hook
+git push --no-verify
+```
+
+## Pre-push Hook Options
+
+### Skip PHP Tests
+
+If PHP tests are slow or you want to skip them during pre-push:
+
+```bash
+# Skip PHP tests for this push
+SKIP_PHP_TESTS=1 git push
+
+# Or export it for the session
+export SKIP_PHP_TESTS=1
+git push
 ```
 
 ## Troubleshooting
@@ -97,9 +139,11 @@ npm run lint:scss:fix
 - **Husky setup**: `package.json` → `"prepare": "husky"`
 - **lint-staged config**: `package.json` → `"lint-staged"`
 - **Pre-commit hook**: `.husky/pre-commit`
-- **Prettier config**: `.prettierrc.json`
-- **Stylelint config**: `.stylelintrc.json`
-- **Pint config**: Laravel default
+- **Pre-push hook**: `.husky/pre-push`
+- **Commit message hook**: `.husky/commit-msg` (validates conventional commits)
+- **Prettier config**: `.prettierrc.json` (if exists)
+- **Stylelint config**: `.stylelintrc.json` (if exists)
+- **Pint config**: `pint.json`
 
 ## Benefits
 
