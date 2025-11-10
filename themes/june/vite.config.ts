@@ -2,10 +2,25 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import path from 'path';
 import { fileURLToPath } from 'url';
-// import fs from 'fs';
+import fs from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Only enable HTTPS in local development when SSL certificates are available
+// Use APP_ENV (Laravel) with fallback to NODE_ENV
+const isLocal = process.env.APP_ENV === 'local' || process.env.NODE_ENV === 'development';
+const sslKeyPath = process.env.VITE_SSL_KEY_PATH || '';
+const sslCertPath = process.env.VITE_SSL_CERT_PATH || '';
+const hasSslCertificates = isLocal && fs.existsSync(sslKeyPath) && fs.existsSync(sslCertPath);
+
+// Configure HTTPS only in development with available certificates
+const httpsConfig = hasSslCertificates
+    ? {
+          key: fs.readFileSync(sslKeyPath),
+          cert: fs.readFileSync(sslCertPath),
+      }
+    : undefined;
 
 export default defineConfig({
     base: `/build/themes/june`,
@@ -38,8 +53,7 @@ export default defineConfig({
         strictPort: true,
         hmr: {
             host: 'localhost', // or your Docker host domain
-            //protocol: 'wss', // ws if http
-            protocol: 'ws', // ws if http
+            protocol: hasSslCertificates ? 'wss' : 'ws',
             clientPort: 5177,
         },
         cors: {
@@ -47,10 +61,7 @@ export default defineConfig({
             methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
             credentials: true,
         },
-        https: {
-            //key: fs.readFileSync('storage/ssl/appsolutely.key.pem'), // comment if http
-            //cert: fs.readFileSync('storage/ssl/appsolutely.pem'), // comment if http
-        },
+        ...(httpsConfig && { https: httpsConfig }),
     },
     css: {
         preprocessorOptions: {

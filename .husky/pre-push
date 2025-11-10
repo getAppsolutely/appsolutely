@@ -37,19 +37,19 @@ if ! git rev-parse --git-dir > /dev/null 2>&1; then
     exit 1
 fi
 
-# Get the remote branch name
-REMOTE_BRANCH=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null)
-if [ -z "$REMOTE_BRANCH" ]; then
-    print_warning "No upstream branch set. Skipping pre-push checks."
-    exit 0
-fi
+# Read ref information from stdin (pre-push hook standard)
+# Format: <local-ref> <local-sha1> <remote-ref> <remote-sha1>
+HAS_COMMITS_TO_PUSH=false
+while read -r local_ref local_sha remote_ref remote_sha; do
+    # Skip if all zeros (deletion) or if local and remote are the same
+    if [ "$local_sha" != "0000000000000000000000000000000000000000" ] && [ "$local_sha" != "$remote_sha" ]; then
+        HAS_COMMITS_TO_PUSH=true
+        break
+    fi
+done
 
-# Check if there are commits to push
-LOCAL=$(git rev-parse @)
-REMOTE=$(git rev-parse @{u} 2>/dev/null)
-BASE=$(git merge-base @ @{u} 2>/dev/null)
-
-if [ "$LOCAL" = "$REMOTE" ]; then
+# If no commits to push, skip checks
+if [ "$HAS_COMMITS_TO_PUSH" = false ]; then
     print_info "No commits to push. Skipping checks."
     exit 0
 fi
