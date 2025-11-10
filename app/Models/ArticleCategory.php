@@ -9,11 +9,13 @@ use App\Models\Traits\ScopePublished;
 use App\Models\Traits\ScopeStatus;
 use App\Models\Traits\Sluggable;
 use Dcat\Admin\Traits\ModelTree;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ArticleCategory extends NestedSetModel
 {
+    use HasFactory;
     use HasFilesOfType;
     use ModelTree;
     use ScopePublished;

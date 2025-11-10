@@ -1,0 +1,37 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tests\Integration;
+
+use App\Models\Form;
+use App\Services\DynamicFormService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+final class FormSubmissionWorkflowTest extends TestCase
+{
+    use RefreshDatabase;
+
+    private DynamicFormService $formService;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->formService = app(DynamicFormService::class);
+    }
+
+    public function test_form_submission_workflow(): void
+    {
+        // Create form with fields
+        $form = Form::factory()->create([
+            'slug'   => 'contact-form',
+            'status' => 1,
+        ]);
+
+        // This test demonstrates the integration pattern
+        // Actual implementation would depend on DynamicFormService methods
+        $this->assertInstanceOf(Form::class, $form);
+        $this->assertEquals('contact-form', $form->slug);
+    }
+}

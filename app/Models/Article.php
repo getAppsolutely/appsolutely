@@ -9,11 +9,13 @@ use App\Models\Traits\HasMarkdownContent;
 use App\Models\Traits\ScopePublished;
 use App\Models\Traits\ScopeStatus;
 use App\Models\Traits\Sluggable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Article extends Model
 {
+    use HasFactory;
     use HasFilesOfType;
     use HasMarkdownContent;
     use ScopePublished;

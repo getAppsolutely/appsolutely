@@ -8,10 +8,12 @@ use App\Models\Traits\ScopePublished;
 use App\Models\Traits\ScopeReference;
 use App\Models\Traits\ScopeStatus;
 use App\Models\Traits\Sluggable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Page extends Model
 {
+    use HasFactory;
     use ScopePublished;
     use ScopeReference;
     use ScopeStatus;
