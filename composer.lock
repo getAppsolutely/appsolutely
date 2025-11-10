@@ -530,12 +530,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/getAppsolutely/dcat-admin.git",
-                "reference": "16c2ed258552c596a76624ca9577c56592eb7f84"
+                "reference": "1bf027b534f77e32992007a238b540eee09587c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getAppsolutely/dcat-admin/zipball/16c2ed258552c596a76624ca9577c56592eb7f84",
-                "reference": "16c2ed258552c596a76624ca9577c56592eb7f84",
+                "url": "https://api.github.com/repos/getAppsolutely/dcat-admin/zipball/1bf027b534f77e32992007a238b540eee09587c1",
+                "reference": "1bf027b534f77e32992007a238b540eee09587c1",
                 "shasum": ""
             },
             "require": {
@@ -602,9 +602,9 @@
                 "laravel admin"
             ],
             "support": {
-                "source": "https://github.com/getAppsolutely/dcat-admin/tree/master"
+                "source": "https://github.com/getAppsolutely/dcat-admin/tree/2.0"
             },
-            "time": "2025-06-25T23:14:59+00:00"
+            "time": "2025-11-10T11:01:24+00:00"
         },
         {
             "name": "deepseek-php/deepseek-php-client",
