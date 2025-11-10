@@ -27,6 +27,7 @@ Pre-commit hooks automatically run before each commit to ensure code quality.
 | File Type                  | Actions                             |
 | -------------------------- | ----------------------------------- |
 | `*.php`                    | Laravel Pint (automatic formatting) |
+| `*.blade.php`              | Laravel Pint (automatic formatting) |
 | `*.scss`                   | Prettier → Stylelint --fix          |
 | `*.{ts,tsx,js,jsx}`        | Prettier → ESLint --fix             |
 | `*.{css,json,md,html,vue}` | Prettier                            |

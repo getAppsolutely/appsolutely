@@ -101,6 +101,67 @@ else
 fi
 echo ""
 
+# Validate Blade templates
+# Set SKIP_BLADE_CHECK=1 to skip Blade template validation during pre-push
+if [ -z "$SKIP_BLADE_CHECK" ] && command -v php >/dev/null 2>&1; then
+    echo "🔍 Validating Blade templates..."
+    # Clear view cache first, then try to cache (which validates syntax)
+    BLADE_VALIDATION_OUTPUT=$(php artisan view:clear 2>&1 && php artisan view:cache 2>&1)
+    BLADE_VALIDATION_EXIT=$?
+    
+    if [ $BLADE_VALIDATION_EXIT -eq 0 ]; then
+        print_success "Blade templates validated"
+        # Clear cache again to avoid leaving cached views
+        php artisan view:clear >/dev/null 2>&1
+    else
+        print_error "Blade template validation failed!"
+        echo ""
+        # Show validation errors
+        echo "$BLADE_VALIDATION_OUTPUT" | grep -E "(error|Error|Exception|syntax)" | head -20
+        if [ $(echo "$BLADE_VALIDATION_OUTPUT" | grep -E "(error|Error|Exception|syntax)" | wc -l) -gt 20 ]; then
+            echo "... (and more errors)"
+        fi
+        echo ""
+        echo "💡 Run 'php artisan view:cache' to see full validation errors."
+        echo "💡 Or set SKIP_BLADE_CHECK=1 to skip Blade template validation during pre-push."
+        FAILED=1
+    fi
+    echo ""
+elif [ -n "$SKIP_BLADE_CHECK" ]; then
+    print_info "Skipping Blade template validation (SKIP_BLADE_CHECK is set)"
+    echo ""
+elif ! command -v php >/dev/null 2>&1; then
+    print_warning "PHP not found. Skipping Blade template validation."
+    echo ""
+fi
+
+# Run frontend tests (Vitest)
+# Set SKIP_FRONTEND_TESTS=1 to skip frontend tests during pre-push
+if [ -z "$SKIP_FRONTEND_TESTS" ]; then
+    echo "🧪 Running frontend tests..."
+    FRONTEND_TEST_OUTPUT=$(npm run -s test:frontend 2>&1)
+    FRONTEND_TEST_EXIT=$?
+    
+    if [ $FRONTEND_TEST_EXIT -eq 0 ]; then
+        print_success "Frontend tests passed"
+        # Show test summary (last 20 lines which usually contain the summary)
+        echo "$FRONTEND_TEST_OUTPUT" | tail -20
+    else
+        print_error "Frontend tests failed!"
+        echo ""
+        # Show test output (last 40 lines for context)
+        echo "$FRONTEND_TEST_OUTPUT" | tail -40
+        echo ""
+        echo "💡 Run 'npm run test:frontend' to see full test results."
+        echo "💡 Or set SKIP_FRONTEND_TESTS=1 to skip frontend tests during pre-push."
+        FAILED=1
+    fi
+    echo ""
+elif [ -n "$SKIP_FRONTEND_TESTS" ]; then
+    print_info "Skipping frontend tests (SKIP_FRONTEND_TESTS is set)"
+    echo ""
+fi
+
 # Optional: Run PHP tests
 # Set SKIP_PHP_TESTS=1 to skip PHP tests during pre-push
 if [ -z "$SKIP_PHP_TESTS" ] && [ -f "./vendor/bin/phpunit" ]; then
