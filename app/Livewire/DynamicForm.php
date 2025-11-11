@@ -129,7 +129,7 @@ final class DynamicForm extends BaseBlock
     {
         $this->submitted      = false;
         $this->successMessage = '';
-        $this->initializeComponent();
+        $this->initializeComponent(app());
         $this->resetValidation();
     }
 }

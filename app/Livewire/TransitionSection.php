@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
+use Illuminate\Contracts\Container\Container;
+
 final class TransitionSection extends BaseBlock
 {
     protected array $defaultDisplayOptions = [
@@ -22,7 +24,7 @@ final class TransitionSection extends BaseBlock
         ],
     ];
 
-    protected function initializeComponent(): void
+    protected function initializeComponent(Container $container): void
     {
         $transitionSection = $this->displayOptions;
         $default           = $this->defaultConfig();

@@ -68,9 +68,11 @@
                                                     <div class="text-muted small d-none">
                                                         @if($location['city'] ?? false)
                                                             {{ $location['city'] }}
-                                                        @endif@if($location['state'] ?? false)
+                                                        @endif
+                                                        @if($location['state'] ?? false)
                                                             , {{ $location['state'] }}
-                                                        @endif@if($location['zip_code'] ?? false)
+                                                        @endif
+                                                        @if($location['zip_code'] ?? false)
                                                             {{ $location['zip_code'] }}
                                                         @endif
                                                     </div>
@@ -194,7 +196,8 @@
                                                             <div class="text-muted small">
                                                                 @if($location['city'] ?? false)
                                                                     {{ $location['city'] }}
-                                                                @endif@if($location['state'] ?? false)
+                                                                @endif
+                                                                @if($location['state'] ?? false)
                                                                     , {{ $location['state'] }}
                                                                 @endif
                                                             </div>

@@ -103,35 +103,69 @@ echo ""
 
 # Validate Blade templates
 # Set SKIP_BLADE_CHECK=1 to skip Blade template validation during pre-push
-if [ -z "$SKIP_BLADE_CHECK" ] && command -v php >/dev/null 2>&1; then
+if [ -z "$SKIP_BLADE_CHECK" ]; then
     echo "🔍 Validating Blade templates..."
-    # Clear view cache first, then try to cache (which validates syntax)
-    BLADE_VALIDATION_OUTPUT=$(php artisan view:clear 2>&1 && php artisan view:cache 2>&1)
-    BLADE_VALIDATION_EXIT=$?
     
-    if [ $BLADE_VALIDATION_EXIT -eq 0 ]; then
-        print_success "Blade templates validated"
-        # Clear cache again to avoid leaving cached views
-        php artisan view:clear >/dev/null 2>&1
-    else
-        print_error "Blade template validation failed!"
-        echo ""
-        # Show validation errors
-        echo "$BLADE_VALIDATION_OUTPUT" | grep -E "(error|Error|Exception|syntax)" | head -20
-        if [ $(echo "$BLADE_VALIDATION_OUTPUT" | grep -E "(error|Error|Exception|syntax)" | wc -l) -gt 20 ]; then
-            echo "... (and more errors)"
+    # Detect Docker container name (try common Laradock workspace container names)
+    WORKSPACE_CONTAINER=""
+    if docker ps --format '{{.Names}}' | grep -q "^laradock-workspace-1$"; then
+        WORKSPACE_CONTAINER="laradock-workspace-1"
+    elif docker ps --format '{{.Names}}' | grep -q "^laradock_workspace_1$"; then
+        WORKSPACE_CONTAINER="laradock_workspace_1"
+    elif docker ps --format '{{.Names}}' | grep -qE "^.*workspace.*$"; then
+        WORKSPACE_CONTAINER=$(docker ps --format '{{.Names}}' | grep -E "^.*workspace.*$" | head -1)
+    fi
+    
+    if [ -n "$WORKSPACE_CONTAINER" ]; then
+        # Run Blade validation inside Docker container
+        # Clear view cache first, then try to cache (which validates syntax)
+        BLADE_VALIDATION_OUTPUT=$(docker exec "$WORKSPACE_CONTAINER" bash -c "cd /var/www/appsolutely/site && php artisan view:clear 2>&1 && php artisan view:cache 2>&1")
+        BLADE_VALIDATION_EXIT=$?
+        
+        if [ $BLADE_VALIDATION_EXIT -eq 0 ]; then
+            print_success "Blade templates validated"
+            # Clear cache again to avoid leaving cached views
+            docker exec "$WORKSPACE_CONTAINER" bash -c "cd /var/www/appsolutely/site && php artisan view:clear" >/dev/null 2>&1
+        else
+            print_error "Blade template validation failed!"
+            echo ""
+            # Show validation errors
+            echo "$BLADE_VALIDATION_OUTPUT" | grep -E "(error|Error|Exception|syntax)" | head -20
+            if [ $(echo "$BLADE_VALIDATION_OUTPUT" | grep -E "(error|Error|Exception|syntax)" | wc -l) -gt 20 ]; then
+                echo "... (and more errors)"
+            fi
+            echo ""
+            echo "💡 Run 'docker exec $WORKSPACE_CONTAINER bash -c \"cd /var/www/appsolutely/site && php artisan view:cache\"' to see full validation errors."
+            echo "💡 Or set SKIP_BLADE_CHECK=1 to skip Blade template validation during pre-push."
+            FAILED=1
         fi
-        echo ""
-        echo "💡 Run 'php artisan view:cache' to see full validation errors."
-        echo "💡 Or set SKIP_BLADE_CHECK=1 to skip Blade template validation during pre-push."
-        FAILED=1
+    else
+        # Fallback: try to run on host (may fail if PHP/dependencies not available)
+        if command -v php >/dev/null 2>&1; then
+            print_warning "Docker container not found. Running Blade validation on host (may fail if dependencies are missing)."
+            BLADE_VALIDATION_OUTPUT=$(php artisan view:clear 2>&1 && php artisan view:cache 2>&1)
+            BLADE_VALIDATION_EXIT=$?
+            
+            if [ $BLADE_VALIDATION_EXIT -eq 0 ]; then
+                print_success "Blade templates validated"
+                php artisan view:clear >/dev/null 2>&1
+            else
+                print_error "Blade template validation failed!"
+                echo ""
+                echo "$BLADE_VALIDATION_OUTPUT" | grep -E "(error|Error|Exception|syntax)" | head -20
+                echo ""
+                echo "💡 Run 'php artisan view:cache' to see full validation errors."
+                echo "💡 Or set SKIP_BLADE_CHECK=1 to skip Blade template validation during pre-push."
+                FAILED=1
+            fi
+        else
+            print_warning "Docker container not found and PHP not available on host."
+            print_warning "Skipping Blade template validation. Run manually: docker exec laradock-workspace-1 bash -c 'cd /var/www/appsolutely/site && php artisan view:cache'"
+        fi
     fi
     echo ""
 elif [ -n "$SKIP_BLADE_CHECK" ]; then
     print_info "Skipping Blade template validation (SKIP_BLADE_CHECK is set)"
-    echo ""
-elif ! command -v php >/dev/null 2>&1; then
-    print_warning "PHP not found. Skipping Blade template validation."
     echo ""
 fi
 
