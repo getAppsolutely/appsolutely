@@ -29,7 +29,10 @@ final class Footer extends BaseBlock
             'title'   => 'Subscribe to our newsletter',
             'text'    => 'Get the latest updates and offers',
         ],
-        'copyright' => [
+        'company_name' => '',
+        'address'      => '',
+        'email'        => '',
+        'copyright'    => [
             'text' => '© 2025 Your Company. All rights reserved.',
         ],
     ];

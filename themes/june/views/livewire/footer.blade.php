@@ -81,9 +81,7 @@
                     </div>
                 @endif
                 <div class="mt-3 me-3">
-                    {{ !empty($displayOptions['company_name']) ? $displayOptions['company_name'] . '<br>' : null }}
-                    {{ !empty($displayOptions['address']) ? $displayOptions['address'] . '<br>' : null }}
-                    {{ !empty($displayOptions['email']) ? $displayOptions['email'] . '<br>' : null }}
+
                 </div>
             </div>
         </div>
@@ -93,6 +91,11 @@
             <!-- Left Side - Copyright -->
             <div class="col-lg-6">
                 <p class="text-white mb-0">
+                    @foreach (['company_name', 'address', 'email'] as $field)
+                        @if (!empty($displayOptions[$field]))
+                            {{ $displayOptions[$field] }}<br>
+                        @endif
+                    @endforeach
                     {{ $displayOptions['copyright']['text']??null }}
                 </p>
             </div>
