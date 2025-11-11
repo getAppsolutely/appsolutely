@@ -801,6 +801,13 @@ if (! function_exists('site_meta')) {
     }
 }
 
+if (! function_exists('structured_data')) {
+    function structured_data(): string
+    {
+        return config('basic.structuredData') ?? '';
+    }
+}
+
 if (! function_exists('tracking_code')) {
     function tracking_code(): string
     {

@@ -10,6 +10,7 @@
     <title>@title($page)</title>
     <meta name="keywords" content="@keywords($page)">
     <meta name="description" content="@description($page)">
+    {!! structured_data() !!}
     {!! site_meta() !!}
     <link rel="canonical" href="{{ url()->current() }}" />
 
@@ -24,6 +25,7 @@
 </head>
 <body>
 <div id="scrollTrigger" class="position-absolute top-0 w-100" style="height: 1px;"></div>
+    <h1 class="d-none">{{ $page->h1_text ?? $page->title }}</h1>
     @yield('content')
 </body>
 {!! tracking_code() !!}

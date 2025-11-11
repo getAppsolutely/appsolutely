@@ -20,6 +20,7 @@ return new class() extends Migration
             $table->text('description')->nullable();
             $table->mediumText('content')->nullable();
             $table->json('setting')->nullable();
+            $table->string('h1_text')->nullable();
             $table->string('canonical_url')->nullable();
             $table->string('meta_robots')->nullable();
             $table->string('og_title')->nullable();

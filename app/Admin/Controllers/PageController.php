@@ -17,14 +17,14 @@ final class PageController extends AdminBaseController
     {
         return Grid::make(Page::query(), function (Grid $grid) {
             $grid->column('id', __t('ID'))->sortable();
-            $grid->column('title', __t('Title'))->editable();
+            $grid->column('name', __t('Name (Internal use)'))->help(__t('form_help.internal_reference'));
             $grid->column('link', __t('Link'))->display(function () {
                 $clean = trim($this->slug, '/');
                 $url   = app_url($clean);
 
                 return '<a href="' . $url . '" target="_blank">/' . $clean . '</a>';
             });
-            $grid->column('name', __t('Name (Internal use)'))->help(__t('form_help.internal_reference'));
+            $grid->column('title', __t('Title'))->editable();
             $grid->column('published_at', __t('Published At'))->display(column_time_format())->sortable();
             $grid->column('expired_at', __t('Expired At'))->display(column_time_format())->sortable();
             $grid->column('status', __t('Status'))->switch();
@@ -64,6 +64,7 @@ final class PageController extends AdminBaseController
                 $form->datetime('expired_at', __t('Expired At (%s)', [app_local_timezone()]));
                 $form->switch('status', __t('Status'));
             })->tab(__t('SEO & Meta'), function (Form $form) {
+                $form->text('h1_text', __t('H1 Text'));
                 $form->text('canonical_url', __t('Canonical URL'));
                 $form->text('meta_robots', __t('Meta Robots'));
                 $form->text('og_title', __t('OG Title'));

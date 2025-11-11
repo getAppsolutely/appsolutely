@@ -27,7 +27,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Add the SetThemeMiddleware to the web middleware group
         $middleware->web(append: [
-            \App\Http\Middleware\SecurityHeaders::class,
+            // \App\Http\Middleware\SecurityHeaders::class,
             \App\Http\Middleware\RestrictRoutePrefixes::class,
             \App\Http\Middleware\SetThemeMiddleware::class,
             \Spatie\ResponseCache\Middlewares\CacheResponse::class,

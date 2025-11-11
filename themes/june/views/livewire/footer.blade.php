@@ -80,6 +80,11 @@
                         @endforeach
                     </div>
                 @endif
+                <div class="mt-3 me-3">
+                    {{ !empty($displayOptions['company_name']) ? $displayOptions['company_name'] . '<br>' : null }}
+                    {{ !empty($displayOptions['address']) ? $displayOptions['address'] . '<br>' : null }}
+                    {{ !empty($displayOptions['email']) ? $displayOptions['email'] . '<br>' : null }}
+                </div>
             </div>
         </div>
 

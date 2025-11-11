@@ -48,7 +48,7 @@ abstract class ModelForm extends Form implements LazyRenderable
 
         try {
             if ($id) {
-                $this->updateModel($id, $input);
+                $this->updateModel((int) $id, $input);
 
                 return $this->response()->success(__t('Updated successfully'))->refresh();
             }
@@ -150,7 +150,7 @@ abstract class ModelForm extends Form implements LazyRenderable
         $id = $this->payload['id'] ?? null;
 
         if ($id && $this->model) {
-            $this->fillModelData($id);
+            $this->fillModelData((int) $id);
         }
     }
 

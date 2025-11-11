@@ -27,6 +27,7 @@ class Page extends Model
         'keywords',
         'content',
         'setting',
+        'h1_text',
         'canonical_url',
         'meta_robots',
         'og_title',
