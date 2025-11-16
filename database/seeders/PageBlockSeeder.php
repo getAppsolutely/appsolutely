@@ -460,6 +460,22 @@ final class PageBlockSeeder extends Seeder
                 ]
             )
         );
+
+        // Product Variant Block
+        PageBlock::firstOrCreate(
+            ['class' => 'App\\Livewire\\ProductVariantBlock', 'block_group_id' => $group->id],
+            array_merge(
+                $this->getBasicFields(),
+                [
+                    'title'       => 'Product Variant Block',
+                    'class'       => 'App\\Livewire\\ProductVariantBlock',
+                    'template'    => $this->getTemplate('product-variant-block'),
+                    'description' => 'Display product variants with configuration switching, color selection, specifications, pricing, and call-to-action buttons. Perfect for vehicle or product detail pages.',
+                    'sort'        => 23,
+                    'reference'   => 'product-variant-block',
+                ]
+            )
+        );
     }
 
     /**

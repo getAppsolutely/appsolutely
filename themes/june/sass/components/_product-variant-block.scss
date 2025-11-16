@@ -1,0 +1,88 @@
+// Product Variant Block Styles
+
+.product-variant-block {
+    background-color: #f8f9fa;
+
+    .product-header {
+        .product-meta {
+            font-size: 0.9rem;
+        }
+    }
+
+    .variant-tabs {
+        .nav-tabs {
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .nav-link {
+            color: #495057;
+            border: none;
+            border-bottom: 3px solid transparent;
+            padding: 1rem 1.5rem;
+            transition: all 0.3s ease;
+
+            &:hover {
+                border-bottom-color: #007bff;
+                color: #007bff;
+            }
+
+            &.active {
+                color: #007bff;
+                border-bottom-color: #007bff;
+                background-color: transparent;
+                font-weight: 600;
+            }
+        }
+    }
+
+    .color-selection {
+        .color-option {
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+
+            &:hover {
+                transform: scale(1.1);
+                box-shadow: 0 4px 8px rgb(0 0 0 / 20%);
+            }
+
+            &.active {
+                box-shadow: 0 0 0 3px rgb(0 123 255 / 30%);
+            }
+        }
+    }
+
+    .main-image-container {
+        .product-main-image {
+            transition: opacity 0.3s ease;
+        }
+    }
+
+    .additional-images {
+        .product-thumbnail {
+            transition: transform 0.2s ease;
+
+            &:hover {
+                transform: scale(1.05);
+            }
+        }
+    }
+
+    .specifications-section {
+        .list-group-item {
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+
+            &:hover {
+                border-left-color: #007bff;
+                background-color: #f8f9fa;
+            }
+        }
+    }
+
+    .price-section {
+        padding: 1rem;
+        background-color: #fff;
+        border-radius: 0.5rem;
+        border-left: 4px solid #007bff;
+    }
+}

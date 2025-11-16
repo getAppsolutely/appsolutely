@@ -122,7 +122,7 @@ final readonly class GeneralPageService implements GeneralPageServiceInterface
                     ]);
                 }
             } else {
-                local_debug('Page not found', ['slug' => $fullSlug]);
+                local_debug('Resource not found', ['slug' => $fullSlug]);
             }
 
             return $page;
