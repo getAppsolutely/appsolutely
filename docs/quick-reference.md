@@ -19,6 +19,16 @@ npm run lint:scss:fix        # Fix SCSS
 # Testing
 npm run test                 # All tests
 ./vendor/bin/phpunit         # PHP tests only
+
+# Form Management (metadata excluded by default for privacy)
+php artisan forms:export                          # Export all forms as CSV (default, no metadata)
+php artisan forms:export 1                        # Export form by ID
+php artisan forms:export contact                  # Export form by slug
+php artisan forms:export 1 contact 3              # Export multiple (mix IDs & slugs)
+php artisan forms:export 1 --format=csv           # Export as CSV (default)
+php artisan forms:export contact --format=excel   # Export as Excel
+php artisan forms:export contact --include-spam   # Include spam entries
+php artisan forms:export contact --include-metadata  # Include metadata columns (IP, User Agent, etc.)
 ```
 
 ## 📝 Commit Message Cheatsheet
