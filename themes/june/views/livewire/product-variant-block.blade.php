@@ -127,7 +127,7 @@
                                 @if (!empty($currentVariant['price']))
                                     <div class="price-section mb-3">
                                         <span class="h4 fw-bold text-primary">
-                                            ${{ number_format($currentVariant['price'], 0) }}
+                                            ${{ is_int($currentVariant['price']) ? number_format($currentVariant['price'], 0) : $currentVariant['price'] }}
                                         </span>
                                     </div>
                                 @endif
