@@ -1,10 +1,7 @@
 // Page Builder Service - Core functionality
-import type { Editor } from 'types/grapesjs';
-import type { BlockRegistryCategory, BlockDefinition, PreviewContent } from 'types/pagebuilder';
-
 export class PageBuilderService {
-    private editor: Editor | null = null;
-    private blockRegistry: BlockRegistryCategory[] = [];
+    private editor: any;
+    private blockRegistry: any[] = [];
     private initializationPromise: Promise<void>;
 
     constructor() {
@@ -23,12 +20,7 @@ export class PageBuilderService {
     }
 
     private setupEditor(): void {
-        const grapesjs = window.grapesjs;
-
-        if (!grapesjs) {
-            console.error('GrapesJS is not available');
-            return;
-        }
+        const grapesjs = (window as any).grapesjs;
 
         this.editor = grapesjs.init({
             container: '#editor-canvas',
@@ -37,7 +29,7 @@ export class PageBuilderService {
             width: 'auto',
             storageManager: false,
             canvas: {
-                styles: [this.getThemedStyles()],
+                styles: this.getThemedStyles(),
             },
             blockManager: {
                 appendTo: '#blocks',
@@ -77,17 +69,13 @@ export class PageBuilderService {
     }
 
     private setupEventListeners(): void {
-        if (!this.editor) return;
-
         this.editor.on('load', () => {
-            if (!this.editor) return;
-
             this.editor.on('component:remove', () => this.updateBlockCount());
-            this.editor.on('component:add', (component: unknown) => {
+            this.editor.on('component:add', (component: any) => {
                 this.ensureComponentReference(component);
                 this.updateBlockCount();
             });
-            this.editor.on('component:update', (component: unknown) => {
+            this.editor.on('component:update', (component: any) => {
                 this.ensureComponentReference(component);
             });
         });
@@ -95,16 +83,17 @@ export class PageBuilderService {
 
     private getThemedStyles(): string {
         // Use themed styles from window configuration (set by Blade template)
-        return window.pageBuilderConfig?.themedStyles || '';
+        return (window as any).pageBuilderConfig?.themedStyles || '';
     }
 
     public async loadBlockRegistry(): Promise<void> {
         try {
             // Use the URL from window configuration (set by Blade template)
-            const blockRegistryUrl = window.pageBuilderConfig?.blockRegistryUrl || '/admin/api/pages/block-registry';
+            const blockRegistryUrl =
+                (window as any).pageBuilderConfig?.blockRegistryUrl || '/admin/api/pages/block-registry';
 
             const response = await fetch(blockRegistryUrl);
-            const result = (await response.json()) as { data: BlockRegistryCategory[] };
+            const result = await response.json();
             this.blockRegistry = result.data;
 
             this.registerBlocks();
@@ -114,8 +103,6 @@ export class PageBuilderService {
     }
 
     private registerBlocks(): void {
-        if (!this.editor) return;
-
         const blockManager = this.editor.BlockManager;
         const domComponents = this.editor.DomComponents;
 
@@ -124,8 +111,8 @@ export class PageBuilderService {
             const categoryLabel = category.label || category.title;
 
             category.blocks
-                .sort((a: BlockDefinition, b: BlockDefinition) => (a.sort || 0) - (b.sort || 0))
-                .forEach((comp: BlockDefinition) => {
+                .sort((a: any, b: any) => a.sort - b.sort)
+                .forEach((comp: any) => {
                     const {
                         id,
                         label,
@@ -175,7 +162,7 @@ export class PageBuilderService {
     `;
     }
 
-    public async renderPageData(pageData: string | null): Promise<void> {
+    public async renderPageData(pageData: any): Promise<void> {
         // Wait for editor initialization to complete
         await this.initializationPromise;
 
@@ -190,13 +177,8 @@ export class PageBuilderService {
         }
 
         if (pageData) {
-            try {
-                const parsedData = JSON.parse(pageData);
-                this.editor.loadProjectData(parsedData);
-                this.updateBlockCount();
-            } catch (error) {
-                console.error('Failed to parse page data:', error);
-            }
+            this.editor.loadProjectData(JSON.parse(pageData));
+            this.updateBlockCount();
         } else {
             const defaultHtml = `
         <h1 class="text-3xl mt-5 text-center">Hello, welcome to Page Builder<br/>Start dragging components from the right!</h1>
@@ -205,24 +187,20 @@ export class PageBuilderService {
         }
     }
 
-    public async savePageData(): Promise<Response> {
+    public async savePageData(): Promise<any> {
         // Wait for editor initialization to complete
         await this.initializationPromise;
-
-        if (!this.editor) {
-            throw new Error('Editor not initialized');
-        }
 
         const projectData = this.editor.getProjectData();
 
         // Ensure all components have unique references
         const components = this.editor.getComponents();
-        components.forEach((component: unknown) => {
+        components.forEach((component: any) => {
             this.ensureComponentReference(component);
         });
 
         // Use the URL from window configuration (set by Blade template)
-        const saveUrl = window.pageBuilderConfig?.saveUrl || '/admin/api/pages/save';
+        const saveUrl = (window as any).pageBuilderConfig?.saveUrl || '/admin/api/pages/save';
 
         return fetch(saveUrl, {
             method: 'PUT',
@@ -236,13 +214,9 @@ export class PageBuilderService {
         });
     }
 
-    public async resetPageData(): Promise<Response> {
+    public async resetPageData(): Promise<any> {
         // Wait for editor initialization to complete
         await this.initializationPromise;
-
-        if (!this.editor) {
-            throw new Error('Editor not initialized');
-        }
 
         this.editor.DomComponents.clear();
         const defaultHtml = `
@@ -251,7 +225,7 @@ export class PageBuilderService {
         this.editor.addComponents(defaultHtml);
 
         // Use the URL from window configuration (set by Blade template)
-        const resetUrl = window.pageBuilderConfig?.resetUrl || '/admin/api/pages/reset';
+        const resetUrl = (window as any).pageBuilderConfig?.resetUrl || '/admin/api/pages/reset';
 
         return fetch(resetUrl, {
             method: 'PUT',
@@ -263,13 +237,9 @@ export class PageBuilderService {
         });
     }
 
-    public async getPreviewContent(): Promise<PreviewContent> {
+    public async getPreviewContent(): Promise<{ html: string; css: string }> {
         // Wait for editor initialization to complete
         await this.initializationPromise;
-
-        if (!this.editor) {
-            throw new Error('Editor not initialized');
-        }
 
         return {
             html: this.editor.getHtml(),
@@ -282,20 +252,13 @@ export class PageBuilderService {
         return `${type.toLowerCase()}-${rand}`;
     }
 
-    private ensureComponentReference(component: unknown): void {
-        // Type guard for Component interface
-        if (component && typeof component === 'object' && 'get' in component && 'set' in component) {
-            const comp = component as { get: (key: string) => unknown; set: (key: string, value: unknown) => void };
-            if (!comp.get('reference')) {
-                const type = comp.get('type');
-                comp.set('reference', this.generateRandomId(typeof type === 'string' ? type : 'component'));
-            }
+    private ensureComponentReference(component: any): void {
+        if (!component.get('reference')) {
+            component.set('reference', this.generateRandomId(component.get('type')));
         }
     }
 
     private updateBlockCount(): void {
-        if (!this.editor) return;
-
         const wrapper = this.editor.getWrapper();
         if (!wrapper || typeof wrapper.components !== 'function') {
             return;
@@ -315,27 +278,18 @@ export class PageBuilderService {
     public async undo(): Promise<void> {
         // Wait for editor initialization to complete
         await this.initializationPromise;
-        if (!this.editor) {
-            throw new Error('Editor not initialized');
-        }
         this.editor.UndoManager.undo();
     }
 
     public async redo(): Promise<void> {
         // Wait for editor initialization to complete
         await this.initializationPromise;
-        if (!this.editor) {
-            throw new Error('Editor not initialized');
-        }
         this.editor.UndoManager.redo();
     }
 
     public async setDevice(device: string): Promise<void> {
         // Wait for editor initialization to complete
         await this.initializationPromise;
-        if (!this.editor) {
-            throw new Error('Editor not initialized');
-        }
         this.editor.setDevice(device);
     }
 }
@@ -345,5 +299,5 @@ export const pageBuilderService = new PageBuilderService();
 
 // Make it available globally
 if (typeof window !== 'undefined') {
-    window.pageBuilderService = pageBuilderService;
+    (window as any).pageBuilderService = pageBuilderService;
 }

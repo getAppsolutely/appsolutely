@@ -1,8 +1,6 @@
 // Config Manager - Handles configuration panel functionality
-import type { BlockDefinition, BlockConfig, BlockSchema, SchemaOption } from 'types/pagebuilder';
-
 export class ConfigManager {
-    private currentBlock: BlockDefinition | null = null;
+    private currentBlock: any = null;
 
     constructor() {
         this.initializeConfigPanel();
@@ -55,13 +53,13 @@ export class ConfigManager {
         this.showEmptyConfig();
     }
 
-    public showBlockConfig(block: BlockDefinition): void {
+    public showBlockConfig(block: any): void {
         this.currentBlock = block;
         this.renderConfigForm(block);
         this.switchToConfigTab();
     }
 
-    private renderConfigForm(block: BlockDefinition): void {
+    private renderConfigForm(block: any): void {
         const configForm = document.getElementById('config-form');
         if (!configForm) return;
 
@@ -76,7 +74,7 @@ export class ConfigManager {
         }
     }
 
-    private createSchemaForm(container: HTMLElement, schema: BlockSchema): void {
+    private createSchemaForm(container: HTMLElement, schema: any): void {
         Object.keys(schema).forEach((key) => {
             const field = schema[key];
             const formGroup = this.createFormGroup(key, field);
@@ -84,24 +82,20 @@ export class ConfigManager {
         });
     }
 
-    private createDefaultForm(container: HTMLElement, _block: BlockDefinition): void {
-        const defaultFields: Array<{
-            key: string;
-            type: 'text' | 'textarea' | 'select' | 'number' | 'boolean' | 'color';
-            label: string;
-        }> = [
+    private createDefaultForm(container: HTMLElement, _block: any): void {
+        const defaultFields = [
             { key: 'title', type: 'text', label: 'Title' },
             { key: 'content', type: 'textarea', label: 'Content' },
             { key: 'style', type: 'text', label: 'Style' },
         ];
 
         defaultFields.forEach((field) => {
-            const formGroup = this.createFormGroup(field.key, field as BlockSchema[string]);
+            const formGroup = this.createFormGroup(field.key, field);
             container.appendChild(formGroup);
         });
     }
 
-    private createFormGroup(key: string, field: BlockSchema[string]): HTMLElement {
+    private createFormGroup(key: string, field: any): HTMLElement {
         const group = document.createElement('div');
         group.className = 'form-group';
 
@@ -119,10 +113,10 @@ export class ConfigManager {
             case 'select':
                 input = document.createElement('select');
                 if (field.options) {
-                    field.options.forEach((option: SchemaOption) => {
+                    field.options.forEach((option: any) => {
                         const optionElement = document.createElement('option');
-                        optionElement.value = String(option.value);
-                        optionElement.textContent = option.label || String(option.value);
+                        optionElement.value = option.value || option;
+                        optionElement.textContent = option.label || option;
                         input.appendChild(optionElement);
                     });
                 }
@@ -134,8 +128,7 @@ export class ConfigManager {
 
         input.setAttribute('id', key);
         input.setAttribute('name', key);
-        const defaultValue = field.default !== undefined ? String(field.default) : '';
-        input.setAttribute('value', defaultValue);
+        input.setAttribute('value', field.default || '');
 
         if (field.placeholder) {
             input.setAttribute('placeholder', field.placeholder);
@@ -166,28 +159,17 @@ export class ConfigManager {
         }
     }
 
-    public getCurrentConfig(): BlockConfig | null {
+    public getCurrentConfig(): any {
         if (!this.currentBlock) return null;
 
         const form = document.getElementById('config-form');
         if (!form) return null;
 
         const formData = new FormData(form as HTMLFormElement);
-        const config: BlockConfig = {};
+        const config: any = {};
 
         for (const [key, value] of formData.entries()) {
-            // Skip File entries, only process string values
-            if (typeof value === 'string') {
-                // Try to parse as number or boolean if possible
-                const numValue = Number(value);
-                if (!isNaN(numValue) && value.trim() !== '') {
-                    config[key] = numValue;
-                } else if (value === 'true' || value === 'false') {
-                    config[key] = value === 'true';
-                } else {
-                    config[key] = value;
-                }
-            }
+            config[key] = value;
         }
 
         return config;

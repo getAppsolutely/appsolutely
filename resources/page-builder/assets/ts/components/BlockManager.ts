@@ -1,6 +1,5 @@
 // Block Manager - Handles block-related functionality
 import { pageBuilderService } from '../services/PageBuilderService';
-import type { BlockRegistryCategory, BlockDefinition } from 'types/pagebuilder';
 
 export class BlockManager {
     private service: typeof pageBuilderService;
@@ -23,19 +22,17 @@ export class BlockManager {
         }
     }
 
-    public async registerCustomBlock(_blockConfig: BlockDefinition): Promise<void> {
+    public async registerCustomBlock(_blockConfig: any): Promise<void> {
         // Method to register custom blocks dynamically
         // This would be used for theme-specific blocks
         // TODO: Implement custom block registration logic
     }
 
-    public getBlockCategories(): BlockRegistryCategory[] {
-        // Access private blockRegistry through service
-        // Note: This is a workaround - ideally blockRegistry should be public or have a getter
-        return (this.service as unknown as { blockRegistry: BlockRegistryCategory[] }).blockRegistry || [];
+    public getBlockCategories(): any[] {
+        return this.service['blockRegistry'] || [];
     }
 
-    public getBlocksByCategory(categoryId: string): BlockDefinition[] {
+    public getBlocksByCategory(categoryId: string): any[] {
         const category = this.getBlockCategories().find((cat) => cat.title === categoryId);
         return category ? category.blocks : [];
     }

@@ -97,9 +97,9 @@ export class EditorManager {
     private async handleSaveConfig(): Promise<void> {
         try {
             // Use the URL from window configuration (set by Blade template)
-            const dataUrl = window.pageBuilderConfig?.dataUrl || '/admin/api/pages/data';
+            const dataUrl = (window as any).pageBuilderConfig?.dataUrl || '/admin/api/pages/data';
             const response = await fetch(dataUrl);
-            const result = (await response.json()) as { data: { page: { content: string } } };
+            const result = await response.json();
             const content = result.data.page.content;
             await this.service.renderPageData(content);
         } catch (error) {

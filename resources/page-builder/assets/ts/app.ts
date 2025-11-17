@@ -2,12 +2,9 @@
 
 // External Dependencies
 import grapesjs from 'grapesjs';
-import type { GrapesJS } from 'types/grapesjs';
 
 // Make GrapesJS available globally
-if (typeof window !== 'undefined') {
-    window.grapesjs = grapesjs as unknown as GrapesJS;
-}
+(window as any).grapesjs = grapesjs;
 
 // Page Builder Components
 import './services/PageBuilderService';
@@ -22,7 +19,7 @@ import './components/PreviewManager';
 document.addEventListener('DOMContentLoaded', async () => {
     // Initialize with data from window object
     if (window.pageBuilderData && window.pageBuilderConfig) {
-        const service = window.pageBuilderService;
+        const service = (window as any).pageBuilderService;
         if (service) {
             // renderPageData handles loading block registry first
             await service.renderPageData(window.pageBuilderData);
