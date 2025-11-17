@@ -43,9 +43,9 @@ final readonly class BlockRendererService implements BlockRendererServiceInterfa
 
         // Get parameters safely and normalize keys
         $normalizeParameter = $this->normalizeParameterKeys($block->parameters);
-        $parameters         = $this->getPossibleParameters($block->parameters, $normalizeParameter, $className);
+        // $parameters         = $this->getPossibleParameters($block->parameters, $normalizeParameter, $className);
 
-        $parameters = array_merge($parameters, ['page' => $page->toArray()]);
+        $parameters = array_merge($normalizeParameter, ['page' => $page->toArray()]);
 
         return Livewire::mount($className, $parameters, $reference);
     }

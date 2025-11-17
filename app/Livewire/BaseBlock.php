@@ -51,8 +51,8 @@ abstract class BaseBlock extends Component
         $this->model          = $page['model'] ?? null;
         $queryOptions         = $this->queryOptions ?? ($data['query_options'] ?? []);
         $displayOptions       = $this->displayOptions ?? ($data['display_options'] ?? []);
-        $this->queryOptions   =  $this->mergeByKey($this->defaultQueryOptions, $queryOptions);
-        $this->displayOptions =  $this->mergeByKey($this->defaultDisplayOptions, $displayOptions);
+        $this->queryOptions   =  ! empty($this->defaultQueryOptions) ? $this->mergeByKey($this->defaultQueryOptions, $queryOptions) : $queryOptions;
+        $this->displayOptions =  ! empty($this->defaultDisplayOptions) ? $this->mergeByKey($this->defaultDisplayOptions, $displayOptions) : $displayOptions;
         $this->style          = $displayOptions['style'] ?? $this->style;
         $this->initializeComponent(app());
         $this->initializePublishDates();
