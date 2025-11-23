@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\Traits\ClearsResponseCache;
 use App\Models\Traits\HasMissingIds;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 final class PageBlockValue extends Model
 {
+    use ClearsResponseCache;
     use HasMissingIds;
 
     protected $fillable = [
