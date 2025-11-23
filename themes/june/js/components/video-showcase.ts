@@ -30,7 +30,7 @@ class VideoShowcase {
         // Ensure video plays on mobile devices
         this.video.setAttribute('playsinline', '');
         this.video.setAttribute('webkit-playsinline', '');
-        
+
         // Set additional mobile-friendly attributes
         this.video.setAttribute('preload', 'metadata');
     }
@@ -40,7 +40,7 @@ class VideoShowcase {
 
         // Add loading state
         this.video.addEventListener('loadstart', () => {
-            console.log('Video loading started');
+            //console.log('Video loading started');
         });
 
         // Try to play video when it's loaded
@@ -72,11 +72,11 @@ class VideoShowcase {
 
         // Handle play promise for modern browsers
         const playPromise = this.video.play();
-        
+
         if (playPromise !== undefined) {
             playPromise
                 .then(() => {
-                    console.log('Video autoplay started successfully');
+                    //console.log('Video autoplay started successfully');
                 })
                 .catch((error: Error) => {
                     console.log('Video autoplay prevented by browser policy:', error);
@@ -89,11 +89,15 @@ class VideoShowcase {
         // Could add user interaction to start video
         // For example, show a play button overlay
         console.log('Autoplay blocked - could show play button');
-        
+
         // Option: Add click listener to start video on user interaction
-        document.addEventListener('click', () => {
-            this.video?.play().catch((e: Error) => console.log('Manual play failed:', e));
-        }, { once: true });
+        document.addEventListener(
+            'click',
+            () => {
+                this.video?.play().catch((e: Error) => console.log('Manual play failed:', e));
+            },
+            { once: true }
+        );
     }
 
     handleVideoError(): void {
@@ -109,20 +113,23 @@ class VideoShowcase {
         if (!this.video) return;
 
         // Pause video when not in view (performance optimization)
-        this.observer = new IntersectionObserver((entries: IntersectionObserverEntry[]) => {
-            entries.forEach((entry: IntersectionObserverEntry) => {
-                if (entry.isIntersecting) {
-                    // Video is in view - play it
-                    this.video?.play().catch((e: Error) => console.log('Play failed:', e));
-                } else {
-                    // Video is out of view - pause it to save resources
-                    this.video?.pause();
-                }
-            });
-        }, { 
-            threshold: 0.5,
-            rootMargin: '50px',
-        });
+        this.observer = new IntersectionObserver(
+            (entries: IntersectionObserverEntry[]) => {
+                entries.forEach((entry: IntersectionObserverEntry) => {
+                    if (entry.isIntersecting) {
+                        // Video is in view - play it
+                        this.video?.play().catch((e: Error) => console.log('Play failed:', e));
+                    } else {
+                        // Video is out of view - pause it to save resources
+                        this.video?.pause();
+                    }
+                });
+            },
+            {
+                threshold: 0.5,
+                rootMargin: '50px',
+            }
+        );
 
         this.observer.observe(this.video);
     }
@@ -132,7 +139,7 @@ class VideoShowcase {
         if (this.observer) {
             this.observer.disconnect();
         }
-        
+
         if (this.video) {
             this.video.pause();
             this.video.removeAttribute('src');
@@ -146,4 +153,3 @@ new VideoShowcase();
 
 // Export for potential use in other modules
 export default VideoShowcase;
-

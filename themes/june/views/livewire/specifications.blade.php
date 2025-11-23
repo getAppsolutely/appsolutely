@@ -57,7 +57,7 @@
                     <div class="col">
                         <div class="row g-4">
                             <!-- Dimensions Column -->
-                            <div class="col-xl-4">
+                            <div class="col-xl-6">
                                 <div class="specifications-section__column">
                                     <h4 class="specifications-section__section-title">Dimensions</h4>
                                     <hr class="specifications-section__divider">
@@ -83,7 +83,7 @@
                             </div>
 
                             <!-- Drive Column -->
-                            <div class="col-xl-4">
+                            <div class="col-xl-6">
                                 <div class="specifications-section__column">
                                     <h4 class="specifications-section__section-title">Drive</h4>
                                     <hr class="specifications-section__divider">
@@ -108,7 +108,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-xl-4">
+                            <div class="col-xl-4 d-none">
                                 <div class="specifications-section__column">
                                     <h4 class="specifications-section__section-title">Key Features</h4>
                                     <hr class="specifications-section__divider">
