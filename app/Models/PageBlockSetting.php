@@ -37,9 +37,7 @@ final class PageBlockSetting extends Model
         'expired_at'    => 'datetime',
     ];
 
-    protected $appends = [
-        'parameters',
-    ];
+    protected $appends = [];
 
     /**
      * Check if block value's schema_values is dirty and create new block value if needed
@@ -93,7 +91,7 @@ final class PageBlockSetting extends Model
      * Get the parameters for this block setting.
      * Returns schema_values if block scope is 'page', otherwise returns block's schema_values.
      */
-    public function getParametersAttribute(): array
+    public function getDisplayOptionsValueAttribute(): array
     {
         // Load the block relationship if not already loaded
         if (! $this->relationLoaded('block')) {
@@ -101,8 +99,10 @@ final class PageBlockSetting extends Model
         }
 
         $displayOptions = $this->blockValue?->display_options;
-        if (is_string($displayOptions)) {
-            return json_decode($displayOptions, true) ?? [];
+        if (! empty($displayOptions)) {
+            return is_array($displayOptions)
+                ? $displayOptions
+                : (is_string($displayOptions) ? json_decode($displayOptions, true) : []);
         }
 
         // Otherwise, return the block's schema_values (for global scope)
@@ -112,5 +112,21 @@ final class PageBlockSetting extends Model
         }
 
         return $blockSchemaValues ?? [];
+    }
+
+    public function getQueryOptionsValueAttribute(): array
+    {
+        // Load the block relationship if not already loaded
+        if (! $this->relationLoaded('block')) {
+            $this->load('block');
+        }
+
+        $queryOptions = $this->blockValue?->query_options;
+        if (! empty($queryOptions) || (! is_array($queryOptions) && ! is_string($queryOptions))) {
+            return [];
+        }
+
+        return is_string($queryOptions) ? json_decode($queryOptions, true) : $queryOptions;
+
     }
 }

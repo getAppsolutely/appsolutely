@@ -41,13 +41,13 @@ final readonly class BlockRendererService implements BlockRendererServiceInterfa
             return $this->getBlockErrorHtml("Class '{$className}' is not a Livewire component");
         }
 
-        // Get parameters safely and normalize keys
-        $normalizeParameter = $this->normalizeParameterKeys($block->parameters);
-        // $parameters         = $this->getPossibleParameters($block->parameters, $normalizeParameter, $className);
+        $data = [
+            'page'           => $page->toArray(),
+            'queryOptions'   => $block->queryOptionsValue ?? [],
+            'displayOptions' => $block->displayOptionsValue ?? [],
+        ];
 
-        $parameters = array_merge($normalizeParameter, ['page' => $page->toArray()]);
-
-        return Livewire::mount($className, $parameters, $reference);
+        return Livewire::mount($className, $data, $reference);
     }
 
     /**
