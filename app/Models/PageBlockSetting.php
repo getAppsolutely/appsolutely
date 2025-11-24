@@ -47,7 +47,7 @@ final class PageBlockSetting extends Model
     public function checkAndCreateNewBlockValue(): void
     {
         // Only proceed if we have a block value and it's dirty
-        if (! $this->blockValue || ! $this->blockValue->isDirty('schema_values')) {
+        if (! $this->blockValue || ! $this->blockValue->isDirty(['display_options', 'query_options'])) {
             return;
         }
 
@@ -60,13 +60,14 @@ final class PageBlockSetting extends Model
 
         // Create a new block value with the updated schema_values
         $newBlockValue = PageBlockValue::create([
-            'id'            => PageBlockValue::getFirstMissingId(),
-            'block_id'      => $this->block_id,
-            'template'      => $this->blockValue->template,
-            'scripts'       => $this->blockValue->scripts,
-            'stylesheets'   => $this->blockValue->stylesheets,
-            'styles'        => $this->blockValue->styles,
-            'schema_values' => $this->blockValue->schema_values,
+            'id'              => PageBlockValue::getFirstMissingId(),
+            'block_id'        => $this->block_id,
+            'template'        => $this->blockValue->template,
+            'scripts'         => $this->blockValue->scripts,
+            'stylesheets'     => $this->blockValue->stylesheets,
+            'styles'          => $this->blockValue->styles,
+            'display_options' => $this->blockValue->display_options,
+            'query_options'   => $this->blockValue->query_options,
         ]);
 
         // Update this setting to use the new block value
@@ -99,9 +100,9 @@ final class PageBlockSetting extends Model
             $this->load('block');
         }
 
-        $schemaValues = $this->blockValue?->schema_values;
-        if (is_string($schemaValues)) {
-            return json_decode($schemaValues, true) ?? [];
+        $displayOptions = $this->blockValue?->display_options;
+        if (is_string($displayOptions)) {
+            return json_decode($displayOptions, true) ?? [];
         }
 
         // Otherwise, return the block's schema_values (for global scope)

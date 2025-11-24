@@ -198,12 +198,12 @@ final class PageBlockController extends AdminBaseController
             $modal = Modal::make()
                 ->xl()
                 ->scrollable()
-                ->title('Edit Global Block Setting: ' . $block->title . ' (Page: ' . $blockSetting->page->title . ')')
+                ->title('Edit Global Block Setting: ' . $block->title . ' (Page: ' . $blockSetting->page->name . ')')
                 ->body(PageBlockSettingForm::make($blockSetting->id)->payload([
                     'id' => $blockSetting->id,
                 ]))
-                ->button("<button type='button' class='btn btn-sm btn-primary mr-2' id='{$buttonId}' style='text-decoration: none;'>
-                    <i class='fa fa-globe mr-1'></i>{$block->title} ({$blockSetting->page->title})
+                ->button("<button type='button' class='btn btn-sm btn-primary mr-2 mt-1' id='{$buttonId}' style='text-decoration: none;'>
+                    <i class='fa fa-globe mr-1'></i>{$block->title} ({$blockSetting->page->name})
                 </button>");
 
             return $modal->render();
@@ -214,7 +214,7 @@ final class PageBlockController extends AdminBaseController
                 <i class='fa fa-globe text-info mr-2'></i>
                 <strong>Global Blocks Available</strong>
             </div>
-            <p class='text-dark mb-1'>Click on any block below to quickly edit its global settings:</p>
+            <p class='text-dark'>Click on any block below to quickly edit its global settings:</p>
             <div class='d-flex flex-wrap'>
                 {$modals}
             </div>

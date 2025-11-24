@@ -20,7 +20,8 @@ return new class() extends Migration
             $table->text('scripts')->nullable();
             $table->text('stylesheets')->nullable();
             $table->json('styles')->nullable();
-            $table->json('schema_values')->nullable();
+            $table->json('query_options')->nullable();
+            $table->json('display_options')->nullable();
             $table->timestamps();
         });
     }

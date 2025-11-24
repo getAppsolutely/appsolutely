@@ -37,8 +37,11 @@ class PageBlockSettingForm extends ModelForm
         $this->text('type', __t('Type'));
         $this->text('remark', __t('Remark'));
 
-        $this->textarea('blockValue.schema_values', __t('Schema Values'))
-            ->rows(10);
+        $this->textarea('blockValue.display_options', __t('Display Options'))
+            ->rows(10)->help(__t('JSON format for display options'));
+
+        $this->textarea('blockValue.query_options', __t('Query Options'))
+            ->rows(10)->help(__t('JSON format for query options'));
 
         $this->number('sort', __t('Sort'));
         $this->switch('status', __t('Status'));
@@ -47,10 +50,25 @@ class PageBlockSettingForm extends ModelForm
     protected function updateModel(int $id, array $input): void
     {
         /** @var PageBlockSetting $model */
-        $model         = $this->model->findOrFail($id);
-        if (! empty($input['blockValue']['schema_values'])) {
-            $model->blockValue->schema_values = $input['blockValue']['schema_values'];
-            $model->checkAndCreateNewBlockValue();
+        $model = $this->model->findOrFail($id);
+
+        // Handle block value updates
+        if (! empty($input['blockValue'])) {
+            $blockValueChanged = false;
+
+            if (isset($input['blockValue']['display_options'])) {
+                $model->blockValue->display_options = $input['blockValue']['display_options'];
+                $blockValueChanged                  = true;
+            }
+
+            if (isset($input['blockValue']['query_options'])) {
+                $model->blockValue->query_options = $input['blockValue']['query_options'];
+                $blockValueChanged                = true;
+            }
+
+            if ($blockValueChanged) {
+                $model->checkAndCreateNewBlockValue();
+            }
             unset($input['blockValue']);
         }
 

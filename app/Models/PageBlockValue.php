@@ -19,12 +19,14 @@ final class PageBlockValue extends Model
         'scripts',
         'stylesheets',
         'styles',
-        'schema_values',
+        'query_options',
+        'display_options',
     ];
 
     protected $casts = [
-        'styles'        => 'array',
-        'schema_values' => 'array',
+        'styles'          => 'array',
+        'query_options'   => 'array',
+        'display_options' => 'array',
     ];
 
     public function block(): BelongsTo
