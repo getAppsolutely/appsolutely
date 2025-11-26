@@ -9,7 +9,6 @@ The PageBlock Schema System provides a flexible and structured way to define con
 ### Database Structure
 
 - **`page_blocks.schema`** (JSON): Defines the field structure and validation rules for each block
-- **`page_block_settings.schema_values`** (JSON): Stores the actual configuration values for block instances
 
 ### Core Components
 
@@ -36,23 +35,23 @@ The PageBlock Schema System provides a flexible and structured way to define con
 
 ### Supported Field Types
 
-| Type | Description | Properties | Example Value |
-|------|-------------|------------|---------------|
-| `text` | Single line text | `max_length`, `pattern` | `"Hello World"` |
-| `textarea` | Multi-line text | `max_length`, `rows` | `"Long description..."` |
-| `number` | Numeric value | `min`, `max`, `step` | `42` |
-| `boolean` | True/false value | `default` | `true` |
-| `select` | Single choice dropdown | `options` | `"option1"` |
-| `multiSelect` | Multiple choice | `options`, `max_selections` | `["opt1", "opt2"]` |
-| `image` | Image upload | `max_size`, `allowed_types` | `"/uploads/image.jpg"` |
-| `file` | File upload | `max_size`, `allowed_types` | `"/uploads/file.pdf"` |
-| `date` | Date picker | `format`, `min_date`, `max_date` | `"2024-01-15"` |
-| `datetime` | Date & time picker | `format` | `"2024-01-15T10:30:00"` |
-| `color` | Color picker | `format` | `"#ff0000"` |
-| `url` | URL input | `protocols` | `"https://example.com"` |
-| `email` | Email input | - | `"user@example.com"` |
-| `table` | Array of objects | `fields`, `max_items` | `[{"key": "value"}]` |
-| `object` | Nested object | `fields` | `{"nested": "value"}` |
+| Type          | Description            | Properties                       | Example Value           |
+| ------------- | ---------------------- | -------------------------------- | ----------------------- |
+| `text`        | Single line text       | `max_length`, `pattern`          | `"Hello World"`         |
+| `textarea`    | Multi-line text        | `max_length`, `rows`             | `"Long description..."` |
+| `number`      | Numeric value          | `min`, `max`, `step`             | `42`                    |
+| `boolean`     | True/false value       | `default`                        | `true`                  |
+| `select`      | Single choice dropdown | `options`                        | `"option1"`             |
+| `multiSelect` | Multiple choice        | `options`, `max_selections`      | `["opt1", "opt2"]`      |
+| `image`       | Image upload           | `max_size`, `allowed_types`      | `"/uploads/image.jpg"`  |
+| `file`        | File upload            | `max_size`, `allowed_types`      | `"/uploads/file.pdf"`   |
+| `date`        | Date picker            | `format`, `min_date`, `max_date` | `"2024-01-15"`          |
+| `datetime`    | Date & time picker     | `format`                         | `"2024-01-15T10:30:00"` |
+| `color`       | Color picker           | `format`                         | `"#ff0000"`             |
+| `url`         | URL input              | `protocols`                      | `"https://example.com"` |
+| `email`       | Email input            | -                                | `"user@example.com"`    |
+| `table`       | Array of objects       | `fields`, `max_items`            | `[{"key": "value"}]`    |
+| `object`      | Nested object          | `fields`                         | `{"nested": "value"}`   |
 
 ### Field Properties
 
@@ -80,57 +79,57 @@ The PageBlock Schema System provides a flexible and structured way to define con
 
 ```json
 {
-  "title": {
-    "type": "text",
-    "label": "Hero Title",
-    "description": "Main headline for the hero section",
-    "required": true,
-    "max_length": 100,
-    "default": "Welcome to Our Site"
-  },
-  "subtitle": {
-    "type": "textarea",
-    "label": "Hero Subtitle",
-    "description": "Supporting text below the main title",
-    "required": false,
-    "max_length": 200,
-    "default": "Discover amazing features and services"
-  },
-  "background_image": {
-    "type": "image",
-    "label": "Background Image",
-    "description": "Hero background image",
-    "required": false,
-    "max_size": "5MB"
-  },
-  "cta_button": {
-    "type": "object",
-    "label": "Call to Action Button",
-    "fields": {
-      "text": {
+    "title": {
         "type": "text",
-        "label": "Button Text",
+        "label": "Hero Title",
+        "description": "Main headline for the hero section",
         "required": true,
-        "default": "Get Started"
-      },
-      "url": {
-        "type": "text",
-        "label": "Button URL",
-        "required": true,
-        "default": "/contact"
-      },
-      "style": {
-        "type": "select",
-        "label": "Button Style",
-        "options": [
-          {"value": "primary", "label": "Primary"},
-          {"value": "secondary", "label": "Secondary"},
-          {"value": "outline", "label": "Outline"}
-        ],
-        "default": "primary"
-      }
+        "max_length": 100,
+        "default": "Welcome to Our Site"
+    },
+    "subtitle": {
+        "type": "textarea",
+        "label": "Hero Subtitle",
+        "description": "Supporting text below the main title",
+        "required": false,
+        "max_length": 200,
+        "default": "Discover amazing features and services"
+    },
+    "background_image": {
+        "type": "image",
+        "label": "Background Image",
+        "description": "Hero background image",
+        "required": false,
+        "max_size": "5MB"
+    },
+    "cta_button": {
+        "type": "object",
+        "label": "Call to Action Button",
+        "fields": {
+            "text": {
+                "type": "text",
+                "label": "Button Text",
+                "required": true,
+                "default": "Get Started"
+            },
+            "url": {
+                "type": "text",
+                "label": "Button URL",
+                "required": true,
+                "default": "/contact"
+            },
+            "style": {
+                "type": "select",
+                "label": "Button Style",
+                "options": [
+                    { "value": "primary", "label": "Primary" },
+                    { "value": "secondary", "label": "Secondary" },
+                    { "value": "outline", "label": "Outline" }
+                ],
+                "default": "primary"
+            }
+        }
     }
-  }
 }
 ```
 
@@ -181,9 +180,9 @@ The PageBlock Schema System provides a flexible and structured way to define con
         "description": "Choose the layout style",
         "required": true,
         "options": [
-            {"value": "horizontal", "label": "Horizontal"},
-            {"value": "vertical", "label": "Vertical"},
-            {"value": "dropdown", "label": "Dropdown"}
+            { "value": "horizontal", "label": "Horizontal" },
+            { "value": "vertical", "label": "Vertical" },
+            { "value": "dropdown", "label": "Dropdown" }
         ],
         "default": "horizontal"
     },
@@ -206,30 +205,30 @@ The PageBlock Schema System provides a flexible and structured way to define con
 }
 ```
 
-##  Example Schema Values
+## Example Schema Values
 
 ```json
 {
-  "mainNav": "Main Menu",
-  "menus": [
-    {
-      "label": "Home",
-      "url": "/home",
-      "image": "/uploads/menu-home.jpg",
-      "is_active": true
-    },
-    {
-      "label": "About",
-      "url": "/about",
-      "image": null,
-      "is_active": false
+    "mainNav": "Main Menu",
+    "menus": [
+        {
+            "label": "Home",
+            "url": "/home",
+            "image": "/uploads/menu-home.jpg",
+            "is_active": true
+        },
+        {
+            "label": "About",
+            "url": "/about",
+            "image": null,
+            "is_active": false
+        }
+    ],
+    "layout": "horizontal",
+    "colors": {
+        "primary": "#007bff",
+        "secondary": "#6c757d"
     }
-  ],
-  "layout": "horizontal",
-  "colors": {
-    "primary": "#007bff",
-    "secondary": "#6c757d"
-  }
 }
 ```
 
@@ -260,18 +259,6 @@ $block = PageBlock::create([
 
 The `PageBlockSettingController` automatically handles schema validation:
 
-```php
-// Schema validation happens automatically in store/update methods
-$setting = PageBlockSetting::create([
-    'block_id' => $blockId,
-    'page_id' => $pageId,
-    'schema_values' => [
-        'title' => 'Welcome to Our Site',
-        'subtitle' => 'Discover amazing features'
-    ]
-]);
-```
-
 ### 3. Accessing Schema Values in Livewire Components
 
 ```php
@@ -280,14 +267,14 @@ class HeroSection extends Component
     public $title;
     public $subtitle;
     public $backgroundImage;
-    
+
     public function mount($schemaValues = [])
     {
         $this->title = $schemaValues['title'] ?? 'Default Title';
         $this->subtitle = $schemaValues['subtitle'] ?? '';
         $this->backgroundImage = $schemaValues['background_image'] ?? null;
     }
-    
+
     public function render()
     {
         return view('livewire.hero-section');
@@ -328,6 +315,7 @@ The admin interface automatically generates form fields based on the block's sch
 ### Schema Field Information
 
 The form displays helpful information about available fields:
+
 - Field names and types
 - Required/optional status
 - Field descriptions
@@ -383,7 +371,6 @@ If you have existing blocks without schemas:
 
 - Use `dd($schema)` to inspect schema definitions
 - Check validation errors with `$e->errors()`
-- Verify database values with `dd($setting->schema_values)`
 
 ## Future Enhancements
 
@@ -394,4 +381,4 @@ Potential improvements to consider:
 3. **Field dependencies**: Make fields depend on other field values
 4. **Custom field types**: Add support for custom field types
 5. **Schema versioning**: Support for schema evolution over time
-6. **Import/Export**: Tools for importing/exporting schema definitions 
+6. **Import/Export**: Tools for importing/exporting schema definitions

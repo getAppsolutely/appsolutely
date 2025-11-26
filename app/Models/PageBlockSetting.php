@@ -30,17 +30,15 @@ final class PageBlockSetting extends Model
     ];
 
     protected $casts = [
-        'styles'        => 'array',
-        'schema_values' => 'array',
-        'status'        => 'integer',
-        'published_at'  => 'datetime',
-        'expired_at'    => 'datetime',
+        'status'       => 'integer',
+        'published_at' => 'datetime',
+        'expired_at'   => 'datetime',
     ];
 
     protected $appends = [];
 
     /**
-     * Check if block value's schema_values is dirty and create new block value if needed
+     * Check if block value's display_options and query_options is dirty and create new block value if needed
      */
     public function checkAndCreateNewBlockValue(): void
     {
@@ -56,7 +54,7 @@ final class PageBlockSetting extends Model
             return;
         }
 
-        // Create a new block value with the updated schema_values
+        // Create a new block value with the updated display_options and query_options
         $newBlockValue = PageBlockValue::create([
             'id'              => PageBlockValue::getFirstMissingId(),
             'block_id'        => $this->block_id,
@@ -89,7 +87,7 @@ final class PageBlockSetting extends Model
 
     /**
      * Get the parameters for this block setting.
-     * Returns schema_values if block scope is 'page', otherwise returns block's schema_values.
+     * Returns display_options if block scope is 'page', otherwise returns block's display_options.
      */
     public function getDisplayOptionsValueAttribute(): array
     {
@@ -122,7 +120,7 @@ final class PageBlockSetting extends Model
         }
 
         $queryOptions = $this->blockValue?->query_options;
-        if (! empty($queryOptions) || (! is_array($queryOptions) && ! is_string($queryOptions))) {
+        if (empty($queryOptions) || (! is_array($queryOptions) && ! is_string($queryOptions))) {
             return [];
         }
 
