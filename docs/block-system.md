@@ -547,61 +547,6 @@ This is handled by `PageBlockSetting::checkAndCreateNewBlockValue()`.
 - Uses block's `schema_values` as defaults
 - Updates existing `PageBlockValue`
 
-## Migration from Old System
-
-### Old Structure (Combined)
-
-Previously, options were combined in a single structure:
-
-```json
-{
-    "display_options": {
-        "title": "Welcome",
-        "layout": "grid"
-    },
-    "query_options": {
-        "posts_per_page": 6,
-        "order_by": "date"
-    }
-}
-```
-
-### New Structure (Separated)
-
-Now stored in separate columns:
-
-```json
-// display_options column
-{
-  "title": "Welcome",
-  "layout": "grid"
-}
-
-// query_options column
-{
-  "posts_per_page": 6,
-  "order_by": "date"
-}
-```
-
-### Migration Command
-
-Use the provided artisan command to migrate:
-
-```bash
-# Verify data structure
-php artisan pageblock:migrate-options --verify
-
-# Dry run (preview changes)
-php artisan pageblock:migrate-options --dry-run --debug
-
-# Run migration
-php artisan pageblock:migrate-options
-
-# Migrate specific record
-php artisan pageblock:migrate-options --id=123
-```
-
 ## Best Practices
 
 ### 1. Component Design
@@ -660,7 +605,7 @@ php artisan pageblock:migrate-options --id=123
 
 - Review validation rules in schema
 - Check field types match input
-- Use `--debug` flag on migration command
+- Ensure required fields are provided
 
 **Data not appearing**
 
