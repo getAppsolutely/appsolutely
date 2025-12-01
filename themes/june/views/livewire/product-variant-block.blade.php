@@ -1,15 +1,43 @@
 @php
     $product = $displayOptions['product'] ?? [];
     $variants = $product['variants'] ?? [];
-    $currentVariant = $variants[$selectedVariantIndex] ?? null;
-    $currentColor = null;
 
-    if ($currentVariant && $selectedColorIndex !== null && isset($currentVariant['colors'][$selectedColorIndex])) {
-        $currentColor = $currentVariant['colors'][$selectedColorIndex];
+    // Pre-process all image URLs through asset_url() helper
+    foreach ($variants as &$variant) {
+        if (!empty($variant['colors'])) {
+            foreach ($variant['colors'] as &$color) {
+                if (!empty($color['images'])) {
+                    $color['images'] = array_map(fn($img) => asset_url($img), $color['images']);
+                }
+            }
+        }
     }
+    unset($variant, $color);
+
+    $product['variants'] = $variants;
 @endphp
 
-<section class="product-variant-block py-5" wire:key="product-variant-{{ $this->getId() }}">
+<section class="product-variant-block py-5" wire:key="product-variant-{{ $this->getId() }}" x-data="{
+    selectedVariantIndex: 0,
+    selectedColorIndex: 0,
+    product: {{ json_encode($product) }},
+    get currentVariant() {
+        return this.product.variants?.[this.selectedVariantIndex] || null;
+    },
+    get currentColor() {
+        return this.currentVariant?.colors?.[this.selectedColorIndex] || null;
+    },
+    switchVariant(index) {
+        this.selectedVariantIndex = index;
+        // Reset to first color when switching variants
+        if (this.currentVariant?.colors?.length) {
+            this.selectedColorIndex = 0;
+        }
+    },
+    selectColor(index) {
+        this.selectedColorIndex = index;
+    }
+}">
     <div class="container">
         @if (empty($product))
             <div class="alert alert-warning">No product data configured</div>
@@ -26,7 +54,8 @@
                             <span class="me-3"><strong>Year:</strong> {{ $product['common']['year'] }}</span>
                         @endif
                         @if (!empty($product['common']['body_type']))
-                            <span class="me-3"><strong>Body Type:</strong> {{ $product['common']['body_type'] }}</span>
+                            <span class="me-3"><strong>Body Type:</strong>
+                                {{ $product['common']['body_type'] }}</span>
                         @endif
                         @if (!empty($product['common']['platform']))
                             <span class="me-3"><strong>Platform:</strong> {{ $product['common']['platform'] }}</span>
@@ -43,9 +72,10 @@
                     <ul class="nav nav-tabs justify-content-center" role="tablist">
                         @foreach ($variants as $index => $variant)
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link {{ $selectedVariantIndex === $index ? 'active' : '' }}"
-                                    type="button" wire:click="switchVariant({{ $index }})" role="tab"
-                                    aria-selected="{{ $selectedVariantIndex === $index ? 'true' : 'false' }}">
+                                <button class="nav-link"
+                                    :class="{ 'active': selectedVariantIndex === {{ $index }} }" type="button"
+                                    @click="switchVariant({{ $index }})" role="tab"
+                                    :aria-selected="selectedVariantIndex === {{ $index }} ? 'true' : 'false'">
                                     {{ $variant['name'] ?? 'Variant ' . ($index + 1) }}
                                 </button>
                             </li>
@@ -53,100 +83,89 @@
                     </ul>
                 </div>
 
-                @if ($currentVariant)
-                    <div class="row g-4">
-                        <!-- Left Column: Images -->
-                        <div class="col-lg-7">
-                            <!-- Main Image -->
-                            @if ($currentColor && !empty($currentColor['images']))
-                                <div class="main-image-container mb-4">
-                                    <img src="{{ asset_url($currentColor['images'][0]) }}"
-                                        alt="{{ $currentColor['name'] ?? 'Product Image' }}"
-                                        class="img-fluid rounded shadow-sm w-100 product-main-image"
-                                        style="max-height: 500px; object-fit: contain;">
-                                </div>
-                            @endif
-
-                            <!-- Color Selection -->
-                            @if (!empty($currentVariant['colors']))
-                                <div class="color-selection mb-4">
-                                    <h6 class="mb-3 fw-semibold">Select Color</h6>
-                                    <div class="d-flex flex-wrap gap-2">
-                                        @foreach ($currentVariant['colors'] as $colorIndex => $color)
-                                            <button type="button"
-                                                class="color-option btn {{ $selectedColorIndex === $colorIndex ? 'active' : '' }}"
-                                                wire:click="selectColor({{ $colorIndex }})"
-                                                style="
-                                                    width: 50px;
-                                                    height: 50px;
-                                                    border-radius: 50%;
-                                                    background-color: {{ $color['code'] ?? '#ccc' }};
-                                                    border: 3px solid {{ $selectedColorIndex === $colorIndex ? '#007bff' : 'transparent' }};
-                                                    position: relative;
-                                                "
-                                                title="{{ $color['name'] ?? 'Color ' . ($colorIndex + 1) }}"
-                                                data-bs-toggle="tooltip">
-                                                @if ($selectedColorIndex === $colorIndex)
-                                                    <i
-                                                        class="fas fa-check text-white position-absolute top-50 start-50 translate-middle"></i>
-                                                @endif
-                                            </button>
-                                        @endforeach
-                                    </div>
-                                    @if ($currentColor)
-                                        <p class="mt-2 mb-0 text-muted">
-                                            <strong>Selected: </strong>{{ $currentColor['name'] ?? 'Unnamed Color' }}
-                                        </p>
-                                    @endif
-                                </div>
-                            @endif
-
-                            <!-- Additional Images -->
-                            @if ($currentColor && !empty($currentColor['images']) && count($currentColor['images']) > 1)
-                                <div class="additional-images mt-4">
-                                    <h6 class="mb-3 fw-semibold">More Images</h6>
-                                    <div class="row g-2">
-                                        @foreach (array_slice($currentColor['images'], 1) as $imageIndex => $image)
-                                            <div class="col-4 col-md-3">
-                                                <img src="{{ asset_url($image) }}"
-                                                    alt="Product Image {{ $imageIndex + 2 }}"
-                                                    class="img-fluid rounded shadow-sm w-100 product-thumbnail"
-                                                    style="height: 100px; object-fit: cover; cursor: pointer;">
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            @endif
+                <!-- Variant Content -->
+                <div class="row g-4">
+                    <!-- Left Column: Images -->
+                    <div class="col-lg-7">
+                        <!-- Main Image -->
+                        <div class="main-image-container mb-4" x-show="currentColor && currentColor.images?.length">
+                            <img :src="currentColor?.images?.[0] || ''" :alt="currentColor?.name || 'Product Image'"
+                                class="img-fluid rounded shadow-sm w-100 product-main-image"
+                                style="max-height: 500px; object-fit: contain;"
+                                x-transition:enter="transition ease-out duration-150"
+                                x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
                         </div>
 
-                        <!-- Right Column: Price & Specs -->
-                        <div class="col-lg-5">
-                            <!-- Variant Name & Price -->
-                            <div class="variant-info mb-4">
-                                <h2 class="h3 fw-bold mb-2">{{ $currentVariant['name'] ?? 'Variant' }}</h2>
-                                @if (!empty($currentVariant['price']))
-                                    <div class="price-section mb-3">
-                                        <span class="h4 fw-bold text-primary">
-                                            ${{ is_int($currentVariant['price']) ? number_format($currentVariant['price'], 0) : $currentVariant['price'] }}
-                                        </span>
-                                    </div>
-                                @endif
+                        <!-- Color Selection -->
+                        <div class="color-selection mb-4" x-show="currentVariant?.colors?.length">
+                            <h6 class="mb-3 fw-semibold">Select Color</h6>
+                            <div class="d-flex flex-wrap gap-2">
+                                <template x-for="(color, colorIndex) in currentVariant?.colors || []"
+                                    :key="colorIndex">
+                                    <button type="button" class="color-option btn"
+                                        :class="{ 'active': selectedColorIndex === colorIndex }"
+                                        @click="selectColor(colorIndex)"
+                                        :style="`
+                                                                                                                            width: 50px;
+                                                                                                                            height: 50px;
+                                                                                                                            border-radius: 50%;
+                                                                                                                            background-color: ${color.code || '#ccc'};
+                                                                                                                            border: 3px solid ${selectedColorIndex === colorIndex ? '#007bff' : 'transparent'};
+                                                                                                                            position: relative;
+                                                                                                                        `"
+                                        :title="color.name || 'Color ' + (colorIndex + 1)" data-bs-toggle="tooltip">
+                                        <i x-show="selectedColorIndex === colorIndex"
+                                            class="fas fa-check text-white position-absolute top-50 start-50 translate-middle"></i>
+                                    </button>
+                                </template>
                             </div>
+                            <p class="mt-2 mb-0 text-muted" x-show="currentColor">
+                                <strong>Selected: </strong><span x-text="currentColor?.name || 'Unnamed Color'"></span>
+                            </p>
+                        </div>
 
-                            <!-- Specifications -->
-                            @if (!empty($currentVariant['specs']))
-                                <div class="specifications-section mb-4">
-                                    <h5 class="fw-bold mb-3">Specifications</h5>
-                                    <ul class="list-group">
-                                        @foreach ($currentVariant['specs'] as $spec)
-                                            <li class="list-group-item">{{ $spec }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
+                        <!-- Additional Images -->
+                        <div class="additional-images mt-4" x-show="currentColor?.images?.length > 1">
+                            <h6 class="mb-3 fw-semibold">More Images</h6>
+                            <div class="row g-2">
+                                <template x-for="(image, imageIndex) in currentColor?.images?.slice(1) || []"
+                                    :key="imageIndex">
+                                    <div class="col-4 col-md-3">
+                                        <img :src="image" :alt="'Product Image ' + (imageIndex + 2)"
+                                            class="img-fluid rounded shadow-sm w-100 product-thumbnail"
+                                            style="height: 100px; object-fit: cover; cursor: pointer;"
+                                            @click="$el.closest('.col-lg-7').querySelector('.product-main-image').src = $el.src">
+                                    </div>
+                                </template>
+                            </div>
                         </div>
                     </div>
-                @endif
+
+                    <!-- Right Column: Price & Specs -->
+                    <div class="col-lg-5">
+                        <!-- Variant Name & Price -->
+                        <div class="variant-info mb-4">
+                            <h2 class="h3 fw-bold mb-2" x-text="currentVariant?.name || 'Variant'"></h2>
+                            <div class="price-section mb-3" x-show="currentVariant?.price">
+                                <span class="h4 fw-bold text-primary">
+                                    $<span
+                                        x-text="typeof currentVariant?.price === 'number' ? currentVariant.price.toLocaleString() : currentVariant?.price"></span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Specifications -->
+                        <div class="specifications-section mb-4" x-show="currentVariant?.specs?.length">
+                            <h5 class="fw-bold mb-3">Specifications</h5>
+                            <ul class="list-group">
+                                <template x-for="(spec, specIndex) in currentVariant?.specs || []"
+                                    :key="specIndex">
+                                    <li class="list-group-item" x-text="spec"></li>
+                                </template>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             @endif
         @endif
     </div>
