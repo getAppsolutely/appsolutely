@@ -854,8 +854,12 @@ if (! function_exists('nested_url')) {
 }
 
 if (! function_exists('app_uri')) {
-    function app_uri(string $path = ''): string
+    function app_uri(?string $path = ''): string
     {
+        if (is_null($path)) {
+            return 'javascript:void(0);';
+        }
+
         return '/' . ltrim($path, '/');
     }
 }
