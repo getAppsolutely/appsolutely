@@ -102,17 +102,19 @@
                             <div class="d-flex flex-wrap gap-2">
                                 <template x-for="(color, colorIndex) in currentVariant?.colors || []"
                                     :key="colorIndex">
-                                    <button type="button" class="color-option btn"
+                                    <button type="button" class="color-option p-0 border-0"
                                         :class="{ 'active': selectedColorIndex === colorIndex }"
                                         @click="selectColor(colorIndex)"
                                         :style="`
-                                                                                                                            width: 50px;
-                                                                                                                            height: 50px;
-                                                                                                                            border-radius: 50%;
-                                                                                                                            background-color: ${color.code || '#ccc'};
-                                                                                                                            border: 3px solid ${selectedColorIndex === colorIndex ? '#007bff' : 'transparent'};
-                                                                                                                            position: relative;
-                                                                                                                        `"
+                                                                                    width: 50px;
+                                                                                    height: 50px;
+                                                                                    border-radius: 50%;
+                                                                                    background: ${color.code || '#ccc'};
+                                                                                    outline: 3px solid ${selectedColorIndex === colorIndex ? '#007bff' : 'transparent'};
+                                                                                    outline-offset: -3px;
+                                                                                    position: relative;
+                                                                                    cursor: pointer;
+                                                                                `"
                                         :title="color.name || 'Color ' + (colorIndex + 1)" data-bs-toggle="tooltip">
                                         <i x-show="selectedColorIndex === colorIndex"
                                             class="fas fa-check text-white position-absolute top-50 start-50 translate-middle"></i>
