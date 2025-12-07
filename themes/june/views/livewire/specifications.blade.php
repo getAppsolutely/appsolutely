@@ -177,7 +177,7 @@
         @if($displayOptions['download_url'] ?? false)
             <div class="text-center mt-5">
                 <a href="{{ asset_url($displayOptions['download_url']) }}"
-                   class="btn btn-primary px-5 py-3 fs-6 rounded-pill shadow-lg"
+                   class="btn btn-light border-dark fw-bold px-5 py-3 fs-6 rounded-3 shadow-lg"
                    download="{{ $displayOptions['download_filename'] ?? 'specifications' }}"
                    target="_blank">
                     <i class="fas fa-download me-2"></i>
