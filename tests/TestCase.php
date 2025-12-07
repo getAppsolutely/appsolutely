@@ -13,7 +13,12 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        // Common test setup can be added here
+
+        // Ensure tests use SQLite in-memory database, overriding any cached config
+        config([
+            'database.default'                     => 'sqlite',
+            'database.connections.sqlite.database' => ':memory:',
+        ]);
     }
 
     protected function tearDown(): void
