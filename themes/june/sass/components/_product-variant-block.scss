@@ -1,6 +1,11 @@
 // Product Variant Block Styles
 
 .product-variant-block {
+    // Hide elements with x-cloak until Alpine.js initializes and removes the attribute
+    [x-cloak] {
+        display: none !important;
+    }
+
     background-color: #f8f9fa;
 
     .product-header {

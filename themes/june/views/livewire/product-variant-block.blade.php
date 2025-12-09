@@ -27,6 +27,7 @@
 @endphp
 
 <section class="product-variant-block py-5" wire:key="product-variant-{{ $this->getId() }}" x-data="{
+    ready: false,
     selectedVariantIndex: 0,
     selectedColorIndex: 0,
     product: {{ Js::from($product) }},
@@ -50,6 +51,12 @@
         this.$watch('selectedColorIndex', () => {
             console.log('[ProductVariantBlock] Color index changed to:', this.selectedColorIndex);
             this.updateCurrentColor();
+        });
+
+        // Mark as ready after initialization - use nextTick to ensure DOM updates
+        this.$nextTick(() => {
+            this.ready = true;
+            console.log('[ProductVariantBlock] Ready state set to true');
         });
     },
 
@@ -152,8 +159,18 @@
                 <div class="row g-4">
                     <!-- Left Column: Images -->
                     <div class="col-lg-7">
+                        <!-- Loading placeholder while Alpine initializes -->
+                        <div x-show="!ready" class="main-image-container mb-4">
+                            <div class="d-flex justify-content-center align-items-center bg-light rounded"
+                                style="height: 400px;">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Main Image -->
-                        <template x-if="currentColor && currentColor.images && currentColor.images.length > 0">
+                        <template x-if="ready && currentColor && currentColor.images && currentColor.images.length > 0">
                             <div class="main-image-container mb-4">
                                 <img :src="currentColor.images[0]" :alt="currentColor.name || 'Product Image'"
                                     class="img-fluid rounded shadow-sm w-100 product-main-image"
@@ -164,7 +181,8 @@
                         </template>
 
                         <!-- Color Selection -->
-                        <template x-if="currentVariant && currentVariant.colors && currentVariant.colors.length > 0">
+                        <template
+                            x-if="ready && currentVariant && currentVariant.colors && currentVariant.colors.length > 0">
                             <div class="color-selection mb-4">
                                 <h6 class="mb-3 fw-semibold">Select Color</h6>
                                 <div class="d-flex flex-wrap gap-2">
@@ -174,15 +192,15 @@
                                             :class="{ 'active': selectedColorIndex === colorIndex }"
                                             @click="selectColor(colorIndex)"
                                             :style="`
-                                                                                                                                        width: 50px;
-                                                                                                                                        height: 50px;
-                                                                                                                                        border-radius: 50%;
-                                                                                                                                        background: ${color.code || '#ccc'};
-                                                                                                                                        outline: 3px solid ${selectedColorIndex === colorIndex ? '#007bff' : 'transparent'};
-                                                                                                                                        outline-offset: -3px;
-                                                                                                                                        position: relative;
-                                                                                                                                        cursor: pointer;
-                                                                                                                                    `"
+                                                                                                                                                                                    width: 50px;
+                                                                                                                                                                                    height: 50px;
+                                                                                                                                                                                    border-radius: 50%;
+                                                                                                                                                                                    background: ${color.code || '#ccc'};
+                                                                                                                                                                                    outline: 3px solid ${selectedColorIndex === colorIndex ? '#007bff' : 'transparent'};
+                                                                                                                                                                                    outline-offset: -3px;
+                                                                                                                                                                                    position: relative;
+                                                                                                                                                                                    cursor: pointer;
+                                                                                                                                                                                `"
                                             :title="color.name || 'Color ' + (colorIndex + 1)" data-bs-toggle="tooltip">
                                             <i x-show="selectedColorIndex === colorIndex"
                                                 class="fas fa-check text-white position-absolute top-50 start-50 translate-middle"></i>
@@ -197,7 +215,7 @@
                         </template>
 
                         <!-- Additional Images -->
-                        <template x-if="currentColor && currentColor.images && currentColor.images.length > 1">
+                        <template x-if="ready && currentColor && currentColor.images && currentColor.images.length > 1">
                             <div class="additional-images mt-4">
                                 <h6 class="mb-3 fw-semibold">More Images</h6>
                                 <div class="row g-2">
@@ -218,7 +236,7 @@
                     <!-- Right Column: Price & Specs -->
                     <div class="col-lg-5">
                         <!-- Variant Name & Price -->
-                        <div class="variant-info mb-4">
+                        <div class="variant-info mb-4" x-show="ready" x-cloak>
                             <h2 class="h3 fw-bold mb-2" x-text="currentVariant?.name || 'Variant'"></h2>
                             <template x-if="currentVariant && getFormattedPrice() !== null">
                                 <div class="price-section mb-3">
@@ -230,7 +248,8 @@
                         </div>
 
                         <!-- Specifications -->
-                        <template x-if="currentVariant && currentVariant.specs && currentVariant.specs.length > 0">
+                        <template
+                            x-if="ready && currentVariant && currentVariant.specs && currentVariant.specs.length > 0">
                             <div class="specifications-section mb-4">
                                 <h5 class="fw-bold mb-3">Specifications</h5>
                                 <ul class="list-group">
