@@ -43,9 +43,15 @@
                                         @endif
                                     @endif
                                     @if(!empty($hero['link']))
-                                        <a href="{{ $hero['link'] }}" class="btn btn-outline-light btn-lg px-4 py-2">
+                                        <a href="{{ $hero['link'] }}" class="btn btn-light btn-lg fw-bold px-4 py-2 border border-white">
                                             <i class="fas fa-play me-2"></i>
                                             Learn More
+                                        </a>
+                                    @endif
+                                    @if(!empty($hero['test_drive_link']))
+                                        <a href="{{ $hero['test_drive_link'] }}" class="btn btn-light btn-lg fw-bold ms-3 px-4 py-2 border border-white">
+                                            <i class="fas fa-play me-2"></i>
+                                            Test Drive
                                         </a>
                                     @endif
                                 </div>
