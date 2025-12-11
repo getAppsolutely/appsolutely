@@ -33,21 +33,35 @@
             </div>
             <div class="alert alert-info">No variants available</div>
         @else
-            {{-- Alpine.js Enhanced Component --}}
-            <div x-data="{
+            {{-- Alpine.js Enhanced Component - wire:ignore prevents Livewire from morphing Alpine state --}}
+            <div wire:ignore x-data="{
                 selectedVariantIndex: 0,
                 selectedColorIndex: 0,
                 product: null,
                 currentVariant: null,
                 currentColor: null,
                 initialized: false,
+                initAttempts: 0,
+                maxInitAttempts: 3,
 
                 init() {
+                    this.$nextTick(() => {
+                        this.initializeData();
+                    });
+                },
+
+                initializeData() {
                     try {
                         // Parse product data from script element (more reliable than inline JSON)
                         const dataEl = this.$el.querySelector('script[data-product]');
                         if (dataEl && dataEl.textContent) {
                             this.product = JSON.parse(dataEl.textContent.trim());
+                        }
+
+                        if (!this.product && this.initAttempts < this.maxInitAttempts) {
+                            this.initAttempts++;
+                            setTimeout(() => this.initializeData(), 100);
+                            return;
                         }
 
                         if (this.product?.variants?.length) {
@@ -60,6 +74,13 @@
                         this.initialized = true;
                     } catch (e) {
                         console.error('[ProductVariantBlock] Init error:', e);
+
+                        if (this.initAttempts < this.maxInitAttempts) {
+                            this.initAttempts++;
+                            setTimeout(() => this.initializeData(), 100);
+                            return;
+                        }
+
                         // Force initialized even on error to show SSR content
                         this.initialized = true;
                     }
@@ -84,7 +105,16 @@
                     if (price === null || price === undefined || price === '') return null;
                     return typeof price === 'number' ? price.toLocaleString() : price;
                 }
-            }">
+            }"
+                x-effect="
+                // Fix 2: Ensure state consistency - sync currentVariant/currentColor when indices change
+                if (product?.variants?.[selectedVariantIndex]) {
+                    currentVariant = product.variants[selectedVariantIndex];
+                    if (currentVariant?.colors?.[selectedColorIndex]) {
+                        currentColor = currentVariant.colors[selectedColorIndex];
+                    }
+                }
+            ">
                 {{-- Hidden data element for reliable JSON parsing --}}
                 <script type="application/json" data-product>@json($product)</script>
 
@@ -118,8 +148,7 @@
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link"
                                     :class="{ 'active': selectedVariantIndex === {{ $index }} }" type="button"
-                                    @click.prevent="switchVariant({{ $index }})" role="tab"
-                                    aria-selected="false"
+                                    @click="switchVariant({{ $index }})" role="tab" aria-selected="false"
                                     :aria-selected="selectedVariantIndex === {{ $index }} ? 'true' : 'false'">
                                     {{ $variant['name'] ?? 'Variant ' . ($index + 1) }}
                                 </button>
