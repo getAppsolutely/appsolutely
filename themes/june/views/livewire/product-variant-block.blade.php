@@ -100,10 +100,12 @@
                                 <span class="me-3"><strong>Year:</strong> {{ $product['common']['year'] }}</span>
                             @endif
                             @if (!empty($product['common']['body_type']))
-                                <span class="me-3"><strong>Body Type:</strong> {{ $product['common']['body_type'] }}</span>
+                                <span class="me-3"><strong>Body Type:</strong>
+                                    {{ $product['common']['body_type'] }}</span>
                             @endif
                             @if (!empty($product['common']['platform']))
-                                <span class="me-3"><strong>Platform:</strong> {{ $product['common']['platform'] }}</span>
+                                <span class="me-3"><strong>Platform:</strong>
+                                    {{ $product['common']['platform'] }}</span>
                             @endif
                         </div>
                     @endif
@@ -114,11 +116,11 @@
                     <ul class="nav nav-tabs justify-content-center" role="tablist">
                         @foreach ($variants as $index => $variant)
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link {{ $index === 0 ? 'active' : '' }}"
-                                    :class="{ 'active': selectedVariantIndex === {{ $index }} }"
-                                    type="button"
-                                    @click="switchVariant({{ $index }})"
-                                    role="tab">
+                                <button class="nav-link"
+                                    :class="{ 'active': selectedVariantIndex === {{ $index }} }" type="button"
+                                    @click.prevent="switchVariant({{ $index }})" role="tab"
+                                    aria-selected="false"
+                                    :aria-selected="selectedVariantIndex === {{ $index }} ? 'true' : 'false'">
                                     {{ $variant['name'] ?? 'Variant ' . ($index + 1) }}
                                 </button>
                             </li>
@@ -133,17 +135,16 @@
                         {{-- SSR Fallback: Show first image immediately (hidden once Alpine loads) --}}
                         @if ($firstImage)
                             <div class="main-image-container mb-4" x-show="!initialized">
-                                <img src="{{ $firstImage }}"
-                                    alt="{{ $firstColor['name'] ?? 'Product Image' }}"
+                                <img src="{{ $firstImage }}" alt="{{ $firstColor['name'] ?? 'Product Image' }}"
                                     class="img-fluid rounded shadow-sm w-100"
                                     style="max-height: 500px; object-fit: contain;">
                             </div>
                         @endif
 
                         {{-- Alpine Dynamic Image --}}
-                        <div class="main-image-container mb-4" x-show="initialized && currentColor?.images?.length" x-cloak>
-                            <img :src="currentColor?.images?.[0] || ''"
-                                :alt="currentColor?.name || 'Product Image'"
+                        <div class="main-image-container mb-4" x-show="initialized && currentColor?.images?.length"
+                            x-cloak>
+                            <img :src="currentColor?.images?.[0] || ''" :alt="currentColor?.name || 'Product Image'"
                                 class="img-fluid rounded shadow-sm w-100 product-main-image"
                                 style="max-height: 500px; object-fit: contain;">
                         </div>
@@ -158,7 +159,8 @@
                                             style="width: 50px; height: 50px; border-radius: 50%; background: {{ $color['code'] ?? '#ccc' }}; outline: 3px solid {{ $colorIndex === 0 ? '#007bff' : 'transparent' }}; outline-offset: -3px; position: relative; cursor: pointer;"
                                             title="{{ $color['name'] ?? 'Color ' . ($colorIndex + 1) }}">
                                             @if ($colorIndex === 0)
-                                                <i class="fas fa-check text-white position-absolute top-50 start-50 translate-middle"></i>
+                                                <i
+                                                    class="fas fa-check text-white position-absolute top-50 start-50 translate-middle"></i>
                                             @endif
                                         </button>
                                     @endforeach
@@ -170,10 +172,12 @@
                         @endif
 
                         {{-- Alpine Dynamic Color Selection --}}
-                        <div class="color-selection mb-4" x-show="initialized && currentVariant?.colors?.length" x-cloak>
+                        <div class="color-selection mb-4" x-show="initialized && currentVariant?.colors?.length"
+                            x-cloak>
                             <h6 class="mb-3 fw-semibold">Select Color</h6>
                             <div class="d-flex flex-wrap gap-2">
-                                <template x-for="(color, colorIndex) in currentVariant?.colors || []" :key="colorIndex">
+                                <template x-for="(color, colorIndex) in currentVariant?.colors || []"
+                                    :key="colorIndex">
                                     <button type="button" class="color-option p-0 border-0"
                                         :class="{ 'active': selectedColorIndex === colorIndex }"
                                         @click="selectColor(colorIndex)"
@@ -190,10 +194,12 @@
                         </div>
 
                         {{-- Alpine Dynamic Additional Images --}}
-                        <div class="additional-images mt-4" x-show="initialized && currentColor?.images?.length > 1" x-cloak>
+                        <div class="additional-images mt-4" x-show="initialized && currentColor?.images?.length > 1"
+                            x-cloak>
                             <h6 class="mb-3 fw-semibold">More Images</h6>
                             <div class="row g-2">
-                                <template x-for="(image, imageIndex) in (currentColor?.images || []).slice(1)" :key="imageIndex">
+                                <template x-for="(image, imageIndex) in (currentColor?.images || []).slice(1)"
+                                    :key="imageIndex">
                                     <div class="col-4 col-md-3">
                                         <img :src="image" :alt="'Product Image ' + (imageIndex + 2)"
                                             class="img-fluid rounded shadow-sm w-100 product-thumbnail"
@@ -244,10 +250,12 @@
                         @endif
 
                         {{-- Alpine Dynamic Specifications --}}
-                        <div class="specifications-section mb-4" x-show="initialized && currentVariant?.specs?.length" x-cloak>
+                        <div class="specifications-section mb-4" x-show="initialized && currentVariant?.specs?.length"
+                            x-cloak>
                             <h5 class="fw-bold mb-3">Specifications</h5>
                             <ul class="list-group">
-                                <template x-for="(spec, specIndex) in currentVariant?.specs || []" :key="specIndex">
+                                <template x-for="(spec, specIndex) in currentVariant?.specs || []"
+                                    :key="specIndex">
                                     <li class="list-group-item" x-text="spec"></li>
                                 </template>
                             </ul>
