@@ -136,7 +136,6 @@
                 <div class="header-mobile-testdrive mt-4">
                     <a href="{{ $displayOptions['booking']['url'] }}"
                        class="btn btn-outline-light-primary w-100">
-                        <i class="fas fa-play me-2"></i>
                         {{ $displayOptions['booking']['text'] }}
                     </a>
                 </div>

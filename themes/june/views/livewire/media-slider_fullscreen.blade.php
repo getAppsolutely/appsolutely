@@ -24,7 +24,6 @@
                         @endif
                         @if (!empty($slide['link']))
                             <a href="{{ $slide['link'] }}" class="btn btn-primary media-slider-btn">
-                                <i class="fas fa-play me-2"></i>
                                 Learn More
                             </a>
                         @endif
