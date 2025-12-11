@@ -67,16 +67,16 @@
                                                             </a>
                                                             @if (!empty($child->setting['learn_more_link']) || !empty($child->setting['test_drive_link']))
                                                                 <div
-                                                                    class="submenu-buttons d-flex justify-content-center gap-2 mt-2">
+                                                                    class="ms-3 submenu-buttons d-flex justify-content-center gap-2 mt-2">
                                                                     @if (!empty($child->setting['learn_more_link']))
                                                                         <a href="{{ $child->setting['learn_more_link'] }}"
-                                                                            class="btn btn-sm fw-semibold fs-6 px-2 py-2 border bg-white text-dark">
+                                                                            class="btn btn-sm fw-semibold px-2 py-2 border bg-white text-dark">
                                                                             Learn More
                                                                         </a>
                                                                     @endif
                                                                     @if (!empty($child->setting['test_drive_link']))
                                                                         <a href="{{ $child->setting['test_drive_link'] }}"
-                                                                            class="btn btn-sm fw-semibold fs-6 px-2 py-2 border bg-white text-dark">
+                                                                            class="btn btn-sm fw-semibold px-2 py-2 border bg-white text-dark">
                                                                             Test Drive
                                                                         </a>
                                                                     @endif
