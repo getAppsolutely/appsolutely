@@ -9,6 +9,18 @@
                 $errorName = "formData.{$fieldName}";
             @endphp
 
+            <!-- Hidden Input -->
+            @if($fieldConfig['type'] === 'hidden')
+                <input
+                    type="hidden"
+                    id="{{ $fieldName }}"
+                    wire:model.defer="formData.{{ $fieldName }}"
+                    value="{{ $fieldConfig['default'] ?? '' }}"
+                    @if(!empty($fieldConfig['options']) && is_array($fieldConfig['options']))
+                        data-options-mapping="{{ json_encode($fieldConfig['options']) }}"
+                    @endif
+                >
+            @else
             <div class="{{ $colClass }}">
                 <!-- Text Input -->
                 @if(in_array($fieldConfig['type'], ['text', 'email', 'tel', 'url']))
@@ -68,6 +80,7 @@
                             class="form-select form-select-lg @error($errorName) is-invalid @enderror"
                             wire:model.defer="formData.{{ $fieldName }}"
                             {{ ($fieldConfig['required'] ?? false) ? 'required' : '' }}
+                            data-field-name="{{ $fieldName }}"
                         >
                             <option value="">{{ $fieldConfig['placeholder'] ?? 'Select an option' }}</option>
                             @foreach($fieldConfig['options'] ?? [] as $option)
@@ -153,6 +166,7 @@
                     </div>
                 @endif
             </div>
+            @endif
         @endforeach
     </div>
 

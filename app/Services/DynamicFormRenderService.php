@@ -37,6 +37,11 @@ final readonly class DynamicFormRenderService implements DynamicFormRenderServic
         $required = $field->required ? 'required' : '';
         $readonly = $field->is_readonly ? 'readonly' : '';
 
+        // Hidden fields don't need wrapper, label, or error display
+        if ($field->type === 'hidden') {
+            return "<input type='hidden' id='{$field->name}' name='{$field->name}' value='{$value}'>";
+        }
+
         $html = "<div class='form-group mb-3'>";
         $html .= "<label for='{$field->name}' class='form-label'>{$field->label}";
 
