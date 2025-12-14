@@ -61,12 +61,86 @@ final class DynamicForm extends BaseBlock
                 $this->formFields = [];
             } else {
                 $this->formFields = $this->formService->getFields($this->form);
+                $this->initializeFormDataFromQuery();
             }
         } catch (\Exception $e) {
             \Log::error("Error loading form with slug {$formSlug}: " . $e->getMessage());
             $this->form       = null;
             $this->formFields = [];
         }
+    }
+
+    /**
+     * Initialize form data from URL query parameters
+     * Matches query parameter values to form field options
+     * First tries exact match, then tries matching with hyphens replaced by spaces
+     */
+    protected function initializeFormDataFromQuery(): void
+    {
+        $queryParams = request()->query();
+
+        foreach ($queryParams as $paramName => $paramValue) {
+            // Skip if parameter doesn't match any form field
+            if (! isset($this->formFields[$paramName])) {
+                continue;
+            }
+
+            // Skip if value is not a string
+            if (! is_string($paramValue)) {
+                continue;
+            }
+
+            $fieldConfig = $this->formFields[$paramName];
+
+            // Only process select and multiselect fields
+            if (! in_array($fieldConfig['type'] ?? '', ['select', 'multiselect'])) {
+                continue;
+            }
+
+            $options = $fieldConfig['options'] ?? [];
+            if (empty($options)) {
+                continue;
+            }
+
+            // Find matching option value
+            $matchedValue = $this->findMatchingOption($paramValue, $options);
+
+            if ($matchedValue !== null) {
+                $this->formData[$paramName] = $matchedValue;
+            }
+        }
+    }
+
+    /**
+     * Find matching option value from query parameter
+     * First tries exact match, then tries matching with hyphens replaced by spaces
+     *
+     * @param  string  $queryValue  The value from URL query parameter
+     * @param  array<string>  $options  Available form field options
+     * @return string|null The matched option value or null if no match found
+     */
+    protected function findMatchingOption(string $queryValue, array $options): ?string
+    {
+        // First, try exact match
+        if (in_array($queryValue, $options, true)) {
+            return $queryValue;
+        }
+
+        // Then, try matching with hyphens replaced by spaces
+        // e.g., "Product-1" should match "Product 1"
+        $queryValueWithSpaces = str_replace('-', ' ', $queryValue);
+        if (in_array($queryValueWithSpaces, $options, true)) {
+            return $queryValueWithSpaces;
+        }
+
+        // Also try the reverse: if query has spaces, try with hyphens
+        // e.g., "Product 1" should match "Product-1"
+        $queryValueWithHyphens = str_replace(' ', '-', $queryValue);
+        if (in_array($queryValueWithHyphens, $options, true)) {
+            return $queryValueWithHyphens;
+        }
+
+        return null;
     }
 
     /**
