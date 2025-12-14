@@ -28,6 +28,7 @@ final class MediaSlider extends BaseBlock
                 'subtitle' => 'Slide Subtitle 2',
             ],
         ],
+        'vehicles'        => [],
         'show_controls'   => true,
         'show_indicators' => true,
         'autoplay'        => true,
