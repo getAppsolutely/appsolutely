@@ -85,6 +85,13 @@ export default [
                 Request: 'readonly',
                 Headers: 'readonly',
 
+                // URL API types
+                URLSearchParams: 'readonly',
+                URL: 'readonly',
+
+                // Image constructor
+                Image: 'readonly',
+
                 // Node.js globals (for config files and test files)
                 global: 'readonly',
                 process: 'readonly',

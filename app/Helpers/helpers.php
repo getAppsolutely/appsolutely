@@ -354,10 +354,10 @@ if (! function_exists('asset_url')) {
     /**
      * files for dashboard viewing
      */
-    function asset_url(?string $uri = null): string
+    function asset_url(?string $uri = null, $withHash = true): string
     {
         $uri  = $uri ?? '';
-        $hash = '?v=' . build_hash();
+        $hash = $withHash ? '?v=' . build_hash() : '';
 
         if (! empty(config('appsolutely.asset_url'))) {
             return path_join(config('appsolutely.asset_url'), $uri) . $hash;
