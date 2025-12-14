@@ -132,11 +132,20 @@ function syncHeight(container: HTMLElement): void {
 }
 
 /**
- * Initialize background from URL parameter
+ * Get random image URL from options mapping
+ */
+function getRandomImageUrl(mapping: OptionsMapping): string | null {
+    const urls = Object.values(mapping).filter((url) => url && url.trim());
+    if (urls.length === 0) return null;
+    const randomIndex = Math.floor(Math.random() * urls.length);
+    return urls[randomIndex];
+}
+
+/**
+ * Initialize background from URL parameter or random selection
  */
 function initializeFromUrl(container: HTMLElement, baseUrl: string, triggerFieldName: string): void {
     const urlValue = getUrlParameter(triggerFieldName);
-    if (!urlValue) return;
 
     // Find the hidden field with options mapping
     const hiddenField = container.querySelector<HTMLInputElement>('input[type="hidden"][data-options-mapping]');
@@ -151,7 +160,16 @@ function initializeFromUrl(container: HTMLElement, baseUrl: string, triggerField
                     const mapping: OptionsMapping = JSON.parse(
                         delayedField.getAttribute('data-options-mapping') || '{}'
                     );
-                    const imageUrl = findMatchingOption(urlValue, mapping);
+                    let imageUrl: string | null = null;
+
+                    if (urlValue) {
+                        // Use URL parameter if available
+                        imageUrl = findMatchingOption(urlValue, mapping);
+                    } else {
+                        // Pick random image if no URL parameter
+                        imageUrl = getRandomImageUrl(mapping);
+                    }
+
                     if (imageUrl) {
                         updateBackgroundImage(container, imageUrl, baseUrl);
                     }
@@ -165,7 +183,16 @@ function initializeFromUrl(container: HTMLElement, baseUrl: string, triggerField
 
     try {
         const mapping: OptionsMapping = JSON.parse(hiddenField.getAttribute('data-options-mapping') || '{}');
-        const imageUrl = findMatchingOption(urlValue, mapping);
+        let imageUrl: string | null = null;
+
+        if (urlValue) {
+            // Use URL parameter if available
+            imageUrl = findMatchingOption(urlValue, mapping);
+        } else {
+            // Pick random image if no URL parameter
+            imageUrl = getRandomImageUrl(mapping);
+        }
+
         if (imageUrl) {
             updateBackgroundImage(container, imageUrl, baseUrl);
         }
