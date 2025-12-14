@@ -60,5 +60,30 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->render(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e, \Illuminate\Http\Request $request) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'status'  => false,
+                    'code'    => 404,
+                    'message' => 'Route not found',
+                ], 404);
+            }
+
+            // Set up theme for error pages
+            $themeService = app(\App\Services\Contracts\ThemeServiceInterface::class);
+            $themeName    = $themeService->resolveThemeName();
+
+            if ($themeName) {
+                $parentTheme = $themeService->getParentTheme();
+                $themeService->setupTheme($themeName, $parentTheme);
+            }
+
+            // Try to find themed error view
+            if (view()->exists('errors.404')) {
+                return response()->view('errors.404', [], 404);
+            }
+
+            // Fallback to Laravel's default
+
+        });
     })->create();
