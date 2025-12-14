@@ -19,3 +19,4 @@ import './components/store-locations-dropdown';
 import './components/store-locations';
 import './components/photo-gallery';
 import './components/product-variant-block';
+import './components/dynamic-form-interactive';

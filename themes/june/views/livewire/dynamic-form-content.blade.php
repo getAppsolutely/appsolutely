@@ -2,7 +2,7 @@
     @csrf
 
     <!-- Form Fields -->
-    <div class="row g-4">
+    <div class="row g-2">
         @foreach($formFields as $fieldName => $fieldConfig)
             @php
                 $colClass = (!empty($displayOptions['columns']) && $displayOptions['columns'] == 2) ? 'col-md-6' : 'col-12';
@@ -14,6 +14,7 @@
                 <input
                     type="hidden"
                     id="{{ $fieldName }}"
+                    name="{{ $fieldName }}"
                     wire:model.defer="formData.{{ $fieldName }}"
                     value="{{ $fieldConfig['default'] ?? '' }}"
                     @if(!empty($fieldConfig['options']) && is_array($fieldConfig['options']))
@@ -34,7 +35,7 @@
                         <input
                             type="{{ $fieldConfig['type'] }}"
                             id="{{ $fieldName }}"
-                            class="form-control form-control-lg @error($errorName) is-invalid @enderror"
+                            class="form-control @error($errorName) is-invalid @enderror"
                             wire:model.defer="formData.{{ $fieldName }}"
                             placeholder="{{ $fieldConfig['placeholder'] ?? '' }}"
                             {{ ($fieldConfig['required'] ?? false) ? 'required' : '' }}
@@ -56,7 +57,7 @@
                         <input
                             type="date"
                             id="{{ $fieldName }}"
-                            class="form-control form-control-lg @error($errorName) is-invalid @enderror"
+                            class="form-control @error($errorName) is-invalid @enderror"
                             wire:model.defer="formData.{{ $fieldName }}"
                             min="{{ date('Y-m-d', strtotime('+1 day')) }}"
                             {{ ($fieldConfig['required'] ?? false) ? 'required' : '' }}
@@ -77,7 +78,7 @@
                         </label>
                         <select
                             id="{{ $fieldName }}"
-                            class="form-select form-select-lg @error($errorName) is-invalid @enderror"
+                            class="form-select @error($errorName) is-invalid @enderror"
                             wire:model.defer="formData.{{ $fieldName }}"
                             {{ ($fieldConfig['required'] ?? false) ? 'required' : '' }}
                             data-field-name="{{ $fieldName }}"
@@ -103,9 +104,9 @@
                         </label>
                         <textarea
                             id="{{ $fieldName }}"
-                            class="form-control form-control-lg @error($errorName) is-invalid @enderror"
+                            class="form-control @error($errorName) is-invalid @enderror"
                             wire:model.defer="formData.{{ $fieldName }}"
-                            rows="{{ $fieldConfig['rows'] ?? 4 }}"
+                            rows="{{ $fieldConfig['rows'] ?? 3 }}"
                             placeholder="{{ $fieldConfig['placeholder'] ?? '' }}"
                             {{ ($fieldConfig['required'] ?? false) ? 'required' : '' }}
                         ></textarea>
@@ -117,7 +118,7 @@
                 <!-- Checkbox -->
                 @elseif($fieldConfig['type'] === 'checkbox')
                     <div class="form-group">
-                        <div class="form-check form-check-lg">
+                        <div class="form-check">
                             <input
                                 type="checkbox"
                                 id="{{ $fieldName }}"
@@ -149,7 +150,7 @@
                         </label>
                         <select
                             id="{{ $fieldName }}"
-                            class="form-select form-select-lg @error($errorName) is-invalid @enderror"
+                            class="form-select @error($errorName) is-invalid @enderror"
                             wire:model.defer="formData.{{ $fieldName }}"
                             multiple
                             size="{{ min(count($fieldConfig['options'] ?? []), 5) }}"
@@ -171,8 +172,8 @@
     </div>
 
     <!-- Submit Button -->
-    <div class="mt-5 text-center">
-        <button type="submit" class="btn btn-dark btn-lg px-5 py-3" wire:loading.attr="disabled">
+    <div class="mt-4 text-center">
+        <button type="submit" class="btn btn-dark px-4 py-2" wire:loading.attr="disabled">
             <span wire:loading.remove wire:target="submit">
                 <i class="fas fa-calendar-check me-2"></i>{{ $displayOptions['submit_text'] }}
             </span>

@@ -1,0 +1,125 @@
+// Dynamic Form Component Styles
+
+// Interactive Style - Split layout with dynamic background
+.block.dynamic-form-interactive {
+    .vehicle-background-image {
+        z-index: 1;
+    }
+
+    .vehicle-background-container {
+        min-height: auto;
+
+        @media (width >= 992px) {
+            // Match the height of the form column
+            display: flex;
+            align-items: stretch;
+        }
+
+        @media (width <= 991.98px) {
+            min-height: 50vh;
+        }
+    }
+
+    // Form container on right side - no scroll
+    .col-lg-6:last-child {
+        @media (width >= 992px) {
+            overflow: hidden;
+        }
+    }
+
+    // Form container padding
+    .col-lg-6:last-child > div {
+        @media (width >= 992px) {
+            padding: 2rem 3rem !important;
+        }
+    }
+
+    // Form styling adjustments for interactive style - compact
+    form {
+        .row {
+            --bs-gutter-y: 0.75rem;
+        }
+
+        .form-group {
+            margin-bottom: 0.625rem;
+        }
+
+        .form-label {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            padding-bottom: 0;
+            color: #333;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 0.375rem;
+            border: 1px solid #dee2e6;
+            padding: 0.4375rem 0.875rem;
+            font-size: 0.875rem;
+            line-height: 1.4;
+
+            &:focus {
+                border-color: #0d6efd;
+                box-shadow: 0 0 0 0.2rem rgb(13 110 253 / 25%);
+            }
+        }
+
+        .form-check {
+            margin-bottom: 0.5rem;
+
+            .form-check-label {
+                font-size: 0.8125rem;
+            }
+        }
+
+        .btn {
+            border-radius: 0.375rem;
+            font-weight: 600;
+            padding: 0.625rem 1.75rem;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+
+            &:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+            }
+        }
+
+        // Submit button container
+        .mt-5 {
+            margin-top: 1.5rem !important;
+        }
+    }
+
+    // Description text
+    .text-muted.mb-4 {
+        margin-bottom: 1rem !important;
+        font-size: 0.875rem;
+    }
+
+    // Success message styling
+    .success-message {
+        padding: 2rem 0;
+    }
+
+    // Responsive adjustments
+    @media (width <= 991.98px) {
+        .row {
+            flex-direction: column-reverse;
+        }
+
+        .vehicle-background-container {
+            position: relative;
+            height: 40vh;
+            min-height: 40vh;
+        }
+
+        .col-lg-6:last-child {
+            padding: 2rem 1rem;
+        }
+    }
+}
