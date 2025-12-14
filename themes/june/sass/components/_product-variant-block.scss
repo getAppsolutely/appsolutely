@@ -1,7 +1,7 @@
 // Product Variant Block Styles
 
 .product-variant-block {
-    // Hide elements with x-cloak until Alpine.js initializes and removes the attribute
+    // Hide Alpine-managed elements until initialized (Alpine removes x-cloak)
     [x-cloak] {
         display: none !important;
     }
@@ -45,7 +45,6 @@
             }
 
             &:active {
-                // Visual feedback for touch
                 opacity: 0.7;
             }
 

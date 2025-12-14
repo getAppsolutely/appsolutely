@@ -16,106 +16,114 @@
 
     $product['variants'] = $variants;
 
-    // Pre-compute first variant and color for SSR fallback (shown before Alpine loads)
+    // Pre-compute first variant and color for SSR fallback
     $firstVariant = $variants[0] ?? null;
     $firstColor = $firstVariant['colors'][0] ?? null;
     $firstImage = $firstColor['images'][0] ?? null;
+
+    // Generate a unique ID for this block instance
+    $blockId = 'pvb-' . $this->getId();
 @endphp
 
-<section class="product-variant-block py-5" wire:key="product-variant-{{ $this->getId() }}">
+<section class="product-variant-block py-5" id="{{ $blockId }}" wire:key="product-variant-{{ $this->getId() }}">
     <div class="container">
         @if (empty($product))
             <div class="alert alert-warning">No product data configured</div>
         @elseif (empty($variants))
-            <!-- Product Header -->
             <div class="product-header mb-4 text-center">
                 <h1 class="h2 fw-bold mb-2">{{ $product['name'] ?? 'Product' }}</h1>
             </div>
             <div class="alert alert-info">No variants available</div>
         @else
-            {{-- Alpine.js Enhanced Component - wire:ignore prevents Livewire from morphing Alpine state --}}
-            <div wire:ignore x-data="{
-                selectedVariantIndex: 0,
-                selectedColorIndex: 0,
-                product: null,
-                currentVariant: null,
-                currentColor: null,
-                initialized: false,
-                initAttempts: 0,
-                maxInitAttempts: 3,
+            {{--
+                Alpine.js Enhanced Component with Robust Initialization
 
-                init() {
-                    this.$nextTick(() => {
-                        this.initializeData();
-                    });
-                },
+                Strategy:
+                - SSR fallback content is visible immediately (no x-cloak)
+                - Alpine dynamic content is hidden until initialized (has x-cloak)
+                - Once Alpine sets initialized=true, SSR hides and dynamic content shows
+                - Native JS fallback in TypeScript handles cases where Alpine fails
+            --}}
+            <div wire:ignore
+                x-data="{
+                    selectedVariantIndex: 0,
+                    selectedColorIndex: 0,
+                    product: null,
+                    currentVariant: null,
+                    currentColor: null,
+                    initialized: false,
 
-                initializeData() {
-                    try {
-                        // Parse product data from script element (more reliable than inline JSON)
-                        const dataEl = this.$el.querySelector('script[data-product]');
-                        if (dataEl && dataEl.textContent) {
-                            this.product = JSON.parse(dataEl.textContent.trim());
+                    init() {
+                        this.loadProductData();
+
+                        // Retry with requestAnimationFrame if first attempt fails
+                        if (!this.product) {
+                            requestAnimationFrame(() => this.loadProductData());
                         }
 
-                        if (!this.product && this.initAttempts < this.maxInitAttempts) {
-                            this.initAttempts++;
-                            setTimeout(() => this.initializeData(), 100);
-                            return;
+                        // Last resort: retry after a short delay
+                        if (!this.product) {
+                            setTimeout(() => {
+                                this.loadProductData();
+                                if (!this.product) {
+                                    console.warn('[ProductVariantBlock] Failed to initialize after retries');
+                                }
+                            }, 250);
                         }
+                    },
 
-                        if (this.product?.variants?.length) {
-                            this.currentVariant = this.product.variants[0];
-                            if (this.currentVariant?.colors?.length) {
-                                this.currentColor = this.currentVariant.colors[0];
+                    loadProductData() {
+                        if (this.initialized) return;
+
+                        try {
+                            const dataEl = this.$el.querySelector('script[data-product]');
+                            if (dataEl && dataEl.textContent) {
+                                this.product = JSON.parse(dataEl.textContent.trim());
+
+                                if (this.product?.variants?.length) {
+                                    this.currentVariant = this.product.variants[0];
+                                    this.currentColor = this.currentVariant?.colors?.[0] || null;
+                                    this.initialized = true;
+                                }
                             }
+                        } catch (e) {
+                            console.error('[ProductVariantBlock] Parse error:', e);
                         }
+                    },
 
-                        this.initialized = true;
-                    } catch (e) {
-                        console.error('[ProductVariantBlock] Init error:', e);
+                    switchVariant(index) {
+                        if (!this.product?.variants?.[index]) return;
 
-                        if (this.initAttempts < this.maxInitAttempts) {
-                            this.initAttempts++;
-                            setTimeout(() => this.initializeData(), 100);
-                            return;
-                        }
+                        this.selectedVariantIndex = index;
+                        this.selectedColorIndex = 0;
+                        this.currentVariant = this.product.variants[index];
+                        this.currentColor = this.currentVariant?.colors?.[0] || null;
+                    },
 
-                        // Force initialized even on error to show SSR content
-                        this.initialized = true;
+                    selectColor(index) {
+                        if (!this.currentVariant?.colors?.[index]) return;
+
+                        this.selectedColorIndex = index;
+                        this.currentColor = this.currentVariant.colors[index];
+                    },
+
+                    getFormattedPrice() {
+                        const price = this.currentVariant?.price;
+                        if (price === null || price === undefined || price === '') return null;
+                        return typeof price === 'number' ? price.toLocaleString() : price;
                     }
-                },
-
-                switchVariant(index) {
-                    if (!this.product?.variants?.[index]) return;
-                    this.selectedVariantIndex = index;
-                    this.selectedColorIndex = 0;
-                    this.currentVariant = this.product.variants[index];
-                    this.currentColor = this.currentVariant?.colors?.[0] || null;
-                },
-
-                selectColor(index) {
-                    if (!this.currentVariant?.colors?.[index]) return;
-                    this.selectedColorIndex = index;
-                    this.currentColor = this.currentVariant.colors[index];
-                },
-
-                getFormattedPrice() {
-                    const price = this.currentVariant?.price;
-                    if (price === null || price === undefined || price === '') return null;
-                    return typeof price === 'number' ? price.toLocaleString() : price;
-                }
-            }"
+                }"
                 x-effect="
-                // Fix 2: Ensure state consistency - sync currentVariant/currentColor when indices change
-                if (product?.variants?.[selectedVariantIndex]) {
-                    currentVariant = product.variants[selectedVariantIndex];
-                    if (currentVariant?.colors?.[selectedColorIndex]) {
-                        currentColor = currentVariant.colors[selectedColorIndex];
+                    if (product?.variants?.[selectedVariantIndex]) {
+                        currentVariant = product.variants[selectedVariantIndex];
+                        if (currentVariant?.colors?.[selectedColorIndex]) {
+                            currentColor = currentVariant.colors[selectedColorIndex];
+                        }
                     }
-                }
-            ">
-                {{-- Hidden data element for reliable JSON parsing --}}
+                "
+                class="product-variant-wrapper">
+
+                {{-- Embedded product data as JSON for reliable parsing --}}
                 <script type="application/json" data-product>@json($product)</script>
 
                 <!-- Product Header (Static - always visible) -->
@@ -141,15 +149,20 @@
                     @endif
                 </div>
 
-                <!-- Variant Tabs (Static names, Alpine handles active state) -->
+                <!-- Variant Tabs -->
                 <div class="variant-tabs mb-4">
                     <ul class="nav nav-tabs justify-content-center" role="tablist">
                         @foreach ($variants as $index => $variant)
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link"
-                                    :class="{ 'active': selectedVariantIndex === {{ $index }} }" type="button"
-                                    @click="switchVariant({{ $index }})" role="tab" aria-selected="false"
-                                    :aria-selected="selectedVariantIndex === {{ $index }} ? 'true' : 'false'">
+                                <button
+                                    class="nav-link {{ $index === 0 ? 'active' : '' }}"
+                                    :class="{ 'active': selectedVariantIndex === {{ $index }} }"
+                                    type="button"
+                                    @click.prevent="switchVariant({{ $index }})"
+                                    role="tab"
+                                    data-variant-index="{{ $index }}"
+                                    :aria-selected="selectedVariantIndex === {{ $index }} ? 'true' : 'false'"
+                                    aria-selected="{{ $index === 0 ? 'true' : 'false' }}">
                                     {{ $variant['name'] ?? 'Variant ' . ($index + 1) }}
                                 </button>
                             </li>
@@ -161,55 +174,53 @@
                 <div class="row g-4">
                     <!-- Left Column: Images -->
                     <div class="col-lg-7">
-                        {{-- SSR Fallback: Show first image immediately (hidden once Alpine loads) --}}
+                        {{-- SSR Fallback: Visible immediately, hidden once Alpine initializes --}}
                         @if ($firstImage)
-                            <div class="main-image-container mb-4" x-show="!initialized">
+                            <div class="main-image-container main-image-container--ssr mb-4" x-show="!initialized">
                                 <img src="{{ $firstImage }}" alt="{{ $firstColor['name'] ?? 'Product Image' }}"
                                     class="img-fluid rounded shadow-sm w-100"
                                     style="max-height: 500px; object-fit: contain;">
                             </div>
                         @endif
 
-                        {{-- Alpine Dynamic Image --}}
-                        <div class="main-image-container mb-4" x-show="initialized && currentColor?.images?.length"
-                            x-cloak>
-                            <img :src="currentColor?.images?.[0] || ''" :alt="currentColor?.name || 'Product Image'"
+                        {{-- Alpine Dynamic Image: Hidden until initialized --}}
+                        <div class="main-image-container mb-4" x-show="initialized && currentColor?.images?.length" x-cloak>
+                            <img
+                                :src="currentColor?.images?.[0] || ''"
+                                :alt="currentColor?.name || 'Product Image'"
                                 class="img-fluid rounded shadow-sm w-100 product-main-image"
                                 style="max-height: 500px; object-fit: contain;">
                         </div>
 
                         {{-- SSR Fallback: Color Selection --}}
                         @if (!empty($firstVariant['colors']))
-                            <div class="color-selection mb-4" x-show="!initialized">
+                            <div class="color-selection color-selection--ssr mb-4" x-show="!initialized">
                                 <h6 class="mb-3 fw-semibold">Select Color</h6>
                                 <div class="d-flex flex-wrap gap-2">
                                     @foreach ($firstVariant['colors'] as $colorIndex => $color)
-                                        <button type="button" class="color-option p-0 border-0"
+                                        <button type="button" class="color-option p-0 border-0 {{ $colorIndex === 0 ? 'active' : '' }}"
                                             style="width: 50px; height: 50px; border-radius: 50%; background: {{ $color['code'] ?? '#ccc' }}; outline: 3px solid {{ $colorIndex === 0 ? '#007bff' : 'transparent' }}; outline-offset: -3px; position: relative; cursor: pointer;"
-                                            title="{{ $color['name'] ?? 'Color ' . ($colorIndex + 1) }}">
-                                            @if ($colorIndex === 0)
-                                                <i
-                                                    class="fas fa-check text-white position-absolute top-50 start-50 translate-middle"></i>
-                                            @endif
+                                            title="{{ $color['name'] ?? 'Color ' . ($colorIndex + 1) }}"
+                                            data-color-index="{{ $colorIndex }}">
+                                            <i class="fas fa-check text-white position-absolute top-50 start-50 translate-middle"
+                                                style="{{ $colorIndex === 0 ? '' : 'display: none;' }}"></i>
                                         </button>
                                     @endforeach
                                 </div>
                                 <p class="mt-2 mb-0 text-muted">
-                                    <strong>Selected: </strong>{{ $firstColor['name'] ?? 'Unnamed Color' }}
+                                    <strong>Selected: </strong><span>{{ $firstColor['name'] ?? 'Unnamed Color' }}</span>
                                 </p>
                             </div>
                         @endif
 
                         {{-- Alpine Dynamic Color Selection --}}
-                        <div class="color-selection mb-4" x-show="initialized && currentVariant?.colors?.length"
-                            x-cloak>
+                        <div class="color-selection mb-4" x-show="initialized && currentVariant?.colors?.length" x-cloak>
                             <h6 class="mb-3 fw-semibold">Select Color</h6>
                             <div class="d-flex flex-wrap gap-2">
-                                <template x-for="(color, colorIndex) in currentVariant?.colors || []"
-                                    :key="colorIndex">
+                                <template x-for="(color, colorIndex) in currentVariant?.colors || []" :key="colorIndex">
                                     <button type="button" class="color-option p-0 border-0"
                                         :class="{ 'active': selectedColorIndex === colorIndex }"
-                                        @click="selectColor(colorIndex)"
+                                        @click.prevent="selectColor(colorIndex)"
                                         :style="`width: 50px; height: 50px; border-radius: 50%; background: ${color.code || '#ccc'}; outline: 3px solid ${selectedColorIndex === colorIndex ? '#007bff' : 'transparent'}; outline-offset: -3px; position: relative; cursor: pointer;`"
                                         :title="color.name || 'Color ' + (colorIndex + 1)">
                                         <i x-show="selectedColorIndex === colorIndex"
@@ -223,14 +234,14 @@
                         </div>
 
                         {{-- Alpine Dynamic Additional Images --}}
-                        <div class="additional-images mt-4" x-show="initialized && currentColor?.images?.length > 1"
-                            x-cloak>
+                        <div class="additional-images mt-4" x-show="initialized && currentColor?.images?.length > 1" x-cloak>
                             <h6 class="mb-3 fw-semibold">More Images</h6>
                             <div class="row g-2">
-                                <template x-for="(image, imageIndex) in (currentColor?.images || []).slice(1)"
-                                    :key="imageIndex">
+                                <template x-for="(image, imageIndex) in (currentColor?.images || []).slice(1)" :key="imageIndex">
                                     <div class="col-4 col-md-3">
-                                        <img :src="image" :alt="'Product Image ' + (imageIndex + 2)"
+                                        <img
+                                            :src="image"
+                                            :alt="'Product Image ' + (imageIndex + 2)"
                                             class="img-fluid rounded shadow-sm w-100 product-thumbnail"
                                             style="height: 100px; object-fit: cover; cursor: pointer;"
                                             @click="$el.closest('.col-lg-7').querySelector('.product-main-image').src = image">
@@ -244,7 +255,7 @@
                     <div class="col-lg-5">
                         {{-- SSR Fallback: Variant Info --}}
                         @if ($firstVariant)
-                            <div class="variant-info mb-4" x-show="!initialized">
+                            <div class="variant-info variant-info--ssr mb-4" x-show="!initialized">
                                 <h2 class="h3 fw-bold mb-2">{{ $firstVariant['name'] ?? 'Variant' }}</h2>
                                 @if (!empty($firstVariant['price']))
                                     <div class="price-section mb-3">
@@ -268,7 +279,7 @@
 
                         {{-- SSR Fallback: Specifications --}}
                         @if (!empty($firstVariant['specs']))
-                            <div class="specifications-section mb-4" x-show="!initialized">
+                            <div class="specifications-section specifications-section--ssr mb-4" x-show="!initialized">
                                 <h5 class="fw-bold mb-3">Specifications</h5>
                                 <ul class="list-group">
                                     @foreach ($firstVariant['specs'] as $spec)
@@ -279,12 +290,10 @@
                         @endif
 
                         {{-- Alpine Dynamic Specifications --}}
-                        <div class="specifications-section mb-4" x-show="initialized && currentVariant?.specs?.length"
-                            x-cloak>
+                        <div class="specifications-section mb-4" x-show="initialized && currentVariant?.specs?.length" x-cloak>
                             <h5 class="fw-bold mb-3">Specifications</h5>
                             <ul class="list-group">
-                                <template x-for="(spec, specIndex) in currentVariant?.specs || []"
-                                    :key="specIndex">
+                                <template x-for="(spec, specIndex) in currentVariant?.specs || []" :key="specIndex">
                                     <li class="list-group-item" x-text="spec"></li>
                                 </template>
                             </ul>
