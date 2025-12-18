@@ -24,6 +24,7 @@
     @vite([ themed_path(). '/sass/app.scss', themed_path() . '/js/app.ts'], themed_build_path())
 </head>
 <body>
+{!! noscript() !!}
 <div id="scrollTrigger" class="position-absolute top-0 w-100" style="height: 1px;"></div>
     <h1 class="d-none">{{ $page->h1_text ?? $page->title }}</h1>
     @yield('content')
