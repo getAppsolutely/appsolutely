@@ -18,9 +18,11 @@
             @endif
 
             <!-- Fallback message for browsers that don't support video -->
-            <div class="d-flex align-items-center justify-content-center h-100 bg-secondary text-white">
-                <p class="mb-0">Your browser does not support the video tag.</p>
-            </div>
+            @if (!empty($displayOptions['fallback_text']))
+                <div class="d-flex align-items-center justify-content-center h-100 bg-secondary text-white">
+                    <p class="mb-0">{{ $displayOptions['fallback_text'] }}</p>
+                </div>
+            @endif
         </video>
     </div>
 

@@ -12,7 +12,7 @@
                             </video>
                         @else
                             <img class="lazy d-block w-100" data-src="{{ asset_url($slide['url']) }}"
-                                alt="{{ $slide['title'] ?? '' }}">
+                                alt="{{ $slide['image_alt'] ?? '' }}">
                         @endif
                         <div class="carousel-caption d-none d-md-block media-slider-caption">
                             @if (!empty($slide['model']) && !empty($slide['title']))

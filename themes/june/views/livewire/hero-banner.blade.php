@@ -25,7 +25,7 @@
                             <div class="row justify-content-center">
                                 <div class="col-12 col-lg-8 col-xl-6">
                                     @if (!empty($hero['model']) && !empty($hero['title']))
-                                        <img src="{{ asset_url($hero['model']) }}" alt="{{ $hero['title'] }}"
+                                        <img src="{{ asset_url($hero['model']) }}" alt="{{ $hero['image_alt'] ?? '' }}"
                                             class="mb-4">
                                     @elseif(empty($hero['model']) && !empty($hero['title']))
                                         <h4 class="display-6 fw-bold mb-3">{{ $hero['title'] }}</h4>

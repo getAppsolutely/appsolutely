@@ -33,5 +33,6 @@ final class VideoShowcase extends BaseBlock
                 'format' => 'mov',
             ],
         ],
+        'fallback_text' => 'Your browser does not support the video tag.',
     ];
 }
