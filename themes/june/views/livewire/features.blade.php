@@ -62,12 +62,12 @@
                                                 <a href="{{ $feature['link'] }}" class="features__image-link">
                                                     <img class="lazy features__image features__image--secondary"
                                                          data-src="{{ asset_url($feature['url']) }}"
-                                                         alt="{{ $feature['title'] ?? '' }}">
+                                                         alt="{{ $feature['image_alt'] ?? '' }}" src="">
                                                 </a>
                                             @else
                                                 <img class="lazy features__image features__image--secondary"
                                                      data-src="{{ asset_url($feature['url']) }}"
-                                                     alt="{{ $feature['title'] ?? '' }}">
+                                                     alt="{{ $feature['image_alt'] ?? '' }}" src="">
                                             @endif
 
                                             @if($feature['title'] || $feature['subtitle'])

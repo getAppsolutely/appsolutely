@@ -78,9 +78,9 @@
                                 </div>
                             @else
                                 <div class="media-slide-image">
-                                    <img class="lazy" 
+                                    <img class="lazy"
                                          data-src="{{ asset_url($slide['url']) }}"
-                                         alt="{{ $slide['title'] ?? 'Slide ' . ($index + 1) }}">
+                                         alt="{{ $slide['image_alt'] ?? '' }}" src="">
                                 </div>
                             @endif
                         </div>
