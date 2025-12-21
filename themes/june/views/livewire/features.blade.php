@@ -28,12 +28,12 @@
                                     <a href="{{ $mainFeature['link'] }}" class="features__image-link">
                                         <img class="lazy features__image features__image--main"
                                              data-src="{{ asset_url($mainFeature['url']) }}"
-                                             alt="{{ $mainFeature['title'] ?? '' }}">
+                                             alt="{{ $mainFeature['image_alt'] ?? '' }}" src="">
                                     </a>
                                 @else
                                     <img class="lazy features__image features__image--main"
                                          data-src="{{ asset_url($mainFeature['url']) }}"
-                                         alt="{{ $mainFeature['title'] ?? '' }}">
+                                         alt="{{ $mainFeature['image_alt'] ?? '' }}" src="">
                                 @endif
 
                                 @if($mainFeature['title'])

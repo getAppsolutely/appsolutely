@@ -14,7 +14,7 @@
                         <div class="lazy lazy-bg hero-image-container" data-bg="{{ asset_url($hero['url']) }}">
                         </div>
                     @else
-                        <img class="lazy w-100 h-auto d-block" data-src="{{ asset_url($hero['url']) }}" alt="">
+                        <img class="lazy w-100 h-auto d-block" data-src="{{ asset_url($hero['url']) }}" alt="{{ $hero['image_alt'] }}" src="">
                     @endif
                 @endif
 
