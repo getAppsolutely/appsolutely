@@ -1,7 +1,7 @@
 <div>
     @if (!empty($displayOptions['heroes']))
         @foreach ($displayOptions['heroes'] as $hero)
-            <div class="hero-banner {{ @$style }}">
+            <div class="hero-banner {{ $style ?? '' }}">
                 @if (($hero['type'] ?? 'image') === 'video')
                     <div class="hero-video-container position-absolute top-0 start-0 w-100 h-100">
                         <video class="lazy w-100 h-100 object-fit-cover" controls preload="none">
@@ -14,7 +14,7 @@
                         <div class="lazy lazy-bg hero-image-container" data-bg="{{ asset_url($hero['url']) }}">
                         </div>
                     @else
-                        <img class="lazy w-100 h-auto d-block" data-src="{{ asset_url($hero['url']) }}" alt="{{ $hero['image_alt'] }}" src="">
+                        <img class="lazy w-100 h-auto d-block" data-src="{{ asset_url($hero['url']) }}" alt="{{ $hero['image_alt'] ?? '' }}" src="">
                     @endif
                 @endif
 
