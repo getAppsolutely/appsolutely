@@ -871,8 +871,8 @@ if (! function_exists('app_uri')) {
     }
 }
 
-if (! function_exists('blade_content')) {
-    function blade_content(string $text, float $threshold = 85.0): string
+if (! function_exists('md2html')) {
+    function md2html(string $text, float $threshold = 85.0): string
     {
         $text = trim($text);
 

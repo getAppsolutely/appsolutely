@@ -31,7 +31,7 @@
             <!-- Content -->
             @if($model->content ?? false)
                 <div class="content-body">
-                    {!! blade_content($model->content) !!}
+                    {!! md2html($model->content) !!}
                 </div>
             @endif
         </div>

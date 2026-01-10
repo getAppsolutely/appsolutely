@@ -37,7 +37,7 @@
                 <!-- Content -->
                 @if($displayOptions['content'] ?? false)
                     <div class="content-body">
-                        {!! blade_content($displayOptions['content']) !!}
+                        {!! md2html($displayOptions['content']) !!}
                     </div>
                 @endif
             </div>

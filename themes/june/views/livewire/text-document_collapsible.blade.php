@@ -58,7 +58,7 @@
                             <!-- Content -->
                             @if($displayOptions['content'] ?? false)
                                 <div class="text-document-collapsible__content-body">
-                                    {!! blade_content($displayOptions['content']) !!}
+                                    {!! md2html($displayOptions['content']) !!}
                                 </div>
                             @endif
                         </div>
