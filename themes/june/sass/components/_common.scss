@@ -98,3 +98,66 @@
     background: url("../images/rednote.svg") no-repeat center center;
     background-size: contain;
 }
+
+// Markdown table styles
+.markdown {
+    table {
+        width: 100%;
+        margin-bottom: 1rem;
+        border-collapse: collapse;
+        border-spacing: 0;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+
+        @include media-breakpoint-up(md) {
+            display: table;
+            white-space: normal;
+        }
+
+        thead {
+            background-color: $gray-100;
+
+            th {
+                font-weight: 600;
+                text-align: left;
+                padding: 0.75rem;
+                border-bottom: 2px solid $gray-300;
+                color: $gray-900;
+            }
+        }
+
+        tbody {
+            tr {
+                border-bottom: 1px solid $gray-200;
+                transition: background-color 0.15s ease-in-out;
+
+                &:hover {
+                    background-color: $gray-100;
+                }
+
+                &:last-child {
+                    border-bottom: none;
+                }
+            }
+
+            td {
+                padding: 0.75rem;
+                vertical-align: top;
+            }
+        }
+
+        th,
+        td {
+            border: 1px solid $gray-200;
+
+            &:first-child {
+                border-left: none;
+            }
+
+            &:last-child {
+                border-right: none;
+            }
+        }
+    }
+}

@@ -30,7 +30,7 @@
 
             <!-- Content -->
             @if($model->content ?? false)
-                <div class="content-body">
+                <div class="content-body markdown">
                     {!! md2html($model->content) !!}
                 </div>
             @endif

@@ -57,7 +57,7 @@
 
                             <!-- Content -->
                             @if($displayOptions['content'] ?? false)
-                                <div class="text-document-collapsible__content-body">
+                                <div class="text-document-collapsible__content-body markdown">
                                     {!! md2html($displayOptions['content']) !!}
                                 </div>
                             @endif

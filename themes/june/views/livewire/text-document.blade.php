@@ -36,7 +36,7 @@
 
                 <!-- Content -->
                 @if($displayOptions['content'] ?? false)
-                    <div class="content-body">
+                    <div class="content-body markdown">
                         {!! md2html($displayOptions['content']) !!}
                     </div>
                 @endif
