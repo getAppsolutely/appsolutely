@@ -7,10 +7,10 @@ use App\Models\GeneralPage;
 use App\Services\TranslationService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
-use League\CommonMark\CommonMarkConverter;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Exception\CommonMarkException;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\GithubFlavoredMarkdownConverter;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Qirolab\Theme\Theme;
 
@@ -877,7 +877,7 @@ if (! function_exists('md2html')) {
         $text = trim($text);
 
         try {
-            $converter = new CommonMarkConverter();
+            $converter = new GithubFlavoredMarkdownConverter();
             $html      = (string) $converter->convert($text);
             $plainText = strip_tags($html);
             similar_text($text, $plainText, $percent);
