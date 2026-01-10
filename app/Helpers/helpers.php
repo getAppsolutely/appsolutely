@@ -872,25 +872,34 @@ if (! function_exists('app_uri')) {
 }
 
 if (! function_exists('md2html')) {
-    function md2html(string $text, float $threshold = 85.0): string
+    /**
+     * Convert markdown text to HTML
+     *
+     * @param  string  $text  The markdown text to convert
+     * @return string The converted HTML, or original text on error
+     */
+    function md2html(string $text): string
     {
         $text = trim($text);
 
-        try {
-            $converter = new GithubFlavoredMarkdownConverter();
-            $html      = (string) $converter->convert($text);
-            $plainText = strip_tags($html);
-            similar_text($text, $plainText, $percent);
+        if (empty($text)) {
+            return $text;
+        }
 
-            if ($percent >= $threshold) {
-                return $html;
+        try {
+            static $converter = null;
+
+            if ($converter === null) {
+                $converter = new GithubFlavoredMarkdownConverter();
             }
 
-            return $text;
-        } catch (CommonMarkException $e) {
-            log_warning('Unable to parse text.', ['exception' => $e->getMessage(), 'text' => $text]);
+            $html = $converter->convert($text)->getContent();
 
-            return '';
+            return $html;
+        } catch (CommonMarkException $e) {
+            log_warning('Unable to parse markdown text.', ['exception' => $e->getMessage(), 'text' => $text]);
+
+            return $text;
         }
     }
 }
