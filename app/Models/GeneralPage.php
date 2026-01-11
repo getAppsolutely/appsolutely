@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Config\BasicConfig;
 use App\Enums\PageType;
 use Illuminate\Database\Eloquent\Model;
 
@@ -161,7 +160,7 @@ class GeneralPage
     {
         $title     = $this->content->title ?? '';
         $separator = config('appsolutely.seo.title_separator', ' | ');
-        $siteName  = (new BasicConfig())->title();
+        $siteName  = basic_config('title');
 
         // For nested pages, optionally append parent title
         if ($this->isNested()) {

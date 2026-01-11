@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Config\BasicConfig;
 use App\Services\Contracts\ThemeServiceInterface;
 use Illuminate\Support\Facades\View;
 use Qirolab\Theme\Theme;
@@ -14,8 +13,7 @@ final readonly class ThemeService implements ThemeServiceInterface
 {
     public function resolveThemeName(): ?string
     {
-        $basicConfig = new BasicConfig();
-        $basicTheme  = $basicConfig->theme();
+        $basicTheme = basic_config('theme');
         if (! empty($basicTheme) && file_exists(themed_absolute_path($basicTheme, 'views'))) {
             return $basicTheme;
         }

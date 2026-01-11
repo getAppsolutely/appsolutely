@@ -798,28 +798,28 @@ if (! function_exists('page_meta')) {
 if (! function_exists('site_meta')) {
     function site_meta(): string
     {
-        return (new BasicConfig())->siteMeta() ?? '';
+        return basic_config('siteMeta') ?? '';
     }
 }
 
 if (! function_exists('noscript')) {
     function noscript(): string
     {
-        return (new BasicConfig())->noscript() ?? '';
+        return basic_config('noscript') ?? '';
     }
 }
 
 if (! function_exists('structured_data')) {
     function structured_data(): string
     {
-        return (new BasicConfig())->structuredData() ?? '';
+        return basic_config('structuredData') ?? '';
     }
 }
 
 if (! function_exists('tracking_code')) {
     function tracking_code(): string
     {
-        return (new BasicConfig())->trackingCode() ?? '';
+        return basic_config('trackingCode') ?? '';
     }
 }
 
@@ -862,7 +862,7 @@ if (! function_exists('site_name')) {
      */
     function site_name(): ?string
     {
-        return (new BasicConfig())->name();
+        return basic_config('name');
     }
 }
 
@@ -872,7 +872,7 @@ if (! function_exists('site_title')) {
      */
     function site_title(): ?string
     {
-        return (new BasicConfig())->title();
+        return basic_config('title');
     }
 }
 
@@ -882,7 +882,7 @@ if (! function_exists('site_keywords')) {
      */
     function site_keywords(): ?string
     {
-        return (new BasicConfig())->keywords();
+        return basic_config('keywords');
     }
 }
 
@@ -892,7 +892,7 @@ if (! function_exists('site_description')) {
      */
     function site_description(): ?string
     {
-        return (new BasicConfig())->description();
+        return basic_config('description');
     }
 }
 
@@ -902,7 +902,7 @@ if (! function_exists('site_logo')) {
      */
     function site_logo(): ?string
     {
-        return (new BasicConfig())->logo();
+        return basic_config('logo');
     }
 }
 
@@ -912,7 +912,7 @@ if (! function_exists('site_favicon')) {
      */
     function site_favicon(): ?string
     {
-        return (new BasicConfig())->favicon();
+        return basic_config('favicon');
     }
 }
 
@@ -922,7 +922,7 @@ if (! function_exists('site_theme')) {
      */
     function site_theme(): ?string
     {
-        return (new BasicConfig())->theme();
+        return basic_config('theme');
     }
 }
 
@@ -932,7 +932,7 @@ if (! function_exists('site_timezone')) {
      */
     function site_timezone(): ?string
     {
-        return (new BasicConfig())->timezone();
+        return basic_config('timezone');
     }
 }
 
@@ -942,7 +942,7 @@ if (! function_exists('site_locale')) {
      */
     function site_locale(): ?string
     {
-        return (new BasicConfig())->locale();
+        return basic_config('locale');
     }
 }
 
@@ -952,7 +952,7 @@ if (! function_exists('site_copyright')) {
      */
     function site_copyright(): ?string
     {
-        return (new BasicConfig())->copyright();
+        return basic_config('copyright');
     }
 }
 
