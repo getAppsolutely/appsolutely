@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Config\BasicConfig;
 use App\Helpers\FileHelper;
 use App\Models\GeneralPage;
 use App\Services\TranslationService;
@@ -797,28 +798,161 @@ if (! function_exists('page_meta')) {
 if (! function_exists('site_meta')) {
     function site_meta(): string
     {
-        return config('basic.siteMeta') ?? '';
+        return (new BasicConfig())->siteMeta() ?? '';
     }
 }
 
 if (! function_exists('noscript')) {
     function noscript(): string
     {
-        return config('basic.noscript') ?? '';
+        return (new BasicConfig())->noscript() ?? '';
     }
 }
 
 if (! function_exists('structured_data')) {
     function structured_data(): string
     {
-        return config('basic.structuredData') ?? '';
+        return (new BasicConfig())->structuredData() ?? '';
     }
 }
 
 if (! function_exists('tracking_code')) {
     function tracking_code(): string
     {
-        return config('basic.trackingCode') ?? '';
+        return (new BasicConfig())->trackingCode() ?? '';
+    }
+}
+
+if (! function_exists('basic_config')) {
+    /**
+     * Get a basic configuration value by key
+     *
+     * @param  string  $key  The configuration key (e.g., 'title', 'favicon', 'theme')
+     * @return mixed The configuration value
+     *
+     * @throws \InvalidArgumentException If the key does not correspond to a valid method
+     */
+    function basic_config(string $key): mixed
+    {
+        $config = new BasicConfig();
+
+        if (! method_exists($config, $key)) {
+            // Get available methods automatically using reflection
+            $reflection = new \ReflectionClass($config);
+            $methods    = array_filter(
+                array_map(
+                    fn (\ReflectionMethod $method) => $method->getName(),
+                    $reflection->getMethods(\ReflectionMethod::IS_PUBLIC)
+                ),
+                fn (string $methodName) => ! str_starts_with($methodName, 'get') && $methodName !== '__construct'
+            );
+
+            throw new \InvalidArgumentException(
+                "Basic config key '{$key}' does not exist. Available keys: " . implode(', ', $methods)
+            );
+        }
+
+        return $config->$key();
+    }
+}
+
+if (! function_exists('site_name')) {
+    /**
+     * Get the site name
+     */
+    function site_name(): ?string
+    {
+        return (new BasicConfig())->name();
+    }
+}
+
+if (! function_exists('site_title')) {
+    /**
+     * Get the site title
+     */
+    function site_title(): ?string
+    {
+        return (new BasicConfig())->title();
+    }
+}
+
+if (! function_exists('site_keywords')) {
+    /**
+     * Get the site keywords
+     */
+    function site_keywords(): ?string
+    {
+        return (new BasicConfig())->keywords();
+    }
+}
+
+if (! function_exists('site_description')) {
+    /**
+     * Get the site description
+     */
+    function site_description(): ?string
+    {
+        return (new BasicConfig())->description();
+    }
+}
+
+if (! function_exists('site_logo')) {
+    /**
+     * Get the site logo path
+     */
+    function site_logo(): ?string
+    {
+        return (new BasicConfig())->logo();
+    }
+}
+
+if (! function_exists('site_favicon')) {
+    /**
+     * Get the site favicon path
+     */
+    function site_favicon(): ?string
+    {
+        return (new BasicConfig())->favicon();
+    }
+}
+
+if (! function_exists('site_theme')) {
+    /**
+     * Get the site theme name
+     */
+    function site_theme(): ?string
+    {
+        return (new BasicConfig())->theme();
+    }
+}
+
+if (! function_exists('site_timezone')) {
+    /**
+     * Get the site timezone
+     */
+    function site_timezone(): ?string
+    {
+        return (new BasicConfig())->timezone();
+    }
+}
+
+if (! function_exists('site_locale')) {
+    /**
+     * Get the site locale
+     */
+    function site_locale(): ?string
+    {
+        return (new BasicConfig())->locale();
+    }
+}
+
+if (! function_exists('site_copyright')) {
+    /**
+     * Get the site copyright text
+     */
+    function site_copyright(): ?string
+    {
+        return (new BasicConfig())->copyright();
     }
 }
 

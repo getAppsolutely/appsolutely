@@ -12,8 +12,8 @@
     <meta name="robots" content="noindex, nofollow">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ asset_url(config('basic.favicon')) }}">
-    <link rel="apple-touch-icon" href="{{ asset_url(config('basic.favicon')) }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset_url(site_favicon()) }}">
+    <link rel="apple-touch-icon" href="{{ asset_url(site_favicon()) }}">
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">

@@ -7,12 +7,12 @@
             <div class="header-left d-flex align-items-center flex-shrink-0">
                 <a href="{{ route('home') }}" class="navbar-brand m-0">
                     @if ($displayOptions['logo'])
-                        <img src="{{ asset_url('assets/images/logo-dark.webp') }}" alt="{{ config('basic.title') }}"
+                        <img src="{{ asset_url('assets/images/logo-dark.webp') }}" alt="{{ site_title() }}"
                             height="40" class="logo-dark">
-                        <img src="{{ asset_url('assets/images/logo.webp') }}" alt="{{ config('basic.title') }}"
+                        <img src="{{ asset_url('assets/images/logo.webp') }}" alt="{{ site_title() }}"
                             height="40" class="logo-light">
                     @else
-                        <span>{{ config('basic.title') }}</span>
+                        <span>{{ site_title() }}</span>
                     @endif
                 </a>
             </div>

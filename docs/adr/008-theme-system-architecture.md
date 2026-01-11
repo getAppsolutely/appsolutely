@@ -53,12 +53,15 @@ themes/
 ### Example
 
 ```php
+use App\Config\BasicConfig;
+
 // Theme Service
 final readonly class ThemeService implements ThemeServiceInterface
 {
     public function resolveThemeName(): ?string
     {
-        $basicTheme = config('basic.theme');
+        $basicConfig = new BasicConfig();
+        $basicTheme  = $basicConfig->theme();
         if (!empty($basicTheme) && file_exists(themed_absolute_path($basicTheme, 'views'))) {
             return $basicTheme;
         }
