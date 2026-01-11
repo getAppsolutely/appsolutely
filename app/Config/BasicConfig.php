@@ -13,16 +13,15 @@ namespace App\Config;
  *
  * Usage:
  *   $config = new BasicConfig();
- *   $name = $config->name(); // Returns string|null
- *   $title = $config->title(); // Returns string|null
+ *   $value = $config->methodName(); // Returns string|null
  *
  * Or use the static helper:
- *   BasicConfig::name();
+ *   BasicConfig::getMethodName();
  */
 final readonly class BasicConfig
 {
     /**
-     * Get the application name
+     * Get the Name
      */
     public function name(): ?string
     {
@@ -30,7 +29,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the application title
+     * Get the Title
      */
     public function title(): ?string
     {
@@ -38,7 +37,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the application keywords
+     * Get the Keywords
      */
     public function keywords(): ?string
     {
@@ -46,7 +45,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the application description
+     * Get the Description
      */
     public function description(): ?string
     {
@@ -54,7 +53,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the logo path
+     * Get the Logo
      */
     public function logo(): ?string
     {
@@ -62,7 +61,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the favicon path
+     * Get the Favicon
      */
     public function favicon(): ?string
     {
@@ -70,7 +69,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the active theme name
+     * Get the Theme
      */
     public function theme(): ?string
     {
@@ -78,7 +77,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the timezone
+     * Get the Timezone
      */
     public function timezone(): ?string
     {
@@ -86,7 +85,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the date format
+     * Get the Date Format
      */
     public function dateFormat(): ?string
     {
@@ -94,7 +93,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the time format
+     * Get the Time Format
      */
     public function timeFormat(): ?string
     {
@@ -102,7 +101,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the locale
+     * Get the Locale
      */
     public function locale(): ?string
     {
@@ -110,7 +109,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the site meta tags
+     * Get the Site Meta
      */
     public function siteMeta(): ?string
     {
@@ -118,7 +117,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the structured data (JSON-LD)
+     * Get the Structured Data
      */
     public function structuredData(): ?string
     {
@@ -126,7 +125,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the tracking code (analytics, etc.)
+     * Get the Tracking Code
      */
     public function trackingCode(): ?string
     {
@@ -134,7 +133,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the copyright text
+     * Get the Copyright
      */
     public function copyright(): ?string
     {
@@ -142,7 +141,9 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the logo pattern (with %s placeholder for extension)
+     * Get the Logo Pattern
+     *
+     * %s: file extension
      */
     public function logoPattern(): ?string
     {
@@ -150,7 +151,9 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the favicon pattern (with %s placeholder for extension)
+     * Get the Favicon Pattern
+     *
+     * %s: file extension
      */
     public function faviconPattern(): ?string
     {
@@ -158,7 +161,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the noscript content
+     * Get the Noscript
      */
     public function noscript(): ?string
     {
@@ -168,7 +171,7 @@ final readonly class BasicConfig
     // Static helper methods for convenience
 
     /**
-     * Get the application name (static)
+     * Get the Name (static)
      */
     public static function getName(): ?string
     {
@@ -176,7 +179,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the application title (static)
+     * Get the Title (static)
      */
     public static function getTitle(): ?string
     {
@@ -184,7 +187,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the application keywords (static)
+     * Get the Keywords (static)
      */
     public static function getKeywords(): ?string
     {
@@ -192,7 +195,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the application description (static)
+     * Get the Description (static)
      */
     public static function getDescription(): ?string
     {
@@ -200,7 +203,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the logo path (static)
+     * Get the Logo (static)
      */
     public static function getLogo(): ?string
     {
@@ -208,7 +211,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the favicon path (static)
+     * Get the Favicon (static)
      */
     public static function getFavicon(): ?string
     {
@@ -216,7 +219,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the active theme name (static)
+     * Get the Theme (static)
      */
     public static function getTheme(): ?string
     {
@@ -224,7 +227,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the timezone (static)
+     * Get the Timezone (static)
      */
     public static function getTimezone(): ?string
     {
@@ -232,7 +235,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the date format (static)
+     * Get the Date Format (static)
      */
     public static function getDateFormat(): ?string
     {
@@ -240,7 +243,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the time format (static)
+     * Get the Time Format (static)
      */
     public static function getTimeFormat(): ?string
     {
@@ -248,7 +251,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the locale (static)
+     * Get the Locale (static)
      */
     public static function getLocale(): ?string
     {
@@ -256,7 +259,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the site meta tags (static)
+     * Get the Site Meta (static)
      */
     public static function getSiteMeta(): ?string
     {
@@ -264,7 +267,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the structured data (static)
+     * Get the Structured Data (static)
      */
     public static function getStructuredData(): ?string
     {
@@ -272,7 +275,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the tracking code (static)
+     * Get the Tracking Code (static)
      */
     public static function getTrackingCode(): ?string
     {
@@ -280,7 +283,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the copyright text (static)
+     * Get the Copyright (static)
      */
     public static function getCopyright(): ?string
     {
@@ -288,7 +291,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the logo pattern (static)
+     * Get the Logo Pattern (static)
      */
     public static function getLogoPattern(): ?string
     {
@@ -296,7 +299,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the favicon pattern (static)
+     * Get the Favicon Pattern (static)
      */
     public static function getFaviconPattern(): ?string
     {
@@ -304,7 +307,7 @@ final readonly class BasicConfig
     }
 
     /**
-     * Get the noscript content (static)
+     * Get the Noscript (static)
      */
     public static function getNoscript(): ?string
     {
