@@ -80,7 +80,7 @@ class AdminConfigSeeder extends Seeder
      */
     private function buildAdminConfigStructure(array $dbValues): array
     {
-        $configs = $this->getConfigDefinitions();
+        $configs = self::getConfigDefinitions();
 
         $result = [];
         $order  = 1;
@@ -119,7 +119,7 @@ class AdminConfigSeeder extends Seeder
     /**
      * Get config definitions
      */
-    private function getConfigDefinitions(): array
+    public static function getConfigDefinitions(): array
     {
         return [
             ['key' => 'basic.name', 'name' => 'Name', 'element' => 'text', 'default' => 'appsolutely'],
@@ -142,7 +142,7 @@ class AdminConfigSeeder extends Seeder
             ['key' => 'basic.noscript', 'name' => 'Noscript', 'element' => 'textarea', 'default' => null],
             ['key' => 'mail.server', 'name' => 'Server', 'element' => 'text', 'default' => ''],
             ['key' => 'mail.port', 'name' => 'port', 'element' => 'text', 'default' => ''],
-            ['key' => 'mail.username', 'name' => 'User Name', 'element' => 'text', 'default' => ''],
+            ['key' => 'mail.username', 'name' => 'Username', 'element' => 'text', 'default' => ''],
             ['key' => 'mail.password', 'name' => 'Password', 'element' => 'text', 'default' => ''],
         ];
     }

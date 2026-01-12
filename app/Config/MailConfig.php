@@ -21,7 +21,23 @@ namespace App\Config;
 final readonly class MailConfig
 {
     /**
-     * Get the User Name
+     * Get the Server
+     */
+    public function server(): ?string
+    {
+        return config('mail.server');
+    }
+
+    /**
+     * Get the port
+     */
+    public function port(): ?string
+    {
+        return config('mail.port');
+    }
+
+    /**
+     * Get the Username
      */
     public function username(): ?string
     {
@@ -39,7 +55,23 @@ final readonly class MailConfig
     // Static helper methods for convenience
 
     /**
-     * Get the User Name (static)
+     * Get the Server (static)
+     */
+    public static function getServer(): ?string
+    {
+        return (new self())->server();
+    }
+
+    /**
+     * Get the port (static)
+     */
+    public static function getPort(): ?string
+    {
+        return (new self())->port();
+    }
+
+    /**
+     * Get the Username (static)
      */
     public static function getUsername(): ?string
     {

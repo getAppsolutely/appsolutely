@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Models\AdminSetting;
+use Database\Seeders\AdminConfigSeeder;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
 /**
- * Generate type-safe config classes from admin config database
+ * Generate type-safe config classes from admin config seeder definitions
  *
- * This command reads admin settings from the database and generates
+ * This command reads config definitions from AdminConfigSeeder and generates
  * type-safe config classes similar to BasicConfig for each config group.
  */
 final class GenerateConfigClassesCommand extends Command
@@ -22,7 +22,7 @@ final class GenerateConfigClassesCommand extends Command
      * @var string
      */
     protected $signature = 'config:generate-classes
-                           {--force : Overwrite existing config classes}
+                           {--no-force : Skip overwriting existing config classes}
                            {--group= : Generate only for a specific group (e.g., basic)}
                            {--debug : Show debug information about found config items}';
 
@@ -31,27 +31,19 @@ final class GenerateConfigClassesCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Generate type-safe config classes from admin config database';
+    protected $description = 'Generate type-safe config classes from admin config seeder definitions';
 
     /**
      * Execute the console command.
      */
     public function handle(): int
     {
-        $this->info('🔍 Loading admin config from database...');
+        $this->info('🔍 Loading admin config from seeder definitions...');
 
-        $adminSetting = AdminSetting::where('slug', 'ghost::admin_config')->first();
+        $configItems = $this->getConfigDefinitions();
 
-        if (! $adminSetting) {
-            $this->error('❌ Admin config not found. Please run the seeder first.');
-
-            return Command::FAILURE;
-        }
-
-        $configItems = json_decode($adminSetting->value, true);
-
-        if (! is_array($configItems)) {
-            $this->error('❌ Invalid admin config format.');
+        if (empty($configItems)) {
+            $this->error('❌ No config definitions found.');
 
             return Command::FAILURE;
         }
@@ -128,7 +120,7 @@ final class GenerateConfigClassesCommand extends Command
         $this->info('📦 Found ' . count($groups) . ' config group(s)');
         $this->newLine();
 
-        $force     = $this->option('force');
+        $force     = ! $this->option('no-force');
         $generated = 0;
 
         foreach ($groups as $group => $items) {
@@ -136,7 +128,7 @@ final class GenerateConfigClassesCommand extends Command
             $filePath  = app_path("Config/{$className}.php");
 
             if (file_exists($filePath) && ! $force) {
-                $this->warn("⏭️  Skipping {$className} (already exists, use --force to overwrite)");
+                $this->warn("⏭️  Skipping {$className} (already exists, use without --no-force to overwrite)");
 
                 continue;
             }
@@ -160,6 +152,27 @@ final class GenerateConfigClassesCommand extends Command
         $this->info("✨ Generated {$generated} config class(es)!");
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * Get config definitions from seeder
+     */
+    private function getConfigDefinitions(): array
+    {
+        $definitions = AdminConfigSeeder::getConfigDefinitions();
+
+        // Transform seeder format to config item format
+        $configItems = [];
+        foreach ($definitions as $def) {
+            $configItems[] = [
+                'key'     => $def['key'],
+                'name'    => $def['name'],
+                'element' => $def['element'],
+                'help'    => $def['help'] ?? null,
+            ];
+        }
+
+        return $configItems;
     }
 
     /**
