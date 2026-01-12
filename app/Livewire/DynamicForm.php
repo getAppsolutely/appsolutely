@@ -10,7 +10,7 @@ use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
 
-final class DynamicForm extends BaseBlock
+final class DynamicForm extends GeneralBlock
 {
     /**
      * @var array<string, mixed>

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
-final class HeroBanner extends BaseBlock
+final class HeroBanner extends GeneralBlock
 {
     protected array $defaultDisplayOptions = [
         'heroes' => [

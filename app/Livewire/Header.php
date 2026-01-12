@@ -8,7 +8,7 @@ use App\Services\Contracts\MenuServiceInterface;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Collection;
 
-final class Header extends BaseBlock
+final class Header extends GeneralBlock
 {
     public Collection $mainNavigation;
 

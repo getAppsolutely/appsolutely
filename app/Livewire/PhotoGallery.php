@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
-final class PhotoGallery extends BaseBlock
+final class PhotoGallery extends GeneralBlock
 {
     protected array $defaultDisplayOptions = [
         'title'        => 'Photo Gallery',

@@ -9,7 +9,7 @@ use App\Repositories\ArticleRepository;
 use Illuminate\Contracts\Container\Container;
 use Livewire\WithPagination;
 
-final class ArticleList extends BaseBlock
+final class ArticleList extends GeneralBlock
 {
     use WithPagination;
 

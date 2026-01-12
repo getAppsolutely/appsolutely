@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
-final class Specifications extends BaseBlock
+final class Specifications extends GeneralBlock
 {
     protected array $defaultDisplayOptions = [
         'title'       => 'Item Specifications',

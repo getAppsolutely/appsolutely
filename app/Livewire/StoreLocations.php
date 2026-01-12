@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
-final class StoreLocations extends BaseBlock
+final class StoreLocations extends GeneralBlock
 {
     protected array $defaultDisplayOptions = [
         'title'       => 'Store Locations',

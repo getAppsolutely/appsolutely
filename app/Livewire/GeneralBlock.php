@@ -8,7 +8,7 @@ use App\Models\Model;
 use Carbon\Carbon;
 use Livewire\Component;
 
-abstract class BaseBlock extends Component
+abstract class GeneralBlock extends Component
 {
     public array $page = [];
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
-final class TextDocument extends BaseBlock
+final class TextDocument extends GeneralBlock
 {
     protected array $defaultDisplayOptions = [
         'title'          => 'Sample Title',

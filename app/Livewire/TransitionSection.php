@@ -6,7 +6,7 @@ namespace App\Livewire;
 
 use Illuminate\Contracts\Container\Container;
 
-final class TransitionSection extends BaseBlock
+final class TransitionSection extends GeneralBlock
 {
     protected array $defaultDisplayOptions = [
         'image'               => '', // Background image URL (required)

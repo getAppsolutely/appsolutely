@@ -8,7 +8,7 @@ use App\Services\Contracts\MenuServiceInterface;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Collection;
 
-final class Footer extends BaseBlock
+final class Footer extends GeneralBlock
 {
     public Collection $footerMenuItems;
 

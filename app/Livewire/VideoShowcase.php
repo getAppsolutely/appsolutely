@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
-final class VideoShowcase extends BaseBlock
+final class VideoShowcase extends GeneralBlock
 {
     protected array $defaultDisplayOptions = [
         'video_url'             => 'assets/videos/your-video.mp4',

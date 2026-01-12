@@ -295,7 +295,7 @@ namespace App\Livewire;
 use App\Repositories\ArticleRepository;
 use Livewire\WithPagination;
 
-final class ArticleList extends BaseBlock
+final class ArticleList extends GeneralBlock
 {
     use WithPagination;
 

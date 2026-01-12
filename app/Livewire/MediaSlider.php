@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
-final class MediaSlider extends BaseBlock
+final class MediaSlider extends GeneralBlock
 {
     protected array $defaultDisplayOptions = [
         'title'       => 'Media Slider',
