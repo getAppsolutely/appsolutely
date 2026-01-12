@@ -57,106 +57,27 @@ final class PageBuilderAdminApiController extends AdminBaseApiController
 
     /**
      * Get available blocks registry
+     * Only returns blocks that have existing Livewire components
      */
     public function getBlockRegistry()
     {
-        $data = [
-            [
-                'name'   => '内容区域',
-                'icon'   => 'fas fa-align-left',
-                'sort'   => 1,
-                'blocks' => [
-                    [
-                        'type'      => 'feature',
-                        'label'     => '特性展示',
-                        'desc'      => '展示产品特性或服务优势',
-                        'sort'      => 1,
-                        'content'   => '',
-                        'style'     => ['background-color' => '#f9fafb', 'padding' => '20px'],
-                        'tagName'   => 'section',
-                        'droppable' => false,
-                        'traits'    => [
-                            [
-                                'type'        => 'text',
-                                'name'        => 'category',
-                                'label'       => 'Category',
-                                'placeholder' => 'news',
-                            ],
-                            [
-                                'type'        => 'number',
-                                'name'        => 'limit',
-                                'label'       => 'Limit',
-                                'placeholder' => '5',
-                                'min'         => 0,
-                                'max'         => 100,
-                                'step'        => 5,
-                            ],
-                            [
-                                'type'        => 'checkbox',
-                                'name'        => 'gender',
-                                'label'       => 'Gender',
-                                'placeholder' => 'n/a',
-                                'valueTrue'   => 'Yes',
-                                'no'          => 'No',
-                            ],
-                            [
-                                'type'        => 'select',
-                                'name'        => 'options',
-                                'label'       => 'Options',
-                                'placeholder' => 'news',
-                                'options'     => [
-                                    ['id' => 'opt1', 'label' => 'Option 1'],
-                                    ['id' => 'opt2', 'label' => 'Option 2'],
-                                ],
-                            ],
-                            [
-                                'type'        => 'color',
-                                'name'        => 'color',
-                                'label'       => 'Color',
-                                'placeholder' => 'color?',
-                            ],
-                            [
-                                'type'        => 'text',
-                                'name'        => 'category',
-                                'label'       => 'Category',
-                                'placeholder' => 'news',
-                            ],
-                        ],
-                    ],
-                    [
-                        'type'      => 'testimonial',
-                        'label'     => '客户评价',
-                        'desc'      => '展示客户推荐和评价',
-                        'sort'      => 2,
-                        'content'   => '<blockquote><p>客户非常满意！</p><h2>Kent</h2><p>Excellent!</p></blockquote>',
-                        'style'     => ['border-left' => '4px solid #ccc', 'padding' => '10px'],
-                        'tagName'   => 'blockquote',
-                        'droppable' => false,
-                        'traits'    => [
-                            [
-                                'type'        => 'text',
-                                'name'        => 'type',
-                                'label'       => 'Category',
-                                'placeholder' => 'news',
-                            ],
-                            [
-                                'type'        => 'limit',
-                                'name'        => 'limit',
-                                'label'       => 'Limit',
-                                'placeholder' => '5',
-                                'min'         => 0,
-                                'max'         => 100,
-                                'step'        => 5,
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ];
+        $data = $this->pageBlockService->getCategorisedBlocks();
 
-        $data = $this->pageBlockService->getCategorisedBlocks()->toArray();
+        // Filter out blocks that don't have existing Livewire components
+        $data = $data->map(function ($group) {
+            $filteredBlocks = $group->blocks->filter(function ($block) {
+                return class_exists($block->class);
+            })->values();
 
-        return $this->success($data);
+            $group->setRelation('blocks', $filteredBlocks);
+
+            return $group;
+        })->filter(function ($group) {
+            // Remove groups that have no valid blocks
+            return $group->blocks->isNotEmpty();
+        })->values();
+
+        return $this->success($data->toArray());
     }
 
     /**
