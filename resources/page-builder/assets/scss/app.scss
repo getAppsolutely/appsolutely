@@ -1,23 +1,18 @@
 // Page Builder Main SCSS Entry Point
 
-// 1. Sass modules MUST come first
-// Using 'as *' to make variables/mixins available without namespace
-@use "variables" as *;
-@use "base" as *;
-@use "components/editor" as *;
-@use "components/blocks" as *;
-@use "components/panels" as *;
-@use "components/modals" as *;
-@use "components/notifications" as *;
-@use "utilities" as *;
-
-// 2. External CSS imports
-// stylelint-disable-next-line no-invalid-position-at-import-rule
+// 1. All @import statements must come first
 @import "grapesjs/dist/css/grapes.min.css";
-// stylelint-disable-next-line no-invalid-position-at-import-rule
 @import "@fortawesome/fontawesome-free/css/all.min.css";
+@import "variables";
+@import "base";
+@import "components/editor";
+@import "components/blocks";
+@import "components/panels";
+@import "components/modals";
+@import "components/notifications";
+@import "utilities";
 
-// 3. TailwindCSS directives after all imports
+// 2. TailwindCSS directives after all imports
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
