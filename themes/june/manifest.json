@@ -1,0 +1,405 @@
+{
+    "version": "1.0.0",
+    "description": "June theme manifest - defines available templates and their configurations",
+    "templates": {
+        "article-list": {
+            "label": "Article List",
+            "description": "Display a list of articles with pagination",
+            "component": "App\\Livewire\\ArticleList",
+            "view": "article-list",
+            "displayOptions": {
+                "title": "Latest Articles",
+                "subtitle": "Stay updated with our latest articles and news",
+                "show_featured_image": true,
+                "show_excerpt": true,
+                "show_author": true,
+                "show_date": true,
+                "show_read_more": true,
+                "read_more_text": "Read More",
+                "layout": "grid"
+            },
+            "queryOptions": {
+                "posts_per_page": 6,
+                "category_filter": "",
+                "tag_filter": "",
+                "order_by": "published_at",
+                "order_direction": "desc"
+            },
+            "styles": ["default"]
+        },
+        "dynamic-form": {
+            "label": "Dynamic Form",
+            "description": "Dynamic form with validation and submission",
+            "component": "App\\Livewire\\DynamicForm",
+            "view": "dynamic-form",
+            "displayOptions": {
+                "title": "Test Drive Booking",
+                "subtitle": "Book your test drive today",
+                "description": "Fill out the form below and we'll get back to you as soon as possible.",
+                "submit_text": "Book Test Drive",
+                "success_title": "Thank You!",
+                "success_message": "✅ Your test drive booking has been submitted. We'll contact you soon to confirm your appointment.",
+                "layout": "form",
+                "theme": "default",
+                "columns": 1,
+                "redirect_after_submit": ""
+            },
+            "queryOptions": {
+                "form_slug": "test-drive-booking",
+                "email_to": "sales@company.com"
+            },
+            "styles": ["default", "interactive", "content"]
+        },
+        "features": {
+            "label": "Features",
+            "description": "Display a grid of feature items with images and descriptions",
+            "component": "App\\Livewire\\GeneralBlock",
+            "view": "features",
+            "displayOptions": {
+                "title": "",
+                "subtitle": "",
+                "descriptions": [""],
+                "features": [
+                    {
+                        "type": "image",
+                        "url": "assets/images/feature1.webp",
+                        "title": "",
+                        "subtitle": "",
+                        "link": ""
+                    },
+                    {
+                        "type": "image",
+                        "url": "assets/images/feature2.webp",
+                        "title": "",
+                        "subtitle": "",
+                        "link": ""
+                    },
+                    {
+                        "type": "image",
+                        "url": "assets/images/feature3.webp",
+                        "title": "",
+                        "subtitle": "",
+                        "link": ""
+                    }
+                ]
+            },
+            "styles": ["default", "fashionable", "fullscreen", "rows"]
+        },
+        "footer": {
+            "label": "Footer",
+            "description": "Site footer with menus, contact info, and social links",
+            "component": "App\\Livewire\\Footer",
+            "view": "footer",
+            "displayOptions": {
+                "logo": true,
+                "contact": {
+                    "enabled": true,
+                    "phone": "+64 9 379 5555",
+                    "email": "info@company.com",
+                    "address": "123 Main Street, Auckland, NZ"
+                },
+                "newsletter": {
+                    "enabled": true,
+                    "title": "Subscribe to our newsletter",
+                    "text": "Get the latest updates and offers"
+                },
+                "company_name": "",
+                "address": "",
+                "email": "",
+                "copyright": {
+                    "text": "© 2025 Your Company. All rights reserved."
+                }
+            },
+            "queryOptions": {
+                "footer_menu": "footer-menu",
+                "social_media": "social-media",
+                "policy_menu": "policy-menu"
+            },
+            "styles": ["default"]
+        },
+        "header": {
+            "label": "Header",
+            "description": "Site header with navigation and branding",
+            "component": "App\\Livewire\\Header",
+            "view": "header",
+            "displayOptions": {
+                "logo": true,
+                "booking": {
+                    "text": "Book A Test Drive",
+                    "url": "/test-drive"
+                }
+            },
+            "queryOptions": {
+                "main_navigation": "main-navigation",
+                "auth_menu": "auth-menu",
+                "footer_menu": "footer-menu"
+            },
+            "styles": ["default"]
+        },
+        "hero-banner": {
+            "label": "Hero Banner",
+            "description": "Full-width hero section with images or videos",
+            "component": "App\\Livewire\\GeneralBlock",
+            "view": "hero-banner",
+            "displayOptions": {
+                "heroes": [
+                    {
+                        "type": "image",
+                        "link": "/",
+                        "url": "assets/images/slides/slide-1.webp",
+                        "title": "Slide Title 1",
+                        "subtitle": "Slide Subtitle 1"
+                    },
+                    {
+                        "type": "image",
+                        "link": "/",
+                        "url": "assets/images/slides/slide-2.webp",
+                        "title": "Slide Title 2",
+                        "subtitle": "Slide Subtitle 2"
+                    }
+                ]
+            },
+            "styles": ["default"]
+        },
+        "media-slider": {
+            "label": "Media Slider",
+            "description": "Image or video slider with navigation controls",
+            "component": "App\\Livewire\\GeneralBlock",
+            "view": "media-slider",
+            "displayOptions": {
+                "title": "Media Slider",
+                "subtitle": "Media Slider Subtitle",
+                "description": ["Media Slider Description"],
+                "slides": [
+                    {
+                        "type": "image",
+                        "link": "/",
+                        "url": "assets/images/slides/slide-1.webp",
+                        "title": "Slide Title 1",
+                        "subtitle": "Slide Subtitle 1"
+                    },
+                    {
+                        "type": "image",
+                        "link": "/",
+                        "url": "assets/images/slides/slide-2.webp",
+                        "title": "Slide Title 2",
+                        "subtitle": "Slide Subtitle 2"
+                    }
+                ],
+                "vehicles": [],
+                "show_controls": true,
+                "show_indicators": true,
+                "autoplay": true
+            },
+            "styles": ["default", "carousel", "fullscreen"]
+        },
+        "photo-gallery": {
+            "label": "Photo Gallery",
+            "description": "Grid of photos with lightbox support",
+            "component": "App\\Livewire\\GeneralBlock",
+            "view": "photo-gallery",
+            "displayOptions": {
+                "title": "Photo Gallery",
+                "subtitle": "",
+                "descriptions": [""],
+                "photos": [
+                    {
+                        "url": "assets/images/gallery/photo-1.webp",
+                        "title": "",
+                        "subtitle": "",
+                        "alt": "Gallery photo 1",
+                        "caption": "",
+                        "link": ""
+                    },
+                    {
+                        "url": "assets/images/gallery/photo-2.webp",
+                        "title": "",
+                        "subtitle": "",
+                        "alt": "Gallery photo 2",
+                        "caption": "",
+                        "link": ""
+                    },
+                    {
+                        "url": "assets/images/gallery/photo-3.webp",
+                        "title": "",
+                        "subtitle": "",
+                        "alt": "Gallery photo 3",
+                        "caption": "",
+                        "link": ""
+                    }
+                ]
+            },
+            "styles": ["default"]
+        },
+        "product-variant-block": {
+            "label": "Product Variant Block",
+            "description": "Display product variants with options",
+            "component": "App\\Livewire\\GeneralBlock",
+            "view": "product-variant-block",
+            "displayOptions": {},
+            "styles": ["default"]
+        },
+        "specifications": {
+            "label": "Specifications",
+            "description": "Product or service specifications table",
+            "component": "App\\Livewire\\Specifications",
+            "view": "specifications",
+            "displayOptions": {
+                "title": "Item Specifications",
+                "subtitle": "Overview of Key Features & Details",
+                "description": "Explore the core specifications and visual highlights of this product offering.",
+                "layout": "table",
+                "columns": 2,
+                "dimensions": [
+                    {
+                        "label": "Length (mm)",
+                        "value": ""
+                    },
+                    {
+                        "label": "Width (mm)",
+                        "value": ""
+                    },
+                    {
+                        "label": "Height (mm)",
+                        "value": ""
+                    }
+                ],
+                "drives": [
+                    {
+                        "label": "Power",
+                        "value": ""
+                    },
+                    {
+                        "label": "Torque",
+                        "value": ""
+                    }
+                ],
+                "specifications": [
+                    {
+                        "label": "Front Exterior",
+                        "value": "Modern design with signature grille"
+                    },
+                    {
+                        "label": "Dashboard Interior",
+                        "value": "Premium materials with digital display"
+                    }
+                ],
+                "download_url": "#",
+                "download_filename": "",
+                "download_label": ""
+            },
+            "styles": ["default"]
+        },
+        "store-locations": {
+            "label": "Store Locations",
+            "description": "Display store locations with map and contact information",
+            "component": "App\\Livewire\\GeneralBlock",
+            "view": "store-locations",
+            "displayOptions": {
+                "title": "Store Locations",
+                "subtitle": "Find a Location Near You",
+                "description": "Visit our retail points for personalized services and unique in-store experiences.",
+                "layout": "grid",
+                "columns": 2,
+                "show_map": true,
+                "map_api_key": "YOUR_API_KEY_PLACEHOLDER",
+                "locations": [
+                    {
+                        "name": "Location A",
+                        "address": "123 Main Street",
+                        "city": "City Name",
+                        "state": "Region",
+                        "zip_code": "0000",
+                        "country": "Country",
+                        "phone": "+00 0 0000 0000",
+                        "email": "contact@store.example",
+                        "website": "https://example.com/location-a",
+                        "hours": "Mon-Fri: 9AM-6PM, Sat: 9AM-5PM, Sun: 10AM-4PM",
+                        "image": "/images/locations/location-a.jpg",
+                        "latitude": "-00.0000",
+                        "longitude": "000.0000",
+                        "services": ["Personal Assistance", "Pickup Service", "Gift Services", "Adjustments"],
+                        "manager": "Jane Doe",
+                        "established": "2018",
+                        "type": "Flagship Store",
+                        "featured": true
+                    }
+                ]
+            },
+            "styles": ["default", "dropdown"]
+        },
+        "text-document": {
+            "label": "Text Document",
+            "description": "Rich text content with optional metadata",
+            "component": "App\\Livewire\\GeneralBlock",
+            "view": "text-document",
+            "displayOptions": {
+                "title": "Sample Title",
+                "subtitle": "Optional Subtitle",
+                "content": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>",
+                "published_date": null,
+                "author": "Anonymous",
+                "show_meta": true
+            },
+            "styles": ["default", "collapsible"]
+        },
+        "transition-section": {
+            "label": "Transition Section",
+            "description": "Visual transition element between sections",
+            "component": "App\\Livewire\\TransitionSection",
+            "view": "transition-section",
+            "displayOptions": {
+                "image": "",
+                "height": "300px",
+                "background_position": "center center",
+                "background_size": "cover",
+                "overlay": {
+                    "enabled": false,
+                    "color": "#000000",
+                    "opacity": 0.3
+                },
+                "responsive": {
+                    "mobile_height": "200px",
+                    "hide_on_mobile": false
+                }
+            },
+            "styles": ["default"]
+        },
+        "video-showcase": {
+            "label": "Video Showcase",
+            "description": "Video player with customizable controls and overlay",
+            "component": "App\\Livewire\\GeneralBlock",
+            "view": "video-showcase",
+            "displayOptions": {
+                "video_url": "assets/videos/your-video.mp4",
+                "poster_image": "assets/images/posters/your-poster.webp",
+                "title": "Your Title Here",
+                "subtitle": "Your Subtitle Here",
+                "description": "Your descriptive text goes here, describing the content in a compelling way.",
+                "cta_text": "Call To Action",
+                "cta_link": "/your/cta/link",
+                "autoplay": true,
+                "loop": true,
+                "muted": true,
+                "controls": false,
+                "mobile_fallback_image": "assets/images/fallbacks/mobile-fallback.webp",
+                "overlay_opacity": 0.4,
+                "text_color": "white",
+                "text_position": "center",
+                "video_format": "mp4",
+                "fallback_videos": [
+                    {
+                        "url": "assets/videos/fallbacks/your-video.webm",
+                        "format": "webm"
+                    },
+                    {
+                        "url": "assets/videos/fallbacks/your-video.mov",
+                        "format": "mov"
+                    }
+                ],
+                "fallback_text": "Your browser does not support the video tag."
+            },
+            "styles": ["default", "simple"]
+        }
+    }
+}
