@@ -13,18 +13,6 @@ final class ArticleList extends GeneralBlock
 {
     use WithPagination;
 
-    protected array $defaultDisplayOptions = [
-        'title'               => 'Latest Articles',
-        'subtitle'            => 'Stay updated with our latest articles and news',
-        'show_featured_image' => true,
-        'show_excerpt'        => true,
-        'show_author'         => true,
-        'show_date'           => true,
-        'show_read_more'      => true,
-        'read_more_text'      => 'Read More',
-        'layout'              => 'grid', // grid, list, masonry
-    ];
-
     protected array $defaultQueryOptions = [
         'posts_per_page'  => 6,
         'category_filter' => '', // empty for all categories

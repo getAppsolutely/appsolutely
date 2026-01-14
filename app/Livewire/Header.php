@@ -14,14 +14,6 @@ final class Header extends GeneralBlock
 
     public Collection $authMenuItems;
 
-    protected array $defaultDisplayOptions = [
-        'logo'    => true,
-        'booking' => [
-            'text' => 'Book A Test Drive',
-            'url'  => '/test-drive',
-        ],
-    ];
-
     protected array $defaultQueryOptions = [
         'main_navigation' => 'main-navigation',
         'auth_menu'       => 'auth-menu',

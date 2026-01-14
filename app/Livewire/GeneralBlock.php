@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
-use App\Models\Model;
 use Carbon\Carbon;
 use Livewire\Component;
 
 class GeneralBlock extends Component
 {
     public array $page = [];
-
-    public ?Model $model = null;
 
     /**
      * The view name to render (without the 'livewire.' prefix).
@@ -24,8 +21,6 @@ class GeneralBlock extends Component
     public array $displayOptions = [];
 
     public array $queryOptions = [];
-
-    protected array $defaultDisplayOptions = [];
 
     protected array $defaultQueryOptions = [];
 
@@ -47,8 +42,7 @@ class GeneralBlock extends Component
      */
     public function mount(array $page, array $data = []): void
     {
-        $this->page           = $page;
-        $this->model          = $page['model'] ?? null;
+        $this->queryOptions   =  ! empty($this->defaultQueryOptions) ? $this->mergeByKey($this->defaultQueryOptions, $this->queryOptions) : $this->queryOptions;
 
         $this->initializeComponent(app());
         $this->initializePublishDates();
@@ -103,6 +97,11 @@ class GeneralBlock extends Component
 
         // Check if current time is before or equal to expired_at
         return $now->lte($this->expiredAt);
+    }
+
+    public static function mergeByKey(array $default, array $data): array
+    {
+        return array_replace($default, array_intersect_key($data, $default));
     }
 
     protected function defaultConfig(): array

@@ -8,22 +8,6 @@ use Illuminate\Contracts\Container\Container;
 
 final class TransitionSection extends GeneralBlock
 {
-    protected array $defaultDisplayOptions = [
-        'image'               => '', // Background image URL (required)
-        'height'              => '300px', // Height in CSS units (e.g., '200px', '40vh')
-        'background_position' => 'center center', // Background image position
-        'background_size'     => 'cover', // Background image size (cover, contain, auto)
-        'overlay'             => [
-            'enabled' => false,
-            'color'   => '#000000',
-            'opacity' => 0.3,
-        ],
-        'responsive' => [
-            'mobile_height'  => '200px',
-            'hide_on_mobile' => false,
-        ],
-    ];
-
     protected function initializeComponent(Container $container): void
     {
         $transitionSection = $this->displayOptions;

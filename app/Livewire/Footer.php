@@ -16,27 +16,6 @@ final class Footer extends GeneralBlock
 
     public Collection $policyMenuItems;
 
-    protected array $defaultDisplayOptions = [
-        'logo'    => true,
-        'contact' => [
-            'enabled' => true,
-            'phone'   => '+64 9 379 5555',
-            'email'   => 'info@company.com',
-            'address' => '123 Main Street, Auckland, NZ',
-        ],
-        'newsletter' => [
-            'enabled' => true,
-            'title'   => 'Subscribe to our newsletter',
-            'text'    => 'Get the latest updates and offers',
-        ],
-        'company_name' => '',
-        'address'      => '',
-        'email'        => '',
-        'copyright'    => [
-            'text' => '© 2025 Your Company. All rights reserved.',
-        ],
-    ];
-
     protected array $defaultQueryOptions = [
         'footer_menu'  => 'footer-menu',
         'social_media' => 'social-media',

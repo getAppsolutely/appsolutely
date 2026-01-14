@@ -67,9 +67,4 @@ final readonly class BlockRendererService implements BlockRendererServiceInterfa
 
         return '';
     }
-
-    protected function mergeByKey(array $default, array $data): array
-    {
-        return array_replace($default, array_intersect_key($data, $default));
-    }
 }
