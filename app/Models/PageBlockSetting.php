@@ -58,12 +58,12 @@ final class PageBlockSetting extends Model
         $newBlockValue = PageBlockValue::create([
             'id'              => PageBlockValue::getFirstMissingId(),
             'block_id'        => $this->block_id,
-            'template'        => $this->blockValue->template,
-            'scripts'         => $this->blockValue->scripts,
-            'stylesheets'     => $this->blockValue->stylesheets,
-            'styles'          => $this->blockValue->styles,
-            'display_options' => $this->blockValue->display_options,
+            'view'            => '',
             'query_options'   => $this->blockValue->query_options,
+            'display_options' => $this->blockValue->display_options,
+            'scripts'         => $this->blockValue->scripts,
+            'styles'          => $this->blockValue->styles,
+            'template'        => $this->blockValue->template,
         ]);
 
         // Update this setting to use the new block value

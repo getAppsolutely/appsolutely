@@ -6,7 +6,6 @@ namespace App\Services;
 
 use App\Models\GeneralPage;
 use App\Services\Contracts\BlockRendererServiceInterface;
-use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\Livewire;
 
@@ -23,7 +22,7 @@ final readonly class BlockRendererService implements BlockRendererServiceInterfa
             return $this->getBlockErrorHtml('Invalid block structure');
         }
 
-        $className = $block['block']['class'];
+        $className = ! empty($block['block']['class']) ? $block['block']['class'] : 'App\Livewire\GeneralBlock';
         $reference = $block['reference'];
 
         // Validate class exists
@@ -41,94 +40,20 @@ final readonly class BlockRendererService implements BlockRendererServiceInterfa
             return $this->getBlockErrorHtml("Class '{$className}' is not a Livewire component");
         }
 
+        $viewName       = $block->blockValue->view ?? '';
+        $style          = $block->displayOptionsValue['style'] ?? '';
+        $queryOptions   = $block->queryOptionsValue ?? [];
+        $displayOptions = $block->displayOptionsValue ?? [];
+
         $data = [
             'page'           => $page->toArray(),
-            'queryOptions'   => $block->queryOptionsValue ?? [],
-            'displayOptions' => $block->displayOptionsValue ?? [],
+            'viewName'       => $viewName,
+            'style'          => $style,
+            'queryOptions'   => $queryOptions,
+            'displayOptions' => $displayOptions,
         ];
 
         return Livewire::mount($className, $data, $reference);
-    }
-
-    /**
-     * Normalize parameter keys to camelCase (first layer only)
-     */
-    private function normalizeParameterKeys(array $parameters): array
-    {
-        return collect($parameters)
-            ->mapWithKeys(fn ($value, $key) => [Str::camel($key) => $value])
-            ->toArray();
-    }
-
-    /**
-     * Get possible parameters by matching with component properties
-     *
-     * This method intelligently matches block parameters to Livewire component properties.
-     * It tries multiple strategies:
-     * 1. Match normalized (camelCase) parameter keys
-     * 2. Match original parameter keys
-     * 3. Fallback to 'data' key if no matches found
-     */
-    private function getPossibleParameters(array $originalParameters, array $normalisedParameters, string $className): array
-    {
-        // Start with normalised parameters as the default (preferred approach)
-        $parameters = $normalisedParameters;
-
-        // Get all array-type properties from the Livewire component class
-        // These are the properties that can accept parameter data (e.g., public array $data = [])
-        $propertyKeys = $this->getArrayClassVars($className);
-
-        // Step 1: Try to match normalised (camelCase) parameter keys with component properties
-        // This is the most common case - parameters match component property names
-        $normalisedKeys         = array_unique(array_keys($normalisedParameters));
-        $normalisedIntersection = array_intersect($normalisedKeys, $propertyKeys);
-
-        // Step 2: If no match found in normalised parameters, try original parameters
-        // This handles cases where parameters use snake_case or other formats
-        if (empty($normalisedIntersection)) {
-            $log                  = "{$className} properties are not in normalized parameters, trying to check if it is in original parameters. ";
-            $originalKeys         = array_unique(array_keys($originalParameters));
-            $originalIntersection = array_intersect($originalKeys, $propertyKeys);
-            $possibleKeys         = $originalIntersection;
-
-            // Step 3: If still no match, fallback to 'data' key as default
-            // This handles cases where parameters don't match any component property
-            // Most Livewire components have a 'data' property for flexible data passing
-            if (empty($originalIntersection)) {
-                $log .= "Not in original parameters either. guessing the key would be the first property of $className";
-                $possibleKeys = ['data']; // Common default property name
-            }
-
-            // Log the mismatch for debugging (only in debug mode)
-            // This helps developers understand why parameters aren't matching
-            local_debug($log, [
-                'className'            => $className,
-                'propertyKeys'         => $propertyKeys,
-                'originalParameters'   => $originalParameters,
-                'normalisedParameters' => $normalisedParameters]);
-
-            // Use the first matching key (or 'data' fallback) and wrap original parameters
-            // Wrapping ensures all parameters are passed even if key doesn't match
-            $key        = \Arr::first($possibleKeys);
-            $parameters = [$key => $originalParameters];
-        }
-
-        return $parameters;
-    }
-
-    /**
-     * Get array-type class variables from a class
-     */
-    private function getArrayClassVars(string $className): array
-    {
-        // Get all class variables (properties) from the Livewire component
-        $vars = get_class_vars($className);
-
-        // Filter to only return property names that have array-type default values
-        // This identifies which properties can accept array parameters
-        return array_unique(array_keys(array_filter($vars, function ($value) {
-            return is_array($value);
-        })));
     }
 
     /**
@@ -141,5 +66,10 @@ final readonly class BlockRendererService implements BlockRendererServiceInterfa
         }
 
         return '';
+    }
+
+    protected function mergeByKey(array $default, array $data): array
+    {
+        return array_replace($default, array_intersect_key($data, $default));
     }
 }

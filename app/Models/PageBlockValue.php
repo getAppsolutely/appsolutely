@@ -15,18 +15,19 @@ final class PageBlockValue extends Model
 
     protected $fillable = [
         'block_id',
-        'template',
-        'scripts',
-        'stylesheets',
-        'styles',
+        'view',
         'query_options',
         'display_options',
+        'scripts',
+        'styles',
+        'template',
     ];
 
     protected $casts = [
-        'styles'          => 'array',
         'query_options'   => 'array',
         'display_options' => 'array',
+        'scripts'         => 'array',
+        'styles'          => 'array',
     ];
 
     public function block(): BelongsTo

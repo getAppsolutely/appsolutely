@@ -8,26 +8,26 @@ use App\Models\Model;
 use Carbon\Carbon;
 use Livewire\Component;
 
-abstract class GeneralBlock extends Component
+class GeneralBlock extends Component
 {
     public array $page = [];
 
     public ?Model $model = null;
 
-    public array $displayOptions = [];
+    /**
+     * The view name to render (without the 'livewire.' prefix).
+     */
+    public string $viewName = '';
 
     public string $style = 'default';
+
+    public array $displayOptions = [];
 
     public array $queryOptions = [];
 
     protected array $defaultDisplayOptions = [];
 
     protected array $defaultQueryOptions = [];
-
-    /**
-     * The view name to render (without the 'livewire.' prefix).
-     */
-    protected string $viewName = '';
 
     /**
      * Published date for the block.
@@ -49,11 +49,7 @@ abstract class GeneralBlock extends Component
     {
         $this->page           = $page;
         $this->model          = $page['model'] ?? null;
-        $queryOptions         = $this->queryOptions ?? ($data['query_options'] ?? []);
-        $displayOptions       = $this->displayOptions ?? ($data['display_options'] ?? []);
-        $this->queryOptions   =  ! empty($this->defaultQueryOptions) ? $this->mergeByKey($this->defaultQueryOptions, $queryOptions) : $queryOptions;
-        $this->displayOptions =  ! empty($this->defaultDisplayOptions) ? $this->mergeByKey($this->defaultDisplayOptions, $displayOptions) : $displayOptions;
-        $this->style          = $displayOptions['style'] ?? $this->style;
+
         $this->initializeComponent(app());
         $this->initializePublishDates();
     }
@@ -67,11 +63,6 @@ abstract class GeneralBlock extends Component
     protected function initializeComponent(\Illuminate\Contracts\Container\Container $container): void
     {
         // Override in child classes if needed
-    }
-
-    protected function mergeByKey(array $default, array $data): array
-    {
-        return array_replace($default, array_intersect_key($data, $default));
     }
 
     /**
