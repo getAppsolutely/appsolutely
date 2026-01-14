@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
+use App\Services\Contracts\ManifestServiceInterface;
 use Carbon\Carbon;
 use Livewire\Component;
 
@@ -42,7 +43,20 @@ class GeneralBlock extends Component
      */
     public function mount(array $page, array $data = []): void
     {
-        $this->queryOptions   =  ! empty($this->defaultQueryOptions) ? $this->mergeByKey($this->defaultQueryOptions, $this->queryOptions) : $this->queryOptions;
+        // Merge default query options if available
+        if (! empty($this->defaultQueryOptions)) {
+            $this->queryOptions = $this->mergeByKey($this->defaultQueryOptions, $this->queryOptions);
+        }
+
+        // Get display options from manifest.json if viewName exists
+        if (! empty($this->viewName)) {
+            $manifestService        = app(ManifestServiceInterface::class);
+            $manifestDisplayOptions = $manifestService->getDisplayOptions($this->viewName);
+
+            if (! empty($manifestDisplayOptions)) {
+                $this->displayOptions = $this->mergeByKey($manifestDisplayOptions, $this->displayOptions);
+            }
+        }
 
         $this->initializeComponent(app());
         $this->initializePublishDates();
@@ -112,26 +126,38 @@ class GeneralBlock extends Component
     /**
      * Get the view name for this component.
      * Override this method in child classes to specify a custom view.
+     *
+     * @throws \RuntimeException If the view file does not exist
      */
     protected function getViewName(): string
     {
         if (empty($this->viewName)) {
             // Auto-generate view name from class name
             $className      = class_basename($this);
-            $baseViewName   = \Str::kebab($className);
+            $this->viewName = \Str::kebab($className);
+        }
 
-            if ($this->style && $this->style !== 'default') {
-                $styleViewName = $baseViewName . '_' . $this->style;
-                // Check if the style-specific view exists in the current theme
-                $themedStyleView = themed_path() . '/views/livewire/' . $styleViewName . '.blade.php';
-                if (file_exists(base_path($themedStyleView))) {
-                    $this->viewName = $styleViewName;
-                } else {
-                    $this->viewName = $baseViewName;
-                }
-            } else {
-                $this->viewName = $baseViewName;
+        // First, try to find view with style suffix (e.g., "article-list_fullscreen")
+        if (! empty($this->style) && $this->style !== 'default') {
+            $styleViewName = $this->viewName . '_' . $this->style;
+            $styleViewPath = 'livewire.' . $styleViewName;
+
+            if (view()->exists($styleViewPath)) {
+                return $styleViewName;
             }
+        }
+
+        // Fallback to base view name without style
+        $baseViewPath = 'livewire.' . $this->viewName;
+
+        if (! view()->exists($baseViewPath)) {
+            throw new \RuntimeException(
+                sprintf(
+                    'View "%s" not found for block "%s". Please ensure the view file exists in the theme.',
+                    $baseViewPath,
+                    get_class($this)
+                )
+            );
         }
 
         return $this->viewName;
