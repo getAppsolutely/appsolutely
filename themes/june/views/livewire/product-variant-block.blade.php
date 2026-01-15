@@ -111,6 +111,12 @@
                         const price = this.currentVariant?.price;
                         if (price === null || price === undefined || price === '') return null;
                         return typeof price === 'number' ? price.toLocaleString() : price;
+                    },
+
+                    shouldShowPriceSuffix() {
+                        const price = this.currentVariant?.price;
+                        if (price === null || price === undefined || price === '') return false;
+                        return String(price).trim().toUpperCase() !== 'TBC';
                     }
                 }"
                 x-effect="
@@ -258,10 +264,21 @@
                             <div class="variant-info variant-info--ssr mb-4" x-show="!initialized">
                                 <h2 class="h3 fw-bold mb-2">{{ $firstVariant['name'] ?? 'Variant' }}</h2>
                                 @if (!empty($firstVariant['price']))
+                                    @php
+                                        $showPriceSuffix = strtoupper(trim((string) $firstVariant['price'])) !== 'TBC';
+                                    @endphp
                                     <div class="price-section mb-3">
                                         <span class="h4 fw-bold text-primary">
                                             ${{ is_numeric($firstVariant['price']) ? number_format($firstVariant['price']) : $firstVariant['price'] }}
+                                            @if ($showPriceSuffix)
+                                                RRP. <small class="fs-6">+ORC</small>
+                                            @endif
                                         </span>
+                                    </div>
+                                @endif
+                                @if (!empty($firstVariant['promotion']) && $showPriceSuffix)
+                                    <div class="promotion-row text-danger">
+                                        <strong>Launch Offer:</strong> {{ $firstVariant['promotion'] }}
                                     </div>
                                 @endif
                             </div>
@@ -273,7 +290,11 @@
                             <div class="price-section mb-3" x-show="getFormattedPrice() !== null">
                                 <span class="h4 fw-bold text-primary">
                                     $<span x-text="getFormattedPrice()"></span>
+                                    <span x-show="shouldShowPriceSuffix()"> RRP. <small class="fs-6">+ORC</small></span>
                                 </span>
+                            </div>
+                            <div class="promotion-row text-danger" x-show="currentVariant?.promotion && shouldShowPriceSuffix()">
+                                <strong>Launch Offer:</strong> <span x-text="currentVariant?.promotion"></span>
                             </div>
                         </div>
 

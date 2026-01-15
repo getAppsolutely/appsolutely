@@ -63,7 +63,15 @@
                                                                         @endif
                                                                     </span>
                                                                 @endif
-                                                                <span class="d-block pt-3">{{ $child->title }}</span>
+                                                                <span class="d-block pt-3 fw-semibold">{{ $child->title }}</span>
+                                                                @if (!empty($child->setting['price']))
+                                                                    <div class="price-section mt-2">
+                                                                        <span class="fs-6">
+                                                                            {{ $child->setting['price'] }}
+                                                                            <small>+ORC</small>
+                                                                        </span>
+                                                                    </div>
+                                                                @endif
                                                             </a>
                                                             @if (!empty($child->setting['learn_more_link']) || !empty($child->setting['test_drive_link']))
                                                                 <div
