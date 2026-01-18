@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
+use App\Models\NotificationSender;
+use App\Repositories\NotificationSenderRepository;
+use App\Services\NotificationSenderService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use Throwable;
 
 /**
@@ -40,7 +42,8 @@ final class SendNotificationEmail implements ShouldQueue
         private readonly string $email,
         private readonly string $subject,
         private readonly string $bodyHtml,
-        private readonly ?string $bodyText = null
+        private readonly ?string $bodyText = null,
+        private readonly ?int $senderId = null
     ) {}
 
     /**
@@ -49,8 +52,15 @@ final class SendNotificationEmail implements ShouldQueue
     public function handle(): void
     {
         try {
-            Mail::send([], [], function ($message) {
-                $message->to($this->email)
+            $sender        = $this->resolveSender();
+            $senderService = app(NotificationSenderService::class);
+
+            $mailer = $senderService->getMailer($sender);
+            $from   = $senderService->getFromAddress($sender);
+
+            $mailer->send([], [], function ($message) use ($from) {
+                $message->from($from['address'], $from['name'])
+                    ->to($this->email)
                     ->subject($this->subject)
                     ->html($this->bodyHtml);
 
@@ -62,6 +72,7 @@ final class SendNotificationEmail implements ShouldQueue
             Log::info('Notification email sent successfully', [
                 'email'   => $this->email,
                 'subject' => $this->subject,
+                'sender'  => $sender->name,
             ]);
         } catch (\Exception $e) {
             Log::error('Failed to send notification email', [
@@ -75,14 +86,38 @@ final class SendNotificationEmail implements ShouldQueue
     }
 
     /**
+     * Resolve sender for this email
+     */
+    private function resolveSender(): NotificationSender
+    {
+        if ($this->senderId) {
+            $sender = NotificationSender::find($this->senderId);
+            if ($sender && $sender->is_active) {
+                return $sender;
+            }
+        }
+
+        // Fallback to default external sender
+        $senderRepository = app(NotificationSenderRepository::class);
+        $defaultSender    = $senderRepository->getDefaultForCategory('external');
+
+        if (! $defaultSender) {
+            throw new \Exception('No active sender available');
+        }
+
+        return $defaultSender;
+    }
+
+    /**
      * Handle a job failure.
      */
     public function failed(Throwable $exception): void
     {
         Log::error('SendNotificationEmail job failed', [
-            'email'   => $this->email,
-            'subject' => $this->subject,
-            'error'   => $exception->getMessage(),
+            'email'     => $this->email,
+            'subject'   => $this->subject,
+            'sender_id' => $this->senderId,
+            'error'     => $exception->getMessage(),
         ]);
     }
 }

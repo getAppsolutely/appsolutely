@@ -54,7 +54,7 @@ class MenuSeeder extends Seeder
         foreach ($menus as $item) {
             // Prepare data for creation
             $data = [
-                'parent_id'    => $parent ? $parent->id : null,
+                'parent_id'    => $parent?->id,
                 'title'        => $item['title'],
                 'remark'       => $item['remark'] ?? null,
                 'url'          => $item['url'] ?? '',

@@ -73,4 +73,15 @@ return [
     |
     */
     'default_per_page' => env('NOTIFICATION_DEFAULT_PER_PAGE', 20),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Internal Email Domains
+    |--------------------------------------------------------------------------
+    |
+    | Email domains that are considered internal (staff/admin).
+    | Used for auto-detecting sender category.
+    |
+    */
+    'internal_domains' => array_filter(explode(',', env('NOTIFICATION_INTERNAL_DOMAINS', '@company.com,@internal.company.com'))),
 ];

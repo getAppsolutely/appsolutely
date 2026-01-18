@@ -7,14 +7,21 @@ namespace App\Admin\Forms\Models;
 use App\Enums\Architecture;
 use App\Enums\Platform;
 use App\Models\ReleaseBuild;
-use App\Models\ReleaseVersion;
+use App\Repositories\ReleaseBuildRepository;
+use App\Repositories\ReleaseVersionRepository;
 use Dcat\Admin\Widgets\Form;
 
 class ReleaseBuildForm extends ModelForm
 {
+    protected ReleaseBuildRepository $repository;
+
+    protected ReleaseVersionRepository $versionRepository;
+
     public function __construct(?int $id = null)
     {
         parent::__construct($id);
+        $this->repository        = app(ReleaseBuildRepository::class);
+        $this->versionRepository = app(ReleaseVersionRepository::class);
     }
 
     protected function initializeModel(): void
@@ -28,7 +35,7 @@ class ReleaseBuildForm extends ModelForm
 
         $this->hidden('id');
 
-        $versionOptions = ReleaseVersion::pluck('version', 'id')->toArray();
+        $versionOptions = $this->versionRepository->all()->pluck('version', 'id')->toArray();
 
         $this->column(6, function (Form $form) use ($versionOptions) {
             $form->select('version_id', __t('Version'))

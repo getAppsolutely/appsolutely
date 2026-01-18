@@ -5,14 +5,21 @@ declare(strict_types=1);
 namespace App\Admin\Forms\Models;
 
 use App\Enums\FormFieldType;
-use App\Models\Form;
 use App\Models\FormField;
+use App\Repositories\FormFieldRepository;
+use App\Repositories\FormRepository;
 
 final class FormFieldForm extends ModelForm
 {
+    protected FormFieldRepository $repository;
+
+    protected FormRepository $formRepository;
+
     public function __construct(?int $id = null)
     {
         parent::__construct($id);
+        $this->repository     = app(FormFieldRepository::class);
+        $this->formRepository = app(FormRepository::class);
     }
 
     protected function initializeModel(): void
@@ -27,7 +34,10 @@ final class FormFieldForm extends ModelForm
         $this->hidden('id');
 
         $this->select('form_id', __t('Form'))->options(
-            Form::where('status', 1)->pluck('name', 'id')->toArray()
+            $this->formRepository->model->newQuery()
+                ->where('status', 1)
+                ->pluck('name', 'id')
+                ->toArray()
         )->required()
             ->help(__t('Select which form this field belongs to'));
 

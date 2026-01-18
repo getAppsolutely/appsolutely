@@ -4,16 +4,26 @@ declare(strict_types=1);
 
 namespace App\Admin\Forms\Models;
 
-use App\Models\Page;
-use App\Models\PageBlock;
 use App\Models\PageBlockSetting;
+use App\Repositories\PageBlockRepository;
+use App\Repositories\PageBlockSettingRepository;
+use App\Repositories\PageRepository;
 
 class PageBlockSettingForm extends ModelForm
 {
+    protected PageBlockSettingRepository $repository;
+
+    protected PageRepository $pageRepository;
+
+    protected PageBlockRepository $blockRepository;
+
     public function __construct(?int $id = null)
     {
         $this->relationships = ['blockValue'];
         parent::__construct($id);
+        $this->repository      = app(PageBlockSettingRepository::class);
+        $this->pageRepository  = app(PageRepository::class);
+        $this->blockRepository = app(PageBlockRepository::class);
     }
 
     protected function initializeModel(): void
@@ -28,10 +38,10 @@ class PageBlockSettingForm extends ModelForm
         $this->hidden('id');
 
         $this->select('page_id', __t('Page'))->options(
-            Page::all()->pluck('title', 'id')->toArray()
+            $this->pageRepository->all()->pluck('title', 'id')->toArray()
         )->required();
         $this->select('block_id', __t('Block'))->options(
-            PageBlock::all()->pluck('title', 'id')->toArray()
+            $this->blockRepository->all()->pluck('title', 'id')->toArray()
         )->required();
 
         $this->text('type', __t('Type'));
@@ -50,7 +60,11 @@ class PageBlockSettingForm extends ModelForm
     protected function updateModel(int $id, array $input): void
     {
         /** @var PageBlockSetting $model */
-        $model = $this->model->findOrFail($id);
+        $model = $this->repository->find($id);
+
+        if (! $model) {
+            throw new \RuntimeException('PageBlockSetting not found');
+        }
 
         // Handle block value updates
         if (! empty($input['blockValue'])) {
@@ -72,7 +86,6 @@ class PageBlockSettingForm extends ModelForm
             unset($input['blockValue']);
         }
 
-        $model->fill($input);
-        $model->save();
+        $this->repository->update($input, $id);
     }
 }

@@ -24,6 +24,7 @@ final class AdminButtonHelper
             'redirect'        => null,
             'class'           => '',
             'attributes'      => [],
+            'use_btn_classes' => true,
         ];
 
         $config = array_merge($defaults, $options);
@@ -41,7 +42,12 @@ final class AdminButtonHelper
         $functionName = $config['function_name'];
 
         // Build CSS classes
-        $classes = ['btn', "btn-{$config['size']}", "btn-{$config['style']}"];
+        $classes = [];
+        if ($config['use_btn_classes']) {
+            $classes[] = 'btn';
+            $classes[] = "btn-{$config['size']}";
+        }
+        $classes[] = "btn-{$config['style']}";
         if (! empty($config['class'])) {
             $classes[] = $config['class'];
         }

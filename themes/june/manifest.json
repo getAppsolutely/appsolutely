@@ -45,8 +45,7 @@
                 "redirect_after_submit": ""
             },
             "queryOptions": {
-                "form_slug": "test-drive-booking",
-                "email_to": "sales@company.com"
+                "form_slug": ""
             },
             "styles": ["default", "interactive", "content"]
         },

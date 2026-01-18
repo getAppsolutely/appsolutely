@@ -6,13 +6,20 @@ namespace App\Admin\Forms\Models;
 
 use App\Enums\BlockScope;
 use App\Models\PageBlock;
-use App\Models\PageBlockGroup;
+use App\Repositories\PageBlockGroupRepository;
+use App\Repositories\PageBlockRepository;
 
 class PageBlockForm extends ModelForm
 {
+    protected PageBlockRepository $repository;
+
+    protected PageBlockGroupRepository $groupRepository;
+
     public function __construct(?int $id = null)
     {
         parent::__construct($id);
+        $this->repository      = app(PageBlockRepository::class);
+        $this->groupRepository = app(PageBlockGroupRepository::class);
     }
 
     protected function initializeModel(): void
@@ -27,7 +34,7 @@ class PageBlockForm extends ModelForm
         $this->hidden('id');
 
         $this->select('block_group_id', __t('Group'))->options(
-            PageBlockGroup::all()->pluck('title', 'id')->toArray()
+            $this->groupRepository->all()->pluck('title', 'id')->toArray()
         )->required();
         $this->text('title', __t('Title'))->required();
         $this->text('class', __t('Class'))->required();

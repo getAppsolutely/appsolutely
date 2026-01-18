@@ -5,13 +5,24 @@ declare(strict_types=1);
 namespace App\Admin\Forms\Models;
 
 use App\Models\NotificationRule;
-use App\Models\NotificationTemplate;
+use App\Repositories\NotificationRuleRepository;
+use App\Repositories\NotificationSenderRepository;
+use App\Repositories\NotificationTemplateRepository;
 
 final class NotificationRuleForm extends ModelForm
 {
+    protected NotificationRuleRepository $repository;
+
+    protected NotificationTemplateRepository $templateRepository;
+
+    protected NotificationSenderRepository $senderRepository;
+
     public function __construct(?int $id = null)
     {
         parent::__construct($id);
+        $this->repository         = app(NotificationRuleRepository::class);
+        $this->templateRepository = app(NotificationTemplateRepository::class);
+        $this->senderRepository   = app(NotificationSenderRepository::class);
     }
 
     protected function initializeModel(): void
@@ -29,9 +40,13 @@ final class NotificationRuleForm extends ModelForm
             ->help(__t('Enter a descriptive name for this notification rule'));
 
         $this->select('template_id', __t('Email Template'))->options(
-            NotificationTemplate::where('status', 1)->pluck('name', 'id')->toArray()
+            $this->templateRepository->getActive()->pluck('name', 'id')->toArray()
         )->required()
             ->help(__t('Select which email template to use for this rule'));
+
+        $this->select('sender_id', __t('Email Sender'))->options(
+            $this->senderRepository->getActive()->pluck('name', 'id')->toArray()
+        )->help(__t('Optional: Select specific sender. If not selected, will auto-detect based on recipient type'));
 
         $this->divider();
 
@@ -49,7 +64,7 @@ final class NotificationRuleForm extends ModelForm
             ->help(__t('When should this notification be triggered?'));
 
         $this->text('trigger_reference', __t('Trigger Reference'))
-            ->help(__t('Optional: Specific reference like form ID, order status, etc.'));
+            ->help(__t('Optional: Specific reference like form slug, order status, etc. Leave empty to match all (use * as wildcard)'));
 
         $this->divider();
 
@@ -85,5 +100,36 @@ final class NotificationRuleForm extends ModelForm
         $this->switch('status', __t('Status'))
             ->help(__t('Enable or disable this rule'))
             ->default(true);
+    }
+
+    public function handle(array $input)
+    {
+        // Set default trigger_reference if empty
+        // Use '*' as wildcard to match all forms/events of the trigger type
+        if (empty($input['trigger_reference'] ?? '')) {
+            $input['trigger_reference'] = '*';
+        }
+
+        // Ensure recipient_emails is an array
+        if (isset($input['recipient_emails']) && is_string($input['recipient_emails'])) {
+            // If it's a string (from tags field), convert to array
+            $input['recipient_emails'] = array_filter(
+                array_map('trim', explode(',', $input['recipient_emails']))
+            );
+        }
+
+        // Ensure conditions is valid JSON if provided
+        if (isset($input['conditions']) && ! empty($input['conditions'])) {
+            if (is_string($input['conditions'])) {
+                $decoded = json_decode($input['conditions'], true);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    $input['conditions'] = $decoded;
+                } else {
+                    return $this->response()->error(__t('Invalid JSON in conditions: ') . json_last_error_msg());
+                }
+            }
+        }
+
+        return parent::handle($input);
     }
 }

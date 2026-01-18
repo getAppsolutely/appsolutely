@@ -16,12 +16,16 @@ final class NotificationRuleRepository extends BaseRepository
 
     /**
      * Find rules for specific trigger
+     * Supports wildcard '*' in trigger_reference to match all references
      */
     public function findByTrigger(string $triggerType, string $reference): Collection
     {
         return $this->model->newQuery()->status()
             ->where('trigger_type', $triggerType)
-            ->where('trigger_reference', $reference)
+            ->where(function ($query) use ($reference) {
+                $query->where('trigger_reference', $reference)
+                    ->orWhere('trigger_reference', '*');
+            })
             ->with('template')
             ->get();
     }

@@ -13,6 +13,7 @@ final class NotificationQueue extends Model
     protected $fillable = [
         'rule_id',
         'template_id',
+        'sender_id',
         'recipient_email',
         'subject',
         'body_html',
@@ -40,6 +41,11 @@ final class NotificationQueue extends Model
     public function template(): BelongsTo
     {
         return $this->belongsTo(NotificationTemplate::class, 'template_id');
+    }
+
+    public function sender(): BelongsTo
+    {
+        return $this->belongsTo(NotificationSender::class, 'sender_id');
     }
 
     /**

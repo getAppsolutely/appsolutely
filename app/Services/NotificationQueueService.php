@@ -32,7 +32,8 @@ final readonly class NotificationQueueService implements NotificationQueueServic
                     $notification->recipient_email,
                     $notification->subject,
                     $notification->body_html,
-                    $notification->body_text
+                    $notification->body_text,
+                    $notification->sender_id
                 ))->afterResponse();
 
                 $this->queueRepository->updateStatus($notification->id, 'sent');

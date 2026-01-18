@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Collection;
 final readonly class NotificationRuleService implements NotificationRuleServiceInterface
 {
     public function __construct(
-        private readonly NotificationRuleRepository $ruleRepository
+        private NotificationRuleRepository $ruleRepository
     ) {}
 
     /**

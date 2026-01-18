@@ -45,6 +45,7 @@ final readonly class NotificationService implements NotificationServiceInterface
         protected NotificationTemplateServiceInterface $templateService,
         protected NotificationRuleServiceInterface $ruleService,
         protected NotificationQueueServiceInterface $queueService,
+        protected NotificationSenderService $senderService,
         protected LoggerInterface $logger,
         protected Mailer $mailer
     ) {}
@@ -54,6 +55,21 @@ final readonly class NotificationService implements NotificationServiceInterface
      */
     public function trigger(string $triggerType, string $reference, array $data): void
     {
+        // Prevent duplicate processing within the same request
+        static $processedTriggers = [];
+        $triggerKey               = $triggerType . ':' . $reference . ':' . ($data['entry_id'] ?? 'unknown');
+
+        if (isset($processedTriggers[$triggerKey])) {
+            $this->logger->warning('Notification: duplicate trigger skipped', [
+                'trigger'  => $triggerType . ':' . $reference,
+                'entry_id' => $data['entry_id'] ?? null,
+            ]);
+
+            return;
+        }
+
+        $processedTriggers[$triggerKey] = true;
+
         try {
             $rules = $this->ruleRepository->findByTrigger($triggerType, $reference);
 
@@ -80,7 +96,7 @@ final readonly class NotificationService implements NotificationServiceInterface
     /**
      * Send notification immediately (dispatches to queue for async processing)
      */
-    public function sendImmediate(string $templateSlug, string $email, array $data): bool
+    public function sendImmediate(string $templateSlug, string $email, array $data, ?int $senderId = null): bool
     {
         try {
             $template = $this->templateRepository->findBySlug($templateSlug);
@@ -98,7 +114,8 @@ final readonly class NotificationService implements NotificationServiceInterface
                 $email,
                 $rendered['subject'],
                 $rendered['body_html'],
-                $rendered['body_text']
+                $rendered['body_text'],
+                $senderId
             ));
 
             return true;
@@ -192,18 +209,28 @@ final readonly class NotificationService implements NotificationServiceInterface
     {
         $recipients  = $this->ruleService->getRecipients($rule, $data);
         $scheduledAt = $rule->getScheduledAt();
+        $sender      = $this->senderService->getSenderForRule($rule, $data);
+
+        // Remove duplicates from recipients
+        $recipients = array_unique($recipients);
 
         foreach ($recipients as $email) {
+            // Skip empty emails
+            if (empty($email) || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                continue;
+            }
+
             $rendered = $rule->template->render($data);
 
             $this->queueRepository->createQueueItem([
                 'rule_id'         => $rule->id,
                 'template_id'     => $rule->template_id,
+                'sender_id'       => $sender?->id,
                 'recipient_email' => $email,
                 'subject'         => $rendered['subject'],
                 'body_html'       => $rendered['body_html'],
                 'body_text'       => $rendered['body_text'],
-                'variables'       => $data,
+                'trigger_data'    => $data,
                 'scheduled_at'    => $scheduledAt,
                 'status'          => 'pending',
             ]);

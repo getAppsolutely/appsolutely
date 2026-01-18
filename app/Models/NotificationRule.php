@@ -17,6 +17,7 @@ final class NotificationRule extends Model
         'trigger_type',
         'trigger_reference',
         'template_id',
+        'sender_id',
         'recipient_type',
         'recipient_emails',
         'conditions',
@@ -34,6 +35,11 @@ final class NotificationRule extends Model
     public function template(): BelongsTo
     {
         return $this->belongsTo(NotificationTemplate::class, 'template_id');
+    }
+
+    public function sender(): BelongsTo
+    {
+        return $this->belongsTo(NotificationSender::class, 'sender_id');
     }
 
     public function queueItems(): HasMany
@@ -106,6 +112,19 @@ final class NotificationRule extends Model
         }
 
         return false;
+    }
+
+    /**
+     * Get sender, with auto-resolution if not set
+     */
+    public function getResolvedSender(): ?NotificationSender
+    {
+        if ($this->sender_id && $this->sender) {
+            return $this->sender;
+        }
+
+        return app(\App\Services\NotificationSenderService::class)
+            ->getSenderForRule($this);
     }
 
     /**

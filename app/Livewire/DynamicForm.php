@@ -28,8 +28,7 @@ final class DynamicForm extends GeneralBlock
     protected ?DynamicFormServiceInterface $formService = null;
 
     protected array $defaultQueryOptions = [
-        'form_slug' => 'test-drive-booking', // Database form slug to load
-        'email_to'  => 'sales@company.com',
+        'form_slug' => '',
     ];
 
     protected function initializeComponent(Container $container): void
@@ -37,7 +36,7 @@ final class DynamicForm extends GeneralBlock
         // Resolve DynamicFormService from container (Livewire doesn't support constructor injection)
         $this->formService = $container->make(DynamicFormServiceInterface::class);
 
-        $formSlug = $this->queryOptions['form_slug'] ?? 'test-drive-booking';
+        $formSlug = $this->queryOptions['form_slug'] ?? '';
 
         try {
             $this->form = $this->formService->getFormBySlug($formSlug);

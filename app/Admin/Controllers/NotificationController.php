@@ -7,10 +7,12 @@ namespace App\Admin\Controllers;
 use App\Admin\Actions\Grid\DeleteAction;
 use App\Admin\Forms\Models\NotificationQueueForm;
 use App\Admin\Forms\Models\NotificationRuleForm;
+use App\Admin\Forms\Models\NotificationSenderForm;
 use App\Admin\Forms\Models\NotificationTemplateForm;
 use App\Helpers\AdminButtonHelper;
 use App\Models\NotificationQueue;
 use App\Models\NotificationRule;
+use App\Models\NotificationSender;
 use App\Models\NotificationTemplate;
 use App\Repositories\NotificationQueueRepository;
 use App\Repositories\NotificationRuleRepository;
@@ -49,6 +51,7 @@ final class NotificationController extends AdminBaseController
 
         $tab->add(__t('Templates'), $this->templatesGrid(), true, 'templates');
         $tab->add(__t('Rules'), $this->rulesGrid(), false, 'rules');
+        $tab->add(__t('Senders'), $this->sendersGrid(), false, 'senders');
         $tab->add(__t('Queue'), $this->queueGrid(), false, 'queue');
         $tab->add(__t('Statistics'), $this->statisticsGrid(), false, 'statistics');
 
@@ -95,7 +98,11 @@ final class NotificationController extends AdminBaseController
                     ->button(admin_edit_action()));
 
                 if (! $actions->row->is_system) {
-                    $actions->append($this->duplicateTemplateButton($actions->getKey()));
+                    $id = $actions->getKey();
+                    $actions->append(AdminButtonHelper::duplicateButton(
+                        $id,
+                        admin_route('api.notifications.duplicate-template', ['id' => $id])
+                    ));
                 }
 
                 $actions->append(new DeleteAction());
@@ -160,7 +167,8 @@ final class NotificationController extends AdminBaseController
                     ]))
                     ->button(admin_edit_action()));
 
-                $actions->append($this->testRuleButton($actions->getKey()));
+                $id = $actions->getKey();
+                $actions->append(NotificationController::testRuleButton($id));
                 $actions->append(new DeleteAction());
             });
 
@@ -169,6 +177,93 @@ final class NotificationController extends AdminBaseController
                     Modal::make()->xl()->scrollable()
                         ->title(__t('New Rule'))
                         ->body(NotificationRuleForm::make())
+                        ->button(admin_create_button())
+                );
+            });
+        });
+    }
+
+    protected function sendersGrid(): Grid
+    {
+        return Grid::make(NotificationSender::query(), function (Grid $grid) {
+            $grid->model()->orderBy('category')->orderBy('priority', 'desc')->orderBy('name');
+
+            $grid->column('id', __t('ID'))->sortable();
+            $grid->column('name', __t('Name'))->limit(50)->editable();
+            $grid->column('slug', __t('Slug'))->limit(30);
+            $grid->column('category', __t('Category'))->display(function ($category) {
+                $labels = [
+                    'internal' => __t('Internal'),
+                    'external' => __t('External'),
+                    'system'   => __t('System'),
+                ];
+                $colors = [
+                    'internal' => 'primary',
+                    'external' => 'success',
+                    'system'   => 'warning',
+                ];
+
+                return "<span class='badge bg-{$colors[$category]}'>{$labels[$category]}</span>";
+            });
+            $grid->column('type', __t('Type'))->label();
+            $grid->column('from_address', __t('From Address'))->limit(40);
+            $grid->column('is_default', __t('Default'))->bool();
+            $grid->column('priority', __t('Priority'))->sortable();
+            $grid->column('is_active', __t('Active'))->bool();
+            $grid->column('usage_stats', __t('Usage'))->display(function () {
+                $stats = $this->usage_stats;
+
+                return "<span class='badge bg-info'>{$stats['rules_count']} rules</span> " .
+                       "<span class='badge bg-success'>{$stats['sent_count']} sent</span>";
+            });
+            $grid->column('created_at', __t('Created'))->display(column_time_format())->sortable();
+
+            $grid->quickSearch('id', 'name', 'slug', 'from_address');
+            $grid->filter(function (Grid\Filter $filter) {
+                $filter->equal('id', __t('ID'))->width(3);
+                $filter->like('name', __t('Name'))->width(3);
+                $filter->equal('category', __t('Category'))
+                    ->select([
+                        'internal' => __t('Internal'),
+                        'external' => __t('External'),
+                        'system'   => __t('System'),
+                    ])->width(3);
+                $filter->equal('type', __t('Type'))
+                    ->select([
+                        'smtp'     => 'SMTP',
+                        'sendmail' => 'Sendmail',
+                        'mailgun'  => 'Mailgun',
+                        'ses'      => 'Amazon SES',
+                        'postmark' => 'Postmark',
+                        'resend'   => 'Resend',
+                        'log'      => 'Log',
+                    ])->width(3);
+                $filter->equal('is_active', __t('Active'))
+                    ->select(['1' => __t('Yes'), '0' => __t('No')])->width(3);
+            });
+
+            $grid->disableCreateButton();
+            $grid->disableViewButton();
+            $grid->disableEditButton();
+            $grid->disableDeleteButton();
+            $grid->disableExport();
+
+            $grid->actions(function (Grid\Displayers\Actions $actions) {
+                $actions->append(Modal::make()->xl()->scrollable()
+                    ->title(__t('Edit Sender') . ' #' . $actions->getKey())
+                    ->body(NotificationSenderForm::make($actions->getKey())->payload([
+                        'id' => $actions->getKey(),
+                    ]))
+                    ->button(admin_edit_action()));
+
+                $actions->append(new DeleteAction());
+            });
+
+            $grid->tools(function (Tools $tools) {
+                $tools->append(
+                    Modal::make()->xl()->scrollable()
+                        ->title(__t('New Sender'))
+                        ->body(NotificationSenderForm::make())
                         ->button(admin_create_button())
                 );
             });
@@ -234,12 +329,33 @@ final class NotificationController extends AdminBaseController
                     ->button(admin_edit_action()));
 
                 $buttons = [];
+                $id      = $actions->getKey();
 
                 if ($actions->row->status === 'failed') {
-                    $buttons[] = $this->retryButton($actions->getKey());
+                    $buttons[] = AdminButtonHelper::apiButton([
+                        'text'            => __t('Retry'),
+                        'icon'            => 'fa fa-refresh',
+                        'style'           => 'outline-warning',
+                        'function_name'   => 'retryNotification',
+                        'api_url'         => admin_route('api.notifications.retry', ['id' => $id]),
+                        'method'          => 'POST',
+                        'confirm'         => __t('Are you sure you want to retry this notification?'),
+                        'success_message' => __t('Notification queued for retry'),
+                        'error_message'   => __t('Failed to retry notification'),
+                    ]);
                 }
                 if ($actions->row->status === 'pending') {
-                    $buttons[] = $this->cancelButton($actions->getKey());
+                    $buttons[] = AdminButtonHelper::apiButton([
+                        'text'            => __t('Cancel'),
+                        'icon'            => 'fa fa-times',
+                        'style'           => 'outline-danger',
+                        'function_name'   => 'cancelNotification',
+                        'api_url'         => admin_route('api.notifications.cancel', ['id' => $id]),
+                        'method'          => 'POST',
+                        'confirm'         => __t('Are you sure you want to cancel this notification?'),
+                        'success_message' => __t('Notification cancelled'),
+                        'error_message'   => __t('Failed to cancel notification'),
+                    ]);
                 }
 
                 if (! empty($buttons)) {
@@ -350,8 +466,7 @@ final class NotificationController extends AdminBaseController
             'icon'            => 'fa fa-refresh',
             'style'           => 'outline-warning',
             'function_name'   => 'retryNotification',
-            'api_url'         => admin_route('api.notifications.retry'),
-            'payload'         => $id,
+            'api_url'         => admin_route('api.notifications.retry', ['id' => $id]),
             'method'          => 'POST',
             'confirm'         => __t('Are you sure you want to retry this notification?'),
             'success_message' => __t('Notification queued for retry'),
@@ -369,8 +484,7 @@ final class NotificationController extends AdminBaseController
             'icon'            => 'fa fa-times',
             'style'           => 'outline-danger',
             'function_name'   => 'cancelNotification',
-            'api_url'         => admin_route('api.notifications.cancel'),
-            'payload'         => $id,
+            'api_url'         => admin_route('api.notifications.cancel', ['id' => $id]),
             'method'          => 'POST',
             'confirm'         => __t('Are you sure you want to cancel this notification?'),
             'success_message' => __t('Notification cancelled'),
@@ -381,19 +495,19 @@ final class NotificationController extends AdminBaseController
     /**
      * Generate test button for notification rules
      */
-    protected function testRuleButton(int $id): string
+    public static function testRuleButton(int $id): string
     {
         return AdminButtonHelper::apiButton([
             'text'            => __t('Test'),
             'icon'            => 'fa fa-flask',
-            'style'           => 'outline-info',
+            'style'           => '',
             'function_name'   => 'testNotificationRule',
-            'api_url'         => admin_route('api.notifications.test-rule'),
-            'payload'         => $id,
+            'api_url'         => admin_route('api.notifications.test-rule', ['id' => $id]),
             'method'          => 'POST',
             'refresh'         => false,
             'success_message' => null,
             'error_message'   => __t('Failed to test rule'),
+            'use_btn_classes' => false,
         ]);
     }
 
@@ -402,7 +516,7 @@ final class NotificationController extends AdminBaseController
      */
     protected function duplicateTemplateButton(int $id): string
     {
-        return AdminButtonHelper::duplicateButton($id, admin_route('api.notifications.duplicate-template'));
+        return AdminButtonHelper::duplicateButton($id, admin_route('api.notifications.duplicate-template', ['id' => $id]));
     }
 
     /**
