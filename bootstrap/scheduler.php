@@ -21,4 +21,13 @@ return function (Schedule $schedule) {
         ->onFailure(function () {
             \Illuminate\Support\Facades\Log::error('Sitemap generation failed');
         });
+
+    // Process notification queue every minute
+    // This reads from notification_queue table and dispatches jobs to Laravel queue
+    $schedule->command('notifications:process-queue --once')
+        ->everyMinute()
+        ->withoutOverlapping()
+        ->onFailure(function () {
+            \Illuminate\Support\Facades\Log::error('Notification queue processing failed');
+        });
 };

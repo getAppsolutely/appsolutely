@@ -20,19 +20,16 @@ class NotificationTemplateSeeder extends Seeder
             [
                 'name'      => 'Form Submission - Staff Notification',
                 'category'  => 'form',
-                'subject'   => 'New Form Submission: {{form_name}}',
+                'subject'   => 'New {{form_name}} Submission from {{user_name}}',
                 'body_html' => $this->getHtmlTemplate(),
                 'body_text' => $this->getTextTemplate(),
                 'variables' => [
                     'form_name',
-                    'form_description',
                     'user_name',
                     'user_email',
                     'user_phone',
-                    'submitted_at',
-                    'entry_id',
-                    'form_data',
-                    'admin_link',
+                    'form_fields_html',
+                    'form_fields_text',
                 ],
                 'is_system' => false,
                 'status'    => 1,
@@ -60,31 +57,7 @@ class NotificationTemplateSeeder extends Seeder
     </div>
 
     <div style="background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 5px; padding: 20px; margin-bottom: 20px;">
-        <h3 style="color: #2c3e50; margin-top: 0; border-bottom: 2px solid #3498db; padding-bottom: 10px;">Form Details</h3>
-        
-        <table style="width: 100%; border-collapse: collapse;">
-            <tr>
-                <td style="padding: 8px 0; font-weight: bold; width: 150px;">Form Name:</td>
-                <td style="padding: 8px 0;">{{form_name}}</td>
-            </tr>
-            <tr>
-                <td style="padding: 8px 0; font-weight: bold;">Description:</td>
-                <td style="padding: 8px 0;">{{form_description}}</td>
-            </tr>
-            <tr>
-                <td style="padding: 8px 0; font-weight: bold;">Submitted At:</td>
-                <td style="padding: 8px 0;">{{submitted_at}}</td>
-            </tr>
-            <tr>
-                <td style="padding: 8px 0; font-weight: bold;">Entry ID:</td>
-                <td style="padding: 8px 0;">#{{entry_id}}</td>
-            </tr>
-        </table>
-    </div>
-
-    <div style="background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 5px; padding: 20px; margin-bottom: 20px;">
         <h3 style="color: #2c3e50; margin-top: 0; border-bottom: 2px solid #3498db; padding-bottom: 10px;">Contact Information</h3>
-        
         <table style="width: 100%; border-collapse: collapse;">
             <tr>
                 <td style="padding: 8px 0; font-weight: bold; width: 150px;">Name:</td>
@@ -98,16 +71,8 @@ class NotificationTemplateSeeder extends Seeder
                 <td style="padding: 8px 0; font-weight: bold;">Phone:</td>
                 <td style="padding: 8px 0;"><a href="tel:{{user_phone}}" style="color: #3498db; text-decoration: none;">{{user_phone}}</a></td>
             </tr>
+            {{form_fields_html}}
         </table>
-    </div>
-
-    <div style="background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 5px; padding: 20px; margin-bottom: 20px;">
-        <h3 style="color: #2c3e50; margin-top: 0; border-bottom: 2px solid #3498db; padding-bottom: 10px;">Form Data</h3>
-        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 3px; font-family: monospace; white-space: pre-wrap; word-wrap: break-word; max-height: 400px; overflow-y: auto;">{{form_data}}</div>
-    </div>
-
-    <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
-        <a href="{{admin_link}}" style="display: inline-block; background-color: #3498db; color: #ffffff; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold;">View in Admin Panel</a>
     </div>
 
     <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; text-align: center; color: #999; font-size: 12px;">
@@ -141,10 +106,7 @@ CONTACT INFORMATION
 Name: {{user_name}}
 Email: {{user_email}}
 Phone: {{user_phone}}
-
-FORM DATA
----------
-{{form_data}}
+{{form_fields_text}}
 
 VIEW IN ADMIN PANEL
 -------------------

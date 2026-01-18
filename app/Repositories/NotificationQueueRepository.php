@@ -25,8 +25,8 @@ final class NotificationQueueRepository extends BaseRepository
         return $this->model->newQuery()->where('status', 'pending')
             ->where('scheduled_at', '<=', now())
             ->where(function ($query) use ($maxRetries) {
-                $query->where('retry_count', '<', $maxRetries)
-                    ->orWhereNull('retry_count');
+                $query->where('attempts', '<', $maxRetries)
+                    ->orWhereNull('attempts');
             })
             ->with(['rule', 'template'])
             ->orderBy('scheduled_at')
@@ -41,7 +41,7 @@ final class NotificationQueueRepository extends BaseRepository
         $maxRetries = config('notifications.max_retry_attempts', 3);
 
         return $this->model->newQuery()->where('status', 'failed')
-            ->where('retry_count', '<', $maxRetries)
+            ->where('attempts', '<', $maxRetries)
             ->with(['rule', 'template'])
             ->orderBy('updated_at', 'desc')
             ->get();
@@ -130,7 +130,7 @@ final class NotificationQueueRepository extends BaseRepository
             $data['error_message'] = $errorMessage;
         }
 
-        $this->update($id, $data);
+        $this->update($data, $id);
 
         return $this->find($id);
     }
@@ -142,12 +142,12 @@ final class NotificationQueueRepository extends BaseRepository
     {
         $maxRetries = config('notifications.max_retry_attempts', 3);
         $item       = $this->find($id);
-        $retryCount = ($item->retry_count ?? 0) + 1;
+        $retryCount = ($item->attempts ?? 0) + 1;
 
-        $this->update($id, [
-            'retry_count' => $retryCount,
-            'status'      => $retryCount >= $maxRetries ? 'failed' : 'pending',
-        ]);
+        $this->update([
+            'attempts' => $retryCount,
+            'status'   => $retryCount >= $maxRetries ? 'failed' : 'pending',
+        ], $id);
 
         return $this->find($id);
     }
@@ -249,7 +249,7 @@ final class NotificationQueueRepository extends BaseRepository
     {
         $maxRetries = config('notifications.max_retry_attempts', 3);
         $query      = $this->model->newQuery()->where('status', 'failed')
-            ->where('retry_count', '<', $maxRetries);
+            ->where('attempts', '<', $maxRetries);
 
         if (! empty($ids)) {
             $query->whereIn('id', $ids);
@@ -270,7 +270,7 @@ final class NotificationQueueRepository extends BaseRepository
         $maxRetries = config('notifications.max_retry_attempts', 3);
         $updated    = $this->model->newQuery()->where('id', $id)
             ->where('status', 'failed')
-            ->where('retry_count', '<', $maxRetries)
+            ->where('attempts', '<', $maxRetries)
             ->update([
                 'status'        => 'pending',
                 'scheduled_at'  => now(),

@@ -73,7 +73,7 @@ final class NotificationTemplate extends Model
         $bodyText = $this->body_text;
 
         foreach ($variables as $key => $value) {
-            $placeholder = "{{$key}}";
+            $placeholder = '{{' . $key . '}}';
             $replacement = is_array($value) ? json_encode($value) : (string) $value;
 
             $subject  = str_replace($placeholder, $replacement, $subject);

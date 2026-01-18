@@ -46,14 +46,11 @@ final class TriggerFormNotifications
             // Prepare notification data matching the format expected by NotificationService
             $notificationData = [
                 'form_name'        => $event->form->name,
-                'form_description' => $event->form->description,
                 'user_name'        => trim(($event->entry->first_name ?? '') . ' ' . ($event->entry->last_name ?? '')),
                 'user_email'       => $event->entry->email,
                 'user_phone'       => $event->entry->mobile,
-                'submitted_at'     => $event->entry->created_at->format('Y-m-d H:i:s'),
-                'entry_id'         => $event->entry->id,
-                'form_data'        => json_encode($event->data),
-                'admin_link'       => url('/admin/dynamic-forms?tab=form-entries&form_id=' . $event->form->id),
+                'form_fields_html' => $this->formatFieldsAsHtml($event->data),
+                'form_fields_text' => $this->formatFieldsAsText($event->data),
             ];
 
             // Trigger notifications using 'form_submission' (matching the trigger type used in rules)
@@ -67,5 +64,109 @@ final class TriggerFormNotifications
             // Release lock after processing (or on exception)
             $lock->release();
         }
+    }
+
+    /**
+     * Format form fields as HTML table rows
+     */
+    private function formatFieldsAsHtml(array $data): string
+    {
+        // Skip common fields that are already displayed
+        $skipFields = ['name', 'first_name', 'last_name', 'email', 'mobile', 'phone'];
+
+        $html = '';
+        foreach ($data as $key => $value) {
+            // Skip if it's already shown in contact info
+            if (in_array(strtolower($key), $skipFields)) {
+                continue;
+            }
+
+            // Format the field name (convert snake_case to Title Case)
+            $label = ucwords(str_replace(['_', '-'], ' ', $key));
+
+            // Format the value
+            $formattedValue = $this->formatValue($value);
+
+            // Add table row
+            $html .= '<tr>';
+            $html .= '<td style="padding: 8px 0; font-weight: bold; width: 150px;">' . htmlspecialchars($label) . ':</td>';
+            $html .= '<td style="padding: 8px 0;">' . $formattedValue . '</td>';
+            $html .= '</tr>' . "\n";
+        }
+
+        return $html;
+    }
+
+    /**
+     * Format form fields as plain text
+     */
+    private function formatFieldsAsText(array $data): string
+    {
+        // Skip common fields that are already displayed
+        $skipFields = ['name', 'first_name', 'last_name', 'email', 'mobile', 'phone'];
+
+        $text = '';
+        foreach ($data as $key => $value) {
+            // Skip if it's already shown in contact info
+            if (in_array(strtolower($key), $skipFields)) {
+                continue;
+            }
+
+            // Format the field name
+            $label = ucwords(str_replace(['_', '-'], ' ', $key));
+
+            // Format the value
+            $formattedValue = $this->formatValueText($value);
+
+            // Add line
+            $text .= $label . ': ' . $formattedValue . "\n";
+        }
+
+        return $text ? "\n" . $text : '';
+    }
+
+    /**
+     * Format a value for HTML display
+     */
+    private function formatValue(mixed $value): string
+    {
+        if (is_bool($value)) {
+            return $value ? '<span style="color: #27ae60;">✓ Yes</span>' : '<span style="color: #e74c3c;">✗ No</span>';
+        }
+
+        if (is_array($value)) {
+            return htmlspecialchars(implode(', ', $value));
+        }
+
+        if (is_null($value)) {
+            return '<span style="color: #999;">—</span>';
+        }
+
+        // Check if it's a URL
+        if (filter_var($value, FILTER_VALIDATE_URL)) {
+            return '<a href="' . htmlspecialchars($value) . '" style="color: #3498db; text-decoration: none;">' . htmlspecialchars($value) . '</a>';
+        }
+
+        return htmlspecialchars((string) $value);
+    }
+
+    /**
+     * Format a value for plain text display
+     */
+    private function formatValueText(mixed $value): string
+    {
+        if (is_bool($value)) {
+            return $value ? 'Yes' : 'No';
+        }
+
+        if (is_array($value)) {
+            return implode(', ', $value);
+        }
+
+        if (is_null($value)) {
+            return '—';
+        }
+
+        return (string) $value;
     }
 }

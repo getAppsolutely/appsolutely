@@ -28,15 +28,18 @@ final readonly class NotificationQueueService implements NotificationQueueServic
         foreach ($notifications as $notification) {
             try {
                 // Dispatch individual email job for better queue management
+                // Pass notification ID so the job can update status after sending
                 dispatch(new SendNotificationEmail(
+                    $notification->id,
                     $notification->recipient_email,
                     $notification->subject,
                     $notification->body_html,
                     $notification->body_text,
                     $notification->sender_id
-                ))->afterResponse();
+                ));
 
-                $this->queueRepository->updateStatus($notification->id, 'sent');
+                // Mark as processing (not sent - the job will mark it as sent)
+                $this->queueRepository->updateStatus($notification->id, 'processing');
                 $processed++;
             } catch (MaxAttemptsExceededException $e) {
                 $this->queueRepository->updateStatus($notification->id, 'failed', $e->getMessage());

@@ -137,4 +137,64 @@ final class NotificationQueue extends Model
             ->map(fn ($value, $key) => "{$key}: " . (is_array($value) ? json_encode($value) : $value))
             ->implode(', ');
     }
+
+    /**
+     * Get all available statuses
+     */
+    public static function getStatuses(): array
+    {
+        return ['pending', 'processing', 'sent', 'failed', 'cancelled'];
+    }
+
+    /**
+     * Get status labels
+     */
+    public static function getStatusLabels(): array
+    {
+        return [
+            'pending'    => __t('Pending'),
+            'processing' => __t('Processing'),
+            'sent'       => __t('Sent'),
+            'failed'     => __t('Failed'),
+            'cancelled'  => __t('Cancelled'),
+        ];
+    }
+
+    /**
+     * Get status colors (Bootstrap classes)
+     */
+    public static function getStatusColors(): array
+    {
+        return [
+            'pending'    => 'warning',
+            'processing' => 'info',
+            'sent'       => 'success',
+            'failed'     => 'danger',
+            'cancelled'  => 'secondary',
+        ];
+    }
+
+    /**
+     * Get status label for current notification
+     */
+    public function getStatusLabelAttribute(): string
+    {
+        return self::getStatusLabels()[$this->status] ?? $this->status;
+    }
+
+    /**
+     * Get status color for current notification
+     */
+    public function getStatusColorAttribute(): string
+    {
+        return self::getStatusColors()[$this->status] ?? 'secondary';
+    }
+
+    /**
+     * Get status badge HTML
+     */
+    public function getStatusBadgeAttribute(): string
+    {
+        return "<span class='badge bg-{$this->status_color}'>{$this->status_label}</span>";
+    }
 }

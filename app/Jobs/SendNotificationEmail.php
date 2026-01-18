@@ -39,9 +39,10 @@ final class SendNotificationEmail implements ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        private readonly string $email,
-        private readonly string $subject,
-        private readonly string $bodyHtml,
+        private readonly ?int $notificationQueueId = null,
+        private readonly string $email = '',
+        private readonly string $subject = '',
+        private readonly string $bodyHtml = '',
         private readonly ?string $bodyText = null,
         private readonly ?int $senderId = null
     ) {}
@@ -69,16 +70,24 @@ final class SendNotificationEmail implements ShouldQueue
                 }
             });
 
+            // Update notification queue status to sent
+            if ($this->notificationQueueId) {
+                $queueRepository = app(\App\Repositories\NotificationQueueRepository::class);
+                $queueRepository->updateStatus($this->notificationQueueId, 'sent');
+            }
+
             Log::info('Notification email sent successfully', [
-                'email'   => $this->email,
-                'subject' => $this->subject,
-                'sender'  => $sender->name,
+                'notification_id' => $this->notificationQueueId,
+                'email'           => $this->email,
+                'subject'         => $this->subject,
+                'sender'          => $sender->name,
             ]);
         } catch (\Exception $e) {
             Log::error('Failed to send notification email', [
-                'email'   => $this->email,
-                'subject' => $this->subject,
-                'error'   => $e->getMessage(),
+                'notification_id' => $this->notificationQueueId,
+                'email'           => $this->email,
+                'subject'         => $this->subject,
+                'error'           => $e->getMessage(),
             ]);
 
             throw $e;
@@ -113,11 +122,22 @@ final class SendNotificationEmail implements ShouldQueue
      */
     public function failed(Throwable $exception): void
     {
+        // Update notification queue status to failed
+        if ($this->notificationQueueId) {
+            $queueRepository = app(\App\Repositories\NotificationQueueRepository::class);
+            $queueRepository->updateStatus(
+                $this->notificationQueueId,
+                'failed',
+                $exception->getMessage()
+            );
+        }
+
         Log::error('SendNotificationEmail job failed', [
-            'email'     => $this->email,
-            'subject'   => $this->subject,
-            'sender_id' => $this->senderId,
-            'error'     => $exception->getMessage(),
+            'notification_id' => $this->notificationQueueId,
+            'email'           => $this->email,
+            'subject'         => $this->subject,
+            'sender_id'       => $this->senderId,
+            'error'           => $exception->getMessage(),
         ]);
     }
 }

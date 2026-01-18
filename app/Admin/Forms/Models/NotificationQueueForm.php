@@ -27,21 +27,8 @@ final class NotificationQueueForm extends ModelForm
         // Basic queue information
         $this->display('template.name', __t('Template'));
         $this->display('rule.name', __t('Rule'));
-        $this->display('status', __t('Status'))->as(function ($status) {
-            $colors = [
-                'pending'   => 'warning',
-                'sent'      => 'success',
-                'failed'    => 'danger',
-                'cancelled' => 'secondary',
-            ];
-            $labels = [
-                'pending'   => __t('Pending'),
-                'sent'      => __t('Sent'),
-                'failed'    => __t('Failed'),
-                'cancelled' => __t('Cancelled'),
-            ];
-
-            return "<span class='badge badge-{$colors[$status]}'>{$labels[$status]}</span>";
+        $this->display('status', __t('Status'))->as(function () use ($queue) {
+            return $queue->status_badge;
         });
 
         $this->divider();
@@ -93,7 +80,7 @@ final class NotificationQueueForm extends ModelForm
         $this->display('scheduled_at', __t('Scheduled At'));
         $this->display('sent_at', __t('Sent At'));
         $this->display('failed_at', __t('Failed At'));
-        $this->display('retry_count', __t('Retry Count'));
+        $this->display('attempts', __t('Retry Count'));
         $this->display('max_attempts', __t('Max Attempts'));
         $this->display('priority', __t('Priority'))->as(function ($priority) {
             $colors = [
@@ -153,7 +140,7 @@ final class NotificationQueueForm extends ModelForm
                 $buttons .= '<button type="button" class="btn btn-success mr-2" onclick="retryNotification(' . $queue->id . ')"><i class="fa fa-retry"></i> ' . __t('Retry') . '</button>';
             }
 
-            if ($queue->status === 'pending') {
+            if (in_array($queue->status, ['pending', 'processing'])) {
                 $buttons .= '<button type="button" class="btn btn-warning mr-2" onclick="cancelNotification(' . $queue->id . ')"><i class="fa fa-ban"></i> ' . __t('Cancel') . '</button>';
             }
 

@@ -22,7 +22,7 @@ return new class() extends Migration
             $table->longText('body_html');
             $table->longText('body_text')->nullable();
             $table->json('trigger_data')->nullable()->comment('Original data that triggered the notification');
-            $table->enum('status', ['pending', 'sent', 'failed', 'cancelled'])->default('pending');
+            $table->enum('status', ['pending', 'processing', 'sent', 'failed', 'cancelled'])->default('pending');
             $table->timestamp('scheduled_at');
             $table->timestamp('sent_at')->nullable();
             $table->text('error_message')->nullable();

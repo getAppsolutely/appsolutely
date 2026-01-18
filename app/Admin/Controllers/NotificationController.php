@@ -279,25 +279,12 @@ final class NotificationController extends AdminBaseController
             $grid->column('template.name', __t('Template'))->limit(40);
             $grid->column('recipient_email', __t('Recipient'))->limit(50);
             $grid->column('subject', __t('Subject'))->limit(60);
-            $grid->column('status', __t('Status'))->display(function ($status) {
-                $colors = [
-                    'pending'   => 'warning',
-                    'sent'      => 'success',
-                    'failed'    => 'danger',
-                    'cancelled' => 'secondary',
-                ];
-                $labels = [
-                    'pending'   => __t('Pending'),
-                    'sent'      => __t('Sent'),
-                    'failed'    => __t('Failed'),
-                    'cancelled' => __t('Cancelled'),
-                ];
-
-                return "<span class='badge bg-{$colors[$status]}'>{$labels[$status]}</span>";
+            $grid->column('status', __t('Status'))->display(function () {
+                return $this->status_badge;
             });
             $grid->column('scheduled_at', __t('Scheduled'))->display(column_time_format())->sortable();
             $grid->column('sent_at', __t('Sent'))->display(column_time_format())->sortable();
-            $grid->column('retry_count', __t('Attempts'))->display(function ($attempts) {
+            $grid->column('attempts', __t('Attempts'))->display(function ($attempts) {
                 return $attempts > 0 ? "<span class='badge bg-warning'>{$attempts}</span>" : '-';
             });
 
@@ -305,12 +292,9 @@ final class NotificationController extends AdminBaseController
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id', __t('ID'))->width(3);
                 $filter->like('recipient_email', __t('Recipient'))->width(3);
-                $filter->equal('status', __t('Status'))->select([
-                    'pending'   => __t('Pending'),
-                    'sent'      => __t('Sent'),
-                    'failed'    => __t('Failed'),
-                    'cancelled' => __t('Cancelled'),
-                ])->width(3);
+                $filter->equal('status', __t('Status'))->select(
+                    NotificationQueue::getStatusLabels()
+                )->width(3);
                 $filter->between('created_at', __t('Created'))->datetime()->width(3);
             });
 
