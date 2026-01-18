@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Listeners;
 
 use App\Events\FormSubmitted;
+use App\Models\Form;
+use App\Models\FormEntry;
 use App\Services\Contracts\NotificationServiceInterface;
 
 /**
@@ -42,15 +44,17 @@ final class TriggerFormNotifications
         }
 
         try {
+            // Load form fields relationship if not already loaded
+            if (! $event->form->relationLoaded('fields')) {
+                $event->form->load('fields');
+            }
 
             // Prepare notification data matching the format expected by NotificationService
             $notificationData = [
                 'form_name'        => $event->form->name,
                 'user_name'        => $event->entry->getUserName(),
-                'user_email'       => $event->entry->email,
-                'user_phone'       => $event->entry->mobile,
-                'form_fields_html' => $this->formatFieldsAsHtml($event->data),
-                'form_fields_text' => $this->formatFieldsAsText($event->data),
+                'form_fields_html' => $this->formatFieldsAsHtml($event->form, $event->entry),
+                'form_fields_text' => $this->formatFieldsAsText($event->form, $event->entry),
             ];
 
             // Trigger notifications using 'form_submission' (matching the trigger type used in rules)
@@ -67,75 +71,115 @@ final class TriggerFormNotifications
     }
 
     /**
-     * Format form fields as HTML table rows
+     * Format form fields as HTML table rows based on database form fields
      */
-    private function formatFieldsAsHtml(array $data): string
+    private function formatFieldsAsHtml(Form $form, FormEntry $entry): string
     {
-        // Skip common fields that are already displayed
-        $skipFields = ['name', 'first_name', 'last_name', 'email', 'mobile', 'phone'];
+        $html = '<table id="form-fields-table">' . "\n";
 
-        $html = '';
-        foreach ($data as $key => $value) {
-            // Skip if it's already shown in contact info
-            if (in_array(strtolower($key), $skipFields)) {
+        // Loop through all form fields from database
+        foreach ($form->fields as $field) {
+            // Get value from entry (check direct properties first, then data JSON)
+            $value = $this->getFieldValue($entry, $field->name);
+
+            // Skip if value is null or empty
+            if ($value === null || $value === '') {
                 continue;
             }
 
-            // Format the field name (convert snake_case to Title Case)
-            $label = ucwords(str_replace(['_', '-'], ' ', $key));
+            // Format the value based on field type
+            $formattedValue = $this->formatValue($value, $field->type);
 
-            // Format the value
-            $formattedValue = $this->formatValue($value);
-
-            // Add table row
-            $html .= '<tr>';
-            $html .= '<td style="padding: 8px 0; font-weight: bold; width: 150px;">' . htmlspecialchars($label) . ':</td>';
-            $html .= '<td style="padding: 8px 0;">' . $formattedValue . '</td>';
-            $html .= '</tr>' . "\n";
+            // Add table row using field label from database
+            $html .= '    <tr>' . "\n";
+            $html .= '        <td class="form-field-label">' . htmlspecialchars($field->label) . ':</td>' . "\n";
+            $html .= '        <td class="form-field-value">' . $formattedValue . '</td>' . "\n";
+            $html .= '    </tr>' . "\n";
         }
+
+        $html .= '</table>';
 
         return $html;
     }
 
     /**
-     * Format form fields as plain text
+     * Format form fields as plain text based on database form fields
      */
-    private function formatFieldsAsText(array $data): string
+    private function formatFieldsAsText(Form $form, FormEntry $entry): string
     {
-        // Skip common fields that are already displayed
-        $skipFields = ['name', 'first_name', 'last_name', 'email', 'mobile', 'phone'];
-
         $text = '';
-        foreach ($data as $key => $value) {
-            // Skip if it's already shown in contact info
-            if (in_array(strtolower($key), $skipFields)) {
+
+        // Loop through all form fields from database
+        foreach ($form->fields as $field) {
+            // Get value from entry (check direct properties first, then data JSON)
+            $value = $this->getFieldValue($entry, $field->name);
+
+            // Skip if value is null or empty
+            if ($value === null || $value === '') {
                 continue;
             }
 
-            // Format the field name
-            $label = ucwords(str_replace(['_', '-'], ' ', $key));
+            // Format the value based on field type
+            $formattedValue = $this->formatValueText($value, $field->type);
 
-            // Format the value
-            $formattedValue = $this->formatValueText($value);
-
-            // Add line
-            $text .= $label . ': ' . $formattedValue . "\n";
+            // Add line using field label from database
+            $text .= $field->label . ': ' . $formattedValue . "\n";
         }
 
         return $text ? "\n" . $text : '';
     }
 
     /**
-     * Format a value for HTML display
+     * Get field value from entry (checks direct properties first, then data JSON)
      */
-    private function formatValue(mixed $value): string
+    private function getFieldValue(FormEntry $entry, string $fieldName): mixed
     {
-        if (is_bool($value)) {
-            return $value ? '<span style="color: #27ae60;">✓ Yes</span>' : '<span style="color: #e74c3c;">✗ No</span>';
+        // Check direct properties on entry (name, email, mobile, first_name, last_name)
+        $directProperties = ['name', 'email', 'mobile', 'first_name', 'last_name'];
+
+        if (in_array($fieldName, $directProperties)) {
+            $value = $entry->{$fieldName};
+            if ($value !== null && $value !== '') {
+                return $value;
+            }
         }
 
-        if (is_array($value)) {
-            return htmlspecialchars(implode(', ', $value));
+        // Fall back to data JSON column
+        return $entry->getFieldValue($fieldName);
+    }
+
+    /**
+     * Format a value for HTML display based on field type
+     */
+    private function formatValue(mixed $value, string $fieldType): string
+    {
+        // Handle file uploads
+        if ($fieldType === 'file') {
+            if (is_array($value)) {
+                $files = [];
+                foreach ($value as $file) {
+                    if (is_array($file) && isset($file['name'])) {
+                        $files[] = htmlspecialchars($file['name']);
+                    } else {
+                        $files[] = htmlspecialchars((string) $file);
+                    }
+                }
+
+                return implode(', ', $files);
+            }
+
+            return htmlspecialchars((string) $value);
+        }
+
+        // Handle checkboxes and multiple selects
+        if (in_array($fieldType, ['checkbox', 'multiple_select']) || is_array($value)) {
+            if (is_array($value)) {
+                return htmlspecialchars(implode(', ', $value));
+            }
+        }
+
+        if (is_bool($value)) {
+            return $value ? '<span style="color: #27ae60;">✓ Yes</span>' : '<span style="color: #e74c3c;">✗ No</span>';
         }
 
         if (is_null($value)) {
@@ -151,16 +195,37 @@ final class TriggerFormNotifications
     }
 
     /**
-     * Format a value for plain text display
+     * Format a value for plain text display based on field type
      */
-    private function formatValueText(mixed $value): string
+    private function formatValueText(mixed $value, string $fieldType): string
     {
-        if (is_bool($value)) {
-            return $value ? 'Yes' : 'No';
+        // Handle file uploads
+        if ($fieldType === 'file') {
+            if (is_array($value)) {
+                $files = [];
+                foreach ($value as $file) {
+                    if (is_array($file) && isset($file['name'])) {
+                        $files[] = $file['name'];
+                    } else {
+                        $files[] = (string) $file;
+                    }
+                }
+
+                return implode(', ', $files);
+            }
+
+            return (string) $value;
         }
 
-        if (is_array($value)) {
-            return implode(', ', $value);
+        // Handle checkboxes and multiple selects
+        if (in_array($fieldType, ['checkbox', 'multiple_select']) || is_array($value)) {
+            if (is_array($value)) {
+                return implode(', ', $value);
+            }
+        }
+
+        if (is_bool($value)) {
+            return $value ? 'Yes' : 'No';
         }
 
         if (is_null($value)) {

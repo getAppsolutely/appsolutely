@@ -22,14 +22,9 @@ final readonly class NotificationTemplateService implements NotificationTemplate
         return match ($category) {
             'form' => [
                 'form_name'        => 'Name of the form',
-                'form_description' => 'Form description',
-                'user_name'        => 'User\'s full name',
-                'user_email'       => 'User\'s email address',
-                'user_phone'       => 'User\'s phone number',
-                'submitted_at'     => 'Submission timestamp',
-                'entry_id'         => 'Form entry ID',
-                'form_data'        => 'All form data as JSON',
-                'admin_link'       => 'Link to admin panel',
+                'user_name'        => 'User\'s name (from name column or first_name + last_name)',
+                'form_fields_html' => 'All form fields formatted as HTML table rows',
+                'form_fields_text' => 'All form fields formatted as plain text',
             ],
             'user' => [
                 'username'          => 'User\'s username',
@@ -96,17 +91,18 @@ final readonly class NotificationTemplateService implements NotificationTemplate
         return match ($category) {
             'form' => [
                 'form_name'        => 'Test Drive Booking Form',
-                'form_description' => 'Book your test drive today',
                 'user_name'        => 'John Doe',
-                'user_email'       => 'john.doe@example.com',
-                'user_phone'       => '+1 234 567 8900',
-                'submitted_at'     => now()->format('Y-m-d H:i:s'),
-                'entry_id'         => '12345',
-                'form_data'        => json_encode([
-                    'preferred_date'   => '2024-01-15',
-                    'vehicle_interest' => 'Sedan Model A',
-                ]),
-                'admin_link' => url('/admin/forms'),
+                'form_fields_html' => '<tr><td class="form-field-label">Name:</td><td class="form-field-value">John Doe</td></tr>' . "\n" .
+                    '<tr><td class="form-field-label">Email:</td><td class="form-field-value"><a href="mailto:john.doe@example.com" style="color: #3498db; text-decoration: none;">john.doe@example.com</a></td></tr>' . "\n" .
+                    '<tr><td class="form-field-label">Phone:</td><td class="form-field-value">+1 234 567 8900</td></tr>' . "\n" .
+                    '<tr><td class="form-field-label">Preferred Date:</td><td class="form-field-value">2024-01-15</td></tr>' . "\n" .
+                    '<tr><td class="form-field-label">Vehicle Interest:</td><td class="form-field-value">Sedan Model A</td></tr>',
+                'form_fields_text' => "\n" .
+                    "Name: John Doe\n" .
+                    "Email: john.doe@example.com\n" .
+                    "Phone: +1 234 567 8900\n" .
+                    "Preferred Date: 2024-01-15\n" .
+                    'Vehicle Interest: Sedan Model A',
             ],
             'user' => [
                 'username'          => 'johndoe',

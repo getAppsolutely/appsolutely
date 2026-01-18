@@ -26,8 +26,6 @@ class NotificationTemplateSeeder extends Seeder
                 'variables' => [
                     'form_name',
                     'user_name',
-                    'user_email',
-                    'user_phone',
                     'form_fields_html',
                     'form_fields_text',
                 ],
@@ -49,33 +47,76 @@ class NotificationTemplateSeeder extends Seeder
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>New Form Submission</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .header-section h2 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .header-section p {
+            margin: 0;
+            color: #666;
+        }
+        .content-section {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .content-section h3 {
+            color: #2c3e50;
+            margin-top: 0;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        #form-fields-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .form-field-label {
+            padding: 8px 0;
+            font-weight: bold;
+            width: 150px;
+        }
+        .form-field-value {
+            padding: 8px 0;
+        }
+        .footer-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+        }
+    </style>
 </head>
-<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-    <div style="background-color: #f8f9fa; padding: 20px; border-radius: 5px; margin-bottom: 20px;">
-        <h2 style="color: #2c3e50; margin-top: 0;">New Form Submission Received</h2>
-        <p style="margin: 0; color: #666;">A new form submission has been received and requires your attention.</p>
+<body>
+    <div class="header-section">
+        <h2>New Form Submission Received</h2>
+        <p>A new form submission has been received and requires your attention.</p>
     </div>
 
-    <div style="background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 5px; padding: 20px; margin-bottom: 20px;">
-        <h3 style="color: #2c3e50; margin-top: 0; border-bottom: 2px solid #3498db; padding-bottom: 10px;">Contact Information</h3>
-        <table style="width: 100%; border-collapse: collapse;">
-            <tr>
-                <td style="padding: 8px 0; font-weight: bold; width: 150px;">Name:</td>
-                <td style="padding: 8px 0;">{{user_name}}</td>
-            </tr>
-            <tr>
-                <td style="padding: 8px 0; font-weight: bold;">Email:</td>
-                <td style="padding: 8px 0;"><a href="mailto:{{user_email}}" style="color: #3498db; text-decoration: none;">{{user_email}}</a></td>
-            </tr>
-            <tr>
-                <td style="padding: 8px 0; font-weight: bold;">Phone:</td>
-                <td style="padding: 8px 0;"><a href="tel:{{user_phone}}" style="color: #3498db; text-decoration: none;">{{user_phone}}</a></td>
-            </tr>
-            {{form_fields_html}}
-        </table>
+    <div class="content-section">
+        <h3>Form Submission Details</h3>
+        {{form_fields_html}}
     </div>
 
-    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; text-align: center; color: #999; font-size: 12px;">
+    <div class="footer-section">
         <p>This is an automated notification. Please do not reply to this email.</p>
     </div>
 </body>
@@ -94,23 +135,11 @@ NEW FORM SUBMISSION RECEIVED
 
 A new form submission has been received and requires your attention.
 
-FORM DETAILS
-------------
-Form Name: {{form_name}}
-Description: {{form_description}}
-Submitted At: {{submitted_at}}
-Entry ID: #{{entry_id}}
+FORM: {{form_name}}
 
-CONTACT INFORMATION
+SUBMISSION DETAILS
 -------------------
-Name: {{user_name}}
-Email: {{user_email}}
-Phone: {{user_phone}}
 {{form_fields_text}}
-
-VIEW IN ADMIN PANEL
--------------------
-{{admin_link}}
 
 ---
 This is an automated notification. Please do not reply to this email.
