@@ -68,6 +68,7 @@ final readonly class DynamicFormSubmissionService implements DynamicFormSubmissi
         // Prepare entry data
         $entryData = [
             'form_id'    => $form->id,
+            'name'       => $data['name'] ?? null,
             'first_name' => $data['first_name'] ?? null,
             'last_name'  => $data['last_name'] ?? null,
             'email'      => $data['email'] ?? null,
@@ -241,6 +242,7 @@ final readonly class DynamicFormSubmissionService implements DynamicFormSubmissi
 
         // Add common contact fields if they exist in target table
         $contactFields = [
+            'name'       => $formEntry->name,
             'first_name' => $formEntry->first_name,
             'last_name'  => $formEntry->last_name,
             'email'      => $formEntry->email,
@@ -290,7 +292,7 @@ final readonly class DynamicFormSubmissionService implements DynamicFormSubmissi
             $notificationData = [
                 'form_name'        => $form->name,
                 'form_description' => $form->description,
-                'user_name'        => trim(($formEntry->first_name ?? '') . ' ' . ($formEntry->last_name ?? '')),
+                'user_name'        => $formEntry->getUserName(),
                 'user_email'       => $formEntry->email,
                 'user_phone'       => $formEntry->mobile,
                 'submitted_at'     => $formEntry->created_at->format('Y-m-d H:i:s'),

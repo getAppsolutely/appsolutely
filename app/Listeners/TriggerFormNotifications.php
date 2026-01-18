@@ -46,7 +46,7 @@ final class TriggerFormNotifications
             // Prepare notification data matching the format expected by NotificationService
             $notificationData = [
                 'form_name'        => $event->form->name,
-                'user_name'        => trim(($event->entry->first_name ?? '') . ' ' . ($event->entry->last_name ?? '')),
+                'user_name'        => $event->entry->getUserName(),
                 'user_email'       => $event->entry->email,
                 'user_phone'       => $event->entry->mobile,
                 'form_fields_html' => $this->formatFieldsAsHtml($event->data),

@@ -210,6 +210,7 @@ final class FormEntryRepository extends BaseRepository
         // Combine all text content from form fields for keyword scanning
         $spamKeywords = config('forms.spam_detection.keywords', ['viagra', 'casino', 'lottery', 'prize', 'winner']);
         $content      = implode(' ', array_filter([
+            $data['name'] ?? '',
             $data['first_name'] ?? '',
             $data['last_name'] ?? '',
             $data['email'] ?? '',

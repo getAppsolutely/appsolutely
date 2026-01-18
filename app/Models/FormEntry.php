@@ -15,6 +15,7 @@ final class FormEntry extends Model
         'form_id',
         'submitted_at',
         'user_id',
+        'name',
         'first_name',
         'last_name',
         'email',
@@ -47,7 +48,19 @@ final class FormEntry extends Model
      */
     public function getFullNameAttribute(): string
     {
-        return trim($this->first_name . ' ' . $this->last_name);
+        return $this->getUserName();
+    }
+
+    /**
+     * Get user name - uses name column if available, otherwise falls back to first_name + last_name
+     */
+    public function getUserName(): string
+    {
+        if (! empty($this->name)) {
+            return trim($this->name);
+        }
+
+        return trim(($this->first_name ?? '') . ' ' . ($this->last_name ?? ''));
     }
 
     /**

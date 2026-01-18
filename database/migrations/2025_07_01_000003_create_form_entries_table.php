@@ -18,6 +18,7 @@ return new class() extends Migration
             $table->foreignId('form_id')->constrained('forms')->onDelete('cascade');
             $table->timestamp('submitted_at');
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->string('name')->nullable();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('email')->nullable();

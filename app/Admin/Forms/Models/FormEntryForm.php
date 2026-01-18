@@ -33,6 +33,7 @@ final class FormEntryForm extends ModelForm
         // Contact information
         $this->html('<h5>' . __t('Contact Information') . '</h5>');
 
+        $this->display('name', __t('Name'));
         $this->display('first_name', __t('First Name'));
         $this->display('last_name', __t('Last Name'));
         $this->display('email', __t('Email'));
