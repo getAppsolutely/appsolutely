@@ -9,6 +9,7 @@ use App\Services\Contracts\DynamicFormServiceInterface;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final class DynamicForm extends GeneralBlock
 {
@@ -28,7 +29,7 @@ final class DynamicForm extends GeneralBlock
     protected ?DynamicFormServiceInterface $formService = null;
 
     protected array $defaultQueryOptions = [
-        'form_slug' => '',
+        'form_slug' => 'test-drive',
     ];
 
     protected function initializeComponent(Container $container): void
@@ -42,13 +43,15 @@ final class DynamicForm extends GeneralBlock
             $this->form = $this->formService->getFormBySlug($formSlug);
 
             if (! $this->form) {
-                \Log::warning("Form not found for slug: {$formSlug}. Using legacy fallback.");
-                $this->form       = null;
-                $this->formFields = [];
-            } else {
-                $this->formFields = $this->formService->getFields($this->form);
-                $this->initializeFormDataFromQuery();
+                \Log::warning("Form not found for slug: {$formSlug}.");
+                abort(404);
             }
+
+            $this->formFields = $this->formService->getFields($this->form);
+            $this->initializeFormDataFromQuery();
+        } catch (NotFoundHttpException $e) {
+            // Re-throw 404 exceptions so they're properly handled
+            throw $e;
         } catch (\Exception $e) {
             \Log::error("Error loading form with slug {$formSlug}: " . $e->getMessage());
             $this->form       = null;
