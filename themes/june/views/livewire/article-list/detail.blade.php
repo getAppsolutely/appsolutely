@@ -1,30 +1,30 @@
 @php
-    $model = $page['model'] ?? '';
+    $article = ($page['model'] ?? null) instanceof \App\Models\Article ? $page['model'] : null;
 @endphp
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-lg-10">
             <!-- Title -->
-            @if($model->title ?? false)
+            @if($article?->title ?? false)
                 <h1 class="fw-bold text-dark mb-3">
-                    {{ $model->title }}
+                    {{ $article->title }}
                 </h1>
             @endif
 
             <!-- Subtitle -->
-            @if($model->subtitle ?? false)
+            @if($article?->subtitle ?? false)
                 <p class="lead text-muted mb-4">
-                    {{ $model->subtitle }}
+                    {{ $article->subtitle }}
                 </p>
             @endif
 
             <!-- Meta Information -->
-            @if(($model->show_meta ?? true) && ($model->published_at ?? false))
+            @if(($article?->show_meta ?? true) && ($article?->published_at ?? false))
                 <div class="text-muted mb-4 pb-3 border-bottom">
                     <small>
-                        @if($model->published_at ?? false)
-                            <time datetime="{{ $model->published_at }}">
-                                Published: {{ \Carbon\Carbon::parse($model->published_at)->format('F j, Y') }}
+                        @if($article->published_at ?? false)
+                            <time datetime="{{ $article->published_at }}">
+                                Published: {{ \Carbon\Carbon::parse($article->published_at)->format('F j, Y') }}
                             </time>
                         @endif
                     </small>
@@ -32,9 +32,9 @@
             @endif
 
             <!-- Content -->
-            @if($model->content ?? false)
+            @if($article?->content ?? false)
                 <div class="content-body markdown">
-                    {!! md2html($model->content) !!}
+                    {!! md2html($article->content) !!}
                 </div>
             @endif
         </div>

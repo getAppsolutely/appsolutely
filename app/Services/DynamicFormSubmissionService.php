@@ -11,7 +11,6 @@ use App\Models\FormField;
 use App\Repositories\FormEntryRepository;
 use App\Repositories\FormRepository;
 use App\Services\Contracts\DynamicFormSubmissionServiceInterface;
-use App\Services\Contracts\NotificationServiceInterface;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -24,19 +23,18 @@ use Psr\Log\LoggerInterface;
  * This service coordinates form submission workflow by composing:
  *
  * - DynamicFormValidationService: Validates form data against field rules
- * - NotificationServiceInterface: Triggers notifications after successful submission
  * - ConnectionInterface: Handles database operations for target table insertion
  *
  * Composition pattern:
  * 1. Validates submission using DynamicFormValidationService
  * 2. Creates form entry and performs spam checking
  * 3. Optionally inserts data into target table
- * 4. Triggers notifications via NotificationServiceInterface
+ * 4. Dispatches FormSubmitted event (listeners handle notifications)
  *
  * This composition provides:
  * - Separation of validation, storage, and notification concerns
  * - Reusable validation logic across different submission contexts
- * - Decoupled notification system (can be swapped or extended)
+ * - Event-driven notification system
  */
 final readonly class DynamicFormSubmissionService implements DynamicFormSubmissionServiceInterface
 {
@@ -46,7 +44,6 @@ final readonly class DynamicFormSubmissionService implements DynamicFormSubmissi
         protected FormRepository $formRepository,
         protected FormEntryRepository $entryRepository,
         protected DynamicFormValidationService $validationService,
-        protected NotificationServiceInterface $notificationService,
         protected ConnectionInterface $db,
         protected LoggerInterface $logger
     ) {}
@@ -281,33 +278,5 @@ final readonly class DynamicFormSubmissionService implements DynamicFormSubmissi
         }
 
         return $targetData;
-    }
-
-    /**
-     * Trigger notifications for form submission
-     */
-    protected function triggerNotifications(Form $form, FormEntry $formEntry, array $validatedData): void
-    {
-        try {
-            $notificationData = [
-                'form_name'        => $form->name,
-                'form_description' => $form->description,
-                'user_name'        => $formEntry->getUserName(),
-                'user_email'       => $formEntry->email,
-                'user_phone'       => $formEntry->mobile,
-                'submitted_at'     => $formEntry->created_at->format('Y-m-d H:i:s'),
-                'entry_id'         => $formEntry->id,
-                'form_data'        => json_encode($validatedData),
-                'admin_link'       => url('/admin/dynamic-forms?tab=form-entries&form_id=' . $form->id),
-            ];
-
-            $this->notificationService->trigger('form_submission', $form->slug, $notificationData);
-        } catch (\Exception $e) {
-            $this->logger->error('Failed to trigger form submission notifications: unexpected error', [
-                'form_id'  => $form->id,
-                'entry_id' => $formEntry->id,
-                'error'    => $e->getMessage(),
-            ]);
-        }
     }
 }
