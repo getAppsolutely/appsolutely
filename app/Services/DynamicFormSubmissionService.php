@@ -65,14 +65,14 @@ final readonly class DynamicFormSubmissionService implements DynamicFormSubmissi
         // Validate the submission
         $validatedData = $this->validationService->validateFormSubmission($form, [self::FORM_WRAPPER => $data])[self::FORM_WRAPPER] ?? null;
 
-        // Prepare entry data
+        // Prepare entry data with fallback values
         $entryData = [
             'form_id'    => $form->id,
-            'name'       => $data['name'] ?? null,
-            'first_name' => $data['first_name'] ?? null,
-            'last_name'  => $data['last_name'] ?? null,
+            'name'       => $data['name'] ?? $data['fullname'] ?? null,
+            'first_name' => $data['first_name'] ?? $data['firstname'] ?? null,
+            'last_name'  => $data['last_name'] ?? $data['lastname'] ?? null,
             'email'      => $data['email'] ?? null,
-            'mobile'     => $data['mobile'] ?? null,
+            'mobile'     => $data['mobile'] ?? $data['phone'] ?? $data['phone_number'] ?? null,
             'data'       => $this->prepareFormData($form, $validatedData),
         ];
 
@@ -260,7 +260,7 @@ final readonly class DynamicFormSubmissionService implements DynamicFormSubmissi
             // Remove 'formData.' prefix if present
             $cleanFieldName = str_replace('formData.', '', $fieldName);
 
-            if (in_array($cleanFieldName, $tableColumns)) {
+            if (in_array($cleanFieldName, $tableColumns) && ! isset($targetData[$cleanFieldName])) {
                 // Handle different data types
                 if (is_array($value)) {
                     // Convert arrays to JSON or comma-separated string based on column type
