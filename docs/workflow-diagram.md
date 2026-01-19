@@ -187,7 +187,7 @@ Other Files (*.css, *.json, *.md, *.html, *.vue)
 
 Development:
    make dev  →  composer run dev  →  ┌─ php artisan serve
-                                     ├─ php artisan queue:listen
+                                     ├─ php artisan queue:listen --queue=notifications,default
                                      ├─ php artisan pail
                                      └─ npm run dev
 

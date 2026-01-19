@@ -26,6 +26,11 @@ final class SendNotificationEmail implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
+     * The name of the queue the job should be dispatched to.
+     */
+    public string $queue = 'notifications';
+
+    /**
      * The number of times the job may be attempted.
      */
     public int $tries = 3;

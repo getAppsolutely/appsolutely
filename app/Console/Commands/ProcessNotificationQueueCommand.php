@@ -47,7 +47,7 @@ final class ProcessNotificationQueueCommand extends Command
 
         if ($processed > 0) {
             $this->info("Processed {$processed} notification(s) and dispatched to Laravel queue.");
-            $this->comment('Run "php artisan queue:work" to send the emails.');
+            $this->comment('Run "php artisan queue:work --queue=notifications,default" to send the emails.');
         } else {
             $this->info('No pending notifications to process.');
         }

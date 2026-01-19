@@ -27,8 +27,13 @@ final class NotificationQueueForm extends ModelForm
         // Basic queue information
         $this->display('template.name', __t('Template'));
         $this->display('rule.name', __t('Rule'));
-        $this->display('status', __t('Status'))->as(function () use ($queue) {
-            return $queue->status_badge;
+        $this->html(function () {
+            $queue = $this->model;
+            if (! $queue || ! $queue->exists) {
+                return '<div class="form-group"><label class="form-label">' . __t('Status') . '</label><div>-</div></div>';
+            }
+
+            return '<div class="form-group"><label class="form-label">' . __t('Status') . '</label><div>' . $queue->status_badge . '</div></div>';
         });
 
         $this->divider();
@@ -56,7 +61,7 @@ final class NotificationQueueForm extends ModelForm
         // Display variables in a formatted way
         $this->html(function () {
             $queue = $this->model;
-            if (! $queue->exists || empty($queue->variables)) {
+            if (! $queue || ! $queue->exists || empty($queue->variables)) {
                 return '<p>' . __t('No variables available') . '</p>';
             }
 
@@ -82,7 +87,12 @@ final class NotificationQueueForm extends ModelForm
         $this->display('failed_at', __t('Failed At'));
         $this->display('attempts', __t('Retry Count'));
         $this->display('max_attempts', __t('Max Attempts'));
-        $this->display('priority', __t('Priority'))->as(function ($priority) {
+        $this->html(function () {
+            $queue = $this->model;
+            if (! $queue || ! $queue->exists || empty($queue->priority)) {
+                return '<div class="form-group"><label class="form-label">' . __t('Priority') . '</label><div>-</div></div>';
+            }
+
             $colors = [
                 'low'    => 'secondary',
                 'normal' => 'primary',
@@ -90,7 +100,11 @@ final class NotificationQueueForm extends ModelForm
                 'urgent' => 'danger',
             ];
 
-            return "<span class='badge badge-{$colors[$priority]}'>" . ucfirst($priority) . '</span>';
+            $priority = $queue->priority;
+            $color    = $colors[$priority] ?? 'secondary';
+            $badge    = "<span class='badge badge-{$color}'>" . ucfirst($priority) . '</span>';
+
+            return '<div class="form-group"><label class="form-label">' . __t('Priority') . '</label><div>' . $badge . '</div></div>';
         });
 
         $this->divider();
@@ -110,7 +124,7 @@ final class NotificationQueueForm extends ModelForm
         // Display metadata in a formatted way
         $this->html(function () {
             $queue = $this->model;
-            if (! $queue->exists || empty($queue->metadata)) {
+            if (! $queue || ! $queue->exists || empty($queue->metadata)) {
                 return '<p>' . __t('No metadata available') . '</p>';
             }
 
@@ -130,7 +144,7 @@ final class NotificationQueueForm extends ModelForm
         // Add action buttons for queue management
         $this->html(function () {
             $queue = $this->model;
-            if (! $queue->exists) {
+            if (! $queue || ! $queue->exists) {
                 return '';
             }
 

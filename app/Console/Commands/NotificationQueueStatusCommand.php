@@ -80,7 +80,7 @@ final class NotificationQueueStatusCommand extends Command
 
         if ($jobsCount > 0) {
             $this->warn("⚠️  {$jobsCount} job(s) waiting in Laravel queue");
-            $this->comment('Run: php artisan queue:work --stop-when-empty');
+            $this->comment('Run: php artisan queue:work --queue=notifications,default --stop-when-empty');
         } else {
             $this->info('✓ No jobs waiting in Laravel queue');
         }
