@@ -66,9 +66,9 @@ final class NotificationController extends AdminBaseController
             $grid->model()->orderBy('created_at', 'desc');
 
             $grid->column('id', __t('ID'))->sortable();
-            $grid->column('name', __t('Name'))->limit(50)->editable();
+            $grid->column('name', __t('Name'))->limit(50);
             $grid->column('category', __t('Category'))->label();
-            $grid->column('subject', __t('Subject'))->limit(60)->editable();
+            $grid->column('subject', __t('Subject'))->limit(60);
             $grid->column('usage_count', __t('Rules'))->display(function ($count) {
                 return "<span class='badge bg-info'>{$count}</span>";
             });
@@ -125,9 +125,9 @@ final class NotificationController extends AdminBaseController
             $grid->model()->orderBy('created_at', 'desc');
 
             $grid->column('id', __t('ID'))->sortable();
-            $grid->column('name', __t('Name'))->limit(50)->editable();
+            $grid->column('name', __t('Name'))->limit(50);
             $grid->column('trigger_type', __t('Trigger'))->label();
-            $grid->column('trigger_reference', __t('Reference'))->limit(30)->editable();
+            $grid->column('trigger_reference', __t('Reference'))->limit(30);
             $grid->column('template.name', __t('Template'))->limit(40);
             $grid->column('recipient_type', __t('Recipients'))->display(function ($type) {
                 $labels = [
@@ -189,7 +189,7 @@ final class NotificationController extends AdminBaseController
             $grid->model()->orderBy('category')->orderBy('priority', 'desc')->orderBy('name');
 
             $grid->column('id', __t('ID'))->sortable();
-            $grid->column('name', __t('Name'))->limit(50)->editable();
+            $grid->column('name', __t('Name'))->limit(50);
             $grid->column('slug', __t('Slug'))->limit(30);
             $grid->column('category', __t('Category'))->display(function ($category) {
                 $labels = [

@@ -47,7 +47,9 @@ final class AdminButtonHelper
             $classes[] = 'btn';
             $classes[] = "btn-{$config['size']}";
         }
-        $classes[] = "btn-{$config['style']}";
+        if ($config['style']) {
+            $classes[] = "btn-{$config['style']}";
+        }
         if (! empty($config['class'])) {
             $classes[] = $config['class'];
         }
@@ -136,6 +138,7 @@ final class AdminButtonHelper
             'method'          => 'POST',
             'success_message' => __t('Item duplicated successfully'),
             'error_message'   => __t('Failed to duplicate item'),
+            'use_btn_classes' => false,
         ]);
     }
 
