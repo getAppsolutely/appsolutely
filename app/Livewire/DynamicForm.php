@@ -192,7 +192,8 @@ final class DynamicForm extends GeneralBlock
     {
         $this->submitted      = false;
         $this->successMessage = '';
-        $this->initializeComponent(app());
+        $this->formData       = [];
         $this->resetValidation();
+        $this->initializeComponent(app());
     }
 }
