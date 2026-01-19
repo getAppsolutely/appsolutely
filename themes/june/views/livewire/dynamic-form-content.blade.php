@@ -174,10 +174,10 @@
     <!-- Submit Button -->
     <div class="mt-4 text-center">
         <button type="submit" class="btn btn-dark px-4 py-2" wire:loading.attr="disabled">
-            <span wire:loading.remove wire:target="submit">
+            <span wire:target="submit" class="d-inline-flex align-items-center" wire:loading.class="d-none">
                 <i class="fas fa-calendar-check me-2"></i>{{ $displayOptions['submit_text'] }}
             </span>
-            <span wire:loading wire:target="submit">
+            <span wire:target="submit" class="d-inline-flex align-items-center d-none" wire:loading.class.remove="d-none">
                 <i class="fas fa-spinner fa-spin me-2"></i>Processing...
             </span>
         </button>
