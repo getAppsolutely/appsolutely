@@ -21,6 +21,7 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans+Thai:wght@100..900&display=swap" rel="stylesheet">
 
+    @livewireStyles
     @vite([ themed_path(). '/sass/app.scss', themed_path() . '/js/app.ts'], themed_build_path())
 </head>
 <body>
@@ -28,6 +29,7 @@
 <div id="scrollTrigger" class="position-absolute top-0 w-100" style="height: 1px;"></div>
     <h1 class="d-none">{{ $page->h1_text ?? $page->title }}</h1>
     @yield('content')
+    @livewireScripts
 </body>
 {!! tracking_code() !!}
 </html>
