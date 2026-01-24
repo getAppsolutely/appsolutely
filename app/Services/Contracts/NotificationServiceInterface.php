@@ -38,4 +38,9 @@ interface NotificationServiceInterface
      * Get notification statistics
      */
     public function getStatistics(): array;
+
+    /**
+     * Reset the processed triggers cache (useful for testing)
+     */
+    public function resetProcessedTriggers(): void;
 }

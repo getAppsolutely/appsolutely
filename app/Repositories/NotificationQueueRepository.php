@@ -314,4 +314,26 @@ final class NotificationQueueRepository extends BaseRepository
             ->limit($limit)
             ->get();
     }
+
+    /**
+     * Check if notification exists for entry and rule
+     */
+    public function hasNotificationForEntryAndRule(int $entryId, int $ruleId): bool
+    {
+        return $this->model->newQuery()
+            ->where('form_entry_id', $entryId)
+            ->where('rule_id', $ruleId)
+            ->exists();
+    }
+
+    /**
+     * Count notifications for entry and rule
+     */
+    public function countForEntryAndRule(int $entryId, int $ruleId): int
+    {
+        return $this->model->newQuery()
+            ->where('form_entry_id', $entryId)
+            ->where('rule_id', $ruleId)
+            ->count();
+    }
 }

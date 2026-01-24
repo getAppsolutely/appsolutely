@@ -294,4 +294,118 @@ final class FormEntryRepository extends BaseRepository
             ->where('is_spam', false)
             ->count();
     }
+
+    /**
+     * Get entries without notification queue entries
+     * Useful for identifying entries that failed to trigger notifications
+     */
+    public function getEntriesWithoutNotifications(?int $formId = null, ?int $limit = null): Collection
+    {
+        $query = $this->model->newQuery()
+            ->leftJoin('notification_queue', 'form_entries.id', '=', 'notification_queue.form_entry_id')
+            ->whereNull('notification_queue.id')
+            ->where('form_entries.is_spam', false)
+            ->with(['form', 'user'])
+            ->select('form_entries.*')
+            ->orderBy('form_entries.submitted_at', 'desc');
+
+        if ($formId) {
+            $query->where('form_entries.form_id', $formId);
+        }
+
+        if ($limit) {
+            $query->limit($limit);
+        }
+
+        return $query->get();
+    }
+
+    /**
+     * Check if entry has notifications
+     */
+    public function hasNotifications(int $entryId): bool
+    {
+        return $this->model->newQuery()
+            ->where('id', $entryId)
+            ->whereHas('notifications')
+            ->exists();
+    }
+
+    /**
+     * Get entries with notifications count
+     */
+    public function getEntriesWithNotificationsCount(?int $formId = null): Collection
+    {
+        $query = $this->model->newQuery()
+            ->withCount('notifications')
+            ->where('is_spam', false)
+            ->with(['form', 'user'])
+            ->orderBy('submitted_at', 'desc');
+
+        if ($formId) {
+            $query->where('form_id', $formId);
+        }
+
+        return $query->get();
+    }
+
+    /**
+     * Get entries by multiple IDs
+     */
+    public function getByIds(array $entryIds): Collection
+    {
+        return $this->model->newQuery()
+            ->whereIn('id', $entryIds)
+            ->where('is_spam', false)
+            ->with(['form', 'form.fields'])
+            ->orderBy('submitted_at', 'desc')
+            ->get();
+    }
+
+    /**
+     * Get entries with filters for resync
+     */
+    public function getEntriesForResync(array $filters): Collection
+    {
+        $query = $this->model->newQuery()
+            ->where('is_spam', false)
+            ->with(['form', 'form.fields']);
+
+        // Filter by form ID if provided
+        if (! empty($filters['form_id'])) {
+            $query->where('form_id', (int) $filters['form_id']);
+        }
+        // Filter by form slug if provided (requires join)
+        elseif (! empty($filters['form_slug'])) {
+            $query->whereHas('form', function ($q) use ($filters) {
+                $q->where('slug', $filters['form_slug']);
+            });
+        }
+        // Filter by rule's trigger reference (form slug or wildcard)
+        elseif (! empty($filters['trigger_reference']) && $filters['trigger_reference'] !== '*') {
+            $query->whereHas('form', function ($q) use ($filters) {
+                $q->where('slug', $filters['trigger_reference']);
+            });
+        }
+
+        // Filter by entry ID range
+        if (! empty($filters['entry_id_from'])) {
+            $query->where('id', '>=', (int) $filters['entry_id_from']);
+        }
+
+        if (! empty($filters['entry_id_to'])) {
+            $query->where('id', '<=', (int) $filters['entry_id_to']);
+        }
+
+        // Filter by date range
+        if (! empty($filters['from_date'])) {
+            $query->whereDate('submitted_at', '>=', $filters['from_date']);
+        }
+
+        if (! empty($filters['to_date'])) {
+            $query->whereDate('submitted_at', '<=', $filters['to_date']);
+        }
+
+        return $query->orderBy('submitted_at', 'desc')->get();
+    }
 }

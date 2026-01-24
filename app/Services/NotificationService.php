@@ -36,30 +36,49 @@ use Psr\Log\LoggerInterface;
  * - Separation of concerns: Each service handles its specific domain
  * - Coordinated workflows: Orchestrates complex notification flows (trigger → evaluate → queue → send)
  */
-final readonly class NotificationService implements NotificationServiceInterface
+final class NotificationService implements NotificationServiceInterface
 {
+    /**
+     * Static cache to prevent duplicate processing within the same request
+     */
+    public static array $processedTriggers = [];
+
     public function __construct(
         private readonly NotificationTemplateRepository $templateRepository,
         private readonly NotificationRuleRepository $ruleRepository,
         private readonly NotificationQueueRepository $queueRepository,
-        protected NotificationTemplateServiceInterface $templateService,
-        protected NotificationRuleServiceInterface $ruleService,
-        protected NotificationQueueServiceInterface $queueService,
-        protected NotificationSenderService $senderService,
-        protected LoggerInterface $logger,
-        protected Mailer $mailer
+        private readonly NotificationTemplateServiceInterface $templateService,
+        private readonly NotificationRuleServiceInterface $ruleService,
+        private readonly NotificationQueueServiceInterface $queueService,
+        private readonly NotificationSenderService $senderService,
+        private readonly LoggerInterface $logger,
+        private readonly Mailer $mailer
     ) {}
+
+    /**
+     * Reset the processed triggers cache (useful for testing)
+     */
+    public function resetProcessedTriggers(): void
+    {
+        self::$processedTriggers = [];
+    }
+
+    /**
+     * Reset the static cache (static helper for tests)
+     */
+    public static function resetCache(): void
+    {
+        self::$processedTriggers = [];
+    }
 
     /**
      * Trigger notifications based on event
      */
     public function trigger(string $triggerType, string $reference, array $data): void
     {
-        // Prevent duplicate processing within the same request
-        static $processedTriggers = [];
-        $triggerKey               = $triggerType . ':' . $reference . ':' . ($data['entry_id'] ?? 'unknown');
+        $triggerKey = $triggerType . ':' . $reference . ':' . ($data['entry_id'] ?? 'unknown');
 
-        if (isset($processedTriggers[$triggerKey])) {
+        if (isset(self::$processedTriggers[$triggerKey])) {
             $this->logger->warning('Notification: duplicate trigger skipped', [
                 'trigger'  => $triggerType . ':' . $reference,
                 'entry_id' => $data['entry_id'] ?? null,
@@ -68,7 +87,7 @@ final readonly class NotificationService implements NotificationServiceInterface
             return;
         }
 
-        $processedTriggers[$triggerKey] = true;
+        self::$processedTriggers[$triggerKey] = true;
 
         try {
             $rules = $this->ruleRepository->findByTrigger($triggerType, $reference);
@@ -222,7 +241,7 @@ final readonly class NotificationService implements NotificationServiceInterface
 
             $rendered = $rule->template->render($data);
 
-            $this->queueRepository->createQueueItem([
+            $queueItemData = [
                 'rule_id'         => $rule->id,
                 'template_id'     => $rule->template_id,
                 'sender_id'       => $sender?->id,
@@ -233,7 +252,14 @@ final readonly class NotificationService implements NotificationServiceInterface
                 'trigger_data'    => $data,
                 'scheduled_at'    => $scheduledAt,
                 'status'          => 'pending',
-            ]);
+            ];
+
+            // Add form_entry_id if present in trigger data (for form submissions)
+            if (isset($data['entry_id'])) {
+                $queueItemData['form_entry_id'] = $data['entry_id'];
+            }
+
+            $this->queueRepository->createQueueItem($queueItemData);
         }
     }
 

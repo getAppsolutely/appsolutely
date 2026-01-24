@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Models\Traits\ScopeStatus;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 final class NotificationTemplate extends Model
 {
+    use HasFactory;
     use ScopeStatus;
 
     protected $fillable = [

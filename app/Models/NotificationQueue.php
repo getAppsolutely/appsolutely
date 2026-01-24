@@ -4,16 +4,20 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 final class NotificationQueue extends Model
 {
+    use HasFactory;
+
     protected $table = 'notification_queue';
 
     protected $fillable = [
         'rule_id',
         'template_id',
         'sender_id',
+        'form_entry_id',
         'recipient_email',
         'subject',
         'body_html',
@@ -46,6 +50,11 @@ final class NotificationQueue extends Model
     public function sender(): BelongsTo
     {
         return $this->belongsTo(NotificationSender::class, 'sender_id');
+    }
+
+    public function formEntry(): BelongsTo
+    {
+        return $this->belongsTo(FormEntry::class, 'form_entry_id');
     }
 
     /**
