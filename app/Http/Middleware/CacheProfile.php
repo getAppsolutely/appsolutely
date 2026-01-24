@@ -20,6 +20,12 @@ final class CacheProfile extends CacheAllSuccessfulGetRequests
             return false;
         }
 
+        // Exclude Livewire requests (they use X-Livewire header, not X-Requested-With)
+        // This includes: component updates, lazy loading, polling, wire:navigate, etc.
+        if ($request->hasHeader('X-Livewire')) {
+            return false;
+        }
+
         // Exclude requests to admin domain (configurable via ADMIN_ROUTE_DOMAIN in .env)
         $adminDomain = config('admin.route.domain');
         if ($adminDomain && $request->getHost() === $adminDomain) {

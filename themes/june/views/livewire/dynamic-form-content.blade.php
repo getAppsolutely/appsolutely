@@ -1,4 +1,4 @@
-<form wire:submit.prevent="submit" novalidate>
+<form wire:submit.prevent="submit" method="POST" novalidate>
     @csrf
 
     <!-- Form Fields -->
