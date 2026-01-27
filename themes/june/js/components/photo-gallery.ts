@@ -1,5 +1,7 @@
 // Photo Gallery client-side filtering
 
+import { asset_url } from '../utils/asset-url';
+
 interface Photo {
     url: string;
     title?: string;
@@ -75,7 +77,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Use placeholder when url is empty or missing; also handle load errors
         if (img) {
-            img.setAttribute('data-src', p.url && String(p.url).trim() !== '' ? p.url : PLACEHOLDER_URL);
+            const imageUrl = p.url && String(p.url).trim() !== '' ? asset_url(p.url) : PLACEHOLDER_URL;
+            img.setAttribute('data-src', imageUrl);
             img.alt = p.alt || p.title || '';
             img.addEventListener(
                 'error',

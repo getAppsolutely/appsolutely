@@ -6,6 +6,10 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    
+    <!-- Asset Base URL -->
+    <meta name="asset-base-url" content="{{ config('appsolutely.asset_url') ?: (config('appsolutely.storage.assets') ?? 'assets/') }}">
+    <meta name="asset-build-hash" content="{{ build_hash() }}">
 
     <title>@title($page)</title>
     <meta name="keywords" content="@keywords($page)">

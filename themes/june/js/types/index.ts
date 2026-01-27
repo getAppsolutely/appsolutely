@@ -27,5 +27,20 @@ export interface HeaderInstance {
     hideMegaMenu(submenu: HTMLElement): void;
 }
 
-export {};
+// Extend Window interface for global utilities
+declare global {
+    interface Window {
+        _: any;
+        bootstrap: any;
+        axios: any;
+        assets: Record<string, unknown>;
+        lazyManager?: {
+            update(): void;
+        };
+        asset_url(uri: string | null | undefined, withHash?: boolean): string;
+        getAssetBaseUrl(): string;
+        getBuildHash(): string;
+    }
+}
 
+export {};
