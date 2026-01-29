@@ -76,7 +76,7 @@ final readonly class DynamicFormSubmissionService implements DynamicFormSubmissi
         // Add request metadata if available
         if ($request) {
             $entryData['referer']    = $request->header('referer');
-            $entryData['ip_address'] = $request->ip();
+            $entryData['ip_address'] = client_ip($request);
             $entryData['user_agent'] = $request->header('user-agent');
 
             if ($request->user()) {

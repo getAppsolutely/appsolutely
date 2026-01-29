@@ -138,7 +138,7 @@ final class DynamicForm extends GeneralBlock
     public function submit(): void
     {
         // Apply rate limiting to prevent spam (5 submissions per minute per IP)
-        $key = 'form-submission:' . request()->ip();
+        $key = 'form-submission:' . client_ip();
         if (RateLimiter::tooManyAttempts($key, 5)) {
             $seconds = RateLimiter::availableIn($key);
             throw ValidationException::withMessages([
@@ -149,7 +149,7 @@ final class DynamicForm extends GeneralBlock
         try {
             $request = request();
             $request->merge([
-                'ip_address' => $request->ip(),
+                'ip_address' => client_ip($request),
                 'user_agent' => $request->userAgent(),
                 'referer'    => $request->header('referer'),
             ]);
@@ -170,7 +170,6 @@ final class DynamicForm extends GeneralBlock
             if (! empty($this->displayOptions['redirect_after_submit'])) {
                 $this->redirect($this->displayOptions['redirect_after_submit']);
             }
-
         } catch (ValidationException $e) {
             // Re-throw validation exception to show errors
             throw $e;

@@ -36,6 +36,46 @@ if (! function_exists('appsolutely')) {
     }
 }
 
+if (! function_exists('client_ip')) {
+    /**
+     * Get the client IP from the request, respecting proxy headers.
+     * When behind a proxy (e.g. Laradock nginx), X-Forwarded-For / X-Real-IP
+     * must be used; otherwise REMOTE_ADDR is the same for all requests.
+     * X-Forwarded-For can be "client, proxy1, proxy2" — leftmost is the original client.
+     *
+     * @return string|null Valid IP or null
+     */
+    function client_ip(?\Illuminate\Http\Request $request = null): ?string
+    {
+        $request = $request ?? request();
+        $ip      = null;
+
+        $forwarded = $request->header('X-Forwarded-For');
+        if ($forwarded !== null && $forwarded !== '') {
+            $parts = array_map('trim', explode(',', (string) $forwarded));
+            foreach ($parts as $part) {
+                if ($part !== '' && filter_var($part, FILTER_VALIDATE_IP)) {
+                    $ip = $part;
+                    break;
+                }
+            }
+        }
+
+        if ($ip === null) {
+            $realIp = $request->header('X-Real-IP');
+            if ($realIp !== null && $realIp !== '' && filter_var($realIp, FILTER_VALIDATE_IP)) {
+                $ip = $realIp;
+            }
+        }
+
+        if ($ip === null) {
+            $ip = $request->ip();
+        }
+
+        return ($ip !== null && filter_var($ip, FILTER_VALIDATE_IP) ? $ip : $request->ip()) ?? null;
+    }
+}
+
 if (! function_exists('themed_absolute_path')) {
     /**
      * Get the path to a theme's views directory.
@@ -423,8 +463,12 @@ if (! function_exists('app_theme')) {
 if (! function_exists('admin_button')) {
     function admin_button(?string $text = 'Create', ?string $icon = 'icon-plus', ?string $button = 'primary'): string
     {
-        return sprintf('<button class="btn btn-icon btn-%s"><i class="feather %s"></i> %s</button>',
-            $button, $icon, __t($text));
+        return sprintf(
+            '<button class="btn btn-icon btn-%s"><i class="feather %s"></i> %s</button>',
+            $button,
+            $icon,
+            __t($text)
+        );
     }
 }
 
@@ -447,8 +491,12 @@ if (! function_exists('admin_link_action')) {
 if (! function_exists('admin_row_action')) {
     function admin_row_action(?string $text = 'Create', ?string $icon = '', ?string $color = ''): string
     {
-        return sprintf('<i class="feather %s"></i><span class="%s"> %s</span>',
-            $icon . ' ' . $color, $color, __t($text));
+        return sprintf(
+            '<i class="feather %s"></i><span class="%s"> %s</span>',
+            $icon . ' ' . $color,
+            $color,
+            __t($text)
+        );
     }
 }
 

@@ -23,7 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
         }
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->append(\App\Http\Middleware\TrustProxies::class);
+        $middleware->prepend(\App\Http\Middleware\TrustProxies::class);
 
         // Add the SetThemeMiddleware to the web middleware group
         $middleware->web(append: [
