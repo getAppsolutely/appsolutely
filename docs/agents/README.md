@@ -4,7 +4,7 @@ Agents are split by role. Each agent has a dedicated doc in this directory with 
 
 ### Workflow
 
-1. **Architect** → produces `docs/feature/*.md` (feature design docs)
+1. **Architect** → produces `docs/feature/*.md` (feature design docs). Naming: `feature-name.extension.md` (extension), `feature-name.v2.md` (version), `feature-name.experiment.md` (experiment).
 2. **Human review** — approve or adjust the design
 3. **Implementer** → implements code from the approved feature doc
 4. **Reviewer** → reviews code against [Reviewer-checklist.md](Reviewer-checklist.md)

@@ -2,6 +2,12 @@
 
 **Short, explicit name:** [One-line description of what this feature does and who it’s for.]
 
+**Naming options** (use when creating the file):
+
+- **Extension** — `feature-name.extension.md` (add-on or variant of an existing feature)
+- **Version** — `feature-name.v2.md` (new version of an existing feature doc)
+- **Experiment** — `feature-name.experiment.md` (experimental or exploratory design)
+
 ## Table of Contents
 
 <!-- Optional: add/remove sections to match the feature -->
