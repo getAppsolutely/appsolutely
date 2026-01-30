@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enums\OrderStatus;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -32,7 +33,7 @@ class OrderFactory extends Factory
             'amount'            => fake()->numberBetween(10000, 100000),
             'discounted_amount' => 0,
             'total_amount'      => fake()->numberBetween(10000, 100000),
-            'status'            => 1,
+            'status'            => OrderStatus::Pending->value,
             'delivery_info'     => null,
             'note'              => fake()->paragraph(),
             'remark'            => null,
@@ -47,7 +48,7 @@ class OrderFactory extends Factory
     public function active(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 1,
+            'status' => OrderStatus::Pending->value,
         ]);
     }
 
@@ -57,7 +58,7 @@ class OrderFactory extends Factory
     public function completed(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 2,
+            'status' => OrderStatus::Completed->value,
         ]);
     }
 
@@ -67,7 +68,7 @@ class OrderFactory extends Factory
     public function cancelled(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 0,
+            'status' => OrderStatus::Cancelled->value,
         ]);
     }
 }

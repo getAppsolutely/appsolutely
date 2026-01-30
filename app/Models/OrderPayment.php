@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\OrderPaymentStatus;
 use App\Models\Traits\ScopeReference;
 use App\Models\Traits\ScopeStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -27,6 +28,7 @@ class OrderPayment extends Model
     ];
 
     protected $casts = [
+        'status'            => OrderPaymentStatus::class,
         'vendor_extra_info' => 'array',
     ];
 

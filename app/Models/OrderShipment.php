@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\OrderShipmentStatus;
 use App\Models\Traits\ScopeStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -30,6 +31,10 @@ class OrderShipment extends Model
         'delivery_reference',
         'remark',
         'status',
+    ];
+
+    protected $casts = [
+        'status' => OrderShipmentStatus::class,
     ];
 
     public function order(): BelongsTo

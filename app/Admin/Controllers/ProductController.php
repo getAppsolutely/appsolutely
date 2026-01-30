@@ -8,6 +8,7 @@ use App\Admin\Actions\Grid\DeleteAction;
 use App\Admin\Forms\Fields\Markdown;
 use App\Admin\Forms\ProductSkuForm;
 use App\Admin\Forms\ProductSkuGeneratorForm;
+use App\Enums\ProductType;
 use App\Models\Product;
 use App\Models\ProductSku;
 use App\Repositories\ProductCategoryRepository;
@@ -33,8 +34,9 @@ final class ProductController extends AdminBaseController
 
             $grid->column('type', __t('Type'))->display(function ($type) {
                 $productTypes = $this->productService->getProductTypes();
+                $key          = $type instanceof \BackedEnum ? $type->value : $type;
 
-                return $productTypes[$type] ?? $type;
+                return $productTypes[$key] ?? $key;
             })->label();
 
             $grid->column('published_at', __t('Published At'))->display(column_time_format())->sortable();
@@ -75,20 +77,20 @@ final class ProductController extends AdminBaseController
     {
         $form->display('id', __t('ID'));
         $form->radio('type', __t('Type'))->options($this->productService->getProductTypes())
-            ->default(Product::TYPE_PHYSICAL_PRODUCT)
-            ->when(Product::TYPE_PHYSICAL_PRODUCT, function (Form $form) {
+            ->default(ProductType::Physical->value)
+            ->when(ProductType::Physical->value, function (Form $form) {
                 $shipmentMethods = associative_array($this->productService->getShipmentMethodForPhysicalProduct());
                 $form->multipleSelect('shipment_methods', __t('Shipment Methods'))
                     ->options($shipmentMethods)
                     ->default(array_shift($shipmentMethods));
             })
-            ->when(Product::TYPE_AUTO_DELIVERABLE_VIRTUAL_PRODUCT, function (Form $form) {
+            ->when(ProductType::AutoVirtual->value, function (Form $form) {
                 $shipmentMethods = associative_array($this->productService->getShipmentMethodForAutoVirtualProduct());
                 $form->multipleSelect('shipment_methods', __t('Shipment Methods'))
                     ->options($shipmentMethods)
                     ->default(array_shift($shipmentMethods));
             })
-            ->when(Product::TYPE_MANUAL_DELIVERABLE_VIRTUAL_PRODUCT, function (Form $form) {
+            ->when(ProductType::ManualVirtual->value, function (Form $form) {
                 $shipmentMethods = associative_array($this->productService->getShipmentMethodForManualVirtualProduct());
                 $form->multipleSelect('shipment_methods', __t('Shipment Methods'))
                     ->options($shipmentMethods)

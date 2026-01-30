@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Admin\Forms\Models;
 
 use App\Enums\Architecture;
+use App\Enums\BuildStatus;
 use App\Enums\Platform;
 use App\Models\ReleaseBuild;
 use App\Repositories\ReleaseBuildRepository;
@@ -65,7 +66,7 @@ class ReleaseBuildForm extends ModelForm
         });
 
         $this->column(6, function (Form $form) {
-            $form->text('build_status', __t('Build Status'));
+            $form->select('build_status', __t('Build Status'))->options(BuildStatus::toArray())->nullable();
             $form->text('build_log', __t('Build Log'));
             $form->file('path', __t('Build File'))
                 ->autoUpload()

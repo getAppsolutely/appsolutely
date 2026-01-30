@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\OrderStatus;
 use App\Models\Traits\ScopeReference;
 use App\Models\Traits\ScopeStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -33,6 +34,7 @@ class OrderItem extends Model
     ];
 
     protected $casts = [
+        'status'           => OrderStatus::class,
         'product_snapshot' => 'array',
     ];
 

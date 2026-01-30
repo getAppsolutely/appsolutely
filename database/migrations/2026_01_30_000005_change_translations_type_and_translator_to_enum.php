@@ -1,0 +1,35 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Enums\TranslationType;
+use App\Enums\TranslatorType;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
+
+return new class() extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        $typeValues   = array_map(fn (\BackedEnum $case) => $case->value, TranslationType::cases());
+        $typeEnumList = "'" . implode("','", array_map('addslashes', $typeValues)) . "'";
+
+        $translatorValues   = array_map(fn (\BackedEnum $case) => $case->value, TranslatorType::cases());
+        $translatorEnumList = "'" . implode("','", array_map('addslashes', $translatorValues)) . "'";
+
+        DB::statement("ALTER TABLE translations MODIFY type ENUM({$typeEnumList}) NOT NULL");
+        DB::statement("ALTER TABLE translations MODIFY translator ENUM({$translatorEnumList}) NULL");
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        DB::statement('ALTER TABLE translations MODIFY type VARCHAR(255) NOT NULL');
+        DB::statement('ALTER TABLE translations MODIFY translator VARCHAR(255) NULL');
+    }
+};

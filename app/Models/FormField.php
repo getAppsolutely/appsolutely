@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\FormFieldType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -28,6 +29,7 @@ final class FormField extends Model
         'options'  => 'array',
         'setting'  => 'array',
         'sort'     => 'integer',
+        'type'     => FormFieldType::class,
     ];
 
     public function form(): BelongsTo
@@ -64,10 +66,10 @@ final class FormField extends Model
 
         // Add type-specific validation
         switch ($this->type) {
-            case 'email':
+            case FormFieldType::Email:
                 $rules[] = 'email';
                 break;
-            case 'number':
+            case FormFieldType::Number:
                 $rules[] = 'numeric';
                 if (isset($this->setting['min'])) {
                     $rules[] = 'min:' . $this->setting['min'];
@@ -76,8 +78,8 @@ final class FormField extends Model
                     $rules[] = 'max:' . $this->setting['max'];
                 }
                 break;
-            case 'text':
-            case 'textarea':
+            case FormFieldType::Text:
+            case FormFieldType::Textarea:
                 if (isset($this->setting['min'])) {
                     $rules[] = 'min:' . $this->setting['min'];
                 }
@@ -88,15 +90,15 @@ final class FormField extends Model
                     $rules[] = 'regex:' . $this->setting['pattern'];
                 }
                 break;
-            case 'select':
-            case 'radio':
+            case FormFieldType::Select:
+            case FormFieldType::Radio:
                 // Validate that the value is one of the available options
                 $options = $this->field_options;
                 if (! empty($options)) {
                     $rules[] = 'in:' . implode(',', $options);
                 }
                 break;
-            case 'checkbox':
+            case FormFieldType::Checkbox:
                 $options = $this->field_options;
                 if (empty($options) || count($options) === 1) {
                     // Single checkbox (e.g., "I agree", "I have a valid license")
@@ -112,7 +114,7 @@ final class FormField extends Model
                     $rules[] = 'in:' . implode(',', $options);
                 }
                 break;
-            case 'multiple_select':
+            case FormFieldType::MultipleSelect:
                 // For multiple select, validate that each value is in the options
                 $rules[] = 'array';
                 $options = $this->field_options;
@@ -120,7 +122,7 @@ final class FormField extends Model
                     $rules[] = 'in:' . implode(',', $options);
                 }
                 break;
-            case 'file':
+            case FormFieldType::File:
                 $rules[] = 'file';
                 if (isset($this->setting['mimes'])) {
                     $rules[] = 'mimes:' . implode(',', $this->setting['mimes']);
@@ -129,7 +131,7 @@ final class FormField extends Model
                     $rules[] = 'max:' . $this->setting['max_size'];
                 }
                 break;
-            case 'date':
+            case FormFieldType::Date:
                 $rules[] = 'date';
                 if (isset($this->setting['after'])) {
                     $rules[] = 'after:' . $this->setting['after'];
@@ -138,8 +140,7 @@ final class FormField extends Model
                     $rules[] = 'before:' . $this->setting['before'];
                 }
                 break;
-            case 'boolean':
-                $rules[] = 'boolean';
+            default:
                 break;
         }
 
@@ -151,7 +152,7 @@ final class FormField extends Model
      */
     public function getSupportsMultipleValuesAttribute(): bool
     {
-        return in_array($this->type, ['checkbox', 'multiple_select']);
+        return $this->type->supportsMultipleValues();
     }
 
     /**
@@ -159,7 +160,7 @@ final class FormField extends Model
      */
     public function getFieldOptionsAttribute(): array
     {
-        if (! in_array($this->type, ['select', 'radio', 'checkbox', 'multiple_select'])) {
+        if (! $this->type->supportsOptions()) {
             return [];
         }
 

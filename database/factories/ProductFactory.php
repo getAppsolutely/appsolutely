@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enums\ProductType;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -25,7 +26,7 @@ class ProductFactory extends Factory
         $title = fake()->words(3, true);
 
         return [
-            'type'               => Product::TYPE_PHYSICAL_PRODUCT,
+            'type'               => ProductType::Physical->value,
             'shipment_methods'   => null,
             'slug'               => Str::slug($title) . '-' . fake()->unique()->numberBetween(1000, 9999),
             'title'              => $title,
@@ -74,7 +75,7 @@ class ProductFactory extends Factory
     public function virtual(): static
     {
         return $this->state(fn (array $attributes) => [
-            'type'             => Product::TYPE_AUTO_DELIVERABLE_VIRTUAL_PRODUCT,
+            'type'             => ProductType::AutoVirtual->value,
             'shipment_methods' => Product::SHIPMENT_METHOD_AUTO_DELIVERABLE_VIRTUAL_PRODUCT,
         ]);
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\ReleaseChannel;
 use App\Models\Traits\ScopePublished;
 use App\Models\Traits\ScopeStatus;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -24,8 +25,9 @@ final class ReleaseVersion extends Model
     ];
 
     protected $casts = [
-        'status'       => 'integer',
-        'published_at' => 'datetime',
+        'release_channel' => ReleaseChannel::class,
+        'status'          => 'integer',
+        'published_at'    => 'datetime',
     ];
 
     public function builds(): HasMany

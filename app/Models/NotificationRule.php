@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\NotificationTriggerType;
 use App\Models\Traits\ScopeStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -28,6 +29,7 @@ final class NotificationRule extends Model
     ];
 
     protected $casts = [
+        'trigger_type'     => NotificationTriggerType::class,
         'recipient_emails' => 'array',
         'conditions'       => 'array',
         'delay_minutes'    => 'integer',

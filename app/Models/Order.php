@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\OrderStatus;
 use App\Models\Traits\HasMonetaryFields;
 use App\Models\Traits\ScopeReference;
 use App\Models\Traits\ScopeStatus;
@@ -36,6 +37,7 @@ class Order extends Model
     ];
 
     protected $casts = [
+        'status'        => OrderStatus::class,
         'delivery_info' => 'array',
         'request'       => 'array',
     ];

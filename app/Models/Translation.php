@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\TranslationType;
+use App\Enums\TranslatorType;
+
 class Translation extends Model
 {
     /**
@@ -28,6 +31,8 @@ class Translation extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'type'       => TranslationType::class,
+        'translator' => TranslatorType::class,
         'last_used'  => 'datetime',
         'used_count' => 'integer',
     ];

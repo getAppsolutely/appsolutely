@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\FormEntrySpamStatus;
+use App\Enums\FormFieldType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -139,14 +140,14 @@ final class FormEntry extends Model
     private function formatFieldValue(FormField $field, mixed $value): string
     {
         switch ($field->type) {
-            case 'checkbox':
-            case 'multiple_select':
+            case FormFieldType::Checkbox:
+            case FormFieldType::MultipleSelect:
                 if (is_array($value)) {
                     return implode(', ', $value);
                 }
 
                 return (string) $value;
-            case 'file':
+            case FormFieldType::File:
                 if (is_array($value)) {
                     return implode(', ', array_map(fn ($file) => $file['name'] ?? $file, $value));
                 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\ProductType;
 use App\Models\Traits\HasFilesOfType;
 use App\Models\Traits\HasMarkdownContent;
 use App\Models\Traits\HasMonetaryFields;
@@ -26,17 +27,11 @@ class Product extends Model
     use Sluggable;
     use SoftDeletes;
 
-    const TYPE_PHYSICAL_PRODUCT = 'PHYSICAL';
+    const array SHIPMENT_METHOD_PHYSICAL_PRODUCT = ['App\Models\UserAddress'];
 
-    const TYPE_AUTO_DELIVERABLE_VIRTUAL_PRODUCT = 'AUTO_VIRTUAL';
+    const array SHIPMENT_METHOD_AUTO_DELIVERABLE_VIRTUAL_PRODUCT = ['App\Models\User'];
 
-    const TYPE_MANUAL_DELIVERABLE_VIRTUAL_PRODUCT = 'MANUAL_VIRTUAL';
-
-    const SHIPMENT_METHOD_PHYSICAL_PRODUCT = ['App\Models\UserAddress'];
-
-    const SHIPMENT_METHOD_AUTO_DELIVERABLE_VIRTUAL_PRODUCT = ['App\Models\User'];
-
-    const SHIPMENT_METHOD_MANUAL_DELIVERABLE_VIRTUAL_PRODUCT = [
+    const array SHIPMENT_METHOD_MANUAL_DELIVERABLE_VIRTUAL_PRODUCT = [
         'Email',
         'Mobile',
         'Whatsapp',
@@ -67,6 +62,7 @@ class Product extends Model
     ];
 
     protected $casts = [
+        'type'               => ProductType::class,
         'shipment_methods'   => 'array',
         'setting'            => 'array',
         'payment_methods'    => 'array',
