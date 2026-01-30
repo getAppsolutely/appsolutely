@@ -7,24 +7,22 @@ namespace App\Helpers;
 final class AdminButtonHelper
 {
     /**
-     * Generate a button with JavaScript API call
+     * Generate the HTML for a button that calls a JS function (e.g. onclick="markEntrySpam(id)").
+     * Returns only the <a> tag; the script must be added via scriptForApiButton() + admin_script().
+     *
+     * Options used for the link: text, size, style, icon, class, attributes, use_btn_classes.
+     * Required: function_name, api_url. Optional for onclick: payload.
      */
     public static function apiButton(array $options): string
     {
-        $defaults = [
+        $defaults = [  // only options that affect the HTML link
             'text'            => 'Action',
             'size'            => 'xs',
             'style'           => 'outline-primary',
             'icon'            => null,
-            'confirm'         => null,
-            'method'          => 'POST',
-            'success_message' => null,
-            'error_message'   => null,
-            'refresh'         => true,
-            'redirect'        => null,
             'class'           => '',
             'attributes'      => [],
-            'use_btn_classes' => true,
+            'use_btn_classes' => false,
         ];
 
         $config = array_merge($defaults, $options);
@@ -76,10 +74,38 @@ final class AdminButtonHelper
         }
         $content .= $config['text'];
 
-        // Generate JavaScript function
-        $jsFunction = self::generateJavaScriptFunction($functionName, $config);
+        return "\n<a{$attrString}>{$content}</a>";
+    }
 
-        return $jsFunction . "\n<a{$attrString}>{$content}</a>";
+    /**
+     * Generate the script for an API button. Call once per page/grid and pass the result to admin_script().
+     * Use the same function_name and api_url as apiButton() (use __ID__ in api_url for row-specific URLs).
+     *
+     * Options used for the script: confirm, method, success_message, error_message, refresh, redirect.
+     * Required: function_name, api_url. Optional: payload, additional_payload.
+     */
+    public static function scriptForApiButton(array $options): string
+    {
+        $defaults = [  // only options that affect the generated JS
+            'confirm'         => null,
+            'method'          => 'POST',
+            'success_message' => null,
+            'error_message'   => null,
+            'refresh'         => true,
+            'redirect'        => null,
+        ];
+
+        $config = array_merge($defaults, $options);
+
+        if (empty($config['api_url'])) {
+            throw new \InvalidArgumentException('api_url is required');
+        }
+
+        if (empty($config['function_name'])) {
+            throw new \InvalidArgumentException('function_name is required');
+        }
+
+        return self::generateJavaScriptFunction($config['function_name'], $config);
     }
 
     /**
@@ -88,16 +114,12 @@ final class AdminButtonHelper
     public static function deleteButton(int $id, string $apiUrl): string
     {
         return self::apiButton([
-            'text'            => __t('Delete'),
-            'icon'            => 'fa fa-trash',
-            'style'           => 'outline-danger',
-            'function_name'   => 'deleteItem',
-            'api_url'         => $apiUrl,
-            'payload'         => $id,
-            'method'          => 'DELETE',
-            'confirm'         => __t('Are you sure you want to delete this item? This action cannot be undone.'),
-            'success_message' => __t('Item deleted successfully'),
-            'error_message'   => __t('Failed to delete item'),
+            'text'          => __t('Delete'),
+            'icon'          => 'fa fa-trash',
+            'style'         => 'outline-danger',
+            'function_name' => 'deleteItem',
+            'api_url'       => $apiUrl,
+            'payload'       => $id,
         ]);
     }
 
@@ -111,15 +133,12 @@ final class AdminButtonHelper
         $icon   = $currentStatus ? 'fa fa-pause' : 'fa fa-play';
 
         return self::apiButton([
-            'text'            => $currentStatus ? __t('Disable') : __t('Enable'),
-            'icon'            => $icon,
-            'style'           => $style,
-            'function_name'   => 'toggleStatus',
-            'api_url'         => $apiUrl,
-            'payload'         => $id,
-            'method'          => 'PATCH',
-            'success_message' => $currentStatus ? __t('Item disabled') : __t('Item enabled'),
-            'error_message'   => __t('Failed to update status'),
+            'text'          => $currentStatus ? __t('Disable') : __t('Enable'),
+            'icon'          => $icon,
+            'style'         => $style,
+            'function_name' => 'toggleStatus',
+            'api_url'       => $apiUrl,
+            'payload'       => $id,
         ]);
     }
 
@@ -135,9 +154,6 @@ final class AdminButtonHelper
             'function_name'   => 'duplicateItem',
             'api_url'         => $apiUrl,
             'payload'         => $id,
-            'method'          => 'POST',
-            'success_message' => __t('Item duplicated successfully'),
-            'error_message'   => __t('Failed to duplicate item'),
             'use_btn_classes' => false,
         ]);
     }
@@ -148,35 +164,39 @@ final class AdminButtonHelper
     public static function previewButton(int $id, string $modalUrl): string
     {
         return self::apiButton([
-            'text'            => __t('Preview'),
-            'icon'            => 'fa fa-eye',
-            'style'           => 'outline-primary',
-            'function_name'   => 'previewItem',
-            'api_url'         => $modalUrl,
-            'payload'         => $id,
-            'method'          => 'GET',
-            'refresh'         => false,
-            'success_message' => null,
-            'error_message'   => __t('Failed to load preview'),
+            'text'          => __t('Preview'),
+            'icon'          => 'fa fa-eye',
+            'style'         => 'outline-primary',
+            'function_name' => 'previewItem',
+            'api_url'       => $modalUrl,
+            'payload'       => $id,
         ]);
     }
 
     /**
-     * Generate JavaScript function for API calls
+     * Generate JavaScript function for API calls.
+     * When api_url contains __ID__, the URL is built at runtime (one script serves all rows).
      */
     protected static function generateJavaScriptFunction(string $functionName, array $config): string
     {
-        $hasPayload = isset($config['payload']);
-        $paramList  = $hasPayload ? 'id' : '';
+        $hasPayload    = isset($config['payload']) || str_contains($config['api_url'], '__ID__');
+        $paramList     = $hasPayload ? 'id' : '';
+        $urlIsTemplate = str_contains($config['api_url'], '__ID__');
 
-        $js = "<script>\n";
-        $js .= "function {$functionName}({$paramList}) {\n";
+        // Assign to window so onclick="markEntryValid(id)" works (admin_script() runs code inside Dcat.ready())
+        $js = "window.{$functionName} = function({$paramList}) {\n";
 
         // Add confirmation if specified
         if ($config['confirm']) {
             $js .= "    if (!confirm('" . addslashes($config['confirm']) . "')) {\n";
             $js .= "        return false;\n";
             $js .= "    }\n\n";
+        }
+
+        // Build URL when using __ID__ template
+        if ($urlIsTemplate) {
+            $escapedUrl = addslashes($config['api_url']);
+            $js .= "    var url = '" . $escapedUrl . "'.replace('__ID__', id);\n\n";
         }
 
         // Build payload
@@ -194,7 +214,7 @@ final class AdminButtonHelper
 
         // AJAX call
         $js .= "\n    $.ajax({\n";
-        $js .= "        url: '" . $config['api_url'] . "',\n";
+        $js .= '        url: ' . ($urlIsTemplate ? 'url' : "'" . addslashes($config['api_url']) . "'") . ",\n";
         $js .= "        type: '" . $config['method'] . "',\n";
         $js .= "        data: payload,\n";
         $js .= "        headers: {\n";
@@ -241,8 +261,7 @@ final class AdminButtonHelper
 
         $js .= "        }\n";
         $js .= "    });\n";
-        $js .= "}\n";
-        $js .= '</script>';
+        $js .= "};\n";
 
         return $js;
     }

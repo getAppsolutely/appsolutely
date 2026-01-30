@@ -169,6 +169,20 @@ final class DynamicFormController extends AdminBaseController
     protected function formEntriesGrid(): Grid
     {
         return Grid::make(FormEntry::query()->with(['form', 'user']), function (Grid $grid) {
+            // One script per button type (rows only output HTML)
+            admin_script(AdminButtonHelper::scriptForApiButton([
+                'function_name'   => 'markEntryValid',
+                'api_url'         => admin_route('api.forms.entries.mark-not-spam', ['id' => '__ID__']),
+                'success_message' => __t('Entry marked as valid'),
+                'error_message'   => __t('Failed to update entry status'),
+            ]));
+            admin_script(AdminButtonHelper::scriptForApiButton([
+                'function_name'   => 'markEntrySpam',
+                'api_url'         => admin_route('api.forms.entries.mark-spam', ['id' => '__ID__']),
+                'success_message' => __t('Entry marked as spam'),
+                'error_message'   => __t('Failed to update entry status'),
+            ]));
+
             $grid->column('id', __t('ID'))->sortable();
             $grid->column('form.name', __t('Form'));
             $grid->column('full_name', __t('Name'))->display(function () {
@@ -213,7 +227,7 @@ final class DynamicFormController extends AdminBaseController
                     ]))
                     ->button('<i class="feather icon-eye"></i> ' . __t('View')));
 
-                // Add spam toggle action via AdminButtonHelper (one button per row based on is_spam)
+                // Add spam toggle action via AdminButtonHelper (HTML only; script injected once above)
                 $row     = $actions->row;
                 $entryId = (int) $actions->getKey();
                 if ($row && $entryId > 0) {
@@ -223,13 +237,9 @@ final class DynamicFormController extends AdminBaseController
                             'text'            => __t('Mark Valid'),
                             'icon'            => 'fa fa-check',
                             'style'           => 'outline-success',
-                            'function_name'   => 'markEntryValid_' . $entryId,
-                            'api_url'         => admin_route('api.forms.entries.mark-not-spam', ['id' => $entryId]),
-                            'method'          => 'POST',
+                            'function_name'   => 'markEntryValid',
+                            'api_url'         => admin_route('api.forms.entries.mark-not-spam', ['id' => '__ID__']),
                             'payload'         => $entryId,
-                            'success_message' => __t('Entry marked as valid'),
-                            'error_message'   => __t('Failed to update entry status'),
-                            'refresh'         => true,
                             'use_btn_classes' => false,
                         ]));
                     } else {
@@ -237,13 +247,9 @@ final class DynamicFormController extends AdminBaseController
                             'text'            => __t('Mark Spam'),
                             'icon'            => 'fa fa-ban',
                             'style'           => 'outline-danger',
-                            'function_name'   => 'markEntrySpam_' . $entryId,
-                            'api_url'         => admin_route('api.forms.entries.mark-spam', ['id' => $entryId]),
-                            'method'          => 'POST',
+                            'function_name'   => 'markEntrySpam',
+                            'api_url'         => admin_route('api.forms.entries.mark-spam', ['id' => '__ID__']),
                             'payload'         => $entryId,
-                            'success_message' => __t('Entry marked as spam'),
-                            'error_message'   => __t('Failed to update entry status'),
-                            'refresh'         => true,
                             'use_btn_classes' => false,
                         ]));
                     }

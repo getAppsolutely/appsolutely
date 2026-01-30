@@ -63,6 +63,13 @@ final class NotificationController extends AdminBaseController
     protected function templatesGrid(): Grid
     {
         return Grid::make(new NotificationTemplate(), function (Grid $grid) {
+            admin_script(AdminButtonHelper::scriptForApiButton([
+                'function_name'   => 'duplicateItem',
+                'api_url'         => admin_route('api.notifications.duplicate-template', ['id' => '__ID__']),
+                'success_message' => __t('Item duplicated successfully'),
+                'error_message'   => __t('Failed to duplicate item'),
+            ]));
+
             $grid->model()->orderBy('created_at', 'desc');
 
             $grid->column('id', __t('ID'))->sortable();
@@ -99,10 +106,15 @@ final class NotificationController extends AdminBaseController
 
                 if (! $actions->row->is_system) {
                     $id = $actions->getKey();
-                    $actions->append(AdminButtonHelper::duplicateButton(
-                        $id,
-                        admin_route('api.notifications.duplicate-template', ['id' => $id])
-                    ));
+                    $actions->append(AdminButtonHelper::apiButton([
+                        'text'            => __t('Duplicate'),
+                        'icon'            => 'fa fa-copy',
+                        'style'           => 'outline-info',
+                        'function_name'   => 'duplicateItem',
+                        'api_url'         => admin_route('api.notifications.duplicate-template', ['id' => '__ID__']),
+                        'payload'         => $id,
+                        'use_btn_classes' => false,
+                    ]));
                 }
 
                 $actions->append(new DeleteAction());
@@ -122,6 +134,13 @@ final class NotificationController extends AdminBaseController
     protected function rulesGrid(): Grid
     {
         return Grid::make(NotificationRule::with('template'), function (Grid $grid) {
+            admin_script(AdminButtonHelper::scriptForApiButton([
+                'function_name' => 'testNotificationRule',
+                'api_url'       => admin_route('api.notifications.test-rule', ['id' => '__ID__']),
+                'refresh'       => false,
+                'error_message' => __t('Failed to test rule'),
+            ]));
+
             $grid->model()->orderBy('created_at', 'desc');
 
             $grid->column('id', __t('ID'))->sortable();
@@ -168,7 +187,15 @@ final class NotificationController extends AdminBaseController
                     ->button(admin_edit_action()));
 
                 $id = $actions->getKey();
-                $actions->append(NotificationController::testRuleButton($id));
+                $actions->append(AdminButtonHelper::apiButton([
+                    'text'            => __t('Test'),
+                    'icon'            => 'fa fa-flask',
+                    'style'           => '',
+                    'function_name'   => 'testNotificationRule',
+                    'api_url'         => admin_route('api.notifications.test-rule', ['id' => '__ID__']),
+                    'payload'         => $id,
+                    'use_btn_classes' => false,
+                ]));
                 $actions->append(new DeleteAction());
             });
 
@@ -273,6 +300,21 @@ final class NotificationController extends AdminBaseController
     protected function queueGrid(): Grid
     {
         return Grid::make(NotificationQueue::with(['template', 'rule']), function (Grid $grid) {
+            admin_script(AdminButtonHelper::scriptForApiButton([
+                'function_name'   => 'retryNotification',
+                'api_url'         => admin_route('api.notifications.retry', ['id' => '__ID__']),
+                'confirm'         => __t('Are you sure you want to retry this notification?'),
+                'success_message' => __t('Notification queued for retry'),
+                'error_message'   => __t('Failed to retry notification'),
+            ]));
+            admin_script(AdminButtonHelper::scriptForApiButton([
+                'function_name'   => 'cancelNotification',
+                'api_url'         => admin_route('api.notifications.cancel', ['id' => '__ID__']),
+                'confirm'         => __t('Are you sure you want to cancel this notification?'),
+                'success_message' => __t('Notification cancelled'),
+                'error_message'   => __t('Failed to cancel notification'),
+            ]));
+
             $grid->model()->orderBy('created_at', 'desc');
 
             $grid->column('id', __t('ID'))->sortable();
@@ -317,28 +359,22 @@ final class NotificationController extends AdminBaseController
 
                 if ($actions->row->status === 'failed') {
                     $buttons[] = AdminButtonHelper::apiButton([
-                        'text'            => __t('Retry'),
-                        'icon'            => 'fa fa-refresh',
-                        'style'           => 'outline-warning',
-                        'function_name'   => 'retryNotification',
-                        'api_url'         => admin_route('api.notifications.retry', ['id' => $id]),
-                        'method'          => 'POST',
-                        'confirm'         => __t('Are you sure you want to retry this notification?'),
-                        'success_message' => __t('Notification queued for retry'),
-                        'error_message'   => __t('Failed to retry notification'),
+                        'text'          => __t('Retry'),
+                        'icon'          => 'fa fa-refresh',
+                        'style'         => 'outline-warning',
+                        'function_name' => 'retryNotification',
+                        'api_url'       => admin_route('api.notifications.retry', ['id' => '__ID__']),
+                        'payload'       => $id,
                     ]);
                 }
                 if ($actions->row->status === 'pending') {
                     $buttons[] = AdminButtonHelper::apiButton([
-                        'text'            => __t('Cancel'),
-                        'icon'            => 'fa fa-times',
-                        'style'           => 'outline-danger',
-                        'function_name'   => 'cancelNotification',
-                        'api_url'         => admin_route('api.notifications.cancel', ['id' => $id]),
-                        'method'          => 'POST',
-                        'confirm'         => __t('Are you sure you want to cancel this notification?'),
-                        'success_message' => __t('Notification cancelled'),
-                        'error_message'   => __t('Failed to cancel notification'),
+                        'text'          => __t('Cancel'),
+                        'icon'          => 'fa fa-times',
+                        'style'         => 'outline-danger',
+                        'function_name' => 'cancelNotification',
+                        'api_url'       => admin_route('api.notifications.cancel', ['id' => '__ID__']),
+                        'payload'       => $id,
                     ]);
                 }
 
@@ -355,6 +391,25 @@ final class NotificationController extends AdminBaseController
 
     protected function statisticsGrid(): string
     {
+        admin_script(AdminButtonHelper::scriptForApiButton([
+            'function_name'   => 'processQueue',
+            'api_url'         => admin_route('api.notifications.process-queue'),
+            'success_message' => __t('Queue processing started'),
+        ]));
+        admin_script(AdminButtonHelper::scriptForApiButton([
+            'function_name'   => 'retryFailed',
+            'api_url'         => admin_route('api.notifications.retry-failed'),
+            'confirm'         => __t('Are you sure you want to retry all failed notifications?'),
+            'success_message' => __t('Failed notifications queued for retry'),
+        ]));
+        admin_script(AdminButtonHelper::scriptForApiButton([
+            'function_name'   => 'cleanOldSent',
+            'api_url'         => admin_route('api.notifications.clean-old'),
+            'method'          => 'DELETE',
+            'confirm'         => __t('Are you sure you want to delete old sent notifications?'),
+            'success_message' => __t('Old sent notifications cleaned'),
+        ]));
+
         $stats      = $this->notificationService->getStatistics();
         $queueStats = $this->queueRepository->getStatistics();
 
@@ -422,11 +477,9 @@ final class NotificationController extends AdminBaseController
             'processQueue',
             admin_route('api.notifications.process-queue'),
             [
-                'icon'            => 'fa fa-cog',
-                'style'           => 'primary',
-                'class'           => 'btn-block mb-2',
-                'method'          => 'POST',
-                'success_message' => __t('Queue processing started'),
+                'icon'  => 'fa fa-cog',
+                'style' => 'primary',
+                'class' => 'btn-block mb-2',
             ]
         );
         $html .= $this->retryFailedButton();
@@ -446,15 +499,12 @@ final class NotificationController extends AdminBaseController
     protected function retryButton(int $id): string
     {
         return AdminButtonHelper::apiButton([
-            'text'            => __t('Retry'),
-            'icon'            => 'fa fa-refresh',
-            'style'           => 'outline-warning',
-            'function_name'   => 'retryNotification',
-            'api_url'         => admin_route('api.notifications.retry', ['id' => $id]),
-            'method'          => 'POST',
-            'confirm'         => __t('Are you sure you want to retry this notification?'),
-            'success_message' => __t('Notification queued for retry'),
-            'error_message'   => __t('Failed to retry notification'),
+            'text'          => __t('Retry'),
+            'icon'          => 'fa fa-refresh',
+            'style'         => 'outline-warning',
+            'function_name' => 'retryNotification',
+            'api_url'       => admin_route('api.notifications.retry', ['id' => $id]),
+            'payload'       => $id,
         ]);
     }
 
@@ -464,15 +514,12 @@ final class NotificationController extends AdminBaseController
     protected function cancelButton(int $id): string
     {
         return AdminButtonHelper::apiButton([
-            'text'            => __t('Cancel'),
-            'icon'            => 'fa fa-times',
-            'style'           => 'outline-danger',
-            'function_name'   => 'cancelNotification',
-            'api_url'         => admin_route('api.notifications.cancel', ['id' => $id]),
-            'method'          => 'POST',
-            'confirm'         => __t('Are you sure you want to cancel this notification?'),
-            'success_message' => __t('Notification cancelled'),
-            'error_message'   => __t('Failed to cancel notification'),
+            'text'          => __t('Cancel'),
+            'icon'          => 'fa fa-times',
+            'style'         => 'outline-danger',
+            'function_name' => 'cancelNotification',
+            'api_url'       => admin_route('api.notifications.cancel', ['id' => $id]),
+            'payload'       => $id,
         ]);
     }
 
@@ -487,10 +534,7 @@ final class NotificationController extends AdminBaseController
             'style'           => '',
             'function_name'   => 'testNotificationRule',
             'api_url'         => admin_route('api.notifications.test-rule', ['id' => $id]),
-            'method'          => 'POST',
-            'refresh'         => false,
-            'success_message' => null,
-            'error_message'   => __t('Failed to test rule'),
+            'payload'         => $id,
             'use_btn_classes' => false,
         ]);
     }
@@ -513,12 +557,9 @@ final class NotificationController extends AdminBaseController
             'processQueue',
             admin_route('api.notifications.process-queue'),
             [
-                'icon'            => 'fa fa-cog',
-                'style'           => 'success',
-                'size'            => 'sm',
-                'method'          => 'POST',
-                'success_message' => __t('Queue processing started'),
-                'error_message'   => __t('Failed to process queue'),
+                'icon'  => 'fa fa-cog',
+                'style' => 'success',
+                'size'  => 'sm',
             ]
         );
     }
@@ -533,12 +574,9 @@ final class NotificationController extends AdminBaseController
             'retryFailed',
             admin_route('api.notifications.retry-failed'),
             [
-                'icon'            => 'fa fa-refresh',
-                'style'           => 'warning',
-                'class'           => 'btn-block mb-2',
-                'method'          => 'POST',
-                'confirm'         => __t('Are you sure you want to retry all failed notifications?'),
-                'success_message' => __t('Failed notifications queued for retry'),
+                'icon'  => 'fa fa-refresh',
+                'style' => 'warning',
+                'class' => 'btn-block mb-2',
             ]
         );
     }
@@ -553,12 +591,9 @@ final class NotificationController extends AdminBaseController
             'cleanOldSent',
             admin_route('api.notifications.clean-old'),
             [
-                'icon'            => 'fa fa-trash-o',
-                'style'           => 'info',
-                'class'           => 'btn-block mb-2',
-                'method'          => 'DELETE',
-                'confirm'         => __t('Are you sure you want to clean old sent notifications? This action cannot be undone.'),
-                'success_message' => __t('Old notifications cleaned'),
+                'icon'  => 'fa fa-trash-o',
+                'style' => 'info',
+                'class' => 'btn-block mb-2',
             ]
         );
     }
