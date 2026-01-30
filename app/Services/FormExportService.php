@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Enums\FormEntrySpamStatus;
 use App\Models\Form;
 use App\Repositories\FormEntryRepository;
 use App\Repositories\FormRepository;
@@ -117,7 +118,7 @@ final readonly class FormExportService implements FormExportServiceInterface
             }
 
             // Add spam status
-            $row[] = $entry->is_spam->isSpam() ? 'Yes' : 'No';
+            $row[] = FormEntrySpamStatus::toYesNoFrom($entry->is_spam);
 
             // Add dynamic field values
             foreach ($dynamicFields as $field) {
