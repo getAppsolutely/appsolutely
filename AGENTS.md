@@ -70,6 +70,15 @@ This file is the **entry point for AI agents** (Cursor, Copilot, CLI tools, etc.
 - **Keep docs up-to-date when work is finished**  
   When implementation, build, or fixes are **really complete**, update any related docs under `docs/` (e.g. `README.architecture.md`, ADRs in `docs/adr/`, feature guides like `block-system.md`, `theme-development-guide.md`, `typescript-conventions.md`, `development-workflow.md`) so that documentation stays accurate and in sync with the codebase.
 
+- **Never modify an implemented feature doc unless behavior is unchanged**  
+  Do not edit an existing feature document when you are changing how the feature works; only update it for typos, clarity, or corrections that leave behavior the same.
+
+- **New behavior requires a new feature document**  
+  When adding or changing behavior, create a new feature document (or a new section/version) instead of rewriting the existing one.
+
+- **Use the feature template for new feature docs**  
+  When creating a new feature document, copy `docs/feature-template.md` and fill in the sections; remove or add sections as needed for the feature.
+
 ---
 
 ## Non-Negotiables
