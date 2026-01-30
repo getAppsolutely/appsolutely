@@ -16,6 +16,15 @@ cmd = '/assets/start.sh'
 [staticAssets]
 "start.sh" = '''
 #!/bin/bash
+set -e
+
+# Ensure storage and bootstrap/cache exist and are writable by PHP (www-data) and queue workers (may run as root).
+mkdir -p /app/storage/logs /app/storage/framework/{sessions,views,cache/data} /app/storage/app/public /app/bootstrap/cache
+chmod -R 775 /app/storage /app/bootstrap/cache
+# laravel.log is often created by queue workers (root); make it writable by www-data so web requests can append.
+touch /app/storage/logs/laravel.log
+chown www-data:www-data /app/storage/logs/laravel.log
+chmod 666 /app/storage/logs/laravel.log
 
 # Transform the nginx configuration
 node /assets/scripts/prestart.mjs /assets/nginx.template.conf /etc/nginx.conf
