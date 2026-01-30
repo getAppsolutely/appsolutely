@@ -74,20 +74,32 @@ This file is the **entry point for AI agents** (Cursor, Copilot, CLI tools, etc.
 
 ## Non-Negotiables
 
+- **Controllers MUST be thin** — Business logic lives in Services or Actions (`app/Actions/`); controllers only orchestrate and return responses.
+
 - **Do not use `php artisan make:model`, `make:controller`, `make:migration`,` etc.**  
   Generated code does not match our architecture. Copy and adapt from existing Migrations, Models, Repositories, Services, Controllers.
 
 - **Repository pattern for DB** — use Repositories, not Models, in controllers/services.
 
-- **Service classes for business logic** — keep controllers thin.
+- **Blade / views** — Blade components and views contain **no PHP business logic**; only presentation (loops, conditionals for display, existing helpers). Logic stays in Services, Livewire, or View Components.
+
+- **No new packages without explicit justification** — Do not add Composer/npm dependencies unless necessary; document why in the change or PR.
+
+- **Prefer boring, explicit code over clever abstractions** — Readable and obvious beats DRY when they conflict; favor clarity.
 
 - **Do not guess.** If something is unclear, ask the user before implementing.
 
 - **Follow existing patterns** — same naming, structure, and style as the rest of the codebase.
 
-- **DRY (Don't Repeat Yourself)** — If similar code blocks appear, extract a function/method/helper and reuse it. Search the codebase before adding new logic.
+- **DRY with care** — Reuse when it clearly helps; **favor clarity over DRY** when in tension. Search the codebase before adding new logic.
 
 - **Enums for fixed-value columns** — When adding or changing table columns that represent a fixed set of values (e.g. status, type), consider using a PHP enum so schema and code stay in sync.
+
+- **Data & models** — Eloquent models are **not** service containers; avoid fat models. No cross-module/model access without going through a Service or Repository.
+
+- **Forbidden** — Do **not** refactor unrelated code; do **not** rename public APIs silently; do **not** introduce new global helpers (use existing `app/Helpers/` or scoped helpers only).
+
+- **Quality bar** — Code must be readable 6 months later; if unsure, ask before implementing.
 
 ---
 
@@ -139,7 +151,13 @@ This file is the **entry point for AI agents** (Cursor, Copilot, CLI tools, etc.
 
 ## Additional Patterns
 
+- **Request flow** — HTTP → Controller → Service → Repository/Domain. Controllers do not call other controllers or access models directly.
+
 - **Controller dependency injection** — Prefer **constructor injection** with **readonly** dependencies (e.g. `PageController` and `GeneralPageServiceInterface`). Controllers are final; use method or constructor injection for services.
+
+- **Events & jobs** — Events are async by default (listeners implement `ShouldQueue` where appropriate). Jobs must be **idempotent** (safe to run more than once).
+
+- **DTOs at boundaries** — Use DTOs (Spatie Data) for request/response and API boundaries; no `JsonResource`/`ApiResource`.
 - **Response cache** — Custom **CacheProfile** (`app/Http/Middleware/CacheProfile.php`) extends Spatie’s; excludes Livewire (`X-Livewire`), admin domain/prefix, authenticated users. Use **`doNotCacheResponse`** middleware on routes that must never be cached. Models use **ClearsResponseCache** to clear on change.
 - **Route restriction (feature toggles)** — **RestrictRoutePrefixes** middleware + **RouteRestrictionService**; `config('appsolutely.features.disabled')` (comma-separated) lists URL prefixes that return 404.
 - **404 handling** — In `bootstrap/app.php`: JSON requests get JSON 404; web requests use theme resolution and themed `errors.404` when available.
