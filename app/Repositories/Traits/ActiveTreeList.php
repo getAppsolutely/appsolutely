@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repositories\Traits;
 
-use APp\Models\NestedSetModel;
+use App\Models\NestedSetModel;
 
 trait ActiveTreeList
 {

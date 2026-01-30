@@ -2,6 +2,8 @@
 
 A Laravel 12 application with TypeScript-based frontend, featuring a modular theme system and page builder.
 
+> **For AI agents and automation:** see [AGENTS.md](AGENTS.md) for entry-point instructions and conventions.
+
 ## Features
 
 ### CMS management

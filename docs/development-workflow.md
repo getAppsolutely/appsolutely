@@ -373,30 +373,36 @@ graph TD
 
 ## 🎯 Best Practices
 
-1. **Run validation before committing:**
+1. **Follow TDD and run tests when done**  
+   Write tests first (strict TDD); once implementation is complete, run the test suite. See **AGENTS.md → Development discipline** for the full workflow (think three times: architecture → codebase → solution; keep code simple, maintainable, and elegant).
+
+2. **Run validation before committing:**
 
     ```bash
     npm run validate
     ```
 
-2. **Write meaningful commit messages:**
+3. **Write meaningful commit messages:**
     - Be specific about what changed
     - Use the appropriate type
     - Include scope when relevant
 
-3. **Fix linting issues immediately:**
+4. **Fix linting issues immediately:**
     - Don't bypass hooks unless emergency
     - Use auto-fix features
     - Check IDE for real-time feedback
 
-4. **Keep dependencies updated:**
+5. **Keep commits small and reviewable (especially for large features):**  
+   Break big features into small tasks; aim for no more than ~10 files per commit and one clear purpose per commit so humans can review easily. See **AGENTS.md → Development discipline → Large features: small steps, small commits**.
+
+6. **Keep dependencies updated:**
 
     ```bash
     npm outdated              # Check npm packages
     composer outdated         # Check composer packages
     ```
 
-5. **Run tests before pushing:**
+7. **Run tests before pushing:**
     ```bash
     npm run test:js
     ./vendor/bin/phpunit
