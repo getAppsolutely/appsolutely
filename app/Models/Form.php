@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\FormEntrySpamStatus;
 use App\Models\Traits\ScopeStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -48,7 +49,7 @@ final class Form extends Model
      */
     public function validEntries(): HasMany
     {
-        return $this->entries()->where('is_spam', false);
+        return $this->entries()->where('is_spam', FormEntrySpamStatus::Valid);
     }
 
     /**

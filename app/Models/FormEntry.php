@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\FormEntrySpamStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -33,7 +34,7 @@ final class FormEntry extends Model
     protected $casts = [
         'submitted_at' => 'datetime',
         'data'         => 'array',
-        'is_spam'      => 'boolean',
+        'is_spam'      => FormEntrySpamStatus::class,
     ];
 
     public function form(): BelongsTo
@@ -94,7 +95,7 @@ final class FormEntry extends Model
      */
     public function markAsSpam(): void
     {
-        $this->update(['is_spam' => true]);
+        $this->update(['is_spam' => FormEntrySpamStatus::Spam]);
     }
 
     /**
@@ -102,7 +103,7 @@ final class FormEntry extends Model
      */
     public function markAsNotSpam(): void
     {
-        $this->update(['is_spam' => false]);
+        $this->update(['is_spam' => FormEntrySpamStatus::Valid]);
     }
 
     /**
@@ -110,7 +111,7 @@ final class FormEntry extends Model
      */
     public function getIsValidAttribute(): bool
     {
-        return ! $this->is_spam;
+        return $this->is_spam === FormEntrySpamStatus::Valid;
     }
 
     /**

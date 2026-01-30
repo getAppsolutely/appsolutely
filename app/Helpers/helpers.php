@@ -234,6 +234,20 @@ if (! function_exists('__tv')) {
     }
 }
 
+if (! function_exists('translate_enum_options')) {
+    /**
+     * Translate labels in an options array (e.g. from Enum::toArray()).
+     * Preserves keys and passes each label through __t().
+     *
+     * @param  array<int|string, string>  $options  [value => label, ...]
+     * @return array<int|string, string> [value => translated label, ...]
+     */
+    function translate_enum_options(array $options): array
+    {
+        return collect($options)->mapWithKeys(fn (string $label, int|string $value) => [$value => __t($label)])->all();
+    }
+}
+
 if (! function_exists('string_concat')) {
     /**
      * Concatenate a string with an optional prefix.

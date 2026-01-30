@@ -8,7 +8,9 @@ use App\Admin\Actions\Grid\DeleteAction;
 use App\Admin\Forms\Models\FormEntryForm;
 use App\Admin\Forms\Models\FormFieldForm;
 use App\Admin\Forms\Models\FormForm;
+use App\Enums\FormEntrySpamStatus;
 use App\Enums\FormFieldType;
+use App\Helpers\AdminButtonHelper;
 use App\Models\Form;
 use App\Models\FormEntry;
 use App\Models\FormField;
@@ -177,8 +179,10 @@ final class DynamicFormController extends AdminBaseController
             $grid->column('user.name', __t('User'))->display(function ($userName) {
                 return $userName ?: __t('Guest');
             });
-            $grid->column('is_spam', __t('Status'))->display(function ($isSpam) {
-                return $isSpam
+            $grid->column('is_spam', __t('Spam?'))->display(function ($isSpam) {
+                $isSpamVal = $isSpam instanceof FormEntrySpamStatus ? $isSpam->isSpam() : (bool) $isSpam;
+
+                return $isSpamVal
                     ? '<span class="badge badge-danger">' . __t('Spam') . '</span>'
                     : '<span class="badge badge-success">' . __t('Valid') . '</span>';
             });
@@ -191,7 +195,7 @@ final class DynamicFormController extends AdminBaseController
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id', __t('ID'))->width(3);
                 $filter->equal('form_id', __t('Form'))->select($this->formRepository->getFormOptions())->width(3);
-                $filter->equal('is_spam', __t('Status'))->select([1 => __t('Spam'), 0 => __t('Valid')])->width(3);
+                $filter->equal('is_spam', __t('Spam?'))->select(translate_enum_options(FormEntrySpamStatus::toArray()))->width(3);
                 $filter->like('email', __t('Email'))->width(3);
                 $filter->between('submitted_at', __t('Submitted'))->datetime()->width(6);
             });
@@ -209,13 +213,39 @@ final class DynamicFormController extends AdminBaseController
                     ]))
                     ->button('<i class="feather icon-eye"></i> ' . __t('View')));
 
-                // Add spam toggle action (use row model; closure may run where $this is not the controller)
-                $row = $actions->row;
-                if ($row) {
-                    if ($row->is_spam) {
-                        $actions->append('<a href="javascript:void(0)" onclick="toggleSpamStatus(' . $actions->getKey() . ', false)"><i class="fa fa-check"></i> ' . __t('Mark Valid') . '</a>');
+                // Add spam toggle action via AdminButtonHelper (one button per row based on is_spam)
+                $row     = $actions->row;
+                $entryId = (int) $actions->getKey();
+                if ($row && $entryId > 0) {
+                    $isSpam = $row->is_spam instanceof FormEntrySpamStatus ? $row->is_spam->isSpam() : (bool) $row->is_spam;
+                    if ($isSpam) {
+                        $actions->append(AdminButtonHelper::apiButton([
+                            'text'            => __t('Mark Valid'),
+                            'icon'            => 'fa fa-check',
+                            'style'           => 'outline-success',
+                            'function_name'   => 'markEntryValid_' . $entryId,
+                            'api_url'         => admin_route('api.forms.entries.mark-not-spam', ['id' => $entryId]),
+                            'method'          => 'POST',
+                            'payload'         => $entryId,
+                            'success_message' => __t('Entry marked as valid'),
+                            'error_message'   => __t('Failed to update entry status'),
+                            'refresh'         => true,
+                            'use_btn_classes' => false,
+                        ]));
                     } else {
-                        $actions->append('<a href="javascript:void(0)" onclick="toggleSpamStatus(' . $actions->getKey() . ', true)"><i class="fa fa-ban"></i> ' . __t('Mark Spam') . '</a>');
+                        $actions->append(AdminButtonHelper::apiButton([
+                            'text'            => __t('Mark Spam'),
+                            'icon'            => 'fa fa-ban',
+                            'style'           => 'outline-danger',
+                            'function_name'   => 'markEntrySpam_' . $entryId,
+                            'api_url'         => admin_route('api.forms.entries.mark-spam', ['id' => $entryId]),
+                            'method'          => 'POST',
+                            'payload'         => $entryId,
+                            'success_message' => __t('Entry marked as spam'),
+                            'error_message'   => __t('Failed to update entry status'),
+                            'refresh'         => true,
+                            'use_btn_classes' => false,
+                        ]));
                     }
                 }
 
@@ -386,35 +416,6 @@ final class DynamicFormController extends AdminBaseController
                 <span class='ml-3'>{$thisWeekLabel}: {$weekEntries}</span>
                 <span class='ml-3'>{$thisMonthLabel}: {$monthEntries}</span>
             </div>
-        </div>
-        <script>
-        function toggleSpamStatus(entryId, isSpam) {
-            const spamUrl = '" . admin_route('api.forms.entries.mark-spam', ['id' => '__ID__']) . "';
-            const notSpamUrl = '" . admin_route('api.forms.entries.mark-not-spam', ['id' => '__ID__']) . "';
-            const url = isSpam 
-                ? spamUrl.replace('__ID__', entryId)
-                : notSpamUrl.replace('__ID__', entryId);
-            
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name=\"csrf-token\"]').getAttribute('content')
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status) {
-                    Dcat.success(data.message);
-                    setTimeout(() => window.location.reload(), 1000);
-                } else {
-                    Dcat.error(data.message);
-                }
-            })
-            .catch(error => {
-                Dcat.error('An error occurred while updating the entry status');
-            });
-        }
-        </script>";
+        </div>";
     }
 }

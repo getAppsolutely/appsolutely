@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enums\FormEntrySpamStatus;
 use App\Models\Form;
 use App\Models\FormEntry;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -35,7 +36,7 @@ class FormEntryFactory extends Factory
                 'email'   => fake()->safeEmail(),
                 'message' => fake()->paragraph(),
             ],
-            'is_spam'    => false,
+            'is_spam'    => FormEntrySpamStatus::Valid,
             'ip_address' => fake()->ipv4(),
             'user_agent' => fake()->userAgent(),
         ];
@@ -47,7 +48,7 @@ class FormEntryFactory extends Factory
     public function notSpam(): static
     {
         return $this->state(fn (array $attributes) => [
-            'is_spam' => false,
+            'is_spam' => FormEntrySpamStatus::Valid,
         ]);
     }
 
@@ -57,7 +58,7 @@ class FormEntryFactory extends Factory
     public function spam(): static
     {
         return $this->state(fn (array $attributes) => [
-            'is_spam' => true,
+            'is_spam' => FormEntrySpamStatus::Spam,
         ]);
     }
 

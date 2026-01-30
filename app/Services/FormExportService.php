@@ -117,7 +117,7 @@ final readonly class FormExportService implements FormExportServiceInterface
             }
 
             // Add spam status
-            $row[] = $entry->is_spam ? 'Yes' : 'No';
+            $row[] = $entry->is_spam->isSpam() ? 'Yes' : 'No';
 
             // Add dynamic field values
             foreach ($dynamicFields as $field) {

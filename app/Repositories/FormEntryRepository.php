@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
+use App\Enums\FormEntrySpamStatus;
 use App\Models\FormEntry;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -29,7 +30,7 @@ final class FormEntryRepository extends BaseRepository
             ->orderBy('submitted_at', 'desc');
 
         if (! $includeSpam) {
-            $query->where('is_spam', false);
+            $query->where('is_spam', FormEntrySpamStatus::Valid);
         }
 
         return $query->get();
@@ -47,7 +48,7 @@ final class FormEntryRepository extends BaseRepository
             ->orderBy('submitted_at', 'desc');
 
         if (! $includeSpam) {
-            $query->where('is_spam', false);
+            $query->where('is_spam', FormEntrySpamStatus::Valid);
         }
 
         return $query->paginate($perPage);
@@ -60,7 +61,7 @@ final class FormEntryRepository extends BaseRepository
     {
         return $this->model->newQuery()
             ->with(['form', 'user'])
-            ->where('is_spam', false)
+            ->where('is_spam', FormEntrySpamStatus::Valid)
             ->orderBy('submitted_at', 'desc')
             ->limit($limit)
             ->get();
@@ -97,7 +98,7 @@ final class FormEntryRepository extends BaseRepository
     {
         return $this->model->newQuery()
             ->whereIn('id', $entryIds)
-            ->update(['is_spam' => true]);
+            ->update(['is_spam' => FormEntrySpamStatus::Spam]);
     }
 
     /**
@@ -107,7 +108,7 @@ final class FormEntryRepository extends BaseRepository
     {
         return $this->model->newQuery()
             ->whereIn('id', $entryIds)
-            ->update(['is_spam' => false]);
+            ->update(['is_spam' => FormEntrySpamStatus::Valid]);
     }
 
     /**
@@ -138,7 +139,7 @@ final class FormEntryRepository extends BaseRepository
     public function getSpamEntries(?int $formId = null): Collection
     {
         $query = $this->model->newQuery()
-            ->where('is_spam', true)
+            ->where('is_spam', FormEntrySpamStatus::Spam)
             ->with(['form', 'user'])
             ->orderBy('submitted_at', 'desc');
 
@@ -155,7 +156,7 @@ final class FormEntryRepository extends BaseRepository
     public function createEntryWithSpamCheck(array $data): FormEntry
     {
         // Basic spam detection can be implemented here
-        $data['is_spam']      = $this->detectSpam($data);
+        $data['is_spam']      = $this->detectSpam($data) ? FormEntrySpamStatus::Spam : FormEntrySpamStatus::Valid;
         $data['submitted_at'] = now();
 
         return $this->create($data);
@@ -172,7 +173,7 @@ final class FormEntryRepository extends BaseRepository
 
         $valid = $this->model->newQuery()
             ->where('form_id', $formId)
-            ->where('is_spam', false)
+            ->where('is_spam', FormEntrySpamStatus::Valid)
             ->count();
 
         $spam = $total - $valid;
@@ -180,13 +181,13 @@ final class FormEntryRepository extends BaseRepository
         $today = $this->model->newQuery()
             ->where('form_id', $formId)
             ->whereDate('submitted_at', today())
-            ->where('is_spam', false)
+            ->where('is_spam', FormEntrySpamStatus::Valid)
             ->count();
 
         $thisWeek = $this->model->newQuery()
             ->where('form_id', $formId)
             ->whereBetween('submitted_at', [now()->startOfWeek(), now()->endOfWeek()])
-            ->where('is_spam', false)
+            ->where('is_spam', FormEntrySpamStatus::Valid)
             ->count();
 
         return [
@@ -252,7 +253,7 @@ final class FormEntryRepository extends BaseRepository
 
         // Filter spam based on config
         if (! $includeSpam) {
-            $query->where('is_spam', false);
+            $query->where('is_spam', FormEntrySpamStatus::Valid);
         }
 
         if ($formId) {
@@ -268,7 +269,7 @@ final class FormEntryRepository extends BaseRepository
      */
     public function countValid(): int
     {
-        return $this->model->where('is_spam', false)->count();
+        return $this->model->where('is_spam', FormEntrySpamStatus::Valid)->count();
     }
 
     /**
@@ -276,7 +277,7 @@ final class FormEntryRepository extends BaseRepository
      */
     public function countSpam(): int
     {
-        return $this->model->where('is_spam', true)->count();
+        return $this->model->where('is_spam', FormEntrySpamStatus::Spam)->count();
     }
 
     /**
@@ -286,12 +287,12 @@ final class FormEntryRepository extends BaseRepository
     {
         if ($startDate === $endDate) {
             return $this->model->whereDate('submitted_at', $startDate)
-                ->where('is_spam', false)
+                ->where('is_spam', FormEntrySpamStatus::Valid)
                 ->count();
         }
 
         return $this->model->whereBetween('submitted_at', [$startDate, $endDate])
-            ->where('is_spam', false)
+            ->where('is_spam', FormEntrySpamStatus::Valid)
             ->count();
     }
 
@@ -304,7 +305,7 @@ final class FormEntryRepository extends BaseRepository
         $query = $this->model->newQuery()
             ->leftJoin('notification_queue', 'form_entries.id', '=', 'notification_queue.form_entry_id')
             ->whereNull('notification_queue.id')
-            ->where('form_entries.is_spam', false)
+            ->where('form_entries.is_spam', FormEntrySpamStatus::Valid)
             ->with(['form', 'user'])
             ->select('form_entries.*')
             ->orderBy('form_entries.submitted_at', 'desc');
@@ -338,7 +339,7 @@ final class FormEntryRepository extends BaseRepository
     {
         $query = $this->model->newQuery()
             ->withCount('notifications')
-            ->where('is_spam', false)
+            ->where('is_spam', FormEntrySpamStatus::Valid)
             ->with(['form', 'user'])
             ->orderBy('submitted_at', 'desc');
 
@@ -356,7 +357,7 @@ final class FormEntryRepository extends BaseRepository
     {
         return $this->model->newQuery()
             ->whereIn('id', $entryIds)
-            ->where('is_spam', false)
+            ->where('is_spam', FormEntrySpamStatus::Valid)
             ->with(['form', 'form.fields'])
             ->orderBy('submitted_at', 'desc')
             ->get();
@@ -368,7 +369,7 @@ final class FormEntryRepository extends BaseRepository
     public function getEntriesForResync(array $filters): Collection
     {
         $query = $this->model->newQuery()
-            ->where('is_spam', false)
+            ->where('is_spam', FormEntrySpamStatus::Valid)
             ->with(['form', 'form.fields']);
 
         // Filter by form ID if provided

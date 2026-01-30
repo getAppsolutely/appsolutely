@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin\Forms\Models;
 
+use App\Enums\FormEntrySpamStatus;
 use App\Models\FormEntry;
 
 final class FormEntryForm extends ModelForm
@@ -82,7 +83,7 @@ final class FormEntryForm extends ModelForm
         // Meta information (editable where appropriate)
         $this->html('<h5>' . __t('Meta Information') . '</h5>');
 
-        $this->switch('is_spam', __t('Status'))->default(0);
+        $this->switch('is_spam', __t('Spam?'))->default(FormEntrySpamStatus::Valid->value);
 
         $this->display('ip_address', __t('IP Address'));
         $this->text('referer', __t('Referer'));
