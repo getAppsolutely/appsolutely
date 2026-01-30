@@ -6,6 +6,7 @@ namespace App\Exceptions;
 
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -26,6 +27,22 @@ class Handler extends ExceptionHandler
     public function register(): void
     {
         //
+    }
+
+    public function report(Throwable $e): void
+    {
+        // When debug is off, log full exception details to the file channel so
+        // "tail storage/logs/laravel.log" shows the cause regardless of LOG_CHANNEL (e.g. stderr).
+        if (! config('app.debug') && ! $this->shouldntReport($e)) {
+            Log::channel('single')->error('Server error (500)', [
+                'exception' => get_class($e),
+                'message'   => $e->getMessage(),
+                'file'      => $e->getFile(),
+                'line'      => $e->getLine(),
+            ]);
+        }
+
+        parent::report($e);
     }
 
     public function render($request, Throwable $e)
