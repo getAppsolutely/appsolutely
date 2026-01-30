@@ -54,5 +54,18 @@ class AdvancedMenuSeeder extends Seeder
                 'updated_at' => now(),
             ]);
         }
+
+        $formsMenu = Menu::where('parent_id', $menuId)->where('title', 'Forms')->first();
+        if (! $formsMenu) {
+            Menu::create([
+                'parent_id'  => $menuId,
+                'order'      => 3,
+                'title'      => 'Forms',
+                'icon'       => 'fa-wpforms',
+                'uri'        => 'forms',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }

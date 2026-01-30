@@ -162,6 +162,7 @@ abstract class ModelForm extends Form implements LazyRenderable
         $model = $this->model->with($this->getRelationships())->find($id);
 
         if ($model) {
+            $this->model = $model;
             $this->fill($model->toArray());
         }
     }
