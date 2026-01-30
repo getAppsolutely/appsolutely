@@ -107,13 +107,12 @@ final class NotificationController extends AdminBaseController
                 if (! $actions->row->is_system) {
                     $id = $actions->getKey();
                     $actions->append(AdminButtonHelper::apiButton([
-                        'text'            => __t('Duplicate'),
-                        'icon'            => 'fa fa-copy',
-                        'style'           => 'outline-info',
-                        'function_name'   => 'duplicateItem',
-                        'api_url'         => admin_route('api.notifications.duplicate-template', ['id' => '__ID__']),
-                        'payload'         => $id,
-                        'use_btn_classes' => false,
+                        'text'          => __t('Duplicate'),
+                        'icon'          => 'fa fa-copy',
+                        'class'         => 'text-info',
+                        'function_name' => 'duplicateItem',
+                        'api_url'       => admin_route('api.notifications.duplicate-template', ['id' => '__ID__']),
+                        'payload'       => $id,
                     ]));
                 }
 
@@ -188,13 +187,12 @@ final class NotificationController extends AdminBaseController
 
                 $id = $actions->getKey();
                 $actions->append(AdminButtonHelper::apiButton([
-                    'text'            => __t('Test'),
-                    'icon'            => 'fa fa-flask',
-                    'style'           => '',
-                    'function_name'   => 'testNotificationRule',
-                    'api_url'         => admin_route('api.notifications.test-rule', ['id' => '__ID__']),
-                    'payload'         => $id,
-                    'use_btn_classes' => false,
+                    'text'          => __t('Test'),
+                    'icon'          => 'fa fa-flask',
+                    'class'         => '',
+                    'function_name' => 'testNotificationRule',
+                    'api_url'       => admin_route('api.notifications.test-rule', ['id' => '__ID__']),
+                    'payload'       => $id,
                 ]));
                 $actions->append(new DeleteAction());
             });
@@ -361,7 +359,7 @@ final class NotificationController extends AdminBaseController
                     $buttons[] = AdminButtonHelper::apiButton([
                         'text'          => __t('Retry'),
                         'icon'          => 'fa fa-refresh',
-                        'style'         => 'outline-warning',
+                        'class'         => 'text-warning',
                         'function_name' => 'retryNotification',
                         'api_url'       => admin_route('api.notifications.retry', ['id' => '__ID__']),
                         'payload'       => $id,
@@ -371,7 +369,7 @@ final class NotificationController extends AdminBaseController
                     $buttons[] = AdminButtonHelper::apiButton([
                         'text'          => __t('Cancel'),
                         'icon'          => 'fa fa-times',
-                        'style'         => 'outline-danger',
+                        'class'         => 'text-danger',
                         'function_name' => 'cancelNotification',
                         'api_url'       => admin_route('api.notifications.cancel', ['id' => '__ID__']),
                         'payload'       => $id,
@@ -478,8 +476,7 @@ final class NotificationController extends AdminBaseController
             admin_route('api.notifications.process-queue'),
             [
                 'icon'  => 'fa fa-cog',
-                'style' => 'primary',
-                'class' => 'btn-block mb-2',
+                'class' => 'btn btn-primary btn-block mb-2',
             ]
         );
         $html .= $this->retryFailedButton();
@@ -501,7 +498,7 @@ final class NotificationController extends AdminBaseController
         return AdminButtonHelper::apiButton([
             'text'          => __t('Retry'),
             'icon'          => 'fa fa-refresh',
-            'style'         => 'outline-warning',
+            'class'         => 'text-warning',
             'function_name' => 'retryNotification',
             'api_url'       => admin_route('api.notifications.retry', ['id' => $id]),
             'payload'       => $id,
@@ -516,7 +513,7 @@ final class NotificationController extends AdminBaseController
         return AdminButtonHelper::apiButton([
             'text'          => __t('Cancel'),
             'icon'          => 'fa fa-times',
-            'style'         => 'outline-danger',
+            'class'         => 'text-danger',
             'function_name' => 'cancelNotification',
             'api_url'       => admin_route('api.notifications.cancel', ['id' => $id]),
             'payload'       => $id,
@@ -529,13 +526,12 @@ final class NotificationController extends AdminBaseController
     public static function testRuleButton(int $id): string
     {
         return AdminButtonHelper::apiButton([
-            'text'            => __t('Test'),
-            'icon'            => 'fa fa-flask',
-            'style'           => '',
-            'function_name'   => 'testNotificationRule',
-            'api_url'         => admin_route('api.notifications.test-rule', ['id' => $id]),
-            'payload'         => $id,
-            'use_btn_classes' => false,
+            'text'          => __t('Test'),
+            'icon'          => 'fa fa-flask',
+            'class'         => '',
+            'function_name' => 'testNotificationRule',
+            'api_url'       => admin_route('api.notifications.test-rule', ['id' => $id]),
+            'payload'       => $id,
         ]);
     }
 
@@ -558,8 +554,7 @@ final class NotificationController extends AdminBaseController
             admin_route('api.notifications.process-queue'),
             [
                 'icon'  => 'fa fa-cog',
-                'style' => 'success',
-                'size'  => 'sm',
+                'class' => 'btn btn-sm btn-success',
             ]
         );
     }
@@ -575,8 +570,7 @@ final class NotificationController extends AdminBaseController
             admin_route('api.notifications.retry-failed'),
             [
                 'icon'  => 'fa fa-refresh',
-                'style' => 'warning',
-                'class' => 'btn-block mb-2',
+                'class' => 'btn btn-warning btn-block mb-2',
             ]
         );
     }
@@ -592,8 +586,7 @@ final class NotificationController extends AdminBaseController
             admin_route('api.notifications.clean-old'),
             [
                 'icon'  => 'fa fa-trash-o',
-                'style' => 'info',
-                'class' => 'btn-block mb-2',
+                'class' => 'btn btn-info btn-block mb-2',
             ]
         );
     }

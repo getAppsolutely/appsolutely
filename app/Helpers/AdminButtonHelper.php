@@ -10,19 +10,19 @@ final class AdminButtonHelper
      * Generate the HTML for a button that calls a JS function (e.g. onclick="markEntrySpam(id)").
      * Returns only the <a> tag; the script must be added via scriptForApiButton() + admin_script().
      *
-     * Options used for the link: text, size, style, icon, class, attributes, use_btn_classes.
-     * Required: function_name, api_url. Optional for onclick: payload.
+     * Required: function_name, api_url.
+     * Options: text, icon, class, attributes, payload.
      */
     public static function apiButton(array $options): string
     {
-        $defaults = [  // only options that affect the HTML link
-            'text'            => 'Action',
-            'size'            => 'xs',
-            'style'           => 'outline-primary',
-            'icon'            => null,
-            'class'           => '',
-            'attributes'      => [],
-            'use_btn_classes' => false,
+        $allowed = ['text', 'icon', 'class', 'attributes', 'function_name', 'api_url', 'payload'];
+        $options = array_intersect_key($options, array_flip($allowed));
+
+        $defaults = [
+            'text'       => 'Action',
+            'icon'       => null,
+            'class'      => 'text-primary',
+            'attributes' => [],
         ];
 
         $config = array_merge($defaults, $options);
@@ -39,22 +39,9 @@ final class AdminButtonHelper
         // Generate unique function name if needed
         $functionName = $config['function_name'];
 
-        // Build CSS classes
-        $classes = [];
-        if ($config['use_btn_classes']) {
-            $classes[] = 'btn';
-            $classes[] = "btn-{$config['size']}";
-        }
-        if ($config['style']) {
-            $classes[] = "btn-{$config['style']}";
-        }
-        if (! empty($config['class'])) {
-            $classes[] = $config['class'];
-        }
-
         $data = [
             'href'    => 'javascript:void(0)',
-            'class'   => implode(' ', $classes),
+            'class'   => trim($config['class']),
             'onclick' => $functionName . '(' . ($config['payload'] ?? '') . ')',
         ];
 
@@ -72,7 +59,7 @@ final class AdminButtonHelper
         if ($config['icon']) {
             $content .= "<i class=\"{$config['icon']}\"></i> ";
         }
-        $content .= $config['text'];
+        $content .= "<span>{$config['text']}</span> ";
 
         return "\n<a{$attrString}>{$content}</a>";
     }
@@ -81,12 +68,18 @@ final class AdminButtonHelper
      * Generate the script for an API button. Call once per page/grid and pass the result to admin_script().
      * Use the same function_name and api_url as apiButton() (use __ID__ in api_url for row-specific URLs).
      *
-     * Options used for the script: confirm, method, success_message, error_message, refresh, redirect.
-     * Required: function_name, api_url. Optional: payload, additional_payload.
+     * Required: function_name, api_url.
+     * Options: confirm, method, success_message, error_message, refresh, redirect, payload, additional_payload.
      */
     public static function scriptForApiButton(array $options): string
     {
-        $defaults = [  // only options that affect the generated JS
+        $allowed = [
+            'function_name', 'api_url', 'confirm', 'method', 'success_message', 'error_message',
+            'refresh', 'redirect', 'payload', 'additional_payload',
+        ];
+        $options = array_intersect_key($options, array_flip($allowed));
+
+        $defaults = [
             'confirm'         => null,
             'method'          => 'POST',
             'success_message' => null,
@@ -116,7 +109,7 @@ final class AdminButtonHelper
         return self::apiButton([
             'text'          => __t('Delete'),
             'icon'          => 'fa fa-trash',
-            'style'         => 'outline-danger',
+            'class'         => 'text-danger',
             'function_name' => 'deleteItem',
             'api_url'       => $apiUrl,
             'payload'       => $id,
@@ -129,13 +122,13 @@ final class AdminButtonHelper
     public static function toggleStatusButton(int $id, string $apiUrl, bool $currentStatus): string
     {
         $action = $currentStatus ? 'disable' : 'enable';
-        $style  = $currentStatus ? 'outline-warning' : 'outline-success';
+        $style  = $currentStatus ? 'text-warning' : 'text-success';
         $icon   = $currentStatus ? 'fa fa-pause' : 'fa fa-play';
 
         return self::apiButton([
             'text'          => $currentStatus ? __t('Disable') : __t('Enable'),
             'icon'          => $icon,
-            'style'         => $style,
+            'class'         => $style,
             'function_name' => 'toggleStatus',
             'api_url'       => $apiUrl,
             'payload'       => $id,
@@ -148,13 +141,12 @@ final class AdminButtonHelper
     public static function duplicateButton(int $id, string $apiUrl): string
     {
         return self::apiButton([
-            'text'            => __t('Duplicate'),
-            'icon'            => 'fa fa-copy',
-            'style'           => 'outline-info',
-            'function_name'   => 'duplicateItem',
-            'api_url'         => $apiUrl,
-            'payload'         => $id,
-            'use_btn_classes' => false,
+            'text'          => __t('Duplicate'),
+            'icon'          => 'fa fa-copy',
+            'class'         => 'text-info',
+            'function_name' => 'duplicateItem',
+            'api_url'       => $apiUrl,
+            'payload'       => $id,
         ]);
     }
 
@@ -166,7 +158,6 @@ final class AdminButtonHelper
         return self::apiButton([
             'text'          => __t('Preview'),
             'icon'          => 'fa fa-eye',
-            'style'         => 'outline-primary',
             'function_name' => 'previewItem',
             'api_url'       => $modalUrl,
             'payload'       => $id,

@@ -234,23 +234,21 @@ final class DynamicFormController extends AdminBaseController
                     $isSpam = $row->is_spam instanceof FormEntrySpamStatus ? $row->is_spam->isSpam() : (bool) $row->is_spam;
                     if ($isSpam) {
                         $actions->append(AdminButtonHelper::apiButton([
-                            'text'            => __t('Mark Valid'),
-                            'icon'            => 'fa fa-check',
-                            'style'           => 'outline-success',
-                            'function_name'   => 'markEntryValid',
-                            'api_url'         => admin_route('api.forms.entries.mark-not-spam', ['id' => '__ID__']),
-                            'payload'         => $entryId,
-                            'use_btn_classes' => false,
+                            'text'          => __t('Mark Valid'),
+                            'icon'          => 'fa fa-check',
+                            'class'         => 'text-success',
+                            'function_name' => 'markEntryValid',
+                            'api_url'       => admin_route('api.forms.entries.mark-not-spam', ['id' => '__ID__']),
+                            'payload'       => $entryId,
                         ]));
                     } else {
                         $actions->append(AdminButtonHelper::apiButton([
-                            'text'            => __t('Mark Spam'),
-                            'icon'            => 'fa fa-ban',
-                            'style'           => 'outline-danger',
-                            'function_name'   => 'markEntrySpam',
-                            'api_url'         => admin_route('api.forms.entries.mark-spam', ['id' => '__ID__']),
-                            'payload'         => $entryId,
-                            'use_btn_classes' => false,
+                            'text'          => __t('Mark Spam'),
+                            'icon'          => 'fa fa-ban',
+                            'class'         => 'text-danger',
+                            'function_name' => 'markEntrySpam',
+                            'api_url'       => admin_route('api.forms.entries.mark-spam', ['id' => '__ID__']),
+                            'payload'       => $entryId,
                         ]));
                     }
                 }
