@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Enums\Status;
 use App\Models\PageBlock;
 use App\Models\PageBlockGroup;
 use Illuminate\Database\Seeder;
@@ -40,13 +41,13 @@ final class PageBlockSeeder extends Seeder
             [
                 'title'  => 'Navigation',
                 'remark' => 'Navigation blocks like header and footer',
-                'status' => 1,
+                'status' => Status::ACTIVE,
                 'sort'   => 1,
             ],
             [
                 'title'  => 'Content',
                 'remark' => 'Content blocks for page sections',
-                'status' => 1,
+                'status' => Status::ACTIVE,
                 'sort'   => 2,
             ],
         ];
@@ -163,7 +164,7 @@ final class PageBlockSeeder extends Seeder
             'schema'      => [],
             'setting'     => [],
             'droppable'   => 0,
-            'status'      => 1,
+            'status'      => Status::ACTIVE,
             'scope'       => 'page',
         ];
     }

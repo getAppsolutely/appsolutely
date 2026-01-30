@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Repositories;
 
+use App\Enums\Status;
 use App\Models\Article;
 use App\Models\ArticleCategory;
 use App\Repositories\ArticleRepository;
@@ -24,9 +25,9 @@ final class ArticleRepositoryTest extends TestCase
 
     public function test_get_published_articles_returns_only_published(): void
     {
-        Article::factory()->create(['status' => 1, 'published_at' => now()->subDay()]);
-        Article::factory()->create(['status' => 0, 'published_at' => now()->subDay()]);
-        Article::factory()->create(['status' => 1, 'published_at' => now()->addDay()]);
+        Article::factory()->create(['status' => Status::ACTIVE, 'published_at' => now()->subDay()]);
+        Article::factory()->create(['status' => Status::INACTIVE, 'published_at' => now()->subDay()]);
+        Article::factory()->create(['status' => Status::ACTIVE, 'published_at' => now()->addDay()]);
 
         $result = $this->repository->getPublishedArticles();
 
@@ -36,8 +37,8 @@ final class ArticleRepositoryTest extends TestCase
     public function test_get_published_articles_filters_by_category(): void
     {
         $category = ArticleCategory::factory()->create(['slug' => 'tech']);
-        $article1 = Article::factory()->create(['status' => 1, 'published_at' => now()->subDay()]);
-        $article2 = Article::factory()->create(['status' => 1, 'published_at' => now()->subDay()]);
+        $article1 = Article::factory()->create(['status' => Status::ACTIVE, 'published_at' => now()->subDay()]);
+        $article2 = Article::factory()->create(['status' => Status::ACTIVE, 'published_at' => now()->subDay()]);
 
         $article1->categories()->attach($category->id);
 
@@ -51,7 +52,7 @@ final class ArticleRepositoryTest extends TestCase
     {
         $article = Article::factory()->create([
             'slug'         => 'test-article',
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDay(),
         ]);
 
@@ -65,7 +66,7 @@ final class ArticleRepositoryTest extends TestCase
     {
         Article::factory()->create([
             'slug'         => 'test-article',
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->addDay(),
         ]);
 
@@ -78,14 +79,14 @@ final class ArticleRepositoryTest extends TestCase
     {
         $published = Article::factory()->create([
             'slug'         => 'article-1',
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDay(),
         ]);
 
         // Create unpublished article (should be excluded)
         Article::factory()->create([
             'slug'         => 'article-2',
-            'status'       => 0, // Unpublished
+            'status'       => Status::INACTIVE, // Unpublished
             'published_at' => now()->subDay(),
         ]);
 
@@ -94,7 +95,7 @@ final class ArticleRepositoryTest extends TestCase
             'title'        => 'No Slug Article',
             'slug'         => null,
             'content'      => 'Test content',
-            'status'       => 1,
+            'status'       => Status::ACTIVE->value,
             'published_at' => now()->subDay(),
             'created_at'   => now(),
             'updated_at'   => now(),
@@ -109,8 +110,8 @@ final class ArticleRepositoryTest extends TestCase
     public function test_find_by_category_slug_returns_articles_in_category(): void
     {
         $category = ArticleCategory::factory()->create(['slug' => 'tech']);
-        $article1 = Article::factory()->create(['status' => 1, 'published_at' => now()->subDay()]);
-        $article2 = Article::factory()->create(['status' => 1, 'published_at' => now()->subDay()]);
+        $article1 = Article::factory()->create(['status' => Status::ACTIVE, 'published_at' => now()->subDay()]);
+        $article2 = Article::factory()->create(['status' => Status::ACTIVE, 'published_at' => now()->subDay()]);
 
         $article1->categories()->attach($category->id);
         $article2->categories()->attach($category->id);
@@ -124,9 +125,9 @@ final class ArticleRepositoryTest extends TestCase
 
     public function test_get_recent_articles_returns_limited_published_articles(): void
     {
-        Article::factory()->create(['status' => 1, 'published_at' => now()->subDays(5)]);
-        Article::factory()->create(['status' => 1, 'published_at' => now()->subDays(2)]);
-        Article::factory()->create(['status' => 1, 'published_at' => now()->subDay()]);
+        Article::factory()->create(['status' => Status::ACTIVE, 'published_at' => now()->subDays(5)]);
+        Article::factory()->create(['status' => Status::ACTIVE, 'published_at' => now()->subDays(2)]);
+        Article::factory()->create(['status' => Status::ACTIVE, 'published_at' => now()->subDay()]);
 
         $result = $this->repository->getRecentArticles(2);
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\Status;
 use App\Models\Traits\ScopeReference;
 use App\Models\Traits\ScopeStatus;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -34,6 +35,6 @@ class Payment extends Model
     protected $casts = [
         'setting' => 'array',
         'sort'    => 'integer',
-        'status'  => 'integer',
+        'status'  => Status::class,
     ];
 }

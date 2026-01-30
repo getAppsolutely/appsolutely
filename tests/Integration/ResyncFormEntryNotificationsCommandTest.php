@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use App\Enums\Status;
 use App\Models\Form;
 use App\Models\FormEntry;
 use App\Models\FormField;
@@ -29,7 +30,7 @@ final class ResyncFormEntryNotificationsCommandTest extends TestCase
         $rule = NotificationRule::factory()->create([
             'trigger_type'      => 'form_submission',
             'trigger_reference' => 'contact-form',
-            'status'            => 1,
+            'status'            => Status::ACTIVE,
         ]);
 
         // Entry without notification
@@ -60,7 +61,7 @@ final class ResyncFormEntryNotificationsCommandTest extends TestCase
         NotificationRule::factory()->create([
             'trigger_type'      => 'form_submission',
             'trigger_reference' => 'contact-form',
-            'status'            => 1,
+            'status'            => Status::ACTIVE,
         ]);
 
         $entry = FormEntry::factory()->create(['form_id' => $form->id]);
@@ -81,7 +82,7 @@ final class ResyncFormEntryNotificationsCommandTest extends TestCase
         $rule = NotificationRule::factory()->create([
             'trigger_type'      => 'form_submission',
             'trigger_reference' => 'contact-form',
-            'status'            => 1,
+            'status'            => Status::ACTIVE,
         ]);
 
         $entry = FormEntry::factory()->create(['form_id' => $form->id]);
@@ -109,7 +110,7 @@ final class ResyncFormEntryNotificationsCommandTest extends TestCase
         $rule = NotificationRule::factory()->create([
             'trigger_type'      => 'form_submission',
             'trigger_reference' => 'contact-form',
-            'status'            => 1,
+            'status'            => Status::ACTIVE,
         ]);
 
         $entry = FormEntry::factory()->create(['form_id' => $form->id]);
@@ -140,13 +141,13 @@ final class ResyncFormEntryNotificationsCommandTest extends TestCase
         NotificationRule::factory()->create([
             'trigger_type'      => 'form_submission',
             'trigger_reference' => 'contact-form',
-            'status'            => 1,
+            'status'            => Status::ACTIVE,
         ]);
 
         NotificationRule::factory()->create([
             'trigger_type'      => 'form_submission',
             'trigger_reference' => 'newsletter-form',
-            'status'            => 1,
+            'status'            => Status::ACTIVE,
         ]);
 
         $entry1 = FormEntry::factory()->create(['form_id' => $form1->id]);
@@ -176,13 +177,13 @@ final class ResyncFormEntryNotificationsCommandTest extends TestCase
         NotificationRule::factory()->create([
             'trigger_type'      => 'form_submission',
             'trigger_reference' => $form1->slug,
-            'status'            => 1,
+            'status'            => Status::ACTIVE,
         ]);
 
         NotificationRule::factory()->create([
             'trigger_type'      => 'form_submission',
             'trigger_reference' => $form2->slug,
-            'status'            => 1,
+            'status'            => Status::ACTIVE,
         ]);
 
         $entry1 = FormEntry::factory()->create(['form_id' => $form1->id]);
@@ -208,7 +209,7 @@ final class ResyncFormEntryNotificationsCommandTest extends TestCase
         NotificationRule::factory()->create([
             'trigger_type'      => 'form_submission',
             'trigger_reference' => $form->slug,
-            'status'            => 1,
+            'status'            => Status::ACTIVE,
         ]);
 
         $entry1 = FormEntry::factory()->create(['form_id' => $form->id]);
@@ -234,7 +235,7 @@ final class ResyncFormEntryNotificationsCommandTest extends TestCase
         NotificationRule::factory()->create([
             'trigger_type'      => 'form_submission',
             'trigger_reference' => $form->slug,
-            'status'            => 1,
+            'status'            => Status::ACTIVE,
         ]);
 
         $entry1 = FormEntry::factory()->create(['form_id' => $form->id]);
@@ -267,7 +268,7 @@ final class ResyncFormEntryNotificationsCommandTest extends TestCase
         NotificationRule::factory()->create([
             'trigger_type'      => 'form_submission',
             'trigger_reference' => $form->slug,
-            'status'            => 1,
+            'status'            => Status::ACTIVE,
         ]);
 
         $entry1 = FormEntry::factory()->create(['form_id' => $form->id]);
@@ -306,7 +307,7 @@ final class ResyncFormEntryNotificationsCommandTest extends TestCase
         NotificationRule::factory()->create([
             'trigger_type'      => 'form_submission',
             'trigger_reference' => $form->slug,
-            'status'            => 1,
+            'status'            => Status::ACTIVE,
         ]);
 
         $oldEntry = FormEntry::factory()->create([
@@ -339,7 +340,7 @@ final class ResyncFormEntryNotificationsCommandTest extends TestCase
         NotificationRule::factory()->create([
             'trigger_type'      => 'form_submission',
             'trigger_reference' => 'test-form',
-            'status'            => 0,
+            'status'            => Status::INACTIVE,
         ]);
 
         $this->artisan('notifications:resync-form-entries')
@@ -359,7 +360,7 @@ final class ResyncFormEntryNotificationsCommandTest extends TestCase
         NotificationRule::factory()->create([
             'trigger_type'      => 'form_submission',
             'trigger_reference' => '*',
-            'status'            => 1,
+            'status'            => Status::ACTIVE,
         ]);
 
         $entry1 = FormEntry::factory()->create(['form_id' => $form1->id]);
@@ -386,7 +387,7 @@ final class ResyncFormEntryNotificationsCommandTest extends TestCase
         $rule = NotificationRule::factory()->create([
             'trigger_type'      => 'form_submission',
             'trigger_reference' => 'contact-form',
-            'status'            => 1,
+            'status'            => Status::ACTIVE,
         ]);
 
         $entry = FormEntry::factory()->create([

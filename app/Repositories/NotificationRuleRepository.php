@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
+use App\Enums\Status;
 use App\Models\NotificationRule;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -107,7 +108,7 @@ final class NotificationRuleRepository extends BaseRepository
     public function getTriggerTypesWithCounts(): array
     {
         return $this->model->newQuery()->selectRaw('trigger_type, COUNT(*) as count')
-            ->where('status', 1)
+            ->where('status', Status::ACTIVE)
             ->groupBy('trigger_type')
             ->pluck('count', 'trigger_type')
             ->toArray();
@@ -132,7 +133,7 @@ final class NotificationRuleRepository extends BaseRepository
         unset($data['id'], $data['created_at'], $data['updated_at']);
 
         $data['name']   = $data['name'] . ' (Copy)';
-        $data['status'] = 0; // Create as inactive by default
+        $data['status'] = Status::INACTIVE;
 
         return $this->create($data);
     }

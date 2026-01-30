@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enums\Status;
 use App\Models\NotificationTemplate;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -37,7 +38,7 @@ class NotificationTemplateFactory extends Factory
                 'form_fields_text',
             ]),
             'is_system' => false,
-            'status'    => 1,
+            'status'    => Status::ACTIVE,
         ];
     }
 
@@ -47,7 +48,7 @@ class NotificationTemplateFactory extends Factory
     public function active(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 1,
+            'status' => Status::ACTIVE,
         ]);
     }
 
@@ -57,7 +58,7 @@ class NotificationTemplateFactory extends Factory
     public function inactive(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 0,
+            'status' => Status::INACTIVE,
         ]);
     }
 }

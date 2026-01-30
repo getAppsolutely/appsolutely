@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Admin\Forms\Models;
 
 use App\Enums\FormFieldType;
+use App\Enums\Status;
 use App\Models\FormField;
 use App\Repositories\FormFieldRepository;
 use App\Repositories\FormRepository;
@@ -35,7 +36,7 @@ final class FormFieldForm extends ModelForm
 
         $this->select('form_id', __t('Form'))->options(
             $this->formRepository->model->newQuery()
-                ->where('status', 1)
+                ->where('status', Status::ACTIVE)
                 ->pluck('name', 'id')
                 ->toArray()
         )->required()

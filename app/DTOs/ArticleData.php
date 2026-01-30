@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\DTOs;
 
+use App\Enums\Status;
 use App\Models\Article;
 use Carbon\Carbon;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
@@ -86,7 +87,7 @@ final class ArticleData extends Data
      */
     public function isPublished(): bool
     {
-        return $this->status === 1
+        return $this->status === Status::ACTIVE->value
             && $this->published_at !== null
             && $this->published_at->isPast()
             && ($this->expired_at === null || $this->expired_at->isFuture());

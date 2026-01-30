@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\Status;
 use App\Models\Traits\ScopeStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -28,7 +29,7 @@ final class NotificationTemplate extends Model
     protected $casts = [
         'variables' => 'array',
         'is_system' => 'boolean',
-        'status'    => 'integer',
+        'status'    => Status::class,
     ];
 
     public function rules(): HasMany

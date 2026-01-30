@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\BlockScope;
+use App\Enums\Status;
 use App\Models\Traits\ClearsResponseCache;
 use App\Models\Traits\ScopePublished;
 use App\Models\Traits\ScopeReference;
@@ -30,7 +31,7 @@ final class PageBlockSetting extends Model
     ];
 
     protected $casts = [
-        'status'       => 'integer',
+        'status'       => Status::class,
         'published_at' => 'datetime',
         'expired_at'   => 'datetime',
     ];

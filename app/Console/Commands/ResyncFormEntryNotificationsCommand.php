@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use App\Enums\Status;
 use App\Repositories\FormEntryRepository;
 use App\Repositories\FormRepository;
 use App\Repositories\NotificationQueueRepository;
@@ -77,7 +78,7 @@ final class ResyncFormEntryNotificationsCommand extends Command
 
         // Get all active form submission notification rules
         $rules = $ruleRepository->getByTriggerType('form_submission')
-            ->filter(fn ($rule) => $rule->status === 1);
+            ->filter(fn ($rule) => $rule->status === Status::ACTIVE);
 
         if ($rules->isEmpty()) {
             $this->warn('No active form submission notification rules found.');

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enums\Status;
 use App\Models\NotificationRule;
 use App\Models\NotificationTemplate;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -32,7 +33,7 @@ class NotificationRuleFactory extends Factory
             'recipient_emails'  => json_encode([fake()->safeEmail()]),
             'conditions'        => null,
             'delay_minutes'     => 0,
-            'status'            => 1,
+            'status'            => Status::ACTIVE,
         ];
     }
 
@@ -42,7 +43,7 @@ class NotificationRuleFactory extends Factory
     public function active(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 1,
+            'status' => Status::ACTIVE,
         ]);
     }
 
@@ -52,7 +53,7 @@ class NotificationRuleFactory extends Factory
     public function inactive(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 0,
+            'status' => Status::INACTIVE,
         ]);
     }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use App\Enums\Status;
 use App\Models\Form;
 use App\Services\DynamicFormService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -26,7 +27,7 @@ final class FormSubmissionWorkflowTest extends TestCase
         // Create form with fields
         $form = Form::factory()->create([
             'slug'   => 'contact-form',
-            'status' => 1,
+            'status' => Status::ACTIVE,
         ]);
 
         // This test demonstrates the integration pattern

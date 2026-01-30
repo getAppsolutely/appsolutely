@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Enums\Status;
 use App\Models\Page;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -20,7 +21,7 @@ class ExampleTest extends TestCase
         // Create a home page for the route to work
         Page::factory()->create([
             'slug'         => '/',
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDay(),
         ]);
 

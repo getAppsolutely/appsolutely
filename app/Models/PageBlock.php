@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\Status;
 use App\Models\Traits\ScopeReference;
 use App\Models\Traits\ScopeStatus;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -39,7 +40,7 @@ final class PageBlock extends Model
         'setting'       => 'array',
         'droppable'     => 'integer',
         'sort'          => 'integer',
-        'status'        => 'integer',
+        'status'        => Status::class,
     ];
 
     public function group(): BelongsTo

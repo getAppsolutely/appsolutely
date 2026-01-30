@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\Status;
 use App\Models\Traits\HasFilesOfType;
 use App\Models\Traits\HasMarkdownContent;
 use App\Models\Traits\ScopePublished;
@@ -45,6 +46,7 @@ class Article extends Model
         'setting'      => 'array',
         'published_at' => 'datetime',
         'expired_at'   => 'datetime',
+        'status'       => Status::class,
     ];
 
     public function categories(): BelongsToMany

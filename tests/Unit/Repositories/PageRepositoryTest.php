@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Repositories;
 
+use App\Enums\Status;
 use App\Models\Page;
 use App\Repositories\PageRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -25,7 +26,7 @@ final class PageRepositoryTest extends TestCase
     {
         $page = Page::factory()->create([
             'slug'         => 'test-page',
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDay(),
             'expired_at'   => null,
         ]);
@@ -41,7 +42,7 @@ final class PageRepositoryTest extends TestCase
     {
         Page::factory()->create([
             'slug'         => 'test-page',
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->addDay(), // Future date
         ]);
 
@@ -54,7 +55,7 @@ final class PageRepositoryTest extends TestCase
     {
         Page::factory()->create([
             'slug'         => 'test-page',
-            'status'       => 0, // Inactive
+            'status'       => Status::INACTIVE, // Inactive
             'published_at' => now()->subDay(),
         ]);
 
@@ -67,7 +68,7 @@ final class PageRepositoryTest extends TestCase
     {
         Page::factory()->create([
             'slug'         => 'test-page',
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDays(10),
             'expired_at'   => now()->subDay(), // Expired
         ]);
@@ -87,7 +88,7 @@ final class PageRepositoryTest extends TestCase
     public function test_find_page_by_id_returns_published_page(): void
     {
         $page = Page::factory()->create([
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDay(),
             'expired_at'   => null,
         ]);
@@ -101,7 +102,7 @@ final class PageRepositoryTest extends TestCase
     public function test_find_page_by_id_returns_null_for_unpublished_page(): void
     {
         $page = Page::factory()->create([
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->addDay(), // Future date
         ]);
 
@@ -113,7 +114,7 @@ final class PageRepositoryTest extends TestCase
     public function test_find_page_by_id_returns_null_for_inactive_page(): void
     {
         $page = Page::factory()->create([
-            'status'       => 0,
+            'status'       => Status::INACTIVE,
             'published_at' => now()->subDay(),
         ]);
 
@@ -126,7 +127,7 @@ final class PageRepositoryTest extends TestCase
     {
         $page = Page::factory()->create([
             'slug'         => 'test-page',
-            'status'       => 0, // Even inactive pages should be found
+            'status'       => Status::INACTIVE, // Even inactive pages should be found
             'published_at' => now()->addDay(), // Even future pages should be found
         ]);
 
@@ -147,19 +148,19 @@ final class PageRepositoryTest extends TestCase
     {
         $published1 = Page::factory()->create([
             'slug'         => 'page-1',
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDay(),
         ]);
 
         $published2 = Page::factory()->create([
             'slug'         => 'page-2',
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDays(2),
         ]);
 
         Page::factory()->create([
             'slug'         => 'unpublished',
-            'status'       => 0,
+            'status'       => Status::INACTIVE,
             'published_at' => now()->subDay(),
         ]);
 
@@ -169,7 +170,7 @@ final class PageRepositoryTest extends TestCase
             'title'        => 'No Slug Page',
             'name'         => 'No Slug Page',
             'slug'         => null,
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDay(),
             'created_at'   => now(),
             'updated_at'   => now(),
@@ -186,7 +187,7 @@ final class PageRepositoryTest extends TestCase
     {
         Page::factory()->create([
             'slug'         => 'valid-page',
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDay(),
         ]);
 
@@ -196,7 +197,7 @@ final class PageRepositoryTest extends TestCase
             'title'        => 'Empty Slug Page',
             'name'         => 'Empty Slug Page',
             'slug'         => '',
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDay(),
             'created_at'   => now(),
             'updated_at'   => now(),
@@ -212,19 +213,19 @@ final class PageRepositoryTest extends TestCase
     {
         $oldest = Page::factory()->create([
             'slug'         => 'oldest',
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDays(5),
         ]);
 
         $newest = Page::factory()->create([
             'slug'         => 'newest',
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDay(),
         ]);
 
         $middle = Page::factory()->create([
             'slug'         => 'middle',
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDays(3),
         ]);
 
@@ -251,9 +252,9 @@ final class PageRepositoryTest extends TestCase
     {
         $parent = Page::factory()->create();
 
-        $child1 = Page::factory()->create(['parent_id' => $parent->id, 'status' => 1]);
-        $child2 = Page::factory()->create(['parent_id' => $parent->id, 'status' => 1]);
-        Page::factory()->create(['parent_id' => null, 'status' => 1]); // Different parent
+        $child1 = Page::factory()->create(['parent_id' => $parent->id, 'status' => Status::ACTIVE]);
+        $child2 = Page::factory()->create(['parent_id' => $parent->id, 'status' => Status::ACTIVE]);
+        Page::factory()->create(['parent_id' => null, 'status' => Status::ACTIVE]); // Different parent
 
         $result = $this->repository->getByParentId($parent->id);
 
@@ -264,9 +265,9 @@ final class PageRepositoryTest extends TestCase
 
     public function test_get_by_parent_id_returns_null_parent_pages_when_parent_id_is_null(): void
     {
-        $page1 = Page::factory()->create(['parent_id' => null, 'status' => 1]);
-        $page2 = Page::factory()->create(['parent_id' => null, 'status' => 1]);
-        Page::factory()->create(['parent_id' => 999, 'status' => 1]); // Has parent
+        $page1 = Page::factory()->create(['parent_id' => null, 'status' => Status::ACTIVE]);
+        $page2 = Page::factory()->create(['parent_id' => null, 'status' => Status::ACTIVE]);
+        Page::factory()->create(['parent_id' => 999, 'status' => Status::ACTIVE]); // Has parent
 
         $result = $this->repository->getByParentId(null);
 
@@ -281,13 +282,13 @@ final class PageRepositoryTest extends TestCase
 
         $published = Page::factory()->create([
             'parent_id'    => $parent->id,
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDay(),
         ]);
 
         Page::factory()->create([
             'parent_id'    => $parent->id,
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->addDay(), // Future
         ]);
 
@@ -303,13 +304,13 @@ final class PageRepositoryTest extends TestCase
 
         $published = Page::factory()->create([
             'parent_id'    => $parent->id,
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDay(),
         ]);
 
         $future = Page::factory()->create([
             'parent_id'    => $parent->id,
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->addDay(),
         ]);
 
@@ -321,12 +322,12 @@ final class PageRepositoryTest extends TestCase
     public function test_get_published_with_blocks_returns_published_pages(): void
     {
         $published = Page::factory()->create([
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDay(),
         ]);
 
         Page::factory()->create([
-            'status'       => 0,
+            'status'       => Status::INACTIVE,
             'published_at' => now()->subDay(),
         ]);
 
@@ -339,12 +340,12 @@ final class PageRepositoryTest extends TestCase
     public function test_get_published_with_blocks_uses_current_datetime_when_not_provided(): void
     {
         $published = Page::factory()->create([
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDay(),
         ]);
 
         Page::factory()->create([
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->addDay(), // Future
         ]);
 
@@ -357,12 +358,12 @@ final class PageRepositoryTest extends TestCase
     public function test_get_published_with_blocks_orders_by_published_at_desc(): void
     {
         $oldest = Page::factory()->create([
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDays(5),
         ]);
 
         $newest = Page::factory()->create([
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDay(),
         ]);
 

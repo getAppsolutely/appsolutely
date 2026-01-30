@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
+use App\Enums\Status;
 use App\Models\NotificationTemplate;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -92,7 +93,7 @@ final class NotificationTemplateRepository extends BaseRepository
     public function getWithUsageStats(): Collection
     {
         return $this->model->newQuery()->withCount(['rules as usage_count' => function ($query) {
-            $query->where('status', 1);
+            $query->where('status', Status::ACTIVE);
         }])->orderBy('created_at', 'desc')->get();
     }
 

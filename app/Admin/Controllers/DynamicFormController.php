@@ -10,6 +10,7 @@ use App\Admin\Forms\Models\FormFieldForm;
 use App\Admin\Forms\Models\FormForm;
 use App\Enums\FormEntrySpamStatus;
 use App\Enums\FormFieldType;
+use App\Enums\Status;
 use App\Helpers\AdminButtonHelper;
 use App\Models\Form;
 use App\Models\FormEntry;
@@ -269,7 +270,7 @@ final class DynamicFormController extends AdminBaseController
     protected function statisticsGrid(): string
     {
         $totalForms   = $this->formRepository->count();
-        $activeForms  = $this->formRepository->countByStatus(1);
+        $activeForms  = $this->formRepository->countByStatus(Status::ACTIVE->value);
         $totalFields  = $this->fieldRepository->count();
         $totalEntries = $this->entryRepository->count();
         $validEntries = $this->entryRepository->countValid();
@@ -335,7 +336,7 @@ final class DynamicFormController extends AdminBaseController
     protected function renderFormStats(): string
     {
         $totalForms   = $this->formRepository->count();
-        $activeForms  = $this->formRepository->countByStatus(1);
+        $activeForms  = $this->formRepository->countByStatus(Status::ACTIVE->value);
         $totalFields  = $this->fieldRepository->count();
         $totalEntries = $this->entryRepository->count();
         $validEntries = $this->entryRepository->countValid();

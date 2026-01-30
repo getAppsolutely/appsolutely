@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Services;
 
 use App\Constants\BasicConstant;
+use App\Enums\Status;
 use App\Models\Page;
 use App\Repositories\PageBlockSettingRepository;
 use App\Repositories\PageRepository;
@@ -52,7 +53,7 @@ final class PageServiceTest extends TestCase
     {
         $page = Page::factory()->create([
             'slug'         => 'test-page',
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDay(),
         ]);
 
@@ -73,7 +74,7 @@ final class PageServiceTest extends TestCase
     public function test_find_published_page_by_id_returns_page(): void
     {
         $page = Page::factory()->create([
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDay(),
         ]);
 

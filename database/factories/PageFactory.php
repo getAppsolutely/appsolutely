@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enums\Status;
 use App\Models\Page;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -44,7 +45,7 @@ class PageFactory extends Factory
             'parent_id'       => null,
             'published_at'    => now(),
             'expired_at'      => null,
-            'status'          => 1,
+            'status'          => Status::ACTIVE,
         ];
     }
 
@@ -54,7 +55,7 @@ class PageFactory extends Factory
     public function published(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDay(),
             'expired_at'   => null,
         ]);
@@ -66,7 +67,7 @@ class PageFactory extends Factory
     public function unpublished(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 0,
+            'status' => Status::INACTIVE,
         ]);
     }
 
@@ -76,7 +77,7 @@ class PageFactory extends Factory
     public function scheduled(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->addDay(),
         ]);
     }
@@ -87,7 +88,7 @@ class PageFactory extends Factory
     public function expired(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDays(10),
             'expired_at'   => now()->subDay(),
         ]);

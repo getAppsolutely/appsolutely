@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\MenuTarget;
 use App\Enums\MenuType;
+use App\Enums\Status;
 use App\Models\Traits\ClearsResponseCache;
 use App\Models\Traits\ScopePublished;
 use App\Models\Traits\ScopeReference;
@@ -51,7 +52,7 @@ final class Menu extends NestedSetModel implements Sortable
         'setting'      => 'array',
         'published_at' => 'datetime',
         'expired_at'   => 'datetime',
-        'status'       => 'integer',
+        'status'       => Status::class,
     ];
 
     public function children(): HasMany

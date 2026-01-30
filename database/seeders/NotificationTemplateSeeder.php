@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Enums\Status;
 use App\Models\NotificationTemplate;
 use Illuminate\Database\Seeder;
 
@@ -30,7 +31,7 @@ class NotificationTemplateSeeder extends Seeder
                     'form_fields_text',
                 ],
                 'is_system' => false,
-                'status'    => 1,
+                'status'    => Status::ACTIVE,
             ]
         );
     }

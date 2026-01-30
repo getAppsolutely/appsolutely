@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\NotificationTriggerType;
+use App\Enums\Status;
 use App\Models\Traits\ScopeStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -33,7 +34,7 @@ final class NotificationRule extends Model
         'recipient_emails' => 'array',
         'conditions'       => 'array',
         'delay_minutes'    => 'integer',
-        'status'           => 'integer',
+        'status'           => Status::class,
     ];
 
     public function template(): BelongsTo

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\Status;
 use App\Models\Traits\HasFilesOfType;
 use App\Models\Traits\ScopePublished;
 use App\Models\Traits\ScopeStatus;
@@ -40,6 +41,7 @@ class ProductCategory extends NestedSetModel
         'setting'      => 'array',
         'published_at' => 'datetime',
         'expired_at'   => 'datetime',
+        'status'       => Status::class,
     ];
 
     public function products(): BelongsToMany

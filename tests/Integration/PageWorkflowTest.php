@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use App\Enums\Status;
 use App\Models\Page;
 use App\Services\PageService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -26,7 +27,7 @@ final class PageWorkflowTest extends TestCase
         // Create page
         $page = Page::factory()->create([
             'slug'         => 'test-page',
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDay(),
         ]);
 

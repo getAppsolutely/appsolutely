@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\ProductType;
+use App\Enums\Status;
 use App\Models\Traits\HasFilesOfType;
 use App\Models\Traits\HasMarkdownContent;
 use App\Models\Traits\HasMonetaryFields;
@@ -69,6 +70,7 @@ class Product extends Model
         'additional_columns' => 'array',
         'published_at'       => 'datetime',
         'expired_at'         => 'datetime',
+        'status'             => Status::class,
     ];
 
     protected $monetaryFields = [

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enums\Status;
 use App\Models\Article;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -32,7 +33,7 @@ class ArticleFactory extends Factory
             'content'      => fake()->paragraphs(5, true),
             'cover'        => null,
             'setting'      => [],
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'sort'         => fake()->numberBetween(0, 100),
             'published_at' => now()->subDay(),
             'expired_at'   => null,
@@ -45,7 +46,7 @@ class ArticleFactory extends Factory
     public function published(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDay(),
             'expired_at'   => null,
         ]);
@@ -57,7 +58,7 @@ class ArticleFactory extends Factory
     public function unpublished(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 0,
+            'status' => Status::INACTIVE,
         ]);
     }
 }

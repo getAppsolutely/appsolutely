@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enums\Status;
 use App\Models\Form;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -29,7 +30,7 @@ class FormFactory extends Factory
             'slug'         => Str::slug($name) . '-' . fake()->unique()->numberBetween(1000, 9999),
             'description'  => fake()->paragraph(),
             'target_table' => null,
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
         ];
     }
 
@@ -39,7 +40,7 @@ class FormFactory extends Factory
     public function active(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 1,
+            'status' => Status::ACTIVE,
         ]);
     }
 
@@ -49,7 +50,7 @@ class FormFactory extends Factory
     public function inactive(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 0,
+            'status' => Status::INACTIVE,
         ]);
     }
 

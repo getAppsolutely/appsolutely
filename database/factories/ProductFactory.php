@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Enums\ProductType;
+use App\Enums\Status;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -41,7 +42,7 @@ class ProductFactory extends Factory
             'payment_methods'    => null,
             'additional_columns' => null,
             'sort'               => fake()->numberBetween(0, 100),
-            'status'             => 1,
+            'status'             => Status::ACTIVE,
             'published_at'       => now()->subDay(),
             'expired_at'         => null,
         ];
@@ -53,7 +54,7 @@ class ProductFactory extends Factory
     public function published(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDay(),
             'expired_at'   => null,
         ]);
@@ -65,7 +66,7 @@ class ProductFactory extends Factory
     public function unpublished(): static
     {
         return $this->state(fn (array $attributes) => [
-            'status' => 0,
+            'status' => Status::INACTIVE,
         ]);
     }
 

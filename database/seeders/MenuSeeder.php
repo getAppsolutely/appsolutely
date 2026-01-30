@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Enums\MenuTarget;
 use App\Enums\MenuType;
+use App\Enums\Status;
 use App\Models\Menu;
 use Illuminate\Database\Seeder;
 
@@ -63,7 +64,7 @@ class MenuSeeder extends Seeder
                 'target'       => MenuTarget::Self->value ?? null,
                 'is_external'  => $item['is_external'] ?? 0,
                 'published_at' => now(),
-                'status'       => 1,
+                'status'       => Status::ACTIVE,
             ];
 
             if (Menu::where('title', $data['title'])->where('parent_id', $data['parent_id'])->exists()) {

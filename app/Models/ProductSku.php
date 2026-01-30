@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\Status;
 use App\Models\Traits\HasFilesOfType;
 use App\Models\Traits\HasMarkdownContent;
 use App\Models\Traits\HasMonetaryFields;
@@ -55,7 +56,7 @@ class ProductSku extends Model implements Sortable
         'attributes'   => 'array',
         'stock'        => 'integer',
         'sort'         => 'integer',
-        'status'       => 'integer',
+        'status'       => Status::class,
         'published_at' => 'datetime',
         'expired_at'   => 'datetime',
     ];

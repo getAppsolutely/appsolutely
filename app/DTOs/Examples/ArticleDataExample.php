@@ -6,6 +6,7 @@ namespace App\DTOs\Examples;
 
 use App\DTOs\ArticleCategoryData;
 use App\DTOs\ArticleData;
+use App\Enums\Status;
 use App\Models\Article;
 use App\Repositories\ArticleRepository;
 use Illuminate\Http\Request;
@@ -41,7 +42,7 @@ class ArticleDataExample
         $data = [
             'title'        => 'My Article',
             'content'      => 'Article content here...',
-            'status'       => 1,
+            'status'       => Status::ACTIVE->value,
             'published_at' => '2024-01-15 10:00:00',
         ];
 
@@ -63,7 +64,7 @@ class ArticleDataExample
     public function exampleCollection(): \Spatie\LaravelData\DataCollection
     {
         $articles = Article::with('categories')
-            ->where('status', 1)
+            ->where('status', Status::ACTIVE)
             ->get();
 
         // Convert to DataCollection

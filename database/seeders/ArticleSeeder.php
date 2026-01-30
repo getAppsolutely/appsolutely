@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Enums\Status;
 use App\Models\Article;
 use App\Models\ArticleCategory;
 use Illuminate\Database\Seeder;
@@ -27,7 +28,7 @@ final class ArticleSeeder extends Seeder
                 'slug'         => 'technology',
                 'description'  => 'Latest technology news, trends, and insights',
                 'keywords'     => 'technology, tech, innovation, digital, software',
-                'status'       => 1,
+                'status'       => Status::ACTIVE,
                 'published_at' => now(),
             ],
             [
@@ -35,7 +36,7 @@ final class ArticleSeeder extends Seeder
                 'slug'         => 'business',
                 'description'  => 'Business strategies, entrepreneurship, and market analysis',
                 'keywords'     => 'business, entrepreneurship, strategy, market, finance',
-                'status'       => 1,
+                'status'       => Status::ACTIVE,
                 'published_at' => now(),
             ],
         ];
@@ -85,7 +86,7 @@ final class ArticleSeeder extends Seeder
                 'content'      => $this->getTechnologyContent('AI'),
                 'keywords'     => 'artificial intelligence, AI, machine learning, technology',
                 'cover'        => 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800',
-                'status'       => 1,
+                'status'       => Status::ACTIVE,
                 'published_at' => now()->subDays(rand(1, 30)),
             ],
             [
@@ -95,7 +96,7 @@ final class ArticleSeeder extends Seeder
                 'content'      => $this->getTechnologyContent('Web Development'),
                 'keywords'     => 'web development, programming, trends, frontend, backend',
                 'cover'        => 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800',
-                'status'       => 1,
+                'status'       => Status::ACTIVE,
                 'published_at' => now()->subDays(rand(1, 30)),
             ],
             [
@@ -105,7 +106,7 @@ final class ArticleSeeder extends Seeder
                 'content'      => $this->getTechnologyContent('Cybersecurity'),
                 'keywords'     => 'cybersecurity, security, small business, protection',
                 'cover'        => 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800',
-                'status'       => 1,
+                'status'       => Status::ACTIVE,
                 'published_at' => now()->subDays(rand(1, 30)),
             ],
             [
@@ -115,7 +116,7 @@ final class ArticleSeeder extends Seeder
                 'content'      => $this->getTechnologyContent('Cloud Computing'),
                 'keywords'     => 'cloud computing, AWS, Azure, Google Cloud, infrastructure',
                 'cover'        => 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800',
-                'status'       => 1,
+                'status'       => Status::ACTIVE,
                 'published_at' => now()->subDays(rand(1, 30)),
             ],
             [
@@ -125,7 +126,7 @@ final class ArticleSeeder extends Seeder
                 'content'      => $this->getTechnologyContent('Mobile Development'),
                 'keywords'     => 'mobile development, React Native, Flutter, iOS, Android',
                 'cover'        => 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800',
-                'status'       => 1,
+                'status'       => Status::ACTIVE,
                 'published_at' => now()->subDays(rand(1, 30)),
             ],
             [
@@ -135,7 +136,7 @@ final class ArticleSeeder extends Seeder
                 'content'      => $this->getTechnologyContent('Data Science'),
                 'keywords'     => 'data science, analytics, big data, machine learning',
                 'cover'        => 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800',
-                'status'       => 1,
+                'status'       => Status::ACTIVE,
                 'published_at' => now()->subDays(rand(1, 30)),
             ],
             [
@@ -145,7 +146,7 @@ final class ArticleSeeder extends Seeder
                 'content'      => $this->getTechnologyContent('Blockchain'),
                 'keywords'     => 'blockchain, cryptocurrency, distributed ledger, smart contracts',
                 'cover'        => 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800',
-                'status'       => 1,
+                'status'       => Status::ACTIVE,
                 'published_at' => now()->subDays(rand(1, 30)),
             ],
             [
@@ -155,7 +156,7 @@ final class ArticleSeeder extends Seeder
                 'content'      => $this->getTechnologyContent('IoT'),
                 'keywords'     => 'IoT, internet of things, smart devices, connectivity',
                 'cover'        => 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800',
-                'status'       => 1,
+                'status'       => Status::ACTIVE,
                 'published_at' => now()->subDays(rand(1, 30)),
             ],
             [
@@ -165,7 +166,7 @@ final class ArticleSeeder extends Seeder
                 'content'      => $this->getTechnologyContent('DevOps'),
                 'keywords'     => 'devops, CI/CD, automation, deployment, infrastructure',
                 'cover'        => 'https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?w=800',
-                'status'       => 1,
+                'status'       => Status::ACTIVE,
                 'published_at' => now()->subDays(rand(1, 30)),
             ],
             [
@@ -175,7 +176,7 @@ final class ArticleSeeder extends Seeder
                 'content'      => $this->getTechnologyContent('VR/AR'),
                 'keywords'     => 'virtual reality, augmented reality, VR, AR, immersive technology',
                 'cover'        => 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=800',
-                'status'       => 1,
+                'status'       => Status::ACTIVE,
                 'published_at' => now()->subDays(rand(1, 30)),
             ],
         ];
@@ -191,7 +192,7 @@ final class ArticleSeeder extends Seeder
                 'content'      => $this->getBusinessContent('Startup'),
                 'keywords'     => 'startup, entrepreneurship, business strategy, success',
                 'cover'        => 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800',
-                'status'       => 1,
+                'status'       => Status::ACTIVE,
                 'published_at' => now()->subDays(rand(1, 30)),
             ],
             [
@@ -201,7 +202,7 @@ final class ArticleSeeder extends Seeder
                 'content'      => $this->getBusinessContent('Digital Marketing'),
                 'keywords'     => 'digital marketing, SEO, social media, content marketing',
                 'cover'        => 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800',
-                'status'       => 1,
+                'status'       => Status::ACTIVE,
                 'published_at' => now()->subDays(rand(1, 30)),
             ],
             [
@@ -211,7 +212,7 @@ final class ArticleSeeder extends Seeder
                 'content'      => $this->getBusinessContent('Financial Planning'),
                 'keywords'     => 'financial planning, small business, budgeting, cash flow',
                 'cover'        => 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800',
-                'status'       => 1,
+                'status'       => Status::ACTIVE,
                 'published_at' => now()->subDays(rand(1, 30)),
             ],
             [
@@ -221,7 +222,7 @@ final class ArticleSeeder extends Seeder
                 'content'      => $this->getBusinessContent('Customer Experience'),
                 'keywords'     => 'customer experience, CX, customer service, business growth',
                 'cover'        => 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800',
-                'status'       => 1,
+                'status'       => Status::ACTIVE,
                 'published_at' => now()->subDays(rand(1, 30)),
             ],
             [
@@ -231,7 +232,7 @@ final class ArticleSeeder extends Seeder
                 'content'      => $this->getBusinessContent('Remote Work'),
                 'keywords'     => 'remote work, distributed teams, management, productivity',
                 'cover'        => 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800',
-                'status'       => 1,
+                'status'       => Status::ACTIVE,
                 'published_at' => now()->subDays(rand(1, 30)),
             ],
             [
@@ -241,7 +242,7 @@ final class ArticleSeeder extends Seeder
                 'content'      => $this->getBusinessContent('E-commerce'),
                 'keywords'     => 'e-commerce, online business, digital commerce, trends',
                 'cover'        => 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800',
-                'status'       => 1,
+                'status'       => Status::ACTIVE,
                 'published_at' => now()->subDays(rand(1, 30)),
             ],
             [
@@ -251,7 +252,7 @@ final class ArticleSeeder extends Seeder
                 'content'      => $this->getBusinessContent('Business Analytics'),
                 'keywords'     => 'business analytics, data analysis, decision making, insights',
                 'cover'        => 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800',
-                'status'       => 1,
+                'status'       => Status::ACTIVE,
                 'published_at' => now()->subDays(rand(1, 30)),
             ],
             [
@@ -261,7 +262,7 @@ final class ArticleSeeder extends Seeder
                 'content'      => $this->getBusinessContent('Leadership'),
                 'keywords'     => 'leadership, management, business skills, team building',
                 'cover'        => 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800',
-                'status'       => 1,
+                'status'       => Status::ACTIVE,
                 'published_at' => now()->subDays(rand(1, 30)),
             ],
             [
@@ -271,7 +272,7 @@ final class ArticleSeeder extends Seeder
                 'content'      => $this->getBusinessContent('Supply Chain'),
                 'keywords'     => 'supply chain, logistics, operations, digital transformation',
                 'cover'        => 'https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=800',
-                'status'       => 1,
+                'status'       => Status::ACTIVE,
                 'published_at' => now()->subDays(rand(1, 30)),
             ],
             [
@@ -281,7 +282,7 @@ final class ArticleSeeder extends Seeder
                 'content'      => $this->getBusinessContent('Sustainability'),
                 'keywords'     => 'sustainability, green business, corporate responsibility, environment',
                 'cover'        => 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800',
-                'status'       => 1,
+                'status'       => Status::ACTIVE,
                 'published_at' => now()->subDays(rand(1, 30)),
             ],
         ];

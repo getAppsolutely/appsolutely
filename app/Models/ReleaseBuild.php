@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\BuildStatus;
 use App\Enums\Platform;
+use App\Enums\Status;
 use App\Models\Traits\HasFilesOfType;
 use App\Models\Traits\ScopePublished;
 use App\Models\Traits\ScopeStatus;
@@ -40,7 +41,7 @@ final class ReleaseBuild extends Model
         'build_status'  => BuildStatus::class,
         'force_update'  => 'integer',
         'gray_strategy' => 'array',
-        'status'        => 'integer',
+        'status'        => Status::class,
         'published_at'  => 'datetime',
     ];
 

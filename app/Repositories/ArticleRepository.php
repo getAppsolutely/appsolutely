@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
+use App\Enums\Status;
 use App\Models\Article;
 use Carbon\Carbon;
 
@@ -17,7 +18,7 @@ final class ArticleRepository extends BaseRepository
     public function getPublishedArticles(array $filters = []): \Illuminate\Database\Eloquent\Builder
     {
         $query = $this->model->newQuery()
-            ->where('status', 1) // Published articles only
+            ->where('status', Status::ACTIVE) // Published articles only
             ->where('published_at', '<=', now());
 
         // Apply category filter

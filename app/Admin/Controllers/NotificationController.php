@@ -9,6 +9,7 @@ use App\Admin\Forms\Models\NotificationQueueForm;
 use App\Admin\Forms\Models\NotificationRuleForm;
 use App\Admin\Forms\Models\NotificationSenderForm;
 use App\Admin\Forms\Models\NotificationTemplateForm;
+use App\Enums\Status;
 use App\Helpers\AdminButtonHelper;
 use App\Models\NotificationQueue;
 use App\Models\NotificationRule;
@@ -87,7 +88,7 @@ final class NotificationController extends AdminBaseController
                 $filter->equal('id', __t('ID'))->width(3);
                 $filter->like('name', __t('Name'))->width(3);
                 $filter->equal('category', __t('Category'))->width(3);
-                $filter->equal('status', __t('Status'))->select(['1' => __t('Active'), '0' => __t('Inactive')])->width(3);
+                $filter->equal('status', __t('Status'))->select(Status::toTranslatedArray())->width(3);
             });
 
             $grid->disableCreateButton();
@@ -168,7 +169,7 @@ final class NotificationController extends AdminBaseController
                 $filter->equal('id', __t('ID'))->width(3);
                 $filter->like('name', __t('Name'))->width(3);
                 $filter->equal('trigger_type', __t('Trigger'))->width(3);
-                $filter->equal('status', __t('Status'))->select(['1' => __t('Active'), '0' => __t('Inactive')])->width(3);
+                $filter->equal('status', __t('Status'))->select(Status::toTranslatedArray())->width(3);
             });
 
             $grid->disableCreateButton();
@@ -264,7 +265,7 @@ final class NotificationController extends AdminBaseController
                         'log'      => 'Log',
                     ])->width(3);
                 $filter->equal('is_active', __t('Active'))
-                    ->select(['1' => __t('Yes'), '0' => __t('No')])->width(3);
+                    ->select([Status::ACTIVE->value => __t('Yes'), Status::INACTIVE->value => __t('No')])->width(3);
             });
 
             $grid->disableCreateButton();

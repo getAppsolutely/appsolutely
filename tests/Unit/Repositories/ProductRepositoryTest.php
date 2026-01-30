@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Repositories;
 
+use App\Enums\Status;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Repositories\ProductRepository;
@@ -24,9 +25,9 @@ final class ProductRepositoryTest extends TestCase
 
     public function test_get_active_products_returns_only_active_products(): void
     {
-        $active1 = Product::factory()->create(['status' => 1, 'sort' => 1]);
-        $active2 = Product::factory()->create(['status' => 1, 'sort' => 2]);
-        Product::factory()->create(['status' => 0]);
+        $active1 = Product::factory()->create(['status' => Status::ACTIVE, 'sort' => 1]);
+        $active2 = Product::factory()->create(['status' => Status::ACTIVE, 'sort' => 2]);
+        Product::factory()->create(['status' => Status::INACTIVE]);
 
         $result = $this->repository->getActiveProducts();
 
@@ -37,9 +38,9 @@ final class ProductRepositoryTest extends TestCase
 
     public function test_get_active_products_orders_by_sort(): void
     {
-        $product1 = Product::factory()->create(['status' => 1, 'sort' => 3]);
-        $product2 = Product::factory()->create(['status' => 1, 'sort' => 1]);
-        $product3 = Product::factory()->create(['status' => 1, 'sort' => 2]);
+        $product1 = Product::factory()->create(['status' => Status::ACTIVE, 'sort' => 3]);
+        $product2 = Product::factory()->create(['status' => Status::ACTIVE, 'sort' => 1]);
+        $product3 = Product::factory()->create(['status' => Status::ACTIVE, 'sort' => 2]);
 
         $result = $this->repository->getActiveProducts();
 
@@ -50,9 +51,9 @@ final class ProductRepositoryTest extends TestCase
 
     public function test_get_active_list_returns_id_title_array(): void
     {
-        $product1 = Product::factory()->create(['status' => 1, 'title' => 'Product A']);
-        $product2 = Product::factory()->create(['status' => 1, 'title' => 'Product B']);
-        Product::factory()->create(['status' => 0]);
+        $product1 = Product::factory()->create(['status' => Status::ACTIVE, 'title' => 'Product A']);
+        $product2 = Product::factory()->create(['status' => Status::ACTIVE, 'title' => 'Product B']);
+        Product::factory()->create(['status' => Status::INACTIVE]);
 
         $result = $this->repository->getActiveList();
 
@@ -66,14 +67,14 @@ final class ProductRepositoryTest extends TestCase
     {
         $published = Product::factory()->create([
             'slug'         => 'product-1',
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDay(),
         ]);
 
         // Create unpublished product (should be excluded)
         Product::factory()->create([
             'slug'         => 'product-2',
-            'status'       => 0,
+            'status'       => Status::INACTIVE,
             'published_at' => now()->subDay(),
         ]);
 
@@ -89,9 +90,9 @@ final class ProductRepositoryTest extends TestCase
     public function test_find_by_category_slug_returns_products_in_category(): void
     {
         $category = ProductCategory::factory()->create(['slug' => 'electronics']);
-        $product1 = Product::factory()->create(['status' => 1, 'published_at' => now()->subDay()]);
-        $product2 = Product::factory()->create(['status' => 1, 'published_at' => now()->subDay()]);
-        $product3 = Product::factory()->create(['status' => 1, 'published_at' => now()->subDay()]);
+        $product1 = Product::factory()->create(['status' => Status::ACTIVE, 'published_at' => now()->subDay()]);
+        $product2 = Product::factory()->create(['status' => Status::ACTIVE, 'published_at' => now()->subDay()]);
+        $product3 = Product::factory()->create(['status' => Status::ACTIVE, 'published_at' => now()->subDay()]);
 
         $product1->categories()->attach($category->id);
         $product2->categories()->attach($category->id);
@@ -106,10 +107,10 @@ final class ProductRepositoryTest extends TestCase
 
     public function test_get_recent_products_returns_limited_published_products(): void
     {
-        Product::factory()->create(['status' => 1, 'published_at' => now()->subDays(5)]);
-        Product::factory()->create(['status' => 1, 'published_at' => now()->subDays(2)]);
-        Product::factory()->create(['status' => 1, 'published_at' => now()->subDay()]);
-        Product::factory()->create(['status' => 0, 'published_at' => now()->subDay()]);
+        Product::factory()->create(['status' => Status::ACTIVE, 'published_at' => now()->subDays(5)]);
+        Product::factory()->create(['status' => Status::ACTIVE, 'published_at' => now()->subDays(2)]);
+        Product::factory()->create(['status' => Status::ACTIVE, 'published_at' => now()->subDay()]);
+        Product::factory()->create(['status' => Status::INACTIVE, 'published_at' => now()->subDay()]);
 
         $result = $this->repository->getRecentProducts(2);
 
@@ -122,7 +123,7 @@ final class ProductRepositoryTest extends TestCase
         $category = ProductCategory::factory()->create();
         $product  = Product::factory()->create([
             'slug'         => 'test-product',
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDay(),
         ]);
         $product->categories()->attach($category->id);

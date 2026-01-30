@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Controllers;
 
+use App\Enums\Status;
 use App\Models\GeneralPage;
 use App\Models\Page;
 use App\Services\Contracts\GeneralPageServiceInterface;
@@ -19,7 +20,7 @@ final class PageControllerTest extends TestCase
     {
         $page = Page::factory()->create([
             'slug'         => 'test-page',
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDay(),
         ]);
 
@@ -61,7 +62,7 @@ final class PageControllerTest extends TestCase
     {
         $page = Page::factory()->create([
             'slug'         => '/',
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDay(),
         ]);
 
@@ -85,7 +86,7 @@ final class PageControllerTest extends TestCase
     {
         $page = Page::factory()->create([
             'slug'         => '/',
-            'status'       => 1,
+            'status'       => Status::ACTIVE,
             'published_at' => now()->subDay(),
         ]);
 

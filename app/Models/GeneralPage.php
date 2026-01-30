@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\PageType;
+use App\Enums\Status;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -126,7 +127,7 @@ class GeneralPage
             'updated_at'   => $this->content->updated_at,
 
             // Status - from main content
-            'status' => $this->content->status ?? 1,
+            'status' => $this->content->status ?? Status::ACTIVE,
 
             // IDs
             'id'             => $this->content->id,

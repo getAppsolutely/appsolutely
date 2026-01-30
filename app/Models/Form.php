@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\FormEntrySpamStatus;
+use App\Enums\Status;
 use App\Models\Traits\ScopeStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -23,7 +24,7 @@ final class Form extends Model
     ];
 
     protected $casts = [
-        'status' => 'integer',
+        'status' => Status::class,
     ];
 
     public function fields(): HasMany

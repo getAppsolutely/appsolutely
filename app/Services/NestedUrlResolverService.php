@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Enums\Status;
 use App\Exceptions\NotFoundException;
 use App\Models\Page;
 use App\Repositories\PageRepository;
@@ -255,7 +256,7 @@ final readonly class NestedUrlResolverService
     protected function isContentValid(Model $content, Carbon $now): bool
     {
         // Check status
-        if (isset($content->status) && $content->status !== 1) {
+        if (isset($content->status) && $content->status !== Status::ACTIVE) {
             return false;
         }
 

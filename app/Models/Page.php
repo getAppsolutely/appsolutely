@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\Status;
 use App\Models\Traits\ClearsResponseCache;
 use App\Models\Traits\ScopePublished;
 use App\Models\Traits\ScopeReference;
@@ -47,7 +48,7 @@ class Page extends Model
     protected $casts = [
         'published_at'    => 'datetime',
         'expired_at'      => 'datetime',
-        'status'          => 'integer',
+        'status'          => Status::class,
         'setting'         => 'array',
         'structured_data' => 'array',
     ];

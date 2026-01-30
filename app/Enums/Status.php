@@ -16,4 +16,12 @@ enum Status: int
             self::ACTIVE->value   => 'Active',
         ];
     }
+
+    /**
+     * Same as toArray() but with labels run through __t() for admin filters/selects.
+     */
+    public static function toTranslatedArray(): array
+    {
+        return collect(self::toArray())->map(fn (string $label) => __t($label))->all();
+    }
 }

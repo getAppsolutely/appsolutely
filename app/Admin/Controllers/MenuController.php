@@ -6,6 +6,7 @@ namespace App\Admin\Controllers;
 
 use App\Enums\MenuTarget;
 use App\Enums\MenuType;
+use App\Enums\Status;
 use App\Models\Menu;
 use App\Repositories\MenuRepository;
 use Dcat\Admin\Form;
@@ -84,7 +85,7 @@ final class MenuController extends AdminBaseController
             $form->datetime('published_at', __t('Published At (%s)', [app_local_timezone()]));
             $form->datetime('expired_at', __t('Expired At (%s)', [app_local_timezone()]));
 
-            $form->switch('status', __t('Status'))->default(1);
+            $form->switch('status', __t('Status'))->default(Status::ACTIVE->value);
 
             $form->saving(function (Form $form) {
                 /** @var Menu $model */
