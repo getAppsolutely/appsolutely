@@ -24,6 +24,7 @@ use App\Services\NotificationTemplateService;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Grid\Tools;
 use Dcat\Admin\Layout\Content;
+use Dcat\Admin\Layout\Row;
 use Dcat\Admin\Widgets\Modal;
 use Dcat\Admin\Widgets\Tab;
 
@@ -50,11 +51,14 @@ final class NotificationController extends AdminBaseController
     {
         $tab = new Tab();
 
-        $tab->add(__t('Templates'), $this->templatesGrid(), true, 'templates');
+        $queueContent = new Row();
+        $queueContent->column(12, $this->statisticsGrid());
+        $queueContent->column(12, $this->queueGrid());
+
+        $tab->add(__t('Queue'), $queueContent, true, 'queue');
         $tab->add(__t('Rules'), $this->rulesGrid(), false, 'rules');
+        $tab->add(__t('Templates'), $this->templatesGrid(), false, 'templates');
         $tab->add(__t('Senders'), $this->sendersGrid(), false, 'senders');
-        $tab->add(__t('Queue'), $this->queueGrid(), false, 'queue');
-        $tab->add(__t('Statistics'), $this->statisticsGrid(), false, 'statistics');
 
         $tab->withCard();
 
