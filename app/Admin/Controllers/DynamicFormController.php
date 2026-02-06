@@ -116,9 +116,11 @@ final class DynamicFormController extends AdminBaseController
             $grid->column('label', __t('Label'))->editable();
             $grid->column('name', __t('Field Name'));
             $grid->column('type', __t('Type'))->display(function ($type) {
-                $formFieldType = FormFieldType::tryFrom($type);
+                $formFieldType = $type instanceof FormFieldType
+                    ? $type
+                    : FormFieldType::tryFrom(is_string($type) ? $type : (string) $type);
 
-                return $formFieldType ? $formFieldType->label() : $type;
+                return $formFieldType ? $formFieldType->label() : (string) $type;
             })->label([
                 'text'     => 'primary',
                 'email'    => 'info',
