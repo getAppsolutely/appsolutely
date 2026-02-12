@@ -26,13 +26,13 @@
                                 <div class="col-12 col-lg-8 col-xl-6">
                                     @if (!empty($hero['model']) && !empty($hero['title']))
                                         <img src="{{ asset_url($hero['model']) }}" alt="{{ $hero['image_alt'] ?? '' }}"
-                                            class="mb-4">
+                                            class="mb-2">
                                     @elseif(empty($hero['model']) && !empty($hero['title']))
-                                        <h4 class="display-6 fw-bold mb-3">{{ $hero['title'] }}</h4>
+                                        <h4 class="display-6 fw-bold mb-2">{{ $hero['title'] }}</h4>
                                     @endif
                                     @if (!empty($hero['subtitle']))
                                         @if (is_string($hero['subtitle']))
-                                            <p class="lead mb-4">{{ $hero['subtitle'] }}</p>
+                                            <p class="lead mb-2">{{ $hero['subtitle'] }}</p>
                                         @elseif(is_array($hero['subtitle']))
                                             @foreach ($hero['subtitle'] as $subtitle)
                                                 <p class="lead mb-1">{{ $subtitle }}</p>
