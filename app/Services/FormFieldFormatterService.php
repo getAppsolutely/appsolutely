@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Enums\FormFieldType;
 use App\Models\Form;
 use App\Models\FormEntry;
 
@@ -100,8 +101,10 @@ final readonly class FormFieldFormatterService
     /**
      * Format a value for HTML display based on field type
      */
-    public function formatValue(mixed $value, string $fieldType): string
+    public function formatValue(mixed $value, string|FormFieldType $fieldType): string
     {
+        $fieldType = $fieldType instanceof FormFieldType ? $fieldType->value : $fieldType;
+
         // Handle file uploads
         if ($fieldType === 'file') {
             if (is_array($value)) {
@@ -146,8 +149,10 @@ final readonly class FormFieldFormatterService
     /**
      * Format a value for plain text display based on field type
      */
-    public function formatValueText(mixed $value, string $fieldType): string
+    public function formatValueText(mixed $value, string|FormFieldType $fieldType): string
     {
+        $fieldType = $fieldType instanceof FormFieldType ? $fieldType->value : $fieldType;
+
         // Handle file uploads
         if ($fieldType === 'file') {
             if (is_array($value)) {

@@ -6,6 +6,7 @@ use App\Enums\TranslationType;
 use App\Enums\TranslatorType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class() extends Migration
 {
@@ -14,6 +15,10 @@ return new class() extends Migration
      */
     public function up(): void
     {
+        if (Schema::getConnection()->getDriverName() !== 'mysql') {
+            return;
+        }
+
         $typeValues   = array_map(fn (\BackedEnum $case) => $case->value, TranslationType::cases());
         $typeEnumList = "'" . implode("','", array_map('addslashes', $typeValues)) . "'";
 
@@ -29,6 +34,10 @@ return new class() extends Migration
      */
     public function down(): void
     {
+        if (Schema::getConnection()->getDriverName() !== 'mysql') {
+            return;
+        }
+
         DB::statement('ALTER TABLE translations MODIFY type VARCHAR(255) NOT NULL');
         DB::statement('ALTER TABLE translations MODIFY translator VARCHAR(255) NULL');
     }

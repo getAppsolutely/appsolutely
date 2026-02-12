@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Enums\OrderStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class() extends Migration
 {
@@ -29,6 +30,10 @@ return new class() extends Migration
         DB::table('order_items')->where('status', '2')->update(['status' => $completed]);
         DB::table('order_items')->whereNotNull('status')->whereNotIn('status', $enumValues)->update(['status' => $pending]);
 
+        if (Schema::getConnection()->getDriverName() !== 'mysql') {
+            return;
+        }
+
         $values   = array_map(fn (\BackedEnum $case) => $case->value, OrderStatus::cases());
         $enumList = "'" . implode("','", array_map('addslashes', $values)) . "'";
 
@@ -41,6 +46,10 @@ return new class() extends Migration
      */
     public function down(): void
     {
+        if (Schema::getConnection()->getDriverName() !== 'mysql') {
+            return;
+        }
+
         DB::statement('ALTER TABLE orders MODIFY status VARCHAR(255) NULL');
         DB::statement('ALTER TABLE order_items MODIFY status VARCHAR(255) NULL');
     }

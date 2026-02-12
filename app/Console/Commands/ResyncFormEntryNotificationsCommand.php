@@ -95,7 +95,7 @@ final class ResyncFormEntryNotificationsCommand extends Command
 
         foreach ($rules as $rule) {
             $this->line("📋 Processing rule: <fg=cyan>{$rule->name}</> (ID: {$rule->id})");
-            $this->line("   Trigger: {$rule->trigger_type} → {$rule->trigger_reference}");
+            $this->line('   Trigger: ' . $rule->trigger_type->value . ' → ' . $rule->trigger_reference);
 
             // Get entries for this rule
             $entries = $this->getEntriesForRule(
