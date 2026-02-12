@@ -11,7 +11,9 @@ use Illuminate\Support\Facades\Log;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Exception\CommonMarkException;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
-use League\CommonMark\GithubFlavoredMarkdownConverter;
+use League\CommonMark\Extension\Footnote\FootnoteExtension;
+use League\CommonMark\Extension\GithubFlavoredMarkdownExtension;
+use League\CommonMark\MarkdownConverter;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Qirolab\Theme\Theme;
 
@@ -1100,7 +1102,22 @@ if (! function_exists('md2html')) {
             static $converter = null;
 
             if ($converter === null) {
-                $converter = new GithubFlavoredMarkdownConverter();
+                $environment = new Environment([
+                    'footnote' => [
+                        'backref_class'      => 'footnote-backref',
+                        'backref_symbol'     => '↩',
+                        'container_add_hr'   => true,
+                        'container_class'    => 'footnotes',
+                        'ref_class'          => 'footnote-ref',
+                        'ref_id_prefix'      => 'fnref:',
+                        'footnote_class'     => 'footnote',
+                        'footnote_id_prefix' => 'fn:',
+                    ],
+                ]);
+                $environment->addExtension(new CommonMarkCoreExtension());
+                $environment->addExtension(new GithubFlavoredMarkdownExtension());
+                $environment->addExtension(new FootnoteExtension());
+                $converter = new MarkdownConverter($environment);
             }
 
             $html = $converter->convert($text)->getContent();
