@@ -96,11 +96,24 @@ class CmsMenuSeeder extends Seeder
             ]);
         }
 
+        $formsMenu = Menu::where('parent_id', $cmsMenuId)->where('title', 'Dynamic Forms')->first();
+        if (! $formsMenu) {
+            Menu::create([
+                'parent_id'  => $cmsMenuId,
+                'order'      => 4,
+                'title'      => 'Dynamic Forms',
+                'icon'       => 'fa-wpforms',
+                'uri'        => 'forms',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
         $blocksMenu = Menu::where('parent_id', $cmsMenuId)->where('title', 'Page Blocks')->first();
         if (! $blocksMenu) {
             Menu::create([
                 'parent_id'  => $cmsMenuId,
-                'order'      => 4,
+                'order'      => 5,
                 'title'      => 'Page Blocks',
                 'icon'       => 'fa-list',
                 'uri'        => 'pages/blocks',
