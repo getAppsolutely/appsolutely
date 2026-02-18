@@ -364,49 +364,48 @@ final class FormEntryRepository extends BaseRepository
     }
 
     /**
-     * Get entries with filters for resync
+     * Get entries by filters (paginated). Filters: form_id, form_slug, trigger_reference (for resync),
+     * entry_id_from, entry_id_to, from_date, to_date; plus page, per_page (default 15, max 100).
+     * Valid (non-spam) only.
+     *
+     * @param  array{form_id?: int, form_slug?: string, trigger_reference?: string, entry_id_from?: int, entry_id_to?: int, from_date?: string, to_date?: string, page?: int, per_page?: int}  $filters
      */
-    public function getEntriesForResync(array $filters): Collection
+    public function getEntriesByFiltersPaginated(array $filters): LengthAwarePaginator
     {
+        $perPage = (int) ($filters['per_page'] ?? 15);
+        $page    = (int) ($filters['page'] ?? 1);
+        $perPage = max(1, min(100, $perPage));
+        $page    = max(1, $page);
+
         $query = $this->model->newQuery()
             ->where('is_spam', FormEntrySpamStatus::Valid)
             ->with(['form', 'form.fields']);
 
-        // Filter by form ID if provided
         if (! empty($filters['form_id'])) {
             $query->where('form_id', (int) $filters['form_id']);
-        }
-        // Filter by form slug if provided (requires join)
-        elseif (! empty($filters['form_slug'])) {
+        } elseif (! empty($filters['form_slug'])) {
             $query->whereHas('form', function ($q) use ($filters) {
                 $q->where('slug', $filters['form_slug']);
             });
-        }
-        // Filter by rule's trigger reference (form slug or wildcard)
-        elseif (! empty($filters['trigger_reference']) && $filters['trigger_reference'] !== '*') {
+        } elseif (! empty($filters['trigger_reference']) && $filters['trigger_reference'] !== '*') {
             $query->whereHas('form', function ($q) use ($filters) {
                 $q->where('slug', $filters['trigger_reference']);
             });
         }
 
-        // Filter by entry ID range
         if (! empty($filters['entry_id_from'])) {
             $query->where('id', '>=', (int) $filters['entry_id_from']);
         }
-
         if (! empty($filters['entry_id_to'])) {
             $query->where('id', '<=', (int) $filters['entry_id_to']);
         }
-
-        // Filter by date range
         if (! empty($filters['from_date'])) {
             $query->whereDate('submitted_at', '>=', $filters['from_date']);
         }
-
         if (! empty($filters['to_date'])) {
             $query->whereDate('submitted_at', '<=', $filters['to_date']);
         }
 
-        return $query->orderBy('submitted_at', 'desc')->get();
+        return $query->orderBy('submitted_at', 'desc')->paginate($perPage, ['*'], 'page', $page);
     }
 }

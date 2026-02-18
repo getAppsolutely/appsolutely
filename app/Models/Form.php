@@ -16,6 +16,7 @@ final class Form extends Model
     use ScopeStatus;
 
     protected $fillable = [
+        'api_access_token',
         'name',
         'slug',
         'description',

@@ -15,7 +15,7 @@ final class FormRepository extends BaseRepository
     }
 
     /**
-     * Find form by slug
+     * Find form by slug (active forms only)
      */
     public function findBySlug(string $slug): ?Form
     {
@@ -23,6 +23,17 @@ final class FormRepository extends BaseRepository
             ->with(['fields'])
             ->where('slug', $slug)
             ->status()
+            ->first();
+    }
+
+    /**
+     * Find form by slug for API (any status) — used to distinguish 404 vs 401
+     */
+    public function findBySlugForApi(string $slug): ?Form
+    {
+        return $this->model->newQuery()
+            ->with(['fields'])
+            ->where('slug', $slug)
             ->first();
     }
 

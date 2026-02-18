@@ -92,6 +92,33 @@ if (! function_exists('client_ip')) {
     }
 }
 
+if (! function_exists('api_bearer_or_query_token')) {
+    /**
+     * Resolve API token from request: Authorization Bearer header or query parameter.
+     * Use for APIs that accept token in header (Authorization: Bearer <token>) or query (?token=...).
+     *
+     * @param  \Illuminate\Http\Request|null  $request  Defaults to request()
+     * @param  string  $queryKey  Query parameter name (default "token")
+     * @return string|null The token or null if not present
+     */
+    function api_bearer_or_query_token(?\Illuminate\Http\Request $request = null, string $queryKey = 'token'): ?string
+    {
+        $request = $request ?? request();
+        $header  = $request->header('Authorization')
+            ?? $request->server('REDIRECT_HTTP_AUTHORIZATION');
+
+        if ($header !== null && $header !== '' && str_starts_with(strtolower($header), 'bearer ')) {
+            $token = trim(substr($header, 7));
+
+            return $token !== '' ? $token : null;
+        }
+
+        $queryToken = $request->query($queryKey);
+
+        return is_string($queryToken) && $queryToken !== '' ? $queryToken : null;
+    }
+}
+
 if (! function_exists('themed_absolute_path')) {
     /**
      * Get the path to a theme's views directory.

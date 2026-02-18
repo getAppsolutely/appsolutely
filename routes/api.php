@@ -18,4 +18,5 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum')->name('api.user');
 
 // Load feature-based route files
+require __DIR__ . '/api/forms.php';
 require __DIR__ . '/api/releases.php';

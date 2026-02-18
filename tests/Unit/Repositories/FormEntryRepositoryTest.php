@@ -129,7 +129,7 @@ final class FormEntryRepositoryTest extends TestCase
         $this->assertCount(0, $result);
     }
 
-    public function test_get_entries_for_resync_filters_by_form_id(): void
+    public function test_get_entries_by_filters_paginated_filters_by_form_id(): void
     {
         $form1 = Form::factory()->create();
         $form2 = Form::factory()->create();
@@ -138,24 +138,26 @@ final class FormEntryRepositoryTest extends TestCase
         FormEntry::factory()->create(['form_id' => $form1->id]);
         FormEntry::factory()->create(['form_id' => $form2->id]);
 
-        $result = $this->repository->getEntriesForResync(['form_id' => $form1->id]);
+        $paginator = $this->repository->getEntriesByFiltersPaginated(['form_id' => $form1->id, 'per_page' => 100]);
+        $result    = collect($paginator->items());
 
         $this->assertCount(2, $result);
         $this->assertTrue($result->every(fn ($entry) => $entry->form_id === $form1->id));
     }
 
-    public function test_get_entries_for_resync_filters_by_form_slug(): void
+    public function test_get_entries_by_filters_paginated_filters_by_form_slug(): void
     {
         $form = Form::factory()->create(['slug' => 'contact-form']);
 
         FormEntry::factory()->count(2)->create(['form_id' => $form->id]);
 
-        $result = $this->repository->getEntriesForResync(['form_slug' => 'contact-form']);
+        $paginator = $this->repository->getEntriesByFiltersPaginated(['form_slug' => 'contact-form', 'per_page' => 100]);
+        $result    = collect($paginator->items());
 
         $this->assertCount(2, $result);
     }
 
-    public function test_get_entries_for_resync_filters_by_entry_id_range(): void
+    public function test_get_entries_by_filters_paginated_filters_by_entry_id_range(): void
     {
         $form = Form::factory()->create();
 
@@ -164,37 +166,37 @@ final class FormEntryRepositoryTest extends TestCase
         $entry3 = FormEntry::factory()->create(['form_id' => $form->id]);
         $entry4 = FormEntry::factory()->create(['form_id' => $form->id]);
 
-        // Test from
-        $result = $this->repository->getEntriesForResync([
+        $paginator = $this->repository->getEntriesByFiltersPaginated([
             'form_id'       => $form->id,
             'entry_id_from' => (string) $entry2->id,
+            'per_page'      => 100,
         ]);
-
+        $result = collect($paginator->items());
         $this->assertGreaterThanOrEqual(3, $result->count());
         $this->assertFalse($result->contains('id', $entry1->id));
 
-        // Test to
-        $result = $this->repository->getEntriesForResync([
+        $paginator = $this->repository->getEntriesByFiltersPaginated([
             'form_id'     => $form->id,
             'entry_id_to' => (string) $entry3->id,
+            'per_page'    => 100,
         ]);
-
+        $result = collect($paginator->items());
         $this->assertLessThanOrEqual(3, $result->count());
         $this->assertFalse($result->contains('id', $entry4->id));
 
-        // Test range
-        $result = $this->repository->getEntriesForResync([
+        $paginator = $this->repository->getEntriesByFiltersPaginated([
             'form_id'       => $form->id,
             'entry_id_from' => (string) $entry2->id,
             'entry_id_to'   => (string) $entry3->id,
+            'per_page'      => 100,
         ]);
-
+        $result = collect($paginator->items());
         $this->assertCount(2, $result);
         $this->assertTrue($result->contains('id', $entry2->id));
         $this->assertTrue($result->contains('id', $entry3->id));
     }
 
-    public function test_get_entries_for_resync_filters_by_date_range(): void
+    public function test_get_entries_by_filters_paginated_filters_by_date_range(): void
     {
         $form = Form::factory()->create();
 
@@ -207,17 +209,18 @@ final class FormEntryRepositoryTest extends TestCase
             'submitted_at' => now()->subDays(2),
         ]);
 
-        $result = $this->repository->getEntriesForResync([
+        $paginator = $this->repository->getEntriesByFiltersPaginated([
             'form_id'   => $form->id,
             'from_date' => now()->subDays(5)->format('Y-m-d'),
+            'per_page'  => 100,
         ]);
-
+        $result = collect($paginator->items());
         $this->assertCount(1, $result);
         $this->assertTrue($result->contains('id', $recentEntry->id));
         $this->assertFalse($result->contains('id', $oldEntry->id));
     }
 
-    public function test_get_entries_for_resync_filters_by_trigger_reference(): void
+    public function test_get_entries_by_filters_paginated_filters_by_trigger_reference(): void
     {
         $form1 = Form::factory()->create(['slug' => 'contact-form']);
         $form2 = Form::factory()->create(['slug' => 'newsletter-form']);
@@ -225,15 +228,16 @@ final class FormEntryRepositoryTest extends TestCase
         FormEntry::factory()->create(['form_id' => $form1->id]);
         FormEntry::factory()->create(['form_id' => $form2->id]);
 
-        $result = $this->repository->getEntriesForResync([
+        $paginator = $this->repository->getEntriesByFiltersPaginated([
             'trigger_reference' => 'contact-form',
+            'per_page'          => 100,
         ]);
-
+        $result = collect($paginator->items());
         $this->assertCount(1, $result);
         $this->assertEquals($form1->id, $result->first()->form_id);
     }
 
-    public function test_get_entries_for_resync_handles_wildcard_trigger_reference(): void
+    public function test_get_entries_by_filters_paginated_handles_wildcard_trigger_reference(): void
     {
         $form1 = Form::factory()->create();
         $form2 = Form::factory()->create();
@@ -241,14 +245,15 @@ final class FormEntryRepositoryTest extends TestCase
         FormEntry::factory()->create(['form_id' => $form1->id]);
         FormEntry::factory()->create(['form_id' => $form2->id]);
 
-        $result = $this->repository->getEntriesForResync([
+        $paginator = $this->repository->getEntriesByFiltersPaginated([
             'trigger_reference' => '*',
+            'per_page'          => 100,
         ]);
-
+        $result = collect($paginator->items());
         $this->assertCount(2, $result);
     }
 
-    public function test_get_entries_for_resync_combines_multiple_filters(): void
+    public function test_get_entries_by_filters_paginated_combines_multiple_filters(): void
     {
         $form = Form::factory()->create(['slug' => 'contact-form']);
 
@@ -265,13 +270,14 @@ final class FormEntryRepositoryTest extends TestCase
             'created_at' => now()->subDays(1),
         ]);
 
-        $result = $this->repository->getEntriesForResync([
+        $paginator = $this->repository->getEntriesByFiltersPaginated([
             'form_slug'     => 'contact-form',
             'from_date'     => now()->subDays(3)->format('Y-m-d'),
             'entry_id_from' => (string) $entry2->id,
             'entry_id_to'   => (string) $entry2->id,
+            'per_page'      => 100,
         ]);
-
+        $result = collect($paginator->items());
         $this->assertCount(1, $result);
         $this->assertTrue($result->contains('id', $entry2->id));
     }

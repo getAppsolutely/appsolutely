@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Traits;
 
 use App\Exceptions\BusinessException;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 
 trait ApiResponseTrait
@@ -16,6 +17,43 @@ trait ApiResponseTrait
             'code'    => $code,
             'message' => $message,
             'data'    => $data,
+        ], 200);
+    }
+
+    /**
+     * Success response with a list as data and top-level count (fewer nested layers).
+     * Returns: { status, code, message, count, data } where data is the list.
+     */
+    protected function successWithCount(array $data, int $count, string $message = 'Success', int $code = 0): JsonResponse
+    {
+        return response()->json([
+            'status'  => true,
+            'code'    => $code,
+            'message' => $message,
+            'count'   => $count,
+            'data'    => $data,
+        ], 200);
+    }
+
+    /**
+     * Success response with paginated list and meta.
+     * Returns: { status, code, message, data, meta: { current_page, last_page, per_page, total, from, to } }.
+     */
+    protected function successWithPagination(LengthAwarePaginator $paginator, string $message = 'Success', int $code = 0): JsonResponse
+    {
+        return response()->json([
+            'status'  => true,
+            'code'    => $code,
+            'message' => $message,
+            'data'    => $paginator->items(),
+            'meta'    => [
+                'current_page' => $paginator->currentPage(),
+                'last_page'    => $paginator->lastPage(),
+                'per_page'     => $paginator->perPage(),
+                'total'        => $paginator->total(),
+                'from'         => $paginator->firstItem(),
+                'to'           => $paginator->lastItem(),
+            ],
         ], 200);
     }
 
@@ -55,6 +93,15 @@ trait ApiResponseTrait
             'code'    => 403,
             'message' => $message,
         ], 403);
+    }
+
+    protected function failNotFound(string $message = 'Not found'): JsonResponse
+    {
+        return response()->json([
+            'status'  => false,
+            'code'    => 404,
+            'message' => $message,
+        ], 404);
     }
 
     protected function failServer($message = 'Server error', int $code = 500): JsonResponse

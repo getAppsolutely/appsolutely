@@ -100,6 +100,8 @@ This file is the **entry point for AI agents** (Cursor, Copilot, CLI tools, etc.
 
 - **Follow existing patterns** — same naming, structure, and style as the rest of the codebase.
 
+- **Name shared functions for common use** — When a function is used in multiple places, rename it to a more common or generic name so it reflects its broader role rather than a single context.
+
 - **DRY with care** — Reuse when it clearly helps; **favor clarity over DRY** when in tension. Search the codebase before adding new logic.
 
 - **Enums for fixed-value columns** — When adding or changing table columns that represent a fixed set of values (e.g. status, type), consider using a PHP enum so schema and code stay in sync.

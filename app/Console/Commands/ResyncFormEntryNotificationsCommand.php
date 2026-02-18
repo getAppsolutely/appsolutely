@@ -227,7 +227,7 @@ final class ResyncFormEntryNotificationsCommand extends Command
             return $entryRepository->getByIds($entryIdsArray);
         }
 
-        // Build filters array for complex query
+        // Build filters and fetch all pages (paginated) so callers get a single collection
         $filters = [
             'form_id'           => $formId,
             'form_slug'         => $formSlug,
@@ -236,9 +236,19 @@ final class ResyncFormEntryNotificationsCommand extends Command
             'entry_id_to'       => $entryIdTo,
             'from_date'         => $fromDate,
             'to_date'           => $toDate,
+            'per_page'          => 100,
         ];
 
-        return $entryRepository->getEntriesForResync($filters);
+        $entries = collect();
+        $page    = 1;
+
+        do {
+            $paginator = $entryRepository->getEntriesByFiltersPaginated(array_merge($filters, ['page' => $page]));
+            $entries   = $entries->merge($paginator->items());
+            $page++;
+        } while ($page <= $paginator->lastPage());
+
+        return $entries;
     }
 
     /**

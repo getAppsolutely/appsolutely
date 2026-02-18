@@ -36,6 +36,9 @@ final class FormForm extends ModelForm
         $this->text('target_table', __t('Target Table'))
             ->help(__t('Optional: Database table name to also store submissions (e.g., test_drive_bookings)'));
 
+        $this->text('api_access_token', __t('API access token'))
+            ->help(__t('Optional: Token for pulling entries via API (GET /api/forms/entries?form_slug=...). Send as Bearer token or query param "token". Leave empty to disable API access for this form.'));
+
         $this->switch('status', __t('Status'))
             ->help(__t('Enable or disable this form'));
     }
