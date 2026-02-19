@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Admin\Extensions\Grid\QuickEditColumn;
 use App\Admin\Extensions\Grid\SwitchableColumn;
+use App\Admin\Extensions\Grid\SwitchDisplay;
 use Dcat\Admin\Admin;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
@@ -91,6 +92,7 @@ Grid::resolving(function (Grid $grid) {
 ');
 
     Grid\Column::extend('quickEdit', QuickEditColumn::class);
+    Grid\Column::extend('switch', SwitchDisplay::class);
     Grid\Column::extend('switchable', SwitchableColumn::class);
 
 });
