@@ -99,17 +99,28 @@ final readonly class DynamicFormSubmissionService implements DynamicFormSubmissi
     }
 
     /**
-     * Prepare form data for storage
+     * Prepare form data for storage.
+     * Only includes keys that exist in the submitted data so we do not store
+     * fields that belong to other form types (e.g. background_image for test-drive).
+     * File fields with no upload (null/empty) are omitted so optional file fields
+     * do not appear in stored JSON when not used.
      */
     protected function prepareFormData(Form $form, array $data): array
     {
         $preparedData = [];
 
         foreach ($form->fields as $field) {
-            $value = $data[$field->name] ?? null;
+            if (! array_key_exists($field->name, $data)) {
+                continue;
+            }
 
-            // Handle file uploads
-            if ($field->type === 'file' && $value) {
+            $value = $data[$field->name];
+
+            // Handle file uploads: only store when a file was actually uploaded
+            if ($field->type === 'file') {
+                if (empty($value)) {
+                    continue;
+                }
                 $preparedData[$field->name] = $this->handleFileUpload($value, $field);
             } else {
                 $preparedData[$field->name] = $value;
