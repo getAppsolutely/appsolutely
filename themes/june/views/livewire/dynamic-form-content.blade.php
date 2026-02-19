@@ -10,7 +10,7 @@
             @endphp
 
             <!-- Hidden Input -->
-            @if($fieldConfig['type'] === 'hidden')
+            @if($fieldConfig['type'] === \App\Enums\FormFieldType::Hidden)
                 <input
                     type="hidden"
                     id="{{ $fieldName }}"
@@ -24,7 +24,7 @@
             @else
             <div class="{{ $colClass }}">
                 <!-- Text Input -->
-                @if(in_array($fieldConfig['type'], ['text', 'email', 'tel', 'url']))
+                @if(in_array($fieldConfig['type'], [\App\Enums\FormFieldType::Text, \App\Enums\FormFieldType::Email]))
                     <div class="form-group">
                         <label for="{{ $fieldName }}" class="form-label fw-semibold">
                             {{ $fieldConfig['label'] }}
@@ -33,7 +33,7 @@
                             @endif
                         </label>
                         <input
-                            type="{{ $fieldConfig['type'] }}"
+                            type="{{ $fieldConfig['type']->value }}"
                             id="{{ $fieldName }}"
                             class="form-control @error($errorName) is-invalid @enderror"
                             wire:model.defer="formData.{{ $fieldName }}"
@@ -46,7 +46,7 @@
                     </div>
 
                 <!-- Date Input -->
-                @elseif($fieldConfig['type'] === 'date')
+                @elseif($fieldConfig['type'] === \App\Enums\FormFieldType::Date)
                     <div class="form-group">
                         <label for="{{ $fieldName }}" class="form-label fw-semibold">
                             {{ $fieldConfig['label'] }}
@@ -68,7 +68,7 @@
                     </div>
 
                 <!-- Select Dropdown -->
-                @elseif($fieldConfig['type'] === 'select')
+                @elseif($fieldConfig['type'] === \App\Enums\FormFieldType::Select)
                     <div class="form-group">
                         <label for="{{ $fieldName }}" class="form-label fw-semibold">
                             {{ $fieldConfig['label'] }}
@@ -94,7 +94,7 @@
                     </div>
 
                 <!-- Textarea -->
-                @elseif($fieldConfig['type'] === 'textarea')
+                @elseif($fieldConfig['type'] === \App\Enums\FormFieldType::Textarea)
                     <div class="form-group">
                         <label for="{{ $fieldName }}" class="form-label fw-semibold">
                             {{ $fieldConfig['label'] }}
@@ -116,7 +116,7 @@
                     </div>
 
                 <!-- Checkbox -->
-                @elseif($fieldConfig['type'] === 'checkbox')
+                @elseif($fieldConfig['type'] === \App\Enums\FormFieldType::Checkbox)
                     <div class="form-group">
                         <div class="form-check">
                             <input
@@ -140,7 +140,7 @@
                     </div>
 
                 <!-- Multiple Select -->
-                @elseif($fieldConfig['type'] === 'multiselect')
+                @elseif($fieldConfig['type'] === \App\Enums\FormFieldType::MultipleSelect)
                     <div class="form-group">
                         <label for="{{ $fieldName }}" class="form-label fw-semibold">
                             {{ $fieldConfig['label'] }}
