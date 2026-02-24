@@ -155,10 +155,16 @@ class GeneralPage
     }
 
     /**
-     * Get the title with optional parent page prefix for nested pages
+     * Get the title with optional parent page prefix for nested pages.
+     * When content has setting.meta_title (e.g. Article), use it as-is without appending site name.
      */
     protected function getMetaTitle(): string
     {
+        $metaTitle = trim((string) setting_get($this->content->setting ?? null, 'meta_title', ''));
+        if ($metaTitle !== '') {
+            return $metaTitle;
+        }
+
         $title     = $this->content->title ?? '';
         $separator = config('appsolutely.seo.title_separator', ' | ');
         $siteName  = basic_config('title');

@@ -869,6 +869,36 @@ if (! function_exists('children_attributes')) {
     }
 }
 
+if (! function_exists('setting_get')) {
+    /**
+     * Normalize content setting (array or JSON string) and optionally get a key.
+     * Use when reading from model->setting which may be cast to array or raw JSON string.
+     *
+     * @param  mixed  $setting  Raw setting (array, JSON string, or null)
+     * @param  string|null  $key  Optional key to get from the setting array
+     * @param  mixed  $default  Default when key is missing or setting is invalid (used only when $key is not null)
+     * @return mixed When $key is null: normalized array or null. When $key is set: the key value or $default
+     */
+    function setting_get(mixed $setting, ?string $key = null, mixed $default = null): mixed
+    {
+        if ($setting === null) {
+            return $key === null ? null : $default;
+        }
+        if (is_string($setting) && $setting !== '') {
+            $decoded = json_decode($setting, true);
+            $setting = is_array($decoded) ? $decoded : null;
+        }
+        if (! is_array($setting)) {
+            return $key === null ? null : $default;
+        }
+        if ($key === null) {
+            return $setting;
+        }
+
+        return $setting[$key] ?? $default;
+    }
+}
+
 if (! function_exists('get_property')) {
     function get_property($target, $key, $default = null)
     {
