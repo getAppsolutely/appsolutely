@@ -1,5 +1,7 @@
 <section class="container my-5 photo-gallery">
-    @php($photos = $displayOptions['photos'] ?? [])
+    @php
+        $photos = array_values(array_filter($displayOptions['photos'] ?? [], fn ($p) => !empty($p['url'] ?? null)));
+    @endphp
 
     @if(isset($displayOptions['title']) || isset($displayOptions['subtitle']) || isset($displayOptions['descriptions']))
         <div class="text-center mb-4">
