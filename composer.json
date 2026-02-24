@@ -83,7 +83,7 @@
         ],
         "dev-ide-helper": [
             "@php artisan ide-helper:generate",
-            "@php artisan ide-helper:models"
+            "@php artisan ide-helper:models --nowrite"
         ],
         "install-hooks": [
             "mkdir -p .git/hooks",
