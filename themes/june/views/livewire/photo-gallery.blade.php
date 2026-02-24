@@ -1,6 +1,6 @@
 <section class="container my-5 photo-gallery">
     @php
-        $photos = array_values(array_filter($displayOptions['photos'] ?? [], fn ($p) => !empty($p['url'] ?? null)));
+        $photos = array_values(array_filter($displayOptions['photos'] ?? [], fn ($p) => !empty($p['image_src'] ?? null)));
     @endphp
 
     @if(isset($displayOptions['title']) || isset($displayOptions['subtitle']) || isset($displayOptions['descriptions']))

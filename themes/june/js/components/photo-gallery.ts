@@ -3,7 +3,7 @@
 import { asset_url } from '../utils/asset-url';
 
 interface Photo {
-    url: string;
+    image_src: string;
     title?: string;
     subtitle?: string;
     description?: string;
@@ -75,9 +75,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const text = node.querySelector<HTMLElement>('.card-text');
         const price = node.querySelector<HTMLElement>('.card-price');
 
-        // Use placeholder when url is empty or missing; also handle load errors
+        // Use placeholder when image_src is empty or missing; also handle load errors
         if (img) {
-            const imageUrl = p.url && String(p.url).trim() !== '' ? asset_url(p.url) : PLACEHOLDER_URL;
+            const imageUrl =
+                p.image_src && String(p.image_src).trim() !== '' ? asset_url(p.image_src) : PLACEHOLDER_URL;
             img.setAttribute('data-src', imageUrl);
             img.alt = p.alt || p.title || '';
             img.addEventListener(
