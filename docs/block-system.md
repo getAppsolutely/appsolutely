@@ -252,6 +252,56 @@ $formConfig = $schemaService->generateFormConfig($schema);
 
 ## Creating Page Blocks
 
+### When to use GeneralBlock vs a custom block
+
+| Use case                                                                                                                                                       | Approach                                                                                                                                                         |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **No data querying** — Content comes entirely from `display_options` (e.g. FAQ items, feature cards, hero slides). No database/repository queries.             | **GeneralBlock** — Add a manifest template + view. No custom component.                                                                                          |
+| **Data querying with different options** — Block loads data from repositories (articles, products, etc.) using `query_options` (filters, pagination, sorting). | **Custom block** — Create a dedicated Livewire component extending `GeneralBlock`, add a `page_block` record, and implement `getExtraData()` / repository calls. |
+
+**GeneralBlock**: Use when you do **not** need to query data and do **not** need `queryOptions`. All content is driven by `display_options` (manually configured per block instance).
+
+**Custom block**: Use when you need to query data with different options (e.g. `posts_per_page`, `category_filter`, `order_by`). Do **not** use GeneralBlock for this — create a dedicated component that uses repositories and `queryOptions`.
+
+### Adding a GeneralBlock template (no custom component)
+
+For blocks that only need display options (no custom data loading or logic), use `GeneralBlock` with a new view. No new Livewire component or database record is required — `GeneralBlock` is already registered.
+
+**Steps:**
+
+1. **Add template to theme manifest.json** — Add an entry under `templates` with `component: "App\\Livewire\\GeneralBlock"`, `view` (view name), and `displayOptions` (default values).
+2. **Create the Livewire view** — Add `themes/{theme}/views/livewire/{view-name}.blade.php` that reads from `$displayOptions`.
+
+**Example: FAQ Section**
+
+1. In `themes/june/manifest.json`:
+
+```json
+"faq-section": {
+    "label": "FAQ Section",
+    "description": "Frequently asked questions with accordion layout",
+    "component": "App\\Livewire\\GeneralBlock",
+    "view": "faq-section",
+    "displayOptions": {
+        "title": "Frequently Asked Questions",
+        "subtitle": "Find answers to common questions below.",
+        "items": [
+            { "question": "Question 1?", "answer": "Answer 1." },
+            { "question": "Question 2?", "answer": "Answer 2." }
+        ]
+    },
+    "styles": ["default"]
+}
+```
+
+2. Create `themes/june/views/livewire/faq-section.blade.php` that renders `$displayOptions['title']`, `$displayOptions['subtitle']`, and loops over `$displayOptions['items']` for question/answer pairs.
+
+The block will appear in the Page Builder under the Content group (GeneralBlock's group). Editors configure `display_options` via the block settings form (JSON) or future schema-driven admin UI.
+
+### Adding a custom block (with data querying)
+
+When you need to query data with different options, create a dedicated Livewire component and register it in the database. Follow the steps below.
+
 ### Step 1: Define the Block (Database)
 
 Create a block record in `page_blocks` table:
@@ -635,6 +685,13 @@ The manifest `component` is matched to `page_blocks.class`. Only manifest templa
 - Ensure pagination is working
 
 ## Example Blocks
+
+### GeneralBlock template (FAQ Section)
+
+Uses `GeneralBlock` with a dedicated view — no custom component:
+
+- **Manifest**: `faq-section` with `component: GeneralBlock`, `view: faq-section`, `displayOptions` with `title`, `subtitle`, `items` (array of `{question, answer}`).
+- **View**: `themes/{theme}/views/livewire/faq-section.blade.php` — renders accordion from `$displayOptions['items']`.
 
 ### Simple Block (No Data Loading)
 

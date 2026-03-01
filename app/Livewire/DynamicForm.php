@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
+use App\Enums\FormFieldType;
 use App\Models\Form;
 use App\Services\Contracts\DynamicFormServiceInterface;
 use Illuminate\Contracts\Container\Container;
@@ -82,7 +83,8 @@ final class DynamicForm extends GeneralBlock
             $fieldConfig = $this->formFields[$paramName];
 
             // Only process select and multiselect fields
-            if (! in_array($fieldConfig['type'] ?? '', ['select', 'multiselect'])) {
+            $fieldType = $fieldConfig['type'] ?? null;
+            if (! $fieldType instanceof FormFieldType || ! $fieldType->supportsOptions()) {
                 continue;
             }
 
@@ -102,7 +104,7 @@ final class DynamicForm extends GeneralBlock
 
     /**
      * Find matching option value from query parameter
-     * First tries exact match, then tries matching with hyphens replaced by spaces
+     * Tries exact match, hyphen/space variations, and case-insensitive matching
      *
      * @param  string  $queryValue  The value from URL query parameter
      * @param  array<string>  $options  Available form field options
@@ -110,23 +112,36 @@ final class DynamicForm extends GeneralBlock
      */
     protected function findMatchingOption(string $queryValue, array $options): ?string
     {
+        $normalize = static fn (string $v): string => strtolower(trim($v));
+
         // First, try exact match
         if (in_array($queryValue, $options, true)) {
             return $queryValue;
         }
 
-        // Then, try matching with hyphens replaced by spaces
-        // e.g., "Product-1" should match "Product 1"
+        // Try hyphen/space variations (case-sensitive)
         $queryValueWithSpaces = str_replace('-', ' ', $queryValue);
         if (in_array($queryValueWithSpaces, $options, true)) {
             return $queryValueWithSpaces;
         }
 
-        // Also try the reverse: if query has spaces, try with hyphens
-        // e.g., "Product 1" should match "Product-1"
         $queryValueWithHyphens = str_replace(' ', '-', $queryValue);
         if (in_array($queryValueWithHyphens, $options, true)) {
             return $queryValueWithHyphens;
+        }
+
+        // Case-insensitive match (e.g. "aion-v" matches "AION V")
+        $queryNormalized        = $normalize($queryValue);
+        $queryNormalizedSpaces  = $normalize(str_replace('-', ' ', $queryValue));
+        $queryNormalizedHyphens = $normalize(str_replace(' ', '-', $queryValue));
+
+        foreach ($options as $option) {
+            $optNormalized = $normalize($option);
+            if ($optNormalized    === $queryNormalized
+                || $optNormalized === $queryNormalizedSpaces
+                || $optNormalized === $queryNormalizedHyphens) {
+                return $option;
+            }
         }
 
         return null;
