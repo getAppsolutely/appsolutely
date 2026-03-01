@@ -54,6 +54,7 @@ This separation allows:
 ├──────────────────┤
 │ id               │
 │ block_id         │
+│ theme            │  → Optional: theme name (null = all themes)
 │ template         │
 │ scripts          │
 │ stylesheets      │
@@ -98,6 +99,7 @@ This separation allows:
 
 - Stores specific configuration for blocks
 - Contains `display_options` and `query_options`
+- **Theme-scoped**: optional `theme` column (nullable). When set, this value is used only when the active theme matches. When `theme` is null, the value is theme-agnostic (used as fallback or for single-theme sites). Frontend page resolution filters blocks by current theme so only matching block values are shown.
 - Can be shared across multiple settings (for reusability)
 - Contains rendering data (template, styles, scripts)
 
@@ -546,6 +548,14 @@ This is handled by `PageBlockSetting::checkAndCreateNewBlockValue()`.
 - Editing affects all instances
 - Uses block's `schema_values` as defaults
 - Updates existing `PageBlockValue`
+
+### Theme-scoped block values
+
+- Each `PageBlockValue` can have an optional `theme` (nullable string). When set, that value is intended for a specific theme (e.g. `june`, `default`).
+- **Frontend**: When a page is loaded for display, blocks are filtered by the current theme: only settings whose `blockValue.theme` is null or equals the active theme are shown. So the same page can show different block configurations per theme.
+- **Sync**: When new block settings are synced from the page builder, the current theme is resolved and new block values are created with that theme (or an existing value for the same block and theme is reused).
+- **Admin**: Block setting form exposes a "Theme" field for the block value so editors can assign or change which theme a value belongs to.
+- Use `theme = null` for theme-agnostic values (single-theme sites or fallback).
 
 ## Best Practices
 

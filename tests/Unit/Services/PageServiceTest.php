@@ -11,6 +11,7 @@ use App\Repositories\PageBlockSettingRepository;
 use App\Repositories\PageRepository;
 use App\Services\Contracts\PageBlockSettingServiceInterface;
 use App\Services\Contracts\PageStructureServiceInterface;
+use App\Services\Contracts\ThemeServiceInterface;
 use App\Services\PageService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -29,6 +30,8 @@ final class PageServiceTest extends TestCase
 
     private PageStructureServiceInterface $structureService;
 
+    private ThemeServiceInterface $themeService;
+
     private PageService $pageService;
 
     protected function setUp(): void
@@ -40,12 +43,14 @@ final class PageServiceTest extends TestCase
         $this->pageBlockSettingRepository = app(PageBlockSettingRepository::class);
         $this->blockSettingService        = Mockery::mock(PageBlockSettingServiceInterface::class);
         $this->structureService           = Mockery::mock(PageStructureServiceInterface::class);
+        $this->themeService               = app(ThemeServiceInterface::class);
 
         $this->pageService = new PageService(
             $this->pageRepository,
             $this->pageBlockSettingRepository,
             $this->blockSettingService,
-            $this->structureService
+            $this->structureService,
+            $this->themeService
         );
     }
 

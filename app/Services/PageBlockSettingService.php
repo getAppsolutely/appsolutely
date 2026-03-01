@@ -10,6 +10,7 @@ use App\Repositories\PageBlockRepository;
 use App\Repositories\PageBlockSettingRepository;
 use App\Repositories\PageBlockValueRepository;
 use App\Services\Contracts\PageBlockSettingServiceInterface;
+use App\Services\Contracts\ThemeServiceInterface;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\QueryException;
 use PDOException;
@@ -32,6 +33,7 @@ final readonly class PageBlockSettingService implements PageBlockSettingServiceI
         protected PageBlockRepository $pageBlockRepository,
         protected PageBlockValueRepository $pageBlockValueRepository,
         protected PageBlockSettingRepository $pageBlockSettingRepository,
+        protected ThemeServiceInterface $themeService,
         protected ConnectionInterface $db
     ) {}
 
@@ -126,10 +128,11 @@ final readonly class PageBlockSettingService implements PageBlockSettingServiceI
         }
 
         // Create new block setting with all required data
-        $data = [
+        $theme = $this->themeService->resolveThemeName();
+        $data  = [
             'page_id'        => $pageId,
             'block_id'       => $blockId,
-            'block_value_id' => $this->getBlockValueId($blockId), // Get or create block value
+            'block_value_id' => $this->getBlockValueId($blockId, $theme), // Get or create block value for current theme
             'reference'      => $reference,
             'status'         => Status::ACTIVE->value,
             'sort'           => $sort,
@@ -139,26 +142,19 @@ final readonly class PageBlockSettingService implements PageBlockSettingServiceI
         return $this->pageBlockSettingRepository->create($data);
     }
 
-    public function getBlockValueId(int $blockId): int
+    public function getBlockValueId(int $blockId, ?string $theme = null): int
     {
-        // Try to reuse existing block value if this block is already used elsewhere
-        // This prevents duplicate block values for the same block type
-        $setting = $this->pageBlockSettingRepository->findByBlockId($blockId);
-        if (! empty($setting->block_value_id)) {
-            // Reuse existing block value ID to maintain data consistency
-            return $setting->block_value_id;
+        // Try to reuse existing block value for this block and theme
+        $existing = $this->pageBlockValueRepository->findByBlockIdAndTheme($blockId, $theme);
+        if ($existing !== null) {
+            return $existing->id;
         }
 
-        // No existing block value found - create a new one
-        // This happens when a block is used for the first time
-        $block = $this->pageBlockRepository->find($blockId);
-
-        // Create new block value with schema values from the block definition
-        $value = [
-            'block_id'      => $blockId,
-            'schema_values' => $block->schema_values, // Copy schema structure from block
-        ];
-        $value = $this->pageBlockValueRepository->create($value);
+        // No existing block value found - create a new one for this theme
+        $value = $this->pageBlockValueRepository->create([
+            'block_id' => $blockId,
+            'theme'    => $theme,
+        ]);
 
         return $value->id;
     }

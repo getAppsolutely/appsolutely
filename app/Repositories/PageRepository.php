@@ -25,9 +25,13 @@ final class PageRepository extends BaseRepository
             ->slug($slug)
             ->status()
             ->published($datetime)
-            ->with(['blocks' => function ($query) {
-                $query->status()->whereNotNull('sort')->orderBy('sort');
-            }, 'blocks.block'])
+            ->with([
+                'blocks' => function ($query) {
+                    $query->status()->whereNotNull('sort')->orderBy('sort');
+                },
+                'blocks.block',
+                'blocks.blockValue',
+            ])
             ->first();
     }
 
@@ -36,9 +40,13 @@ final class PageRepository extends BaseRepository
         return $this->model->newQuery()
             ->status()
             ->published($datetime)
-            ->with(['blocks' => function ($query) {
-                $query->status()->whereNotNull('sort')->orderBy('sort');
-            }, 'blocks.block'])
+            ->with([
+                'blocks' => function ($query) {
+                    $query->status()->whereNotNull('sort')->orderBy('sort');
+                },
+                'blocks.block',
+                'blocks.blockValue',
+            ])
             ->find($id);
     }
 
@@ -100,9 +108,13 @@ final class PageRepository extends BaseRepository
         return $this->model->newQuery()
             ->status()
             ->published($datetime)
-            ->with(['blocks' => function ($query) {
-                $query->status()->whereNotNull('sort')->orderBy('sort');
-            }, 'blocks.block'])
+            ->with([
+                'blocks' => function ($query) {
+                    $query->status()->whereNotNull('sort')->orderBy('sort');
+                },
+                'blocks.block',
+                'blocks.blockValue',
+            ])
             ->orderBy('published_at', 'desc')
             ->get();
     }

@@ -22,6 +22,27 @@ final class PageBlockValueRepository extends BaseRepository
     }
 
     /**
+     * Find block value by block ID and theme.
+     * Prefers value with matching theme, then falls back to theme=null.
+     */
+    public function findByBlockIdAndTheme(int $blockId, ?string $theme): ?\App\Models\PageBlockValue
+    {
+        $query = $this->model->newQuery()->where('block_id', $blockId);
+
+        if ($theme === null || $theme === '') {
+            return $query->whereNull('theme')->first();
+        }
+
+        return $this->model->newQuery()
+            ->where('block_id', $blockId)
+            ->where(function ($q) use ($theme) {
+                $q->where('theme', $theme)->orWhereNull('theme');
+            })
+            ->orderByRaw('CASE WHEN theme = ? THEN 0 ELSE 1 END', [$theme])
+            ->first();
+    }
+
+    /**
      * Create or update setting value for a block
      */
     public function createOrUpdate(int $blockId, array $data): \App\Models\PageBlockValue

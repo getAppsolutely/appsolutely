@@ -39,12 +39,11 @@ final class PageBlockSetting extends Model
     protected $appends = [];
 
     /**
-     * Check if block value's display_options and query_options is dirty and create new block value if needed
+     * Check if block value's display_options, query_options, or theme is dirty and create new block value if needed
      */
     public function checkAndCreateNewBlockValue(): void
     {
-        // Only proceed if we have a block value and it's dirty
-        if (! $this->blockValue || ! $this->blockValue->isDirty(['display_options', 'query_options'])) {
+        if (! $this->blockValue || ! $this->blockValue->isDirty(['display_options', 'query_options', 'theme'])) {
             return;
         }
 
@@ -59,6 +58,7 @@ final class PageBlockSetting extends Model
         $newBlockValue = PageBlockValue::create([
             'id'              => PageBlockValue::getFirstMissingId(),
             'block_id'        => $this->block_id,
+            'theme'           => $this->blockValue->theme,
             'view'            => '',
             'query_options'   => $this->blockValue->query_options,
             'display_options' => $this->blockValue->display_options,

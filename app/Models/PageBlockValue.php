@@ -15,6 +15,7 @@ final class PageBlockValue extends Model
 
     protected $fillable = [
         'block_id',
+        'theme',
         'view',
         'query_options',
         'display_options',

@@ -53,6 +53,9 @@ class PageBlockSettingForm extends ModelForm
         $this->textarea('blockValue.query_options', __t('Query Options'))
             ->rows(10)->help(__t('JSON format for query options'));
 
+        $this->text('blockValue.theme', __t('Theme'))
+            ->help(__t('Theme name this value is for (empty = all themes)'));
+
         $this->number('sort', __t('Sort'));
         $this->switch('status', __t('Status'));
     }
@@ -78,6 +81,11 @@ class PageBlockSettingForm extends ModelForm
             if (isset($input['blockValue']['query_options'])) {
                 $model->blockValue->query_options = $input['blockValue']['query_options'];
                 $blockValueChanged                = true;
+            }
+
+            if (isset($input['blockValue']['theme']) && $model->blockValue) {
+                $model->blockValue->theme = $input['blockValue']['theme'] !== '' ? $input['blockValue']['theme'] : null;
+                $blockValueChanged        = true;
             }
 
             if ($blockValueChanged) {

@@ -7,7 +7,7 @@ namespace App\Services;
 use App\Enums\Status;
 use App\Exceptions\NotFoundException;
 use App\Models\Page;
-use App\Repositories\PageRepository;
+use App\Services\Contracts\PageServiceInterface;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -21,7 +21,7 @@ use Illuminate\Support\Carbon;
 final readonly class NestedUrlResolverService
 {
     public function __construct(
-        private PageRepository $pageRepository,
+        private PageServiceInterface $pageService,
         private Container $container
     ) {}
 
@@ -54,8 +54,8 @@ final readonly class NestedUrlResolverService
             $parentSlug = '/' . implode('/', $parentSlugSegments);
             $childSlug  = implode('/', $childSlugSegments);
 
-            // Try to find the parent page
-            $parentPage = $this->pageRepository->findPageBySlug($parentSlug, now());
+            // Use PageService so parent page gets theme-filtered blocks
+            $parentPage = $this->pageService->findPublishedPage($parentSlug);
 
             if ($parentPage) {
                 // Try to find nested content based on parent page blocks

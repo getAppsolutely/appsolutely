@@ -11,6 +11,7 @@ use App\Repositories\PageRepository;
 use App\Services\Contracts\PageBlockSettingServiceInterface;
 use App\Services\Contracts\PageServiceInterface;
 use App\Services\Contracts\PageStructureServiceInterface;
+use App\Services\Contracts\ThemeServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 
@@ -30,17 +31,28 @@ final readonly class PageService implements PageServiceInterface
         protected PageRepository $pageRepository,
         protected PageBlockSettingRepository $pageBlockSettingRepository,
         protected PageBlockSettingServiceInterface $blockSettingService,
-        protected PageStructureServiceInterface $structureService
+        protected PageStructureServiceInterface $structureService,
+        protected ThemeServiceInterface $themeService
     ) {}
 
     public function findPublishedPage(string $slug): ?Page
     {
-        return $this->pageRepository->findPageBySlug($slug, now());
+        $page = $this->pageRepository->findPageBySlug($slug, now());
+        if ($page !== null) {
+            $this->filterPageBlocksByTheme($page);
+        }
+
+        return $page;
     }
 
     public function findPublishedPageById(int $id): ?Page
     {
-        return $this->pageRepository->findPageById($id, now());
+        $page = $this->pageRepository->findPageById($id, now());
+        if ($page !== null) {
+            $this->filterPageBlocksByTheme($page);
+        }
+
+        return $page;
     }
 
     public function findByReference(string $reference): Model
@@ -99,5 +111,35 @@ final readonly class PageService implements PageServiceInterface
     public function generateDefaultPageSetting(): array
     {
         return $this->structureService->generateDefaultPageSetting();
+    }
+
+    /**
+     * Filter page blocks to only those whose block value matches the current theme.
+     * Keeps settings where blockValue.theme is null (theme-agnostic) or equals current theme.
+     */
+    protected function filterPageBlocksByTheme(Page $page): void
+    {
+        $theme  = $this->themeService->resolveThemeName();
+        $blocks = $page->getRelation('blocks');
+
+        if ($blocks === null || $blocks->isEmpty()) {
+            return;
+        }
+
+        $filtered = $blocks->filter(function ($setting) use ($theme) {
+            $blockValue = $setting->blockValue;
+            if ($blockValue === null) {
+                return true;
+            }
+
+            $valueTheme = $blockValue->theme;
+            if ($valueTheme === null || $valueTheme === '') {
+                return true;
+            }
+
+            return $theme !== null && $valueTheme === $theme;
+        });
+
+        $page->setRelation('blocks', $filtered->sortBy('sort')->values());
     }
 }

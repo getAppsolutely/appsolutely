@@ -16,11 +16,12 @@ interface PageBlockSettingServiceInterface
     public function syncSettings(array $data, int $pageId): array;
 
     /**
-     * Get or create block value ID for a block
-     * Reuses existing block value if block is already used elsewhere
+     * Get or create block value ID for a block and optional theme.
+     * Reuses existing block value for the same block and theme when possible.
      *
      * @param  int  $blockId  The block ID
+     * @param  string|null  $theme  The theme name (null = theme-agnostic)
      * @return int The block value ID
      */
-    public function getBlockValueId(int $blockId): int;
+    public function getBlockValueId(int $blockId, ?string $theme = null): int;
 }
