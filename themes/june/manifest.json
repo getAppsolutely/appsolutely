@@ -399,6 +399,32 @@
                 "fallback_text": "Your browser does not support the video tag."
             },
             "styles": ["default", "simple"]
+        },
+        "user-manual": {
+            "label": "User Manual",
+            "description": "Display user manual items with cover images and PDF links",
+            "component": "App\\Livewire\\GeneralBlock",
+            "view": "user-manual",
+            "displayOptions": {
+                "title": "User Manuals",
+                "subtitle": "Download guides and documentation",
+                "items": [
+                    {
+                        "image_src": "assets/images/manual-placeholder.webp",
+                        "title": "Manual Title",
+                        "links": [
+                            { "label": "English (PDF)", "url": "/documents/manual-en.pdf" },
+                            { "label": "Manual (PDF)", "url": "/documents/manual.pdf" }
+                        ]
+                    },
+                    {
+                        "image_src": "assets/images/manual-placeholder.webp",
+                        "title": "Another Manual",
+                        "links": [{ "label": "Download PDF", "url": "/documents/another.pdf" }]
+                    }
+                ]
+            },
+            "styles": ["default"]
         }
     }
 }

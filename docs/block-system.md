@@ -564,7 +564,7 @@ The manifest `component` is matched to `page_blocks.class`. Only manifest templa
 
 - Each `PageBlockValue` can have an optional `theme` (nullable string). When set, that value is intended for a specific theme (e.g. `june`, `default`).
 - **Frontend**: When a page is loaded for display, blocks are filtered by the current theme: only settings whose `blockValue.theme` is null or equals the active theme are shown. So the same page can show different block configurations per theme.
-- **Sync**: When new block settings are synced from the page builder, the current theme is resolved and new block values are created with that theme (or an existing value for the same block and theme is reused).
+- **Sync**: When new block settings are synced from the page builder, the current theme is resolved and new block values are created with that theme (or an existing value for the same block and theme is reused). Exception: blocks whose class is `GeneralBlock` always get a new `PageBlockValue` (GeneralBlock is shared by many templates, so each instance needs its own configuration).
 - **Admin**: Block setting form exposes a "Theme" field for the block value so editors can assign or change which theme a value belongs to.
 - Use `theme = null` for theme-agnostic values (single-theme sites or fallback).
 

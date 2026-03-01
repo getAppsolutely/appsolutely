@@ -78,10 +78,10 @@ final class PageBlockSettingRepository extends BaseRepository
      */
     public function updateStatusAndSort(int $id, int $status, int $sort): PageBlockSetting
     {
-        return $this->update($id, [
+        return $this->update([
             'status' => $status,
             'sort'   => $sort,
-        ]);
+        ], $id);
     }
 
     /**

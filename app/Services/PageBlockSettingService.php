@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Enums\Status;
+use App\Livewire\GeneralBlock;
 use App\Models\PageBlockSetting;
 use App\Repositories\PageBlockRepository;
 use App\Repositories\PageBlockSettingRepository;
 use App\Repositories\PageBlockValueRepository;
+use App\Services\Contracts\ManifestServiceInterface;
 use App\Services\Contracts\PageBlockSettingServiceInterface;
 use App\Services\Contracts\ThemeServiceInterface;
 use Illuminate\Database\ConnectionInterface;
@@ -33,6 +35,7 @@ final readonly class PageBlockSettingService implements PageBlockSettingServiceI
         protected PageBlockRepository $pageBlockRepository,
         protected PageBlockValueRepository $pageBlockValueRepository,
         protected PageBlockSettingRepository $pageBlockSettingRepository,
+        protected ManifestServiceInterface $manifestService,
         protected ThemeServiceInterface $themeService,
         protected ConnectionInterface $db
     ) {}
@@ -99,9 +102,10 @@ final readonly class PageBlockSettingService implements PageBlockSettingServiceI
      */
     protected function syncBlockSettingItem(array $blockSetting, int $sort, int $pageId): array|PageBlockSetting
     {
-        // Extract required identifiers from block setting data
-        $blockId   = $blockSetting['block_id'];
-        $reference = $blockSetting['reference'];
+        // Extract required identifiers from block setting data (GrapesJS may nest in attributes)
+        $blockId   = $blockSetting['block_id'] ?? $blockSetting['attributes']['block_id'] ?? null;
+        $reference = $blockSetting['reference'] ?? $blockSetting['attributes']['reference'] ?? null;
+        $type      = $blockSetting['type'] ?? $blockSetting['attributes']['type'] ?? null;
 
         // Validate required fields - both block_id and reference are mandatory
         if (empty($blockId) || empty($reference)) {
@@ -127,12 +131,15 @@ final readonly class PageBlockSettingService implements PageBlockSettingServiceI
             return []; // Return empty array since we updated, not created
         }
 
+        // Resolve view (template name) from manifest for new block values
+        $view = $this->resolveViewFromManifest($type);
+
         // Create new block setting with all required data
         $theme = $this->themeService->resolveThemeName();
         $data  = [
             'page_id'        => $pageId,
             'block_id'       => $blockId,
-            'block_value_id' => $this->getBlockValueId($blockId, $theme), // Get or create block value for current theme
+            'block_value_id' => $this->getBlockValueId($blockId, $theme, $view),
             'reference'      => $reference,
             'status'         => Status::ACTIVE->value,
             'sort'           => $sort,
@@ -142,8 +149,35 @@ final readonly class PageBlockSettingService implements PageBlockSettingServiceI
         return $this->pageBlockSettingRepository->create($data);
     }
 
-    public function getBlockValueId(int $blockId, ?string $theme = null): int
+    /**
+     * Resolve view (template name) from manifest for a block type (manifest template key).
+     */
+    protected function resolveViewFromManifest(?string $type): string
     {
+        if (empty($type)) {
+            return '';
+        }
+
+        $config = $this->manifestService->getTemplateConfig($type);
+
+        return $config['view'] ?? $type;
+    }
+
+    public function getBlockValueId(int $blockId, ?string $theme = null, string $view = ''): int
+    {
+        $block = $this->pageBlockRepository->find($blockId);
+
+        // GeneralBlock is used by many templates; each instance gets its own block value
+        if ($block !== null && $block->class === GeneralBlock::class) {
+            $value = $this->pageBlockValueRepository->create([
+                'block_id' => $blockId,
+                'theme'    => $theme,
+                'view'     => $view,
+            ]);
+
+            return $value->id;
+        }
+
         // Try to reuse existing block value for this block and theme
         $existing = $this->pageBlockValueRepository->findByBlockIdAndTheme($blockId, $theme);
         if ($existing !== null) {
@@ -154,6 +188,7 @@ final readonly class PageBlockSettingService implements PageBlockSettingServiceI
         $value = $this->pageBlockValueRepository->create([
             'block_id' => $blockId,
             'theme'    => $theme,
+            'view'     => $view,
         ]);
 
         return $value->id;

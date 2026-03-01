@@ -18,10 +18,12 @@ interface PageBlockSettingServiceInterface
     /**
      * Get or create block value ID for a block and optional theme.
      * Reuses existing block value for the same block and theme when possible.
+     * Exception: GeneralBlock always creates a new value (used by many templates).
      *
      * @param  int  $blockId  The block ID
      * @param  string|null  $theme  The theme name (null = theme-agnostic)
+     * @param  string  $view  Template name from manifest (for new block values)
      * @return int The block value ID
      */
-    public function getBlockValueId(int $blockId, ?string $theme = null): int;
+    public function getBlockValueId(int $blockId, ?string $theme = null, string $view = ''): int;
 }
