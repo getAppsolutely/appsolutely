@@ -55,4 +55,26 @@ final class PageBlockRepository extends BaseRepository
             ->orderBy('sort')
             ->get();
     }
+
+    /**
+     * Get all active blocks keyed by class (component FQCN).
+     * Used for manifest-to-block matching in block registry.
+     *
+     * @return array<string, \App\Models\PageBlock>
+     */
+    public function getBlocksByClass(): array
+    {
+        $blocks = $this->model->newQuery()
+            ->with('group')
+            ->status()
+            ->orderBy('sort')
+            ->get();
+
+        $byClass = [];
+        foreach ($blocks as $block) {
+            $byClass[$block->class] = $block;
+        }
+
+        return $byClass;
+    }
 }

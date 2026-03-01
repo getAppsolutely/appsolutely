@@ -534,6 +534,17 @@ When you modify `display_options` or `query_options` on a `PageBlockValue` that'
 
 This is handled by `PageBlockSetting::checkAndCreateNewBlockValue()`.
 
+### Block Registry (Page Builder)
+
+The Page Builder design page (`pages/{reference}/design`) loads available blocks from the **block-registry API** (`api/dash/api/pages/block-registry`). The registry is built from:
+
+1. **Theme manifest.json** — Source of truth for which blocks are available in the active theme. Each template entry defines `component` (Livewire class), `label`, `description`, etc.
+2. **page_block table** — Lookup by `class` to obtain `block_id` for correct saving of page design data.
+
+The manifest `component` is matched to `page_blocks.class`. Only manifest templates with a matching `page_block` record are included (so `block_id` can be saved correctly). The manifest key (e.g. `header`, `features`) becomes the component `type` in the canvas; `block_id` comes from `page_blocks.id`.
+
+**Response schema** (unchanged for canvas compatibility): groups with blocks; each block has `id` (block_id), `type` (manifest key), `label`, `content`, `tagName`, `droppable`, `sort`, etc.
+
 ## Block Scope
 
 ### Page Scope (`scope = 'page'`)

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Admin\Controllers\Api;
 
 use App\Models\Page;
+use App\Services\BlockRegistryService;
 use App\Services\PageBlockSchemaService;
 use App\Services\PageBlockService;
 use App\Services\PageService;
@@ -13,9 +14,11 @@ use Illuminate\Http\Request;
 
 final class PageBuilderAdminApiController extends AdminBaseApiController
 {
-    public function __construct(protected PageService $pageService,
+    public function __construct(
+        protected PageService $pageService,
         protected PageBlockService $pageBlockService,
-        protected PageBlockSchemaService $pageBlockSchemaService
+        protected PageBlockSchemaService $pageBlockSchemaService,
+        protected BlockRegistryService $blockRegistryService
     ) {}
 
     /**
@@ -56,28 +59,14 @@ final class PageBuilderAdminApiController extends AdminBaseApiController
     }
 
     /**
-     * Get available blocks registry
-     * Only returns blocks that have existing Livewire components
+     * Get available blocks registry from theme manifest.json.
+     * Matches manifest component class to page_block to obtain block_id for correct saving.
      */
-    public function getBlockRegistry()
+    public function getBlockRegistry(): JsonResponse
     {
-        $data = $this->pageBlockService->getCategorisedBlocks();
+        $data = $this->blockRegistryService->getRegistry();
 
-        // Filter out blocks that don't have existing Livewire components
-        $data = $data->map(function ($group) {
-            $filteredBlocks = $group->blocks->filter(function ($block) {
-                return class_exists($block->class);
-            })->values();
-
-            $group->setRelation('blocks', $filteredBlocks);
-
-            return $group;
-        })->filter(function ($group) {
-            // Remove groups that have no valid blocks
-            return $group->blocks->isNotEmpty();
-        })->values();
-
-        return $this->success($data->toArray());
+        return $this->success($data);
     }
 
     /**
