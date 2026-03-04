@@ -15,6 +15,7 @@ use App\Services\Contracts\PageBlockSettingServiceInterface;
 use App\Services\Contracts\ThemeServiceInterface;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Cache;
 use PDOException;
 
 /**
@@ -103,9 +104,9 @@ final readonly class PageBlockSettingService implements PageBlockSettingServiceI
     protected function syncBlockSettingItem(array $blockSetting, int $sort, int $pageId): array|PageBlockSetting
     {
         // Extract required identifiers from block setting data (GrapesJS may nest in attributes)
-        $blockId   = $blockSetting['block_id'] ?? $blockSetting['attributes']['block_id'] ?? null;
-        $reference = $blockSetting['reference'] ?? $blockSetting['attributes']['reference'] ?? null;
-        $type      = $blockSetting['type'] ?? $blockSetting['attributes']['type'] ?? null;
+        $reference      = $blockSetting['reference'] ?? $blockSetting['attributes']['reference'] ?? null;
+        $blockReference = $blockSetting['type'] ?? $blockSetting['attributes']['type'] ?? null;
+        $blockId        = $this->resolveBlockId($blockReference ?? '');
 
         // Validate required fields - both block_id and reference are mandatory
         if (empty($blockId) || empty($reference)) {
@@ -132,7 +133,7 @@ final readonly class PageBlockSettingService implements PageBlockSettingServiceI
         }
 
         // Resolve view (template name) from manifest for new block values
-        $view = $this->resolveViewFromManifest($type);
+        $view = $this->resolveViewFromManifest($blockReference);
 
         // Create new block setting with all required data
         $theme = $this->themeService->resolveThemeName();
@@ -147,6 +148,34 @@ final readonly class PageBlockSettingService implements PageBlockSettingServiceI
         ];
 
         return $this->pageBlockSettingRepository->create($data);
+    }
+
+    private function resolveBlockId(string $reference): ?int
+    {
+        if (empty($reference)) {
+            return null;
+        }
+
+        $blockIdFromCache = Cache::rememberForever(
+            "page_block:reference:{$reference}",
+            function () use ($reference) {
+                $block = $this->pageBlockRepository->findByFieldFirst('reference', $reference);
+
+                return $block?->id;
+            }
+        );
+        if ($blockIdFromCache !== null) {
+            return (int) $blockIdFromCache;
+        }
+
+        return Cache::rememberForever(
+            'page_block:class:general_block',
+            function () {
+                $block = $this->pageBlockRepository->findByFieldFirst('class', GeneralBlock::class);
+
+                return $block?->id;
+            }
+        );
     }
 
     /**
