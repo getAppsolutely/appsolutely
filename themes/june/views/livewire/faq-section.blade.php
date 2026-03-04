@@ -32,7 +32,7 @@
                                          class="accordion-collapse collapse {{ $index === 0 ? 'show' : '' }}"
                                          data-bs-parent="#faqAccordion">
                                         <div class="accordion-body">
-                                            {{ $item['answer'] ?? '' }}
+                                            {!! md2html((string) ($item['answer'] ?? '')) !!}
                                         </div>
                                     </div>
                                 </div>
