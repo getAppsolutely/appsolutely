@@ -27,8 +27,11 @@ final class FormEntryForm extends ModelForm
         $model = $this->model->with(['form', 'form.fields'])->find($id);
 
         if ($model) {
-            $this->model = $model;
-            $this->fill($model->toArray());
+            $this->model       = $model;
+            $data              = $model->toArray();
+            $data['data_json'] = json_encode($model->data ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            $data['meta_json'] = json_encode($model->meta ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            $this->fill($data);
         }
     }
 
@@ -56,50 +59,19 @@ final class FormEntryForm extends ModelForm
 
         $this->divider();
 
-        // Form data
-        $this->html('<h5>' . __t('Form Data') . '</h5>');
-
-        // Display formatted form data
-        $this->html(function () {
-            $entry = $this->model;
-            if ($entry === null || ! $entry->exists) {
-                return '<p>' . __t('No data available') . '</p>';
-            }
-
-            $html = '<div class="table-responsive"><table class="table table-bordered">';
-            $html .= '<thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>';
-
-            foreach ($entry->formatted_data as $label => $value) {
-                $html .= "<tr><td><strong>{$label}</strong></td><td>{$value}</td></tr>";
-            }
-
-            $html .= '</tbody></table></div>';
-
-            return $html;
-        });
+        // Form data (JSON view)
+        $this->textarea('data_json', __t('Form Data'))->rows(8)->readonly()
+            ->default('{}')
+            ->help(__t('Form field values as JSON'));
 
         $this->divider();
 
-        // Collected meta (from cookies per form config)
-        if (! empty($this->model->meta)) {
-            $this->html('<h5>' . __t('Collected Meta') . '</h5>');
-            $this->html(function () {
-                $entry = $this->model;
-                $meta  = $entry->meta ?? [];
-                if (empty($meta)) {
-                    return '<p class="text-muted">' . __t('No meta collected') . '</p>';
-                }
-                $html = '<div class="table-responsive"><table class="table table-bordered table-sm">';
-                $html .= '<thead><tr><th>' . __t('Key') . '</th><th>' . __t('Value') . '</th></tr></thead><tbody>';
-                foreach ($meta as $key => $value) {
-                    $html .= '<tr><td><code>' . e($key) . '</code></td><td>' . e((string) $value) . '</td></tr>';
-                }
-                $html .= '</tbody></table></div>';
+        // Collected meta (JSON view)
+        $this->textarea('meta_json', __t('Collected Meta'))->rows(6)->readonly()
+            ->default('{}')
+            ->help(__t('Meta from cookies as JSON'));
 
-                return $html;
-            });
-            $this->divider();
-        }
+        $this->divider();
 
         // Meta information (editable where appropriate)
         $this->html('<h5>' . __t('Meta Information') . '</h5>');

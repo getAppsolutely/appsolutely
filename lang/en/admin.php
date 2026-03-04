@@ -200,9 +200,11 @@ return [
     'quick_create'             => 'Quick create',
 
     // Form meta collection
-    'Meta keys to collect' => 'Meta keys to collect',
-    'Collected Meta'       => 'Collected Meta',
-    'No meta collected'    => 'No meta collected',
+    'Meta keys to collect'      => 'Meta keys to collect',
+    'Collected Meta'            => 'Collected Meta',
+    'No meta collected'         => 'No meta collected',
+    'Form field values as JSON' => 'Form field values as JSON',
+    'Meta from cookies as JSON' => 'Meta from cookies as JSON',
 
     // Form help messages
     'form_help' => [

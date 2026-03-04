@@ -228,9 +228,11 @@ return [
     ],
 
     // Form meta collection
-    'Meta keys to collect' => '要收集的 Meta 鍵',
-    'Collected Meta'       => '已收集的 Meta',
-    'No meta collected'    => '未收集任何 Meta',
+    'Meta keys to collect'      => '要收集的 Meta 鍵',
+    'Collected Meta'            => '已收集的 Meta',
+    'No meta collected'         => '未收集任何 Meta',
+    'Form field values as JSON' => '表單欄位值 (JSON)',
+    'Meta from cookies as JSON' => 'Cookie 收集的 Meta (JSON)',
 
     // Form help messages
     'form_help' => [
