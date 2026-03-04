@@ -227,6 +227,11 @@ return [
         'maxlength' => ':attribute 字符长度不能超出 :max。',
     ],
 
+    // Form meta collection
+    'Meta keys to collect' => '要收集的 Meta 鍵',
+    'Collected Meta'       => '已收集的 Meta',
+    'No meta collected'    => '未收集任何 Meta',
+
     // Form help messages
     'form_help' => [
         'expired_at_timezone'   => '过期时间 (%s)',

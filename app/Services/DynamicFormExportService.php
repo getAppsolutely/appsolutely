@@ -26,10 +26,20 @@ final readonly class DynamicFormExportService implements DynamicFormExportServic
 
         $output = fopen('php://temp', 'r+');
 
-        // Headers
+        // Headers: base + form fields + meta keys (union of all entry meta keys)
+        $metaKeys = [];
+        foreach ($entries as $entry) {
+            $meta     = $entry->meta ?? [];
+            $metaKeys = array_unique(array_merge($metaKeys, array_keys($meta)));
+        }
+        sort($metaKeys);
+
         $headers = ['ID', 'Submitted At', 'First Name', 'Last Name', 'Email', 'Mobile'];
         foreach ($form->fields as $field) {
             $headers[] = $field->label;
+        }
+        foreach ($metaKeys as $key) {
+            $headers[] = 'meta_' . $key;
         }
         fputcsv($output, $headers);
 
@@ -50,6 +60,11 @@ final readonly class DynamicFormExportService implements DynamicFormExportServic
                     $value = implode(', ', $value);
                 }
                 $row[] = $value;
+            }
+
+            $entryMeta = $entry->meta ?? [];
+            foreach ($metaKeys as $key) {
+                $row[] = $entryMeta[$key] ?? '';
             }
 
             fputcsv($output, $row);
@@ -83,6 +98,7 @@ final readonly class DynamicFormExportService implements DynamicFormExportServic
                 'Mobile',
                 'User',
                 'Form Data',
+                'Meta',
                 'Submitted At',
                 'IP Address',
             ]);
@@ -98,6 +114,7 @@ final readonly class DynamicFormExportService implements DynamicFormExportServic
                     $entry->mobile,
                     $entry->user ? $entry->user->name : 'Guest',
                     json_encode($entry->data),
+                    json_encode($entry->meta ?? []),
                     $entry->submitted_at->format('Y-m-d H:i:s'),
                     $entry->ip_address,
                 ]);

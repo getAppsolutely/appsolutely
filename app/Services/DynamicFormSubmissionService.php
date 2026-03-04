@@ -82,6 +82,12 @@ final readonly class DynamicFormSubmissionService implements DynamicFormSubmissi
             if ($request->user()) {
                 $entryData['user_id'] = $request->user()->id;
             }
+
+            // Collect meta from cookies per form config (keys are not hardcoded)
+            $metaKeys = $form->meta_keys_to_collect ?? [];
+            if (! empty($metaKeys) && is_array($metaKeys)) {
+                $entryData['meta'] = $this->collectMetaFromCookies($request, $metaKeys);
+            }
         }
 
         // Create the form entry
@@ -96,6 +102,31 @@ final readonly class DynamicFormSubmissionService implements DynamicFormSubmissi
         event(new \App\Events\FormSubmitted($form, $formEntry, $validatedData));
 
         return $formEntry;
+    }
+
+    /**
+     * Collect meta values from cookies for the configured keys.
+     * Keys are defined per form in meta_keys_to_collect; values are read from request cookies.
+     *
+     * @param  array<string>  $metaKeys
+     * @return array<string, string>
+     */
+    protected function collectMetaFromCookies(Request $request, array $metaKeys): array
+    {
+        $meta = [];
+
+        foreach ($metaKeys as $key) {
+            if (! is_string($key) || $key === '') {
+                continue;
+            }
+
+            $value = $request->cookie($key);
+            if ($value !== null && $value !== '') {
+                $meta[$key] = (string) $value;
+            }
+        }
+
+        return $meta;
     }
 
     /**

@@ -67,6 +67,7 @@ final class FormEntriesPullService implements FormEntriesPullServiceInterface
             'mobile'       => $entry->mobile,
             'referer'      => $entry->referer,
             'data'         => $entry->data ?? [],
+            'meta'         => $entry->meta ?? [],
         ];
     }
 }

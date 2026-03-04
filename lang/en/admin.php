@@ -199,6 +199,11 @@ return [
     'import_extension_confirm' => 'Are you sure import the extension?',
     'quick_create'             => 'Quick create',
 
+    // Form meta collection
+    'Meta keys to collect' => 'Meta keys to collect',
+    'Collected Meta'       => 'Collected Meta',
+    'No meta collected'    => 'No meta collected',
+
     // Form help messages
     'form_help' => [
         'expired_at_timezone'   => 'Expired At (%s)',

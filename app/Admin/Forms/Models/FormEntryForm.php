@@ -80,6 +80,27 @@ final class FormEntryForm extends ModelForm
 
         $this->divider();
 
+        // Collected meta (from cookies per form config)
+        if (! empty($this->model->meta)) {
+            $this->html('<h5>' . __t('Collected Meta') . '</h5>');
+            $this->html(function () {
+                $entry = $this->model;
+                $meta  = $entry->meta ?? [];
+                if (empty($meta)) {
+                    return '<p class="text-muted">' . __t('No meta collected') . '</p>';
+                }
+                $html = '<div class="table-responsive"><table class="table table-bordered table-sm">';
+                $html .= '<thead><tr><th>' . __t('Key') . '</th><th>' . __t('Value') . '</th></tr></thead><tbody>';
+                foreach ($meta as $key => $value) {
+                    $html .= '<tr><td><code>' . e($key) . '</code></td><td>' . e((string) $value) . '</td></tr>';
+                }
+                $html .= '</tbody></table></div>';
+
+                return $html;
+            });
+            $this->divider();
+        }
+
         // Meta information (editable where appropriate)
         $this->html('<h5>' . __t('Meta Information') . '</h5>');
 

@@ -26,6 +26,7 @@ final class FormEntry extends Model
         'email',
         'mobile',
         'data',
+        'meta',
         'is_spam',
         'referer',
         'ip_address',
@@ -35,6 +36,7 @@ final class FormEntry extends Model
     protected $casts = [
         'submitted_at' => 'datetime',
         'data'         => 'array',
+        'meta'         => 'array',
         'is_spam'      => FormEntrySpamStatus::class,
     ];
 
@@ -89,6 +91,16 @@ final class FormEntry extends Model
         $data             = $this->data ?? [];
         $data[$fieldName] = $value;
         $this->data       = $data;
+    }
+
+    /**
+     * Get a meta value by key (from collected cookie/request meta)
+     */
+    public function getMetaValue(string $key): ?string
+    {
+        $meta = $this->meta ?? [];
+
+        return isset($meta[$key]) ? (string) $meta[$key] : null;
     }
 
     /**

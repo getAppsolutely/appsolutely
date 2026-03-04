@@ -17,6 +17,7 @@ final class Form extends Model
 
     protected $fillable = [
         'api_access_token',
+        'meta_keys_to_collect',
         'name',
         'slug',
         'description',
@@ -25,7 +26,8 @@ final class Form extends Model
     ];
 
     protected $casts = [
-        'status' => Status::class,
+        'meta_keys_to_collect' => 'array',
+        'status'               => Status::class,
     ];
 
     public function fields(): HasMany
