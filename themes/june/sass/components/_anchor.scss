@@ -1,0 +1,48 @@
+.anchor-nav {
+    z-index: 1020;
+
+    &__list {
+        gap: 0.5rem 0;
+    }
+
+    &__item {
+        display: flex;
+        align-items: center;
+
+        &:not(:last-child)::after {
+            content: "";
+            width: 1px;
+            height: 1em;
+            margin-left: 1.25rem;
+            margin-right: 1.25rem;
+            background-color: rgb(255 255 255 / 35%);
+            flex-shrink: 0;
+        }
+    }
+
+    &__link {
+        font-size: 0.8125rem;
+        font-weight: 500;
+        padding: 0.25rem 0;
+        border-bottom: 2px solid transparent;
+        transition:
+            border-color 0.2s,
+            color 0.2s;
+
+        &:hover {
+            color: rgb(255 255 255 / 90%) !important;
+        }
+
+        &--active {
+            border-bottom-color: rgb(255 255 255 / 90%);
+            font-weight: 600;
+        }
+    }
+
+    &__cta {
+        font-size: 0.8125rem;
+        font-weight: 500;
+        margin-left: auto;
+        flex-shrink: 0;
+    }
+}

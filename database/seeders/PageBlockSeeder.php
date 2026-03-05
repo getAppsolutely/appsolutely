@@ -152,6 +152,22 @@ final class PageBlockSeeder extends Seeder
                 ]
             )
         );
+
+        // Anchor
+        PageBlock::firstOrCreate(
+            ['class' => 'App\\Livewire\\Anchor', 'block_group_id' => $group->id],
+            array_merge(
+                $this->getBasicFields(),
+                [
+                    'title'       => 'Anchor Navigation',
+                    'class'       => 'App\\Livewire\\Anchor',
+                    'template'    => $this->getTemplate('anchor'),
+                    'description' => 'Sticky navigation bar linking to sections below. Shows only page blocks after itself.',
+                    'sort'        => 4,
+                    'reference'   => 'anchor',
+                ]
+            )
+        );
     }
 
     /**

@@ -686,6 +686,15 @@ The manifest `component` is matched to `page_blocks.class`. Only manifest templa
 
 ## Example Blocks
 
+### Anchor Block
+
+Sticky navigation bar that links to page sections below. Shows only **page-scoped** blocks after itself (excludes global blocks like footer).
+
+- **Order logic**: If the anchor block is at sort 3, it lists only blocks with sort > 3.
+- **Title source**: Only blocks with `anchor_label` in their displayOptions appear in the nav.
+- **Display options**: `cta_text`, `cta_url`, `cta_icon` for the optional call-to-action button on the right.
+- **Scroll targets**: Each block is wrapped with `id="block-{reference}"` for anchor links.
+
 ### GeneralBlock template (FAQ Section)
 
 Uses `GeneralBlock` with a dedicated view — no custom component:

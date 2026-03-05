@@ -40,20 +40,46 @@ final readonly class BlockRendererService implements BlockRendererServiceInterfa
             return $this->getBlockErrorHtml("Class '{$className}' is not a Livewire component");
         }
 
-        $viewName       = $block->blockValue->view ?? '';
-        $style          = $block->displayOptionsValue['style'] ?? '';
-        $queryOptions   = $block->queryOptionsValue ?? [];
-        $displayOptions = $block->displayOptionsValue ?? [];
+        $blockValue         = $block->blockValue ?? null;
+        $viewName           = $blockValue?->view ?? '';
+        $style              = $block->displayOptionsValue['style'] ?? '';
+        $queryOptions       = $block->queryOptionsValue ?? [];
+        $displayOptions     = $block->displayOptionsValue ?? [];
+        $pageData           = $page->toArray();
+        $pageData['blocks'] = $this->buildBlocksForAnchor($page);
 
         $data = [
-            'page'           => $page->toArray(),
+            'page'           => $pageData,
             'viewName'       => $viewName,
             'style'          => $style,
             'queryOptions'   => $queryOptions,
             'displayOptions' => $displayOptions,
+            'blockSort'      => (int) ($block->sort ?? 0),
+            'blockReference' => $reference,
         ];
 
         return Livewire::mount($className, $data, $reference);
+    }
+
+    /**
+     * Build minimal block data for anchor navigation (used by Anchor block).
+     *
+     * @return array<int, array{sort: int, reference: string, scope: string, view: string, display_options: array, block_title: string}>
+     */
+    private function buildBlocksForAnchor(GeneralPage $page): array
+    {
+        $blocks = $page->blocks ?? collect();
+
+        return collect($blocks)->map(function ($b) {
+            return [
+                'sort'            => (int) ($b->sort ?? 0),
+                'reference'       => (string) ($b->reference ?? ''),
+                'scope'           => (string) ($b->block?->scope ?? 'page'),
+                'view'            => (string) ($b->blockValue?->view ?? ''),
+                'display_options' => $b->displayOptionsValue ?? [],
+                'block_title'     => (string) ($b->block?->title ?? ''),
+            ];
+        })->values()->toArray();
     }
 
     /**
