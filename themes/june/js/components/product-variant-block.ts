@@ -51,7 +51,7 @@ function initializeNativeFallback(container: HTMLElement): void {
     let currentVariantIndex = 0;
     let currentColorIndex = 0;
 
-    const tabs = container.querySelectorAll<HTMLButtonElement>('.variant-tabs .nav-link');
+    const tabs = container.querySelectorAll<HTMLButtonElement>('.product-variant-block__tabs .nav-link');
 
     function updateDisplay(variantIndex: number, colorIndex: number = 0): void {
         const variant = productData?.variants?.[variantIndex];
@@ -66,33 +66,35 @@ function initializeNativeFallback(container: HTMLElement): void {
         });
 
         // Update main image
-        const mainImage = container.querySelector<HTMLImageElement>('.product-main-image');
+        const mainImage = container.querySelector<HTMLImageElement>('.product-variant-block__main-image-img');
         if (mainImage && color?.images?.[0]) {
             mainImage.src = color.images[0];
             mainImage.alt = color.name || 'Product Image';
         }
 
         // Update variant name
-        const variantName = container.querySelector<HTMLElement>('.variant-info h2');
+        const variantName = container.querySelector<HTMLElement>('.product-variant-block__info h2');
         if (variantName) {
             variantName.textContent = variant.name || 'Variant';
         }
 
         // Update price
-        const priceEl = container.querySelector<HTMLElement>('.price-section span:last-child');
+        const priceEl = container.querySelector<HTMLElement>('.product-variant-block__price span:last-child');
         if (priceEl && variant.price !== undefined && variant.price !== null) {
             const price = typeof variant.price === 'number' ? variant.price.toLocaleString() : variant.price;
             priceEl.textContent = String(price);
         }
 
         // Update specs
-        const specsList = container.querySelector<HTMLElement>('.specifications-section .list-group');
+        const specsList = container.querySelector<HTMLElement>('.product-variant-block__specs .list-group');
         if (specsList && variant?.specs) {
             specsList.innerHTML = variant.specs.map((spec) => `<li class="list-group-item">${spec}</li>`).join('');
         }
 
         // Update color options
-        const colorOptions = container.querySelectorAll<HTMLButtonElement>('.color-selection .color-option');
+        const colorOptions = container.querySelectorAll<HTMLButtonElement>(
+            '.product-variant-block__color-selection .product-variant-block__color-option'
+        );
         colorOptions.forEach((option, idx) => {
             option.classList.toggle('active', idx === colorIndex);
             const checkIcon = option.querySelector('.fa-check');
@@ -102,7 +104,7 @@ function initializeNativeFallback(container: HTMLElement): void {
         });
 
         // Update selected color name
-        const colorName = container.querySelector<HTMLElement>('.color-selection p span');
+        const colorName = container.querySelector<HTMLElement>('.product-variant-block__color-selection p span');
         if (colorName && color) {
             colorName.textContent = color.name || 'Unnamed Color';
         }
@@ -116,7 +118,7 @@ function initializeNativeFallback(container: HTMLElement): void {
         const target = e.target as HTMLElement;
 
         // Handle variant tab clicks
-        const tabButton = target.closest<HTMLButtonElement>('.variant-tabs .nav-link');
+        const tabButton = target.closest<HTMLButtonElement>('.product-variant-block__tabs .nav-link');
         if (tabButton) {
             e.preventDefault();
             e.stopPropagation();
@@ -127,11 +129,15 @@ function initializeNativeFallback(container: HTMLElement): void {
         }
 
         // Handle color selection clicks
-        const colorButton = target.closest<HTMLButtonElement>('.color-selection .color-option');
+        const colorButton = target.closest<HTMLButtonElement>(
+            '.product-variant-block__color-selection .product-variant-block__color-option'
+        );
         if (colorButton) {
             e.preventDefault();
             e.stopPropagation();
-            const colorOptions = container.querySelectorAll<HTMLButtonElement>('.color-selection .color-option');
+            const colorOptions = container.querySelectorAll<HTMLButtonElement>(
+                '.product-variant-block__color-selection .product-variant-block__color-option'
+            );
             const colorIndex = Array.from(colorOptions).indexOf(colorButton);
             if (colorIndex >= 0 && colorIndex !== currentColorIndex) {
                 updateDisplay(currentVariantIndex, colorIndex);

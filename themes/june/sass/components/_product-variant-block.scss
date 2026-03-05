@@ -1,4 +1,7 @@
-// Product Variant Block Styles
+// Product Variant Block Styles (BEM)
+// Block: product-variant-block
+// Elements: __header, __meta, __tabs, __main-image, __color-selection, __color-option, __thumbnails, __thumbnail, __info, __price, __specs
+// Modifiers: __main-image--ssr, __color-selection--ssr, __info--ssr, __specs--ssr
 
 .product-variant-block {
     // Hide Alpine-managed elements until initialized (Alpine removes x-cloak)
@@ -8,13 +11,13 @@
 
     background-color: $light;
 
-    .product-header {
-        .product-meta {
+    &__header {
+        .product-variant-block__meta {
             font-size: 0.9rem;
         }
     }
 
-    .variant-tabs {
+    &__tabs {
         .nav-tabs {
             border-bottom: 2px solid $gray-300;
         }
@@ -57,8 +60,8 @@
         }
     }
 
-    .color-selection {
-        .color-option {
+    &__color-selection {
+        .product-variant-block__color-option {
             transition: all 0.2s ease;
             box-shadow: 0 2px 4px $black-alpha-10;
 
@@ -73,14 +76,14 @@
         }
     }
 
-    .main-image-container {
-        .product-main-image {
+    &__main-image {
+        .product-variant-block__main-image-img {
             transition: opacity 0.3s ease;
         }
     }
 
-    .additional-images {
-        .product-thumbnail {
+    &__thumbnails {
+        .product-variant-block__thumbnail {
             transition: transform 0.2s ease;
 
             &:hover {
@@ -89,7 +92,7 @@
         }
     }
 
-    .specifications-section {
+    &__specs {
         .list-group-item {
             border-left: 3px solid transparent;
             transition: all 0.2s ease;
@@ -101,7 +104,7 @@
         }
     }
 
-    .price-section {
+    &__price {
         padding: 1rem;
         background-color: $white;
         border-radius: 0.5rem;

@@ -30,7 +30,7 @@
         @if (empty($product))
             <div class="alert alert-warning">No product data configured</div>
         @elseif (empty($variants))
-            <div class="product-header mb-4 text-center">
+            <div class="product-variant-block__header mb-4 text-center">
                 <h1 class="h2 fw-bold mb-2">{{ $product['name'] ?? 'Product' }}</h1>
             </div>
             <div class="alert alert-info">No variants available</div>
@@ -132,10 +132,10 @@
                 <script type="application/json" data-product>@json($product)</script>
 
                 <!-- Product Header (Static - always visible) -->
-                <div class="product-header mb-4 text-center">
+                <div class="product-variant-block__header mb-4 text-center">
                     <h1 class="h2 fw-bold mb-2">{{ $product['name'] ?? 'Product' }}</h1>
                     @if (!empty($product['common']))
-                        <div class="product-meta text-muted">
+                        <div class="product-variant-block__meta text-muted">
                             @if (!empty($product['common']['brand']))
                                 <span class="me-3"><strong>Brand:</strong> {{ $product['common']['brand'] }}</span>
                             @endif
@@ -155,7 +155,7 @@
                 </div>
 
                 <!-- Variant Tabs -->
-                <div class="variant-tabs mb-4">
+                <div class="product-variant-block__tabs mb-4">
                     <ul class="nav nav-tabs justify-content-center" role="tablist">
                         @foreach ($variants as $index => $variant)
                             <li class="nav-item" role="presentation">
@@ -178,7 +178,8 @@
                     <div class="col-lg-7">
                         {{-- SSR Fallback: Visible immediately, hidden once Alpine initializes --}}
                         @if ($firstImage)
-                            <div class="main-image-container main-image-container--ssr mb-4" x-show="!initialized">
+                            <div class="product-variant-block__main-image product-variant-block__main-image--ssr mb-4"
+                                x-show="!initialized">
                                 <img src="{{ $firstImage }}" alt="{{ $firstColor['name'] ?? 'Product Image' }}"
                                     class="img-fluid rounded shadow-sm w-100"
                                     style="max-height: 500px; object-fit: contain;">
@@ -186,21 +187,22 @@
                         @endif
 
                         {{-- Alpine Dynamic Image: Hidden until initialized --}}
-                        <div class="main-image-container mb-4" x-show="initialized && currentColor?.images?.length"
-                            x-cloak>
+                        <div class="product-variant-block__main-image mb-4"
+                            x-show="initialized && currentColor?.images?.length" x-cloak>
                             <img :src="currentColor?.images?.[0] || ''" :alt="currentColor?.name || 'Product Image'"
-                                class="img-fluid rounded shadow-sm w-100 product-main-image"
+                                class="img-fluid rounded shadow-sm w-100 product-variant-block__main-image-img"
                                 style="max-height: 500px; object-fit: contain;">
                         </div>
 
                         {{-- SSR Fallback: Color Selection --}}
                         @if (!empty($firstVariant['colors']))
-                            <div class="color-selection color-selection--ssr mb-4" x-show="!initialized">
+                            <div class="product-variant-block__color-selection product-variant-block__color-selection--ssr mb-4"
+                                x-show="!initialized">
                                 <h6 class="mb-3 fw-semibold">Select Color</h6>
                                 <div class="d-flex flex-wrap gap-2">
                                     @foreach ($firstVariant['colors'] as $colorIndex => $color)
                                         <button type="button"
-                                            class="color-option p-0 border-0 {{ $colorIndex === 0 ? 'active' : '' }}"
+                                            class="product-variant-block__color-option p-0 border-0 {{ $colorIndex === 0 ? 'active' : '' }}"
                                             style="width: 50px; height: 50px; border-radius: 50%; background: {{ $color['code'] ?? '#ccc' }}; outline: 3px solid {{ $colorIndex === 0 ? '#007bff' : 'transparent' }}; outline-offset: -3px; position: relative; cursor: pointer;"
                                             title="{{ $color['name'] ?? 'Color ' . ($colorIndex + 1) }}"
                                             data-color-index="{{ $colorIndex }}">
@@ -217,13 +219,13 @@
                         @endif
 
                         {{-- Alpine Dynamic Color Selection --}}
-                        <div class="color-selection mb-4" x-show="initialized && currentVariant?.colors?.length"
-                            x-cloak>
+                        <div class="product-variant-block__color-selection mb-4"
+                            x-show="initialized && currentVariant?.colors?.length" x-cloak>
                             <h6 class="mb-3 fw-semibold">Select Color</h6>
                             <div class="d-flex flex-wrap gap-2">
                                 <template x-for="(color, colorIndex) in currentVariant?.colors || []"
                                     :key="colorIndex">
-                                    <button type="button" class="color-option p-0 border-0"
+                                    <button type="button" class="product-variant-block__color-option p-0 border-0"
                                         :class="{ 'active': selectedColorIndex === colorIndex }"
                                         @click.prevent="selectColor(colorIndex)"
                                         :style="`width: 50px; height: 50px; border-radius: 50%; background: ${color.code || '#ccc'}; outline: 3px solid ${selectedColorIndex === colorIndex ? '#007bff' : 'transparent'}; outline-offset: -3px; position: relative; cursor: pointer;`"
@@ -239,17 +241,17 @@
                         </div>
 
                         {{-- Alpine Dynamic Additional Images --}}
-                        <div class="additional-images mt-4" x-show="initialized && currentColor?.images?.length > 1"
-                            x-cloak>
+                        <div class="product-variant-block__thumbnails mt-4"
+                            x-show="initialized && currentColor?.images?.length > 1" x-cloak>
                             <h6 class="mb-3 fw-semibold">More Images</h6>
                             <div class="row g-2">
                                 <template x-for="(image, imageIndex) in (currentColor?.images || []).slice(1)"
                                     :key="imageIndex">
                                     <div class="col-4 col-md-3">
                                         <img :src="image" :alt="'Product Image ' + (imageIndex + 2)"
-                                            class="img-fluid rounded shadow-sm w-100 product-thumbnail"
+                                            class="img-fluid rounded shadow-sm w-100 product-variant-block__thumbnail"
                                             style="height: 100px; object-fit: cover; cursor: pointer;"
-                                            @click="$el.closest('.col-lg-7').querySelector('.product-main-image').src = image">
+                                            @click="$el.closest('.col-lg-7').querySelector('.product-variant-block__main-image-img').src = image">
                                     </div>
                                 </template>
                             </div>
@@ -260,13 +262,14 @@
                     <div class="col-lg-5">
                         {{-- SSR Fallback: Variant Info --}}
                         @if ($firstVariant)
-                            <div class="variant-info variant-info--ssr mb-4" x-show="!initialized">
+                            <div class="product-variant-block__info product-variant-block__info--ssr mb-4"
+                                x-show="!initialized">
                                 <h2 class="h3 fw-bold mb-2">{{ $firstVariant['name'] ?? 'Variant' }}</h2>
                                 @if (!empty($firstVariant['price']))
                                     @php
                                         $showPriceSuffix = strtoupper(trim((string) $firstVariant['price'])) !== 'TBC';
                                     @endphp
-                                    <div class="price-section mb-3">
+                                    <div class="product-variant-block__price mb-3">
                                         <span class="h4 fw-bold">
                                             ${{ is_numeric($firstVariant['price']) ? number_format($firstVariant['price']) : $firstVariant['price'] }}
                                             @if ($showPriceSuffix)
@@ -284,9 +287,9 @@
                         @endif
 
                         {{-- Alpine Dynamic Variant Info --}}
-                        <div class="variant-info mb-4" x-show="initialized" x-cloak>
+                        <div class="product-variant-block__info mb-4" x-show="initialized" x-cloak>
                             <h2 class="h3 fw-bold mb-2" x-text="currentVariant?.name || 'Variant'"></h2>
-                            <div class="price-section mb-3" x-show="getFormattedPrice() !== null">
+                            <div class="product-variant-block__price mb-3" x-show="getFormattedPrice() !== null">
                                 <span class="h4 fw-bold">
                                     $<span x-text="getFormattedPrice()"></span>
                                     <span x-show="shouldShowPriceSuffix()"> RRP. <small
@@ -301,7 +304,8 @@
 
                         {{-- SSR Fallback: Specifications --}}
                         @if (!empty($firstVariant['specs']))
-                            <div class="specifications-section specifications-section--ssr mb-4" x-show="!initialized">
+                            <div class="product-variant-block__specs product-variant-block__specs--ssr mb-4"
+                                x-show="!initialized">
                                 <h5 class="fw-bold mb-3">Specifications</h5>
                                 <ul class="list-group">
                                     @foreach ($firstVariant['specs'] as $spec)
@@ -312,8 +316,8 @@
                         @endif
 
                         {{-- Alpine Dynamic Specifications --}}
-                        <div class="specifications-section mb-4" x-show="initialized && currentVariant?.specs?.length"
-                            x-cloak>
+                        <div class="product-variant-block__specs mb-4"
+                            x-show="initialized && currentVariant?.specs?.length" x-cloak>
                             <h5 class="fw-bold mb-3">Specifications</h5>
                             <ul class="list-group">
                                 <template x-for="(spec, specIndex) in currentVariant?.specs || []"
