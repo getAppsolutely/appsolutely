@@ -80,13 +80,13 @@
                                                                     @if (!empty($child->setting['learn_more_link']))
                                                                         <a href="{{ $child->setting['learn_more_link'] }}"
                                                                             class="btn btn-sm fw-semibold px-2 py-2 border bg-white text-dark">
-                                                                            Learn More
+                                                                            {{ __t('Learn More') }}
                                                                         </a>
                                                                     @endif
                                                                     @if (!empty($child->setting['test_drive_link']))
                                                                         <a href="{{ $child->setting['test_drive_link'] }}"
                                                                             class="btn btn-sm fw-semibold px-2 py-2 border bg-white text-dark">
-                                                                            Test Drive
+                                                                            {{ __t('Test Drive') }}
                                                                         </a>
                                                                     @endif
                                                                 </div>

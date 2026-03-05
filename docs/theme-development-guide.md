@@ -173,7 +173,7 @@ Each block is rendered inside a page-level wrapper in `resources/views/pages/sho
 
 ### Component Structure & CSS Naming (Unified)
 
-Use a consistent root element and BEM-style class naming across all Livewire block views.
+Use a consistent root element and BEM-style class naming across all Livewire block views. The page wraps each block in `block-wrapper`; the block view outputs its own root. SCSS targets blocks by their class (e.g. `.hero-banner`, `.faq-section`) — no `.block` prefix is used.
 
 **Root Element:**
 
@@ -184,17 +184,22 @@ Use a consistent root element and BEM-style class naming across all Livewire blo
 
 **Root Classes (BEM-style):**
 
-Use `block-name` on the root. For style variants, add `block-name--style` (BEM modifier) or use a compound class `block-name-style` when the view file is style-specific:
+Use `block-name` on the root. For style variants, add `block-name--style` (BEM modifier) or `block-name-style` (compound class). For blocks with multiple items (e.g. hero carousel), use an outer wrapper `block-name__wrapper`; the actual block instances go on inner elements with `block-name block-name-{style}`.
 
 ```php
-{{-- themes/theme-name/views/livewire/hero-banner.blade.php Default style --}}
-<section class="hero-banner hero-banner--default">
-    {{-- Content --}}
+{{-- Simple block: single root with block-name --}}
+<section class="faq-section">
+    <div class="faq-section__container container">...</div>
 </section>
 
-{{-- themes/theme-name/views/livewire/hero-banner_fullscreen.blade.php Style-specific variant --}}
-<section class="hero-banner hero-banner--fullscreen">
-    {{-- Content --}}
+{{-- Block with multiple items: wrapper + inner block instances --}}
+<section class="hero-banner__wrapper">
+    @foreach ($displayOptions['heroes'] as $hero)
+        <div class="hero-banner hero-banner-{{ $style ?? 'default' }}">
+            <div class="hero-banner__caption">...</div>
+            <div class="hero-banner__image-wrap">...</div>
+        </div>
+    @endforeach
 </section>
 
 {{-- header.blade.php — semantic element matches component name --}}
@@ -212,8 +217,9 @@ Use `block-name` on the root. For style variants, add `block-name--style` (BEM m
 
 **Examples:**
 
-- `hero-banner hero-banner--default` — Default hero banner
-- `hero-banner hero-banner--fullscreen` — Fullscreen hero banner
+- `hero-banner hero-banner-default` — Default hero banner (inner instance)
+- `hero-banner hero-banner-fullscreen` — Fullscreen hero banner (inner instance)
+- `hero-banner__wrapper` — Outer wrapper for multi-item hero block
 - `media-slider media-slider--carousel` — Carousel media slider
 - `header` — Header block (root `<header>`)
 - `footer` — Footer block (root `<footer>`)
@@ -606,16 +612,15 @@ $input-btn-padding-x: 0.75rem;
 ```scss
 // themes/theme-name/sass/components/_hero-banner.scss
 
-// Import animation mixins
-@import 'mixins';
+@use 'mixins' as *;
 
-// Common styles for all hero-banner blocks
-.block.hero-banner {
+// Common styles for all hero-banner blocks (target inner instances; no .block prefix)
+.hero-banner {
     position: relative;
 
     // Intersection Observer trigger
     &.in-view {
-        .hero-banner-caption {
+        .hero-banner__caption {
             opacity: 1;
             transform: translate(-50%, -30%) translateY(0);
 
@@ -629,7 +634,7 @@ $input-btn-padding-x: 0.75rem;
                 transform: translateY(0);
             }
 
-            .hero-banner-btn {
+            .hero-banner__btn {
                 opacity: 1;
                 transform: translateY(0);
             }
@@ -637,33 +642,41 @@ $input-btn-padding-x: 0.75rem;
     }
 }
 
-// Default hero banner styles
-.block.hero-banner.hero-banner-default {
-    // Default-specific styles
-    .hero-image-container {
+// Default hero banner styles (not fullscreen)
+.hero-banner:not(.hero-banner-fullscreen) {
+    & > .hero-banner__image-wrap {
         aspect-ratio: 16 / 9;
     }
+
+    & > .hero-banner__caption {
+        top: 12% !important;
+
+        h4 {
+            font-weight: 500 !important;
+            font-size: 2rem !important;
+        }
+    }
 }
 
-// Fullscreen hero banner styles
-.block.hero-banner.hero-banner-fullscreen {
-    // Fullscreen-specific styles
-    .hero-image-container {
-        height: 100vh;
+// Fullscreen style modifier
+.hero-banner-fullscreen {
+    & > .hero-banner__image-wrap {
         width: 100%;
-    }
-
-    .hero-banner-caption {
-        top: 50% !important;
-        transform: translate(-50%, -50%);
+        height: 100vh;
     }
 }
 
-// Hero banner caption
-.hero-banner-caption {
-    @extend %overlay-caption;
+// Hero banner caption (BEM: block__element)
+.hero-banner__caption {
+    @include overlay-caption;
 
-    top: 25% !important;
+    top: 15% !important;
+
+    @media (prefers-reduced-motion: reduce) {
+        opacity: 1;
+        transform: translate(-50%, -30%);
+        transition: none;
+    }
 
     // Initial state
     opacity: 0;
@@ -701,42 +714,26 @@ $input-btn-padding-x: 0.75rem;
         }
     }
 
-    .hero-banner-btn {
+    .hero-banner__btn {
         @include fade-in-up(0.6s);
     }
 }
 
-// Button styles
-.hero-banner-btn {
-    @extend %overlay-btn;
+// Button styles (BEM: block__element)
+.hero-banner__btn {
+    @include overlay-btn;
 }
 
-.hero-image-container {
+.hero-banner__image-wrap {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
 
-:not(.fullscreen) {
-    & > .hero-image-container {
-        aspect-ratio: 16 / 9;
-    }
-
-    & > .hero-banner-caption {
-        top: 12% !important;
-
-        h4 {
-            font-weight: 500 !important;
-            font-size: 2rem !important;
-        }
-    }
-}
-
-.fullscreen {
-    & > .hero-image-container {
-        width: 100%;
-        height: 100vh;
-    }
+// Optional overlay for text readability
+.hero-banner__overlay {
+    opacity: 0.3;
+    z-index: 1;
 }
 ```
 
@@ -747,7 +744,7 @@ $input-btn-padding-x: 0.75rem;
 3. **Component Organization**: Create separate SCSS files for each component
 4. **Mixins**: Use mixins for reusable animation and styling patterns. Two animation patterns: `fade-in-up` (transition-based, triggered by `.animate` via Intersection Observer) for scroll-triggered effects; `animate-fade-in-up` (keyframe-based) for load-triggered effects. Add `@media (prefers-reduced-motion: reduce)` override when using `animate-fade-in-up`.
 5. **Responsive Design**: Use Bootstrap's media query mixins consistently
-6. **Naming Conventions**: Use BEM methodology for custom classes (`.block__element`, `.block__element--modifier`)
+6. **Naming Conventions**: Use BEM methodology: `block-name__element` for children, `block-name--modifier` for variants (e.g. `hero-banner__caption`, `hero-banner--fullscreen`)
 7. **Performance**: Avoid deep nesting (max 3-4 levels)
 
 ### SCSS Conventions
@@ -824,7 +821,7 @@ import './components/photo-gallery';
  */
 
 (() => {
-    const heroBanners = document.querySelectorAll<HTMLElement>('.block.hero-banner');
+    const heroBanners = document.querySelectorAll<HTMLElement>('.hero-banner');
 
     if (!heroBanners.length) return;
 
