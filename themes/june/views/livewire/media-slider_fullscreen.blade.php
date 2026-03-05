@@ -1,7 +1,7 @@
-<div id="mediaSliderCarousel-{{ $this->getId() }}" class="media-slider-fullscreen carousel slide section-full"
-    data-bs-ride="carousel">
+<section id="mediaSliderCarousel-{{ $this->getId() }}"
+    class="media-slider media-slider--fullscreen carousel slide section-full" data-bs-ride="carousel">
     <!-- Carousel Section (80vh) -->
-    <div class="media-slider-fullscreen__carousel">
+    <div class="media-slider__carousel">
         <div class="carousel-inner">
             @if (!empty($displayOptions['slides']))
                 @foreach ($displayOptions['slides'] as $index => $slide)
@@ -15,7 +15,7 @@
                             <img class="lazy d-block w-100" data-src="{{ asset_url($slide['url']) }}"
                                 alt="{{ $slide['image_alt'] ?? '' }}">
                         @endif
-                        <div class="media-slider-fullscreen__caption carousel-caption d-none d-md-block">
+                        <div class="media-slider__caption carousel-caption d-none d-md-block">
                             @if (!empty($slide['model']) && !empty($slide['title']))
                                 <img class="lazy mb-4" data-src="{{ asset_url($slide['model']) }}"
                                     alt="{{ $slide['title'] }}">
@@ -26,7 +26,7 @@
                                 <p class="lead">{{ $slide['subtitle'] }}</p>
                             @endif
                             @if (!empty($slide['link']))
-                                <a href="{{ $slide['link'] }}" class="media-slider-fullscreen__btn btn btn-dark">
+                                <a href="{{ $slide['link'] }}" class="media-slider__btn btn btn-dark">
                                     Learn More
                                 </a>
                             @endif
@@ -65,29 +65,29 @@
 
     <!-- Items Section (20vh) -->
     @if (!empty($displayOptions['items']) || !empty($displayOptions['vehicles']))
-        <div class="media-slider-fullscreen__items">
+        <div class="media-slider__items">
             <div class="container">
                 <div class="row g-3 g-md-4 justify-content-center">
                     @foreach ($displayOptions['items'] ?? ($displayOptions['vehicles'] ?? []) as $item)
                         <div class="col-12 col-sm-6 col-lg-4">
-                            <div class="media-slider-fullscreen__item">
-                                <div class="media-slider-fullscreen__item-image-wrap">
-                                    <img class="media-slider-fullscreen__item-image lazy"
+                            <div class="media-slider__item">
+                                <div class="media-slider__item-image-wrap">
+                                    <img class="media-slider__item-image lazy"
                                         data-src="{{ asset_url($item['image'] ?? '') }}"
                                         alt="{{ $item['name'] ?? '' }}">
                                 </div>
-                                <div class="media-slider-fullscreen__item-content">
-                                    <h3 class="media-slider-fullscreen__item-name">{{ $item['name'] ?? '' }}</h3>
-                                    <div class="media-slider-fullscreen__item-actions">
+                                <div class="media-slider__item-content">
+                                    <h3 class="media-slider__item-name">{{ $item['name'] ?? '' }}</h3>
+                                    <div class="media-slider__item-actions">
                                         @if (!empty($item['learn_more_link']))
                                             <a href="{{ $item['learn_more_link'] }}"
-                                                class="media-slider-fullscreen__item-btn btn btn-outline-secondary">
+                                                class="media-slider__item-btn btn btn-outline-secondary">
                                                 Learn More
                                             </a>
                                         @endif
                                         @if (!empty($item['test_drive_link']))
                                             <a href="{{ $item['test_drive_link'] }}"
-                                                class="media-slider-fullscreen__item-btn btn btn-outline-secondary">
+                                                class="media-slider__item-btn btn btn-outline-secondary">
                                                 Test Drive
                                             </a>
                                         @endif
@@ -100,4 +100,4 @@
             </div>
         </div>
     @endif
-</div>
+</section>

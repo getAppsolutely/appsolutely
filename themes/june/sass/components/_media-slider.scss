@@ -8,7 +8,7 @@
     height: auto;
 
     // Carousel wrapper (flexible, minimum 60vh, prefers 80vh, can shrink if needed)
-    .media-slider-fullscreen__carousel {
+    .media-slider__carousel {
         flex: 0 1 80vh;
         min-height: 60vh;
         max-height: 80vh;
@@ -31,7 +31,7 @@
     }
 
     // Items section (flexible, minimum 20vh, can grow)
-    .media-slider-fullscreen__items {
+    .media-slider__items {
         flex: 1 1 auto;
         min-height: 20vh;
         background-color: $light;
@@ -39,7 +39,7 @@
         align-items: center;
         padding: 1.5rem 0;
 
-        .media-slider-fullscreen__item {
+        .media-slider__item {
             height: 100%;
             min-height: 280px;
             display: flex;
@@ -57,7 +57,7 @@
                 box-shadow: 0 4px 16px $black-alpha-12;
             }
 
-            .media-slider-fullscreen__item-image-wrap {
+            .media-slider__item-image-wrap {
                 flex: 1 1 auto;
                 min-height: 120px;
                 max-height: 200px;
@@ -65,7 +65,7 @@
                 overflow: hidden;
                 background-color: $lazy-loading-shimmer-start;
 
-                .media-slider-fullscreen__item-image {
+                .media-slider__item-image {
                     width: 100%;
                     height: 100%;
                     object-fit: cover;
@@ -73,14 +73,14 @@
                 }
             }
 
-            .media-slider-fullscreen__item-content {
+            .media-slider__item-content {
                 flex: 0 0 auto;
                 padding: 1rem;
                 display: flex;
                 flex-direction: column;
                 gap: 0.75rem;
 
-                .media-slider-fullscreen__item-name {
+                .media-slider__item-name {
                     font-size: 1.125rem;
                     font-weight: 600;
                     margin: 0;
@@ -90,12 +90,12 @@
                     overflow-wrap: break-word;
                 }
 
-                .media-slider-fullscreen__item-actions {
+                .media-slider__item-actions {
                     display: flex;
                     gap: 0.5rem;
                     justify-content: center;
 
-                    .media-slider-fullscreen__item-btn {
+                    .media-slider__item-btn {
                         flex: 1;
                         padding: 0.5rem 0.75rem;
                         font-size: 0.875rem;
@@ -142,7 +142,7 @@
     }
 }
 
-.media-slider-fullscreen__caption {
+.media-slider__caption {
     @include overlay-caption;
 
     top: 40% !important;
@@ -163,37 +163,37 @@
     }
 }
 
-.media-slider-fullscreen__btn {
+.media-slider__btn {
     @include overlay-btn;
 }
 
 // Carousel styles
-.media-slider-carousel {
+.media-slider--carousel {
     padding-top: 4rem;
     padding-bottom: 2rem;
     @include media-breakpoint-down(xxl) {
         padding-bottom: 0;
     }
 
-    .media-slider-carousel__header {
+    .media-slider__header {
         margin-bottom: 1rem;
         padding: 0 1rem;
 
-        .media-slider-carousel__title {
+        .media-slider__title {
             font-size: 2rem;
             font-weight: 400;
             margin-bottom: 0.5rem;
             color: var(--bs-dark);
         }
 
-        .media-slider-carousel__subtitle {
+        .media-slider__subtitle {
             font-size: 1.5rem;
             font-weight: 400;
             margin-bottom: 1rem;
             color: var(--bs-secondary);
         }
 
-        .media-slider-carousel__description {
+        .media-slider__description {
             font-size: 1.1rem;
             line-height: 1.6;
             color: var(--bs-body-color);
@@ -243,7 +243,7 @@
                 flex-shrink: 0;
             }
 
-            .media-slider-carousel__slide-content {
+            .media-slider__slide-content {
                 width: 100%;
                 height: 100%;
                 position: relative;
@@ -266,8 +266,8 @@
                 }
             }
 
-            .media-slider-carousel__slide-image,
-            .media-slider-carousel__slide-video {
+            .media-slider__slide-image,
+            .media-slider__slide-video {
                 width: 100%;
                 height: 100%;
                 position: relative;
@@ -281,7 +281,7 @@
                 }
             }
 
-            .media-slider-carousel__slide-caption {
+            .media-slider__slide-caption {
                 position: absolute;
                 bottom: 0;
                 left: 0;
@@ -291,20 +291,20 @@
                 padding: 2rem 1.5rem 1.5rem;
                 text-align: left;
 
-                .media-slider-carousel__slide-title {
+                .media-slider__slide-title {
                     font-size: 1.5rem;
                     font-weight: 600;
                     margin-bottom: 0.5rem;
                     color: $white;
                 }
 
-                .media-slider-carousel__slide-subtitle {
+                .media-slider__slide-subtitle {
                     font-size: 1rem;
                     margin-bottom: 1rem;
                     opacity: 0.9;
                 }
 
-                .media-slider-carousel__slide-btn {
+                .media-slider__slide-btn {
                     background: var(--bs-primary);
                     border: none;
                     padding: 0.5rem 1.5rem;
@@ -329,29 +329,29 @@
     }
 
     // External Navigation Controls
-    .media-slider-carousel__controls {
+    .media-slider__controls {
         display: flex;
         justify-content: space-between;
         align-items: center;
         gap: 1rem;
         margin-bottom: 1rem;
 
-        .media-slider-carousel__caption-wrap {
+        .media-slider__caption-wrap {
             flex: 1;
             margin-right: 1rem;
 
-            .media-slider-carousel__title-slider {
+            .media-slider__title-slider {
                 position: relative;
                 overflow: hidden;
                 display: flex;
                 align-items: center;
 
-                .media-slider-carousel__title-slider-inner {
+                .media-slider__title-slider-inner {
                     position: relative;
                     transition: transform 0.5s ease;
                     width: 100%;
 
-                    .media-slider-carousel__title-slide {
+                    .media-slider__title-slide {
                         opacity: 0;
                         transform: translateX(20px);
                         transition: all 0.5s ease;
@@ -371,21 +371,21 @@
                             position: relative;
                         }
 
-                        .media-slider-carousel__slide-title {
+                        .media-slider__slide-title {
                             font-size: 1rem;
                             margin-bottom: 0.5rem;
                             color: var(--bs-dark);
                             line-height: 1.2;
                         }
 
-                        .media-slider-carousel__slide-subtitle {
+                        .media-slider__slide-subtitle {
                             font-size: 1rem;
                             margin-bottom: 1rem;
                             color: var(--bs-secondary);
                             line-height: 1.4;
                         }
 
-                        .media-slider-carousel__slide-btn {
+                        .media-slider__slide-btn {
                             background: var(--bs-primary);
                             border: none;
                             padding: 0.5rem 1.5rem;
@@ -404,7 +404,7 @@
             }
         }
 
-        .media-slider-carousel__nav-buttons {
+        .media-slider__nav-buttons {
             display: flex;
             gap: 1rem;
 
@@ -454,33 +454,33 @@
 // Responsive adjustments for fullscreen slider
 @include media-breakpoint-down(xxl) {
     .section-full {
-        .media-slider-fullscreen__carousel {
+        .media-slider__carousel {
             flex: 0 1 75vh;
             min-height: 55vh;
             max-height: 75vh;
         }
 
-        .media-slider-fullscreen__items {
+        .media-slider__items {
             min-height: 25vh;
             padding: 1.25rem 0;
 
-            .media-slider-fullscreen__item {
+            .media-slider__item {
                 min-height: 260px;
 
-                .media-slider-fullscreen__item-image-wrap {
+                .media-slider__item-image-wrap {
                     min-height: 110px;
                     max-height: 180px;
                 }
 
-                .media-slider-fullscreen__item-content {
+                .media-slider__item-content {
                     padding: 0.875rem;
 
-                    .media-slider-fullscreen__item-name {
+                    .media-slider__item-name {
                         font-size: 1rem;
                     }
 
-                    .media-slider-fullscreen__item-actions {
-                        .media-slider-fullscreen__item-btn {
+                    .media-slider__item-actions {
+                        .media-slider__item-btn {
                             padding: 0.45rem 0.65rem;
                             font-size: 0.8125rem;
                         }
@@ -490,18 +490,18 @@
         }
     }
 
-    .media-slider-carousel {
-        .media-slider-carousel__controls {
+    .media-slider--carousel {
+        .media-slider__controls {
             flex-direction: column;
             align-items: center;
             gap: 1rem;
 
-            .media-slider-carousel__caption-wrap {
+            .media-slider__caption-wrap {
                 width: 100%;
                 margin-right: 0;
             }
 
-            .media-slider-carousel__nav-buttons {
+            .media-slider__nav-buttons {
                 display: flex;
                 gap: 1rem;
                 justify-content: flex-end;
@@ -519,35 +519,35 @@
 
 @include media-breakpoint-down(lg) {
     .section-full {
-        .media-slider-fullscreen__carousel {
+        .media-slider__carousel {
             flex: 0 1 65vh;
             min-height: 50vh;
             max-height: 65vh;
         }
 
-        .media-slider-fullscreen__items {
+        .media-slider__items {
             min-height: 35vh;
             padding: 1.25rem 0;
 
-            .media-slider-fullscreen__item {
+            .media-slider__item {
                 min-height: 240px;
 
-                .media-slider-fullscreen__item-image-wrap {
+                .media-slider__item-image-wrap {
                     min-height: 100px;
                     max-height: 160px;
                 }
 
-                .media-slider-fullscreen__item-content {
+                .media-slider__item-content {
                     padding: 1rem;
 
-                    .media-slider-fullscreen__item-name {
+                    .media-slider__item-name {
                         font-size: 1.0625rem;
                     }
 
-                    .media-slider-fullscreen__item-actions {
+                    .media-slider__item-actions {
                         gap: 0.5rem;
 
-                        .media-slider-fullscreen__item-btn {
+                        .media-slider__item-btn {
                             padding: 0.5rem 0.75rem;
                             font-size: 0.875rem;
                         }
@@ -557,13 +557,13 @@
         }
     }
 
-    .media-slider-carousel {
-        .media-slider-carousel__header {
-            .media-slider-carousel__title {
+    .media-slider--carousel {
+        .media-slider__header {
+            .media-slider__title {
                 font-size: 2rem;
             }
 
-            .media-slider-carousel__subtitle {
+            .media-slider__subtitle {
                 font-size: 1.25rem;
             }
         }
@@ -576,22 +576,22 @@
             }
         }
 
-        .media-slider-carousel__controls {
-            .media-slider-carousel__caption-wrap {
-                .media-slider-carousel__title-slider {
-                    .media-slider-carousel__title-slide {
-                        .media-slider-carousel__slide-title {
+        .media-slider__controls {
+            .media-slider__caption-wrap {
+                .media-slider__title-slider {
+                    .media-slider__title-slide {
+                        .media-slider__slide-title {
                             font-size: 1.25rem;
                         }
 
-                        .media-slider-carousel__slide-subtitle {
+                        .media-slider__slide-subtitle {
                             font-size: 0.9rem;
                         }
                     }
                 }
             }
 
-            .media-slider-carousel__nav-buttons {
+            .media-slider__nav-buttons {
                 .swiper-button-next,
                 .swiper-button-prev {
                     width: 36px;
@@ -608,13 +608,13 @@
 
 @include media-breakpoint-down(md) {
     .section-full {
-        .media-slider-fullscreen__carousel {
+        .media-slider__carousel {
             flex: 0 1 55vh;
             min-height: 45vh;
             max-height: 55vh;
         }
 
-        .media-slider-fullscreen__items {
+        .media-slider__items {
             min-height: 45vh;
             padding: 1.25rem 0;
 
@@ -623,26 +623,26 @@
                 padding-right: 0.75rem;
             }
 
-            .media-slider-fullscreen__item {
+            .media-slider__item {
                 min-height: 220px;
 
-                .media-slider-fullscreen__item-image-wrap {
+                .media-slider__item-image-wrap {
                     min-height: 90px;
                     max-height: 140px;
                 }
 
-                .media-slider-fullscreen__item-content {
+                .media-slider__item-content {
                     padding: 0.875rem;
 
-                    .media-slider-fullscreen__item-name {
+                    .media-slider__item-name {
                         font-size: 1rem;
                     }
 
-                    .media-slider-fullscreen__item-actions {
+                    .media-slider__item-actions {
                         flex-direction: column;
                         gap: 0.5rem;
 
-                        .media-slider-fullscreen__item-btn {
+                        .media-slider__item-btn {
                             width: 100%;
                             padding: 0.5rem 0.75rem;
                             font-size: 0.875rem;
@@ -653,15 +653,15 @@
         }
     }
 
-    .media-slider-carousel {
-        .media-slider-carousel__header {
+    .media-slider--carousel {
+        .media-slider__header {
             margin-bottom: 1.5rem;
 
-            .media-slider-carousel__title {
+            .media-slider__title {
                 font-size: 1.75rem;
             }
 
-            .media-slider-carousel__subtitle {
+            .media-slider__subtitle {
                 font-size: 1.1rem;
             }
         }
@@ -674,19 +674,19 @@
             }
         }
 
-        .media-slider-carousel__controls {
-            .media-slider-carousel__caption-wrap {
-                .media-slider-carousel__title-slider {
-                    .media-slider-carousel__title-slide {
-                        .media-slider-carousel__slide-title {
+        .media-slider__controls {
+            .media-slider__caption-wrap {
+                .media-slider__title-slider {
+                    .media-slider__title-slide {
+                        .media-slider__slide-title {
                             font-size: 1.1rem;
                         }
 
-                        .media-slider-carousel__slide-subtitle {
+                        .media-slider__slide-subtitle {
                             font-size: 0.85rem;
                         }
 
-                        .media-slider-carousel__slide-btn {
+                        .media-slider__slide-btn {
                             padding: 0.4rem 1.2rem;
                             font-size: 0.8rem;
                         }
@@ -694,7 +694,7 @@
                 }
             }
 
-            .media-slider-carousel__nav-buttons {
+            .media-slider__nav-buttons {
                 .swiper-button-next,
                 .swiper-button-prev {
                     width: 32px;
@@ -710,7 +710,7 @@
 }
 
 // Simple Media Slider Styles
-.media-slider-simple {
+.media-slider--default {
     width: 100%;
     height: 100%;
     position: relative;
@@ -728,8 +728,8 @@
             align-items: center;
             overflow: hidden;
 
-            .media-slider-simple__slide-image,
-            .media-slider-simple__slide-video {
+            .media-slider__slide-image,
+            .media-slider__slide-video {
                 width: 100%;
                 height: 100%;
                 position: relative;
@@ -760,7 +760,7 @@
     }
 
     // Bottom center navigation controls
-    .media-slider-simple__controls {
+    .media-slider__controls {
         position: absolute;
         bottom: 20px;
         left: 50%;
@@ -810,13 +810,13 @@
 
 @include media-breakpoint-down(sm) {
     .section-full {
-        .media-slider-fullscreen__carousel {
+        .media-slider__carousel {
             flex: 0 1 50vh;
             min-height: 40vh;
             max-height: 50vh;
         }
 
-        .media-slider-fullscreen__items {
+        .media-slider__items {
             min-height: 50vh;
             padding: 1rem 0;
 
@@ -829,23 +829,23 @@
                 --bs-gutter-x: 0.5rem;
             }
 
-            .media-slider-fullscreen__item {
+            .media-slider__item {
                 min-height: 200px;
 
-                .media-slider-fullscreen__item-image-wrap {
+                .media-slider__item-image-wrap {
                     min-height: 80px;
                     max-height: 120px;
                 }
 
-                .media-slider-fullscreen__item-content {
+                .media-slider__item-content {
                     padding: 0.75rem;
 
-                    .media-slider-fullscreen__item-name {
+                    .media-slider__item-name {
                         font-size: 0.9375rem;
                     }
 
-                    .media-slider-fullscreen__item-actions {
-                        .media-slider-fullscreen__item-btn {
+                    .media-slider__item-actions {
+                        .media-slider__item-btn {
                             padding: 0.45rem 0.65rem;
                             font-size: 0.8125rem;
                         }
@@ -858,12 +858,12 @@
 
 // Responsive adjustments for simple slider
 @include media-breakpoint-down(xxl) {
-    .media-slider-simple {
+    .media-slider--default {
         .swiper {
             min-height: auto !important;
         }
 
-        .media-slider-simple__controls {
+        .media-slider__controls {
             bottom: 15px;
             gap: 0.75rem;
 

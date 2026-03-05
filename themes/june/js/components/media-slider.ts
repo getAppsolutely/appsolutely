@@ -37,7 +37,7 @@ class MediaSliderCarousel {
             const self = this;
 
             // Detect slider type
-            const isSimpleSlider = sliderElement.closest('.media-slider-simple') !== null;
+            const isSimpleSlider = sliderElement.closest('.media-slider--default') !== null;
 
             // Base Swiper configuration
             const swiperConfig: SwiperOptions = {
@@ -119,10 +119,10 @@ class MediaSliderCarousel {
             const sliderElement = document.querySelector(`[data-slider-id="${sliderId}"]`);
             if (!sliderElement) return false;
 
-            const container = sliderElement.closest('.media-slider-carousel');
+            const container = sliderElement.closest('.media-slider--carousel');
             if (!container) return false;
 
-            const titleSlider = container.querySelector('.media-slider-carousel__title-slider');
+            const titleSlider = container.querySelector('.media-slider__title-slider');
             return titleSlider !== null;
         } catch (error) {
             console.warn('Error checking for title slider:', error);
@@ -135,13 +135,13 @@ class MediaSliderCarousel {
             const sliderElement = document.querySelector(`[data-slider-id="${sliderId}"]`);
             if (!sliderElement) return;
 
-            const container = sliderElement.closest('.media-slider-carousel');
+            const container = sliderElement.closest('.media-slider--carousel');
             if (!container) return;
 
-            const titleSlider = container.querySelector('.media-slider-carousel__title-slider');
+            const titleSlider = container.querySelector('.media-slider__title-slider');
             if (!titleSlider) return;
 
-            const titleSlides = titleSlider.querySelectorAll<HTMLElement>('.media-slider-carousel__title-slide');
+            const titleSlides = titleSlider.querySelectorAll<HTMLElement>('.media-slider__title-slide');
             const totalSlides = titleSlides.length;
 
             if (totalSlides === 0) return;
