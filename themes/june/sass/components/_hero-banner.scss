@@ -99,7 +99,7 @@
 }
 
 // Default style (not fullscreen)
-.hero-banner:not(.hero-banner-fullscreen) {
+.hero-banner:not(.hero-banner--fullscreen) {
     & > .hero-banner__image-wrap {
         aspect-ratio: 16 / 9;
     }
@@ -115,7 +115,7 @@
 }
 
 // Fullscreen style modifier
-.hero-banner-fullscreen {
+.hero-banner--fullscreen {
     & > .hero-banner__image-wrap {
         width: 100%;
         height: 100vh;
@@ -127,7 +127,7 @@
 
 // Responsive: Reorder caption and image on smaller screens
 @include media-breakpoint-down(xxl) {
-    .hero-banner.hero-banner-default {
+    .hero-banner.hero-banner--default {
         display: flex;
         flex-direction: column;
 
