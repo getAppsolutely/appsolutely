@@ -34,4 +34,8 @@ return [
     'options' => [
         //
     ],
+    'anchor' => [
+        'go_to_top'          => '返回顶部',
+        'section_navigation' => '区块导航',
+    ],
 ];

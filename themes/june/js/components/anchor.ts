@@ -39,6 +39,42 @@ function updateActiveLink(links: NodeListOf<HTMLAnchorElement>): void {
     });
 }
 
+const TO_TOP_VISIBLE_CLASS = 'anchor-nav__to-top--visible';
+const SCROLL_THRESHOLD = 200;
+/** Offset above anchor to account for floating mega menu / header */
+const SCROLL_OFFSET = 180;
+
+function initToTopButton(): void {
+    const toTop = document.querySelector<HTMLButtonElement>('.anchor-nav__to-top');
+    const nav = document.querySelector<HTMLElement>('.anchor-nav');
+    if (!toTop || !nav) return;
+
+    function updateVisibility(): void {
+        if (window.scrollY > SCROLL_THRESHOLD) {
+            toTop.classList.add(TO_TOP_VISIBLE_CLASS);
+        } else {
+            toTop.classList.remove(TO_TOP_VISIBLE_CLASS);
+        }
+    }
+
+    toTop.addEventListener('click', () => {
+        const navTop = nav.getBoundingClientRect().top + window.scrollY;
+        const targetScroll = Math.max(0, navTop - SCROLL_OFFSET);
+        window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+    });
+
+    updateVisibility();
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+        if (ticking) return;
+        window.requestAnimationFrame(() => {
+            updateVisibility();
+            ticking = false;
+        });
+        ticking = true;
+    });
+}
+
 function initAnchorNav(): void {
     const nav = document.querySelector<HTMLElement>('.anchor-nav');
     if (!nav) return;
@@ -70,6 +106,8 @@ function initAnchorNav(): void {
             }
         });
     });
+
+    initToTopButton();
 }
 
 document.addEventListener('DOMContentLoaded', initAnchorNav);

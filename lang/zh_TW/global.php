@@ -37,5 +37,8 @@ return [
 
         ],
     ],
-
+    'anchor' => [
+        'go_to_top'          => '返回頂部',
+        'section_navigation' => '區塊導航',
+    ],
 ];

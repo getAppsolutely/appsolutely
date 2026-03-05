@@ -5,7 +5,8 @@
     $ctaIcon = $displayOptions['cta_icon'] ?? 'fa-steering-wheel';
 @endphp
 @if (count($anchorItems) > 0)
-<nav class="anchor-nav sticky-top bg-dark py-2" role="navigation" aria-label="{{ __('Section navigation') }}">
+<div>
+<nav class="anchor-nav sticky-top bg-dark py-3" role="navigation" aria-label="{{ __('global.anchor.section_navigation') }}">
     <div class="container">
         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
             <ul class="anchor-nav__list nav mb-0 flex-grow-1 flex-wrap" role="list">
@@ -30,4 +31,11 @@
         </div>
     </div>
 </nav>
+<button type="button"
+    class="anchor-nav__to-top"
+    aria-label="{{ __('global.anchor.go_to_top') }}"
+    title="{{ __('global.anchor.go_to_top') }}">
+    <i class="bi bi-chevron-double-up" aria-hidden="true"></i>
+</button>
+</div>
 @endif
