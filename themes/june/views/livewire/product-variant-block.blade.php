@@ -267,7 +267,7 @@
                                         $showPriceSuffix = strtoupper(trim((string) $firstVariant['price'])) !== 'TBC';
                                     @endphp
                                     <div class="price-section mb-3">
-                                        <span class="h4 fw-bold text-primary">
+                                        <span class="h4 fw-bold">
                                             ${{ is_numeric($firstVariant['price']) ? number_format($firstVariant['price']) : $firstVariant['price'] }}
                                             @if ($showPriceSuffix)
                                                 RRP. <small class="fs-6">+ORC</small>
