@@ -23,9 +23,11 @@ class TextDocumentCollapsible {
             this.handleCollapseHidden(event);
         });
 
-        // Handle keyboard navigation
+        // Handle keyboard navigation only when focus is inside a collapsible (event delegation)
         document.addEventListener('keydown', (event: KeyboardEvent) => {
-            this.handleKeyboardNavigation(event);
+            if ((event.target as Element)?.closest?.('.text-document-collapsible')) {
+                this.handleKeyboardNavigation(event);
+            }
         });
     }
 

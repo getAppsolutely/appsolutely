@@ -7,15 +7,15 @@
 
 import type { AssetPaths } from './types';
 
-// Import images that should be emitted by Vite
-import '../images/coming.png';
-import '../images/rednote.svg';
+// Import images – Vite resolves these to built URLs
+import comingImg from '../images/coming.png';
+import rednoteImg from '../images/rednote.svg';
 
 // Export asset paths for use in components if needed
 export const assets: AssetPaths = {
     images: {
-        coming: '../images/coming.png',
-        rednote: '../images/rednote.svg',
+        coming: comingImg,
+        rednote: rednoteImg,
     },
 };
 

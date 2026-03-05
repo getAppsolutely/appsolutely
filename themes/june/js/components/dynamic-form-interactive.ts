@@ -79,8 +79,11 @@ function updateBackgroundImage(container: HTMLElement, imageUrl: string, baseUrl
     img.src = normalizedUrl;
 }
 
+const RESIZE_CLEANUP = new WeakMap<HTMLElement, () => void>();
+
 /**
- * Sync height between background and form container
+ * Sync height between background and form container.
+ * Cleans up observers/listeners when container is removed from DOM.
  */
 function syncHeight(container: HTMLElement): void {
     const backgroundEl = container.querySelector<HTMLElement>('.dynamic-form-interactive__background');
@@ -88,27 +91,33 @@ function syncHeight(container: HTMLElement): void {
 
     if (!backgroundEl || !formContainerEl) return;
 
-    const updateHeight = () => {
+    // Clean up previous sync for this container if re-initialized
+    RESIZE_CLEANUP.get(container)?.();
+
+    const updateHeight = (): void => {
+        if (!document.contains(formContainerEl)) {
+            RESIZE_CLEANUP.get(container)?.();
+            return;
+        }
         const formHeight = formContainerEl.offsetHeight;
         if (formHeight > 0) {
             backgroundEl.style.height = `${formHeight}px`;
         }
     };
 
-    // Use ResizeObserver if available
+    let cleanup: () => void;
+
     if (typeof ResizeObserver !== 'undefined') {
-        const observer = new ResizeObserver(() => {
-            updateHeight();
-        });
+        const observer = new ResizeObserver(updateHeight);
         observer.observe(formContainerEl);
+        cleanup = () => observer.disconnect();
     } else {
-        // Fallback to window resize
         window.addEventListener('resize', updateHeight);
-        // Also update on initial load
         setTimeout(updateHeight, 100);
+        cleanup = () => window.removeEventListener('resize', updateHeight);
     }
 
-    // Initial height sync
+    RESIZE_CLEANUP.set(container, cleanup);
     updateHeight();
 }
 

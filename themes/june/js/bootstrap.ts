@@ -80,19 +80,13 @@ if (token) {
 document.addEventListener('DOMContentLoaded', (): void => {
     // Initialize tooltips
     const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    tooltipTriggerList.map((tooltipTriggerEl: Element) => {
-        return new bootstrap.Tooltip(tooltipTriggerEl as HTMLElement);
-    });
+    tooltipTriggerList.forEach((el) => new bootstrap.Tooltip(el as HTMLElement));
 
     // Initialize popovers
     const popoverTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="popover"]'));
-    popoverTriggerList.map((popoverTriggerEl: Element) => {
-        return new bootstrap.Popover(popoverTriggerEl as HTMLElement);
-    });
+    popoverTriggerList.forEach((el) => new bootstrap.Popover(el as HTMLElement));
 
     // Initialize toasts
     const toastElList = Array.from(document.querySelectorAll('.toast'));
-    toastElList.map((toastEl: Element) => {
-        return new bootstrap.Toast(toastEl as HTMLElement);
-    });
+    toastElList.forEach((el) => new bootstrap.Toast(el as HTMLElement));
 });

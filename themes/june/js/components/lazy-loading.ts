@@ -123,47 +123,38 @@ class LazyLoadingManager {
     }
 
     /**
-     * Create lazy image element with proper attributes
+     * Escape string for safe use in HTML attributes (prevents XSS).
+     */
+    private static escapeHtmlAttr(s: string): string {
+        return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    /**
+     * Create lazy image element with proper attributes.
+     * Uses attribute escaping to prevent XSS when src/alt/className contain user input.
      */
     static createLazyImage(src: string, alt: string = '', className: string = ''): string {
-        return `
-            <img 
-                class="lazy ${className}" 
-                data-src="${src}" 
-                alt="${alt}"
-                loading="lazy"
-            />
-        `;
+        const e = LazyLoadingManager.escapeHtmlAttr;
+        return `<img class="lazy ${e(className)}" data-src="${e(src)}" alt="${e(alt)}" loading="lazy" />`;
     }
 
     /**
-     * Create lazy video element with proper attributes
+     * Create lazy video element with proper attributes.
+     * Uses attribute escaping to prevent XSS when src/poster/className contain user input.
      */
     static createLazyVideo(src: string, poster?: string, className: string = ''): string {
-        const posterAttr = poster ? `poster="${poster}"` : '';
-        return `
-            <video 
-                class="lazy ${className}" 
-                data-src="${src}" 
-                ${posterAttr}
-                controls
-                preload="none"
-            >
-                Your browser does not support the video tag.
-            </video>
-        `;
+        const e = LazyLoadingManager.escapeHtmlAttr;
+        const posterAttr = poster ? ` poster="${e(poster)}"` : '';
+        return `<video class="lazy ${e(className)}" data-src="${e(src)}"${posterAttr} controls preload="none">Your browser does not support the video tag.</video>`;
     }
 
     /**
-     * Create lazy background image element
+     * Create lazy background image element.
+     * Uses attribute escaping to prevent XSS when src/className contain user input.
      */
     static createLazyBackground(src: string, className: string = ''): string {
-        return `
-            <div 
-                class="lazy lazy-bg ${className}" 
-                data-bg="${src}"
-            ></div>
-        `;
+        const e = LazyLoadingManager.escapeHtmlAttr;
+        return `<div class="lazy lazy-bg ${e(className)}" data-bg="${e(src)}"></div>`;
     }
 }
 

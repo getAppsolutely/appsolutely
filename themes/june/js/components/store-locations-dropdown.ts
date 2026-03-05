@@ -1,5 +1,17 @@
 // Store Locations Dropdown Component
 
+/**
+ * Escape string for safe use in HTML text content (prevents XSS).
+ */
+function escapeHtml(text: string): string {
+    return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 interface StoreLocation {
     name?: string;
     type?: string;
@@ -84,18 +96,23 @@ class StoreLocationsDropdown {
                 // Split on first colon to separate day from time
                 const colonIndex = line.indexOf(':');
                 if (colonIndex === -1) {
-                    // No colon found, treat entire line as day
-                    return `<tr><td class="pe-2 text-nowrap">${line.trim()}</td><td class="ps-2 text-muted">-</td></tr>`;
+                    return `<tr><td class="pe-2 text-nowrap">${escapeHtml(line.trim())}</td><td class="ps-2 text-muted">-</td></tr>`;
                 }
 
-                const day = line.substring(0, colonIndex).trim();
-                const time = line.substring(colonIndex + 1).trim();
+                const day = escapeHtml(line.substring(0, colonIndex).trim());
+                const time = escapeHtml(
+                    line
+                        .substring(colonIndex + 1)
+                        .trim()
+                        .replace(/:00 /g, '')
+                        .toLowerCase()
+                );
 
-                return `<tr><td class="pe-2 text-nowrap">${day}</td><td class="ps-2 text-muted">${time.replace(/:00 /g, '').toLowerCase()}</td></tr>`;
+                return `<tr><td class="pe-2 text-nowrap">${day}</td><td class="ps-2 text-muted">${time}</td></tr>`;
             })
             .join('');
 
-        const titleHtml = sectionTitle ? `<div class="small mb-1 fw-semibold">${sectionTitle}</div>` : '';
+        const titleHtml = sectionTitle ? `<div class="small mb-1 fw-semibold">${escapeHtml(sectionTitle)}</div>` : '';
         const tableHtml = `<table class="table table-sm table-borderless mb-0 align-middle w-auto"><tbody>${rows}</tbody></table>`;
 
         return `${titleHtml}<div class="d-flex align-items-start mb-3"><i class="fas fa-clock text-muted me-3 mt-1"></i><div class="small text-muted lh-sm w-100">${tableHtml}</div></div>`;
@@ -104,7 +121,9 @@ class StoreLocationsDropdown {
     // Generate services badges HTML
     generateServicesBadges(services?: string[]): string {
         if (!services?.length) return '';
-        return services.map((service) => `<span class="badge bg-light text-dark border">${service}</span>`).join('');
+        return services
+            .map((service) => `<span class="badge bg-light text-dark border">${escapeHtml(service)}</span>`)
+            .join('');
     }
 
     // Update location display

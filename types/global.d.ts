@@ -8,7 +8,12 @@ declare global {
         axios: AxiosStatic;
         bootstrap: typeof BootstrapNamespace;
         _: LoDashStatic;
-        assets?: { images?: Record<string, string> };
+        assets?: {
+            images: {
+                coming: string;
+                rednote: string;
+            };
+        };
         lazyLoadInstance?: import('vanilla-lazyload').ILazyLoadInstance;
         lazyManager?: { update(): void };
         MediaSliderCarousel?: unknown;

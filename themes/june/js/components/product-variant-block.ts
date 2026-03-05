@@ -150,8 +150,8 @@ function initializeNativeFallback(container: HTMLElement): void {
 
 /**
  * Check if Alpine.js has initialized a component.
- * Uses public APIs where possible; falls back to internal markers (Alpine 2/3).
- * May need updating when Alpine releases new major versions.
+ * Uses internal markers (Alpine 2: _x_dataStack, Alpine 3: __x).
+ * NOTE: These are internal APIs and may change in future Alpine versions – update if fallback stops working.
  */
 function hasAlpineInitialized(element: HTMLElement): boolean {
     const alpineRoot = element.querySelector('[x-data]');

@@ -10,18 +10,15 @@ class VideoShowcase {
     constructor() {
         this.video = null;
         this.observer = null;
-        this.init();
     }
 
     init(): void {
-        document.addEventListener('DOMContentLoaded', () => {
-            this.video = document.querySelector<HTMLVideoElement>('.video-showcase video');
-            if (this.video) {
-                this.setupVideo();
-                this.setupIntersectionObserver();
-                this.handleVideoEvents();
-            }
-        });
+        this.video = document.querySelector<HTMLVideoElement>('.video-showcase video');
+        if (this.video) {
+            this.setupVideo();
+            this.setupIntersectionObserver();
+            this.handleVideoEvents();
+        }
     }
 
     setupVideo(): void {
@@ -130,8 +127,16 @@ class VideoShowcase {
     }
 }
 
-// Initialize the video showcase
-new VideoShowcase();
+let videoShowcaseInstance: VideoShowcase | null = null;
+
+function initVideoShowcase(): void {
+    videoShowcaseInstance?.destroy();
+    videoShowcaseInstance = new VideoShowcase();
+    videoShowcaseInstance.init();
+}
+
+document.addEventListener('DOMContentLoaded', initVideoShowcase);
+document.addEventListener('livewire:navigated', initVideoShowcase);
 
 // Export for potential use in other modules
 export default VideoShowcase;

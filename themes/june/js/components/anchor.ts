@@ -4,9 +4,11 @@
  */
 
 const ACTIVE_CLASS = 'anchor-nav__link--active';
+/** Offset for scroll-spy to account for sticky header */
+const SCROLL_SPY_OFFSET = 120;
 
 function updateActiveLink(links: NodeListOf<HTMLAnchorElement>): void {
-    const viewportTop = window.scrollY + 120; // Offset for sticky nav
+    const viewportTop = window.scrollY + SCROLL_SPY_OFFSET;
     let activeHref: string | null = null;
 
     links.forEach((link) => {
