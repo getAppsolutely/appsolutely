@@ -40,13 +40,12 @@ final readonly class BlockRendererService implements BlockRendererServiceInterfa
             return $this->getBlockErrorHtml("Class '{$className}' is not a Livewire component");
         }
 
-        $blockValue         = $block->blockValue ?? null;
-        $viewName           = $blockValue?->view ?? '';
-        $style              = $block->displayOptionsValue['style'] ?? '';
-        $queryOptions       = $block->queryOptionsValue ?? [];
-        $displayOptions     = $block->displayOptionsValue ?? [];
-        $pageData           = $page->toArray();
-        $pageData['blocks'] = $this->buildBlocksForAnchor($page);
+        $blockValue     = $block->blockValue ?? null;
+        $viewName       = $blockValue?->view ?? '';
+        $style          = $block->displayOptionsValue['style'] ?? '';
+        $queryOptions   = $block->queryOptionsValue ?? [];
+        $displayOptions = $block->displayOptionsValue ?? [];
+        $pageData       = $page->toArray();
 
         $data = [
             'page'           => $pageData,
@@ -55,8 +54,11 @@ final readonly class BlockRendererService implements BlockRendererServiceInterfa
             'queryOptions'   => $queryOptions,
             'displayOptions' => $displayOptions,
             'blockSort'      => (int) ($block->sort ?? 0),
-            'blockReference' => $reference,
         ];
+
+        if ($className === \App\Livewire\Anchor::class) {
+            $data['blocksForAnchor'] = $this->buildBlocksForAnchor($page);
+        }
 
         return Livewire::mount($className, $data, $reference);
     }

@@ -18,13 +18,18 @@ final class Anchor extends GeneralBlock
     public int $blockSort = 0;
 
     /**
+     * @var array<int, array{sort: int, reference: string, scope: string, view: string, display_options: array, block_title: string}>
+     */
+    public array $blocksForAnchor = [];
+
+    /**
      * @var array<int, array{reference: string, title: string}>
      */
     public array $anchorItems = [];
 
     protected function initializeComponent(Container $container): void
     {
-        $blocks = $this->page['blocks'] ?? [];
+        $blocks = $this->blocksForAnchor;
         if (empty($blocks) || $this->blockSort <= 0) {
             $this->anchorItems = [];
 
