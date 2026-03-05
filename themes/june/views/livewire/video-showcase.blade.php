@@ -1,6 +1,6 @@
 <section class="video-showcase position-relative overflow-hidden w-100 {{ $style }}">
     <!-- Background Video -->
-    <div class="video-background position-absolute top-0 start-0 w-100 h-100" style="z-index: 1;">
+    <div class="video-showcase__background position-absolute top-0 start-0 w-100 h-100" style="z-index: 1;">
         <video class="lazy w-100 h-100 object-fit-cover" @if ($displayOptions['autoplay']) autoplay @endif
             @if ($displayOptions['loop']) loop @endif @if ($displayOptions['muted']) muted @endif
             @if (!$displayOptions['controls']) style="pointer-events: none;" @else controls @endif
@@ -28,7 +28,8 @@
 
     <!-- Mobile Fallback Image -->
     @if ($displayOptions['mobile_fallback_image'])
-        <div class="mobile-fallback d-block d-md-none position-absolute top-0 start-0 w-100 h-100" style="z-index: 1;">
+        <div class="video-showcase__mobile-fallback d-block d-md-none position-absolute top-0 start-0 w-100 h-100"
+            style="z-index: 1;">
             <img class="lazy w-100 h-100 object-fit-cover"
                 data-src="{{ asset_url($displayOptions['mobile_fallback_image']) }}" alt="Video fallback">
         </div>
@@ -36,12 +37,12 @@
 
     <!-- Overlay -->
     @if ($displayOptions['overlay_opacity'] > 0)
-        <div class="video-overlay position-absolute top-0 start-0 w-100 h-100 bg-dark"
+        <div class="video-showcase__overlay position-absolute top-0 start-0 w-100 h-100 bg-dark"
             style="z-index: 2; opacity: {{ $displayOptions['overlay_opacity'] }};"></div>
     @endif
 
     <!-- Content Overlay -->
-    <div class="content-overlay position-relative d-flex align-items-center justify-content-center h-100">
+    <div class="video-showcase__content position-relative d-flex align-items-center justify-content-center h-100">
         <div class="container-fluid px-4">
             <div
                 class="row justify-content-{{ $displayOptions['text_position'] === 'left' ? 'start' : ($displayOptions['text_position'] === 'right' ? 'end' : 'center') }}">

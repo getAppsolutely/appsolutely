@@ -2,21 +2,21 @@
     <div class="container">
         <!-- Section Header -->
         @if ($displayOptions['title'] || $displayOptions['subtitle'] || $displayOptions['description'])
-            <div class="text-center mb-5">
+            <div class="specifications-section__header text-center mb-5">
                 @if ($displayOptions['title'])
-                    <h2 class="display-5 fw-bold mb-3">
+                    <h2 class="specifications-section__title display-5 fw-bold mb-3">
                         {{ $displayOptions['title'] }}
                     </h2>
                 @endif
 
                 @if ($displayOptions['subtitle'])
-                    <h3 class="h4 mb-4">
+                    <h3 class="specifications-section__subtitle h4 mb-4">
                         {{ $displayOptions['subtitle'] }}
                     </h3>
                 @endif
 
                 @if ($displayOptions['description'])
-                    <p class="lead">
+                    <p class="specifications-section__description lead">
                         {{ $displayOptions['description'] }}
                     </p>
                 @endif
@@ -27,22 +27,23 @@
         @if (!empty($displayOptions['specifications']))
             @if ($displayOptions['layout'] === 'grid')
                 <!-- Grid Layout -->
-                <div class="row g-4">
+                <div class="specifications-section__grid row g-4">
                     @foreach ($displayOptions['specifications'] as $spec)
-                        <div class="col-md-{{ 12 / $displayOptions['columns'] }}">
-                            <div class="specification-item p-4 h-100 border rounded-3 shadow-sm">
-                                <div class="specification-content">
-                                    <h5 class="specification-label fw-semibold mb-2">
+                        <div class="specifications-section__grid-item col-md-{{ 12 / $displayOptions['columns'] }}">
+                            <div class="specifications-section__item p-4 h-100 border rounded-3 shadow-sm">
+                                <div class="specifications-section__item-content">
+                                    <h5 class="specifications-section__item-label fw-semibold mb-2">
                                         @if ($spec['icon'] ?? false)
                                             <i class="{{ $spec['icon'] }} me-2"></i>
                                         @endif
                                         {{ $spec['label'] }}
                                     </h5>
 
-                                    <div class="specification-value">
+                                    <div class="specifications-section__item-value">
                                         {{ $spec['value'] }}
                                         @if ($spec['unit'] ?? false)
-                                            <span class="text-muted">{{ $spec['unit'] }}</span>
+                                            <span
+                                                class="specifications-section__item-value-unit text-muted">{{ $spec['unit'] }}</span>
                                         @endif
                                     </div>
                                 </div>
@@ -177,9 +178,9 @@
 
         <!-- Download Button -->
         @if ($displayOptions['download_url'] ?? false)
-            <div class="text-center mt-5">
+            <div class="specifications-section__download text-center mt-5">
                 <a href="{{ asset_url($displayOptions['download_url']) }}"
-                    class="btn btn-light border-dark fw-bold px-3 py-3 fs-6 rounded-3 shadow-lg"
+                    class="specifications-section__download-btn btn btn-light border-dark fw-bold px-3 py-3 fs-6 rounded-3 shadow-lg"
                     download="{{ $displayOptions['download_filename'] ?? 'specifications' }}" target="_blank">
                     <i class="fas fa-download me-2"></i>
                     {{ !empty($displayOptions['download_label']) ? $displayOptions['download_label'] : 'Download Brochure' }}

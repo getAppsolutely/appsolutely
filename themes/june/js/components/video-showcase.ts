@@ -102,7 +102,9 @@ class VideoShowcase {
 
     handleVideoError(): void {
         // Hide video and show fallback image if available
-        const fallbackImage = document.querySelector<HTMLImageElement>('.video-showcase .mobile-fallback img');
+        const fallbackImage = document.querySelector<HTMLImageElement>(
+            '.video-showcase .video-showcase__mobile-fallback img'
+        );
         if (fallbackImage && this.video) {
             fallbackImage.style.display = 'block';
             this.video.style.display = 'none';

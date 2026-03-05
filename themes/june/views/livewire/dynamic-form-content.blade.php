@@ -1,8 +1,8 @@
-<form wire:submit.prevent="submit" method="POST" novalidate>
+<form class="dynamic-form__form" wire:submit.prevent="submit" method="POST" novalidate>
     @csrf
 
     <!-- Form Fields -->
-    <div class="row g-2">
+    <div class="dynamic-form__fields row g-2">
         @foreach ($formFields as $fieldName => $fieldConfig)
             @php
                 $colClass =
@@ -16,10 +16,10 @@
                     wire:model.defer="formData.{{ $fieldName }}" value="{{ $fieldConfig['default'] ?? '' }}"
                     @if (!empty($fieldConfig['options']) && is_array($fieldConfig['options'])) data-options-mapping="{{ json_encode($fieldConfig['options']) }}" @endif>
             @else
-                <div class="{{ $colClass }}">
+                <div class="dynamic-form__field {{ $colClass }}">
                     <!-- Text Input -->
                     @if (in_array($fieldConfig['type'], [\App\Enums\FormFieldType::Text, \App\Enums\FormFieldType::Email]))
-                        <div class="form-group">
+                        <div class="dynamic-form__field-group form-group">
                             <label for="{{ $fieldName }}" class="form-label fw-semibold">
                                 {{ $fieldConfig['label'] }}
                                 @if ($fieldConfig['required'] ?? false)
@@ -38,7 +38,7 @@
 
                         <!-- Date Input -->
                     @elseif($fieldConfig['type'] === \App\Enums\FormFieldType::Date)
-                        <div class="form-group">
+                        <div class="dynamic-form__field-group form-group">
                             <label for="{{ $fieldName }}" class="form-label fw-semibold">
                                 {{ $fieldConfig['label'] }}
                                 @if ($fieldConfig['required'] ?? false)
@@ -57,7 +57,7 @@
 
                         <!-- Select Dropdown -->
                     @elseif($fieldConfig['type'] === \App\Enums\FormFieldType::Select)
-                        <div class="form-group">
+                        <div class="dynamic-form__field-group form-group">
                             <label for="{{ $fieldName }}" class="form-label fw-semibold">
                                 {{ $fieldConfig['label'] }}
                                 @if ($fieldConfig['required'] ?? false)
@@ -81,7 +81,7 @@
 
                         <!-- Textarea -->
                     @elseif($fieldConfig['type'] === \App\Enums\FormFieldType::Textarea)
-                        <div class="form-group">
+                        <div class="dynamic-form__field-group form-group">
                             <label for="{{ $fieldName }}" class="form-label fw-semibold">
                                 {{ $fieldConfig['label'] }}
                                 @if ($fieldConfig['required'] ?? false)
@@ -98,7 +98,7 @@
 
                         <!-- Checkbox -->
                     @elseif($fieldConfig['type'] === \App\Enums\FormFieldType::Checkbox)
-                        <div class="form-group">
+                        <div class="dynamic-form__field-group form-group">
                             <div class="form-check">
                                 <input type="checkbox" id="{{ $fieldName }}"
                                     class="form-check-input @error($errorName) is-invalid @enderror"
@@ -118,7 +118,7 @@
 
                         <!-- Multiple Select -->
                     @elseif($fieldConfig['type'] === \App\Enums\FormFieldType::MultipleSelect)
-                        <div class="form-group">
+                        <div class="dynamic-form__field-group form-group">
                             <label for="{{ $fieldName }}" class="form-label fw-semibold">
                                 {{ $fieldConfig['label'] }}
                                 @if ($fieldConfig['required'] ?? false)
@@ -146,8 +146,8 @@
     </div>
 
     <!-- Submit Button -->
-    <div class="mt-4 text-center">
-        <button type="submit" class="btn btn-dark px-4 py-2" wire:loading.attr="disabled">
+    <div class="dynamic-form__submit-wrap mt-4 text-center">
+        <button type="submit" class="dynamic-form__submit btn btn-dark px-4 py-2" wire:loading.attr="disabled">
             <span wire:target="submit" class="d-inline-flex align-items-center" wire:loading.class="d-none">
                 <i class="fas fa-calendar-check me-2"></i>{{ $displayOptions['submit_text'] }}
             </span>

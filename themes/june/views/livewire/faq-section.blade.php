@@ -1,20 +1,20 @@
 <section class="faq-section py-5">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
+    <div class="faq-section__container container">
+        <div class="faq-section__row row justify-content-center">
+            <div class="faq-section__content col-lg-8">
                 @if (($displayOptions['title'] ?? false) || ($displayOptions['subtitle'] ?? false))
-                    <div class="text-center mb-5">
+                    <div class="faq-section__header text-center mb-5">
                         @if ($displayOptions['title'] ?? false)
-                            <h2 class="display-5 fw-bold mb-3">{{ $displayOptions['title'] }}</h2>
+                            <h2 class="faq-section__title display-5 fw-bold mb-3">{{ $displayOptions['title'] }}</h2>
                         @endif
                         @if ($displayOptions['subtitle'] ?? false)
-                            <p class="lead text-muted">{{ $displayOptions['subtitle'] }}</p>
+                            <p class="faq-section__subtitle lead text-muted">{{ $displayOptions['subtitle'] }}</p>
                         @endif
                     </div>
                 @endif
 
                 @if (!empty($displayOptions['items']) && is_array($displayOptions['items']))
-                    <div class="accordion" id="faqAccordion">
+                    <div class="faq-section__accordion accordion" id="faqAccordion">
                         @foreach ($displayOptions['items'] as $index => $item)
                             @if (!empty($item['question']))
                                 <div class="accordion-item">

@@ -1,8 +1,8 @@
-<section class="store-locations-section py-5">
-    <div class="container">
+<section class="store-locations-dropdown py-5">
+    <div class="store-locations-dropdown__container container">
         <!-- Section Header -->
         @if ($displayOptions['title'] || $displayOptions['subtitle'] || $displayOptions['description'])
-            <div class="text-center mb-5">
+            <div class="store-locations-dropdown__header text-center mb-5">
                 @if ($displayOptions['title'])
                     <h2 class="display-5 fw-bold mb-3">
                         {{ $displayOptions['title'] }}
@@ -49,7 +49,8 @@
                     </div>
 
                     <!-- Selected Location Display -->
-                    <div id="selected-location-display" class="location-details" style="display: none;">
+                    <div id="selected-location-display" class="store-locations-dropdown__location-details"
+                        style="display: none;">
                         <div class="card border-0 shadow-lg">
                             <div class="card-body p-4">
                                 <!-- Location Header -->
@@ -69,7 +70,7 @@
                                 <!-- Location Information -->
                                 <div class="row">
                                     <div class="col-lg-6">
-                                        <div class="location-info mb-4">
+                                        <div class="store-locations-dropdown__location-info mb-4">
                                             <!-- Address -->
                                             <div class="d-flex align-items-start mb-3">
                                                 <i class="fas bi-geo-alt-fill text-muted me-2"></i>

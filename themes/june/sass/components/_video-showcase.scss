@@ -47,7 +47,7 @@
         }
     }
 
-    .content-overlay {
+    .video-showcase__content {
         z-index: 3 !important;
         min-height: 100vh !important;
 
@@ -73,7 +73,7 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-        .content-overlay > * {
+        .video-showcase__content > * {
             animation: none;
         }
 

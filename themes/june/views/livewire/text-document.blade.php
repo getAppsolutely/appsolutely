@@ -1,5 +1,5 @@
 <section class="text-document py-5">
-    <div class="container">
+    <div class="text-document__container container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <!-- Title -->

@@ -1,8 +1,8 @@
-<section class="store-locations-section py-5">
-    <div class="container">
+<section class="store-locations py-5">
+    <div class="store-locations__container container">
         <!-- Section Header -->
         @if ($displayOptions['title'] || $displayOptions['subtitle'] || $displayOptions['description'])
-            <div class="text-center mb-5">
+            <div class="store-locations__header text-center mb-5">
                 @if ($displayOptions['title'])
                     <h2 class="display-5 fw-bold mb-3">
                         {{ $displayOptions['title'] }}
@@ -32,7 +32,7 @@
                         @if ($location['show'] ?? false)
                             <div class="col-lg-{{ 12 / $displayOptions['columns'] }} col-md-6 mb-4">
                                 <div
-                                    class="store-card h-100 card border-0 shadow-lg position-relative
+                                    class="store-locations__card h-100 card border-0 shadow-lg position-relative
                                 {{ $location['featured'] ?? false ? 'border-2 border-dark' : '' }}">
 
                                     @if ($location['featured'] ?? false)
@@ -45,14 +45,15 @@
 
                                     <div class="card-body p-4">
                                         <div class="mb-3">
-                                            <h5 class="store-name fw-bold text-dark mb-1">{{ $location['name'] }}</h5>
+                                            <h5 class="store-locations__card-name fw-bold text-dark mb-1">
+                                                {{ $location['name'] }}</h5>
                                             @if ($location['type'] ?? false)
                                                 <p class="text-muted small mb-0 text-uppercase fw-semibold">
                                                     {{ $location['type'] }}</p>
                                             @endif
                                         </div>
 
-                                        <div class="store-info mb-4">
+                                        <div class="store-locations__card-info mb-4">
                                             <div class="d-flex align-items-start mb-2">
                                                 <i class="fas bi bi-geo-alt-fill text-muted me-2"></i>
                                                 <div class="flex-grow-1">
@@ -159,10 +160,10 @@
                 </div>
             @elseif($displayOptions['layout'] === 'list')
                 <!-- List Layout -->
-                <div class="store-list">
+                <div class="store-locations__list">
                     @foreach ($displayOptions['locations'] as $location)
                         <div
-                            class="store-item card border-0 shadow-sm mb-4 position-relative
+                            class="store-locations__list-item card border-0 shadow-sm mb-4 position-relative
                             {{ $location['featured'] ?? false ? 'border-2 border-dark' : '' }}">
 
                             @if ($location['featured'] ?? false)
@@ -178,7 +179,8 @@
                                     <div class="col-12">
                                         <div class="d-flex justify-content-between align-items-start mb-3">
                                             <div>
-                                                <h5 class="store-name fw-bold text-dark mb-1">{{ $location['name'] }}
+                                                <h5 class="store-locations__card-name fw-bold text-dark mb-1">
+                                                    {{ $location['name'] }}
                                                 </h5>
                                                 @if ($location['type'] ?? false)
                                                     <p class="text-muted small mb-0 text-uppercase fw-semibold">
@@ -189,7 +191,7 @@
 
                                         <div class="row">
                                             <div class="col-lg-6">
-                                                <div class="store-info mb-3">
+                                                <div class="store-locations__card-info mb-3">
                                                     <div class="d-flex align-items-start mb-3">
                                                         <i class="fas fa-map-marker-alt text-muted me-3 mt-1"></i>
                                                         <div class="flex-grow-1">

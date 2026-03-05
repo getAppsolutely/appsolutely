@@ -1,4 +1,4 @@
-<section class="container my-5 photo-gallery">
+<section class="photo-gallery container my-5">
     @php
         $photos = array_values(
             array_filter($displayOptions['photos'] ?? [], fn($p) => !empty($p['image_src'] ?? null)),
@@ -6,36 +6,37 @@
     @endphp
 
     @if (isset($displayOptions['title']) || isset($displayOptions['subtitle']) || isset($displayOptions['descriptions']))
-        <div class="text-center mb-4">
+        <div class="photo-gallery__header text-center mb-4">
             @if (!empty($displayOptions['title']))
-                <h2 class="mb-2">{{ $displayOptions['title'] }}</h2>
+                <h2 class="photo-gallery__title mb-2">{{ $displayOptions['title'] }}</h2>
             @endif
             @if (!empty($displayOptions['subtitle']))
-                <p class="lead mb-2">{{ $displayOptions['subtitle'] }}</p>
+                <p class="photo-gallery__subtitle lead mb-2">{{ $displayOptions['subtitle'] }}</p>
             @endif
             @if (!empty($displayOptions['descriptions']))
                 @foreach ($displayOptions['descriptions'] as $description)
-                    <p class="text-muted mb-0">{{ $description }}</p>
+                    <p class="photo-gallery__description text-muted mb-0">{{ $description }}</p>
                 @endforeach
             @endif
         </div>
     @endif
 
-    <div class="mb-4 d-flex flex-wrap gap-2 justify-content-center" id="gallery-filters" aria-label="Photo filters"></div>
+    <div class="photo-gallery__filters mb-4 d-flex flex-wrap gap-2 justify-content-center" id="gallery-filters"
+        aria-label="Photo filters"></div>
 
-    <div class="row g-3" id="gallery-grid" data-photos='@json($photos)'></div>
+    <div class="photo-gallery__grid row g-3" id="gallery-grid" data-photos='@json($photos)'></div>
 
     <template id="gallery-card-template">
-        <div class="col-6 col-lg-4 gallery-card">
-            <div class="card h-100 shadow-sm">
-                <div class="ratio ratio-4x3">
-                    <img class="lazy card-img-top object-fit-cover" alt="">
+        <div class="photo-gallery__card col-6 col-lg-4">
+            <div class="photo-gallery__card-inner card h-100 shadow-sm">
+                <div class="photo-gallery__card-image-wrap ratio ratio-4x3">
+                    <img class="photo-gallery__card-img lazy card-img-top object-fit-cover" alt="">
                 </div>
-                <div class="card-body">
-                    <h3 class="h5 card-title mb-1"></h3>
-                    <p class="card-subtitle text-muted small mb-2"></p>
-                    <div class="card-text text-muted small mb-2"></div>
-                    <div class="card-price fw-semibold"></div>
+                <div class="photo-gallery__card-body card-body">
+                    <h3 class="photo-gallery__card-title h5 card-title mb-1"></h3>
+                    <p class="photo-gallery__card-subtitle card-subtitle text-muted small mb-2"></p>
+                    <div class="photo-gallery__card-text card-text text-muted small mb-2"></div>
+                    <div class="photo-gallery__card-price card-price fw-semibold"></div>
                 </div>
             </div>
         </div>

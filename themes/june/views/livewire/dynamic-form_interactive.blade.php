@@ -1,57 +1,57 @@
 <section class="dynamic-form-interactive" data-asset-base-url="{{ asset_url(null, false) }}" wire:ignore.self>
     <!-- Background Container -->
-    <div class="dynamic-form-background" wire:ignore>
-        <div class="dynamic-form-background-image"></div>
-        <div class="dynamic-form-background-overlay"></div>
+    <div class="dynamic-form-interactive__background" wire:ignore>
+        <div class="dynamic-form-interactive__background-image"></div>
+        <div class="dynamic-form-interactive__background-overlay"></div>
     </div>
 
     <!-- Form Container -->
-    <div class="dynamic-form-container">
-        <div class="dynamic-form-wrapper">
+    <div class="dynamic-form-interactive__container">
+        <div class="dynamic-form-interactive__wrapper">
             @if (!$submitted)
                 <!-- Form Header -->
                 @if ($displayOptions['title'] || $displayOptions['subtitle'] || $displayOptions['description'])
-                    <div class="dynamic-form-header">
+                    <div class="dynamic-form-interactive__header">
                         @if ($displayOptions['title'])
-                            <h2 class="dynamic-form-title">{{ $displayOptions['title'] }}</h2>
+                            <h2 class="dynamic-form-interactive__title">{{ $displayOptions['title'] }}</h2>
                         @endif
 
                         @if ($displayOptions['subtitle'])
-                            <h3 class="dynamic-form-subtitle">{{ $displayOptions['subtitle'] }}</h3>
+                            <h3 class="dynamic-form-interactive__subtitle">{{ $displayOptions['subtitle'] }}</h3>
                         @endif
 
                         @if ($displayOptions['description'])
-                            <p class="dynamic-form-description">{{ $displayOptions['description'] }}</p>
+                            <p class="dynamic-form-interactive__description">{{ $displayOptions['description'] }}</p>
                         @endif
                     </div>
                 @endif
 
                 <!-- Form Content -->
-                <div class="dynamic-form-content-wrapper">
+                <div class="dynamic-form-interactive__content">
                     @include('livewire.dynamic-form-content')
                 </div>
             @else
                 <!-- Success Message -->
-                <div class="dynamic-form-success">
-                    <div class="dynamic-form-success-icon">
-                        <i class="fas fa-check-circle"></i>
+                <div class="dynamic-form-interactive__success">
+                    <div class="dynamic-form-interactive__success-icon">
+                        <i class="fas fa-check-circle" aria-hidden="true"></i>
                     </div>
 
                     @if ($displayOptions['success_title'])
-                        <h3 class="dynamic-form-success-title">{{ $displayOptions['success_title'] }}</h3>
+                        <h3 class="dynamic-form-interactive__success-title">{{ $displayOptions['success_title'] }}</h3>
                     @endif
 
-                    <p class="dynamic-form-success-message">{{ $successMessage }}</p>
+                    <p class="dynamic-form-interactive__success-message">{{ $successMessage }}</p>
 
-                    <button wire:click="resetForm" class="dynamic-form-reset-btn">
-                        <i class="fas fa-plus me-2"></i>Submit Another Request
+                    <button wire:click="resetForm" class="dynamic-form-interactive__reset-btn">
+                        <i class="fas fa-plus me-2" aria-hidden="true"></i>Submit Another Request
                     </button>
                 </div>
             @endif
 
             <!-- Error Flash Message -->
             @if (session()->has('error'))
-                <div class="dynamic-form-error">
+                <div class="dynamic-form-interactive__error">
                     <i class="fas fa-exclamation-triangle me-2"></i>
                     {{ session('error') }}
                 </div>

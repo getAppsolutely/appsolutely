@@ -1,6 +1,6 @@
-<section class="container my-5 feature-rows">
+<section class="feature-rows container my-5">
     @if (isset($displayOptions['title']) || isset($displayOptions['subtitle']) || isset($displayOptions['description']))
-        <div class="text-center mb-5">
+        <div class="feature-rows__header text-center mb-5">
             @if (!empty($displayOptions['title']))
                 <h2 class="mb-3">{{ $displayOptions['title'] }}</h2>
             @endif
@@ -19,7 +19,7 @@
     @if (is_array($features) && count($features))
         @foreach ($features as $index => $feature)
             @php($isImageLeft = $index % 2 === 0)
-            <div class="row align-items-center g-5 mb-5 feature-row">
+            <div class="feature-rows__row row align-items-center g-5 mb-5">
                 <div class="col-md-6 {{ $isImageLeft ? 'order-1 order-md-1' : 'order-1 order-md-2' }}">
                     @if (($feature['type'] ?? 'image') === 'image' && !empty($feature['url']))
                         <div class="ratio ratio-16x9 rounded overflow-hidden shadow-sm">
