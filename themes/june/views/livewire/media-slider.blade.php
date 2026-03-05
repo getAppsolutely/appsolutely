@@ -34,12 +34,14 @@
         {{-- Navigation Controls at bottom center (if enabled) --}}
         @if ($displayOptions['show_controls'] && count($displayOptions['slides']) > 1)
             <div class="media-slider-simple__controls">
-                <div class="swiper-button-prev" data-slider-id="{{ $sliderId }}">
-                    <i class="bi bi-chevron-left"></i>
-                </div>
-                <div class="swiper-button-next" data-slider-id="{{ $sliderId }}">
-                    <i class="bi bi-chevron-right"></i>
-                </div>
+                <button type="button" class="swiper-button-prev border-0 bg-transparent p-0"
+                    data-slider-id="{{ $sliderId }}" aria-label="Previous slide">
+                    <i class="bi bi-chevron-left" aria-hidden="true"></i>
+                </button>
+                <button type="button" class="swiper-button-next border-0 bg-transparent p-0"
+                    data-slider-id="{{ $sliderId }}" aria-label="Next slide">
+                    <i class="bi bi-chevron-right" aria-hidden="true"></i>
+                </button>
             </div>
         @endif
     @else

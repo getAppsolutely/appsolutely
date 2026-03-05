@@ -21,10 +21,10 @@
 
             <!-- Fallback message for browsers that don't support video -->
             @if (!empty($displayOptions['fallback_text']))
-                <div
-                    class="video-showcase-simple__fallback d-flex align-items-center justify-content-center h-100 bg-secondary text-white">
-                    <p class="video-showcase-simple__fallback-text mb-0">{{ $displayOptions['fallback_text'] }}</p>
-                </div>
+                <p
+                    class="video-showcase-simple__fallback video-showcase-simple__fallback-text d-flex align-items-center justify-content-center h-100 bg-secondary text-white mb-0">
+                    {{ $displayOptions['fallback_text'] }}
+                </p>
             @endif
         </video>
     </div>

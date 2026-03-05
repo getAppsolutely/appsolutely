@@ -32,7 +32,7 @@
                                 @if ($item->children->isNotEmpty())
                                     <a class="nav-link text-uppercase" href="#" role="button">
                                         @if ($item->icon)
-                                            <i class="{{ $item->icon }} me-1"></i>
+                                            <i class="{{ $item->icon }} me-1" aria-hidden="true"></i>
                                         @endif
                                         {{ $item->title }}
                                     </a>
@@ -101,7 +101,7 @@
                                     <a class="nav-link text-uppercase {{ request()->routeIs($item->url) ? 'active' : '' }}"
                                         href="{{ app_uri($item->url) }}" target="{{ $item->target->value }}">
                                         @if ($item->icon)
-                                            <i class="{{ $item->icon }} me-1"></i>
+                                            <i class="{{ $item->icon }} me-1" aria-hidden="true"></i>
                                         @endif
                                         {{ $item->title }}
                                     </a>
@@ -134,7 +134,7 @@
                                 <a class="nav-link text-uppercase {{ request()->routeIs($item->url) ? 'active' : '' }}"
                                     href="{{ app_uri($item->url) }}" target="{{ $item->target->value }}">
                                     @if ($item->icon)
-                                        <i class="{{ $item->icon }} me-1"></i>
+                                        <i class="{{ $item->icon }} me-1" aria-hidden="true"></i>
                                     @endif
                                     {{ $item->title }}
                                 </a>
@@ -145,7 +145,7 @@
                                                 <a class="dropdown-item text-center" href="{{ app_uri($child->url) }}"
                                                     target="{{ $child->target->value }}">
                                                     @if ($child->icon)
-                                                        <i class="{{ $child->icon }} me-2"></i>
+                                                        <i class="{{ $child->icon }} me-2" aria-hidden="true"></i>
                                                     @endif
                                                     @if ($child->thumbnail)
                                                         <span class="d-block position-relative">

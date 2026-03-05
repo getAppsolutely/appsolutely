@@ -34,7 +34,7 @@
                                 <div class="specifications-section__item-content">
                                     <h5 class="specifications-section__item-label fw-semibold mb-2">
                                         @if ($spec['icon'] ?? false)
-                                            <i class="{{ $spec['icon'] }} me-2"></i>
+                                            <i class="{{ $spec['icon'] }} me-2" aria-hidden="true"></i>
                                         @endif
                                         {{ $spec['label'] }}
                                     </h5>
@@ -156,7 +156,7 @@
                                         <tr>
                                             <td>
                                                 @if ($spec['icon'] ?? false)
-                                                    <i class="{{ $spec['icon'] }} me-2"></i>
+                                                    <i class="{{ $spec['icon'] }} me-2" aria-hidden="true"></i>
                                                 @endif
                                                 {{ $spec['label'] }}
                                             </td>
@@ -181,8 +181,9 @@
             <div class="specifications-section__download text-center mt-5">
                 <a href="{{ asset_url($displayOptions['download_url']) }}"
                     class="specifications-section__download-btn btn btn-light border-dark fw-bold px-3 py-3 fs-6 rounded-3 shadow-lg"
-                    download="{{ $displayOptions['download_filename'] ?? 'specifications' }}" target="_blank">
-                    <i class="fas fa-download me-2"></i>
+                    download="{{ $displayOptions['download_filename'] ?? 'specifications' }}" target="_blank"
+                    rel="noopener noreferrer">
+                    <i class="fas fa-download me-2" aria-hidden="true"></i>
                     {{ !empty($displayOptions['download_label']) ? $displayOptions['download_label'] : 'Download Brochure' }}
                 </a>
             </div>

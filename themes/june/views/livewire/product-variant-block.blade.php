@@ -207,6 +207,7 @@
                                             title="{{ $color['name'] ?? 'Color ' . ($colorIndex + 1) }}"
                                             data-color-index="{{ $colorIndex }}">
                                             <i class="fas fa-check text-white position-absolute top-50 start-50 translate-middle"
+                                                aria-hidden="true"
                                                 style="{{ $colorIndex === 0 ? '' : 'display: none;' }}"></i>
                                         </button>
                                     @endforeach

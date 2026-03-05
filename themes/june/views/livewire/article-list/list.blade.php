@@ -39,13 +39,13 @@
                                 <div class="article-list__card-meta d-flex align-items-center text-muted small mb-2">
                                     @if (($displayOptions['show_author'] ?? true) && $article->author)
                                         <span class="me-3">
-                                            <i class="fas fa-user me-1"></i>
+                                            <i class="fas fa-user me-1" aria-hidden="true"></i>
                                             {{ $article->author }}
                                         </span>
                                     @endif
                                     @if (($displayOptions['show_date'] ?? true) && $article->published_at)
                                         <span>
-                                            <i class="fas fa-calendar-alt me-1"></i>
+                                            <i class="fas fa-calendar-alt me-1" aria-hidden="true"></i>
                                             {{ $article->published_at->format('M j, Y') }}
                                         </span>
                                     @endif
@@ -73,7 +73,7 @@
                                     <a href="{{ nested_url($article->slug) }}"
                                         class="article-list__card-btn btn btn-outline-dark btn-sm">
                                         {{ $displayOptions['read_more_text'] ?? 'Read More' }}
-                                        <i class="fas fa-arrow-right ms-1"></i>
+                                        <i class="fas fa-arrow-right ms-1" aria-hidden="true"></i>
                                     </a>
                                 </div>
                             @endif

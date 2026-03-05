@@ -70,7 +70,7 @@
                             <a href="{{ $socialItem->url }}" target="{{ $socialItem->target->value }}"
                                 class="footer__link text-white text-decoration-none me-3">
                                 @if ($socialItem->icon)
-                                    <i class="{{ $socialItem->icon }} fs-5"></i>
+                                    <i class="{{ $socialItem->icon }} fs-5" aria-hidden="true"></i>
                                 @else
                                     {{ $socialItem->title }}
                                 @endif

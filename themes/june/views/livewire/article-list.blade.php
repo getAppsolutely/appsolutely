@@ -1,6 +1,6 @@
 <section class="article-list py-5">
     <div class="article-list__wrapper container">
-        <div class="row justify-content-center">
+        <div class="article-list__breadcrumb row justify-content-center">
             <div class="col-lg-10">
                 {{ Breadcrumbs::render('page', $page) }}
             </div>

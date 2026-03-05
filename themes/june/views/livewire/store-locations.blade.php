@@ -38,7 +38,7 @@
                                     @if ($location['featured'] ?? false)
                                         <div class="position-absolute top-0 end-0 m-3">
                                             <span class="badge bg-dark text-white fs-6 px-3 py-2">
-                                                <i class="fas fa-star me-1"></i>Featured
+                                                <i class="fas fa-star me-1" aria-hidden="true"></i>Featured
                                             </span>
                                         </div>
                                     @endif
@@ -55,7 +55,7 @@
 
                                         <div class="store-locations__card-info mb-4">
                                             <div class="d-flex align-items-start mb-2">
-                                                <i class="fas bi bi-geo-alt-fill text-muted me-2"></i>
+                                                <i class="bi bi-geo-alt-fill text-muted me-2" aria-hidden="true"></i>
                                                 <div class="flex-grow-1">
                                                     @if (isset($location['latitude']) && isset($location['longitude']))
                                                         <a href="javascript:void(0)"
@@ -84,7 +84,8 @@
 
                                             @if ($location['phone'] ?? false)
                                                 <div class="d-flex align-items-center mb-2">
-                                                    <i class="fas bi-telephone-fill text-muted me-2"></i>
+                                                    <i class="bi bi-telephone-fill text-muted me-2"
+                                                        aria-hidden="true"></i>
                                                     <a href="tel:{{ $location['phone'] }}"
                                                         class="text-decoration-none text-dark fw-medium">{{ $location['phone'] }}</a>
                                                 </div>
@@ -94,7 +95,7 @@
                                                 <div class="small mb-1 fw-semibold">Vehicle Sales</div>
                                                 @php($__hoursLines = preg_split('/\s*,\s*/', $location['hours']))
                                                 <div class="d-flex align-items-start mb-3">
-                                                    <i class="fas bi-clock-fill text-muted me-2"></i>
+                                                    <i class="bi bi-clock-fill text-muted me-2" aria-hidden="true"></i>
                                                     <div class="small text-muted w-100">
                                                         <table
                                                             class="table table-sm table-borderless mb-0 align-middle w-auto">
@@ -119,7 +120,7 @@
                                                 <div class="small mb-1 fw-semibold">Servicing & Parts</div>
                                                 @php($__hoursLines = preg_split('/\s*,\s*/', $location['service_hours']))
                                                 <div class="d-flex align-items-start mb-3">
-                                                    <i class="fas bi-clock-fill text-muted me-2"></i>
+                                                    <i class="bi bi-clock-fill text-muted me-2" aria-hidden="true"></i>
                                                     <div class="small text-muted w-100">
                                                         <table
                                                             class="table table-sm table-borderless mb-0 align-middle w-auto">
@@ -142,7 +143,7 @@
                                         </div>
 
                                         @if (!empty($location['services']))
-                                            <div class="services mb-4">
+                                            <div class="store-locations__services mb-4">
                                                 <div class="small text-muted mb-2 fw-semibold">Available Services:</div>
                                                 <div class="d-flex flex-wrap gap-1">
                                                     @foreach ($location['services'] as $service)
@@ -169,7 +170,7 @@
                             @if ($location['featured'] ?? false)
                                 <div class="position-absolute top-0 end-0 m-3">
                                     <span class="badge bg-dark text-white fs-6 px-3 py-2">
-                                        <i class="fas fa-star me-1"></i>Featured
+                                        <i class="fas fa-star me-1" aria-hidden="true"></i>Featured
                                     </span>
                                 </div>
                             @endif
@@ -193,7 +194,8 @@
                                             <div class="col-lg-6">
                                                 <div class="store-locations__card-info mb-3">
                                                     <div class="d-flex align-items-start mb-3">
-                                                        <i class="fas fa-map-marker-alt text-muted me-3 mt-1"></i>
+                                                        <i class="fas fa-map-marker-alt text-muted me-3 mt-1"
+                                                            aria-hidden="true"></i>
                                                         <div class="flex-grow-1">
                                                             @if (isset($location['latitude']) && isset($location['longitude']))
                                                                 <a href="javascript:void(0)"
@@ -229,7 +231,8 @@
                                                         </div>
                                                         @php($__hoursLines = preg_split('/\s*,\s*/', $location['hours']))
                                                         <div class="d-flex align-items-start">
-                                                            <i class="fas fa-clock text-muted me-3 mt-1"></i>
+                                                            <i class="fas fa-clock text-muted me-3 mt-1"
+                                                                aria-hidden="true"></i>
                                                             <div class="small text-muted lh-sm w-100">
                                                                 <table
                                                                     class="table table-sm table-borderless mb-0 align-middle w-auto">
@@ -254,7 +257,7 @@
 
                                             <div class="col-lg-6">
                                                 @if (!empty($location['services']))
-                                                    <div class="services mb-4">
+                                                    <div class="store-locations__services mb-4">
                                                         <div class="small text-muted mb-2 fw-semibold">Available
                                                             Services:
                                                         </div>

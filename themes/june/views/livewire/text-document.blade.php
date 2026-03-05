@@ -4,14 +4,14 @@
             <div class="text-document__content col-lg-8">
                 <!-- Title -->
                 @if ($displayOptions['title'] ?? false)
-                    <h1 class="fw-bold text-dark mb-3">
+                    <h1 class="text-document__title fw-bold text-dark mb-3">
                         {{ $displayOptions['title'] }}
                     </h1>
                 @endif
 
                 <!-- Subtitle -->
                 @if ($displayOptions['subtitle'] ?? false)
-                    <p class="lead text-muted mb-4">
+                    <p class="text-document__subtitle lead text-muted mb-4">
                         {{ $displayOptions['subtitle'] }}
                     </p>
                 @endif
@@ -20,14 +20,14 @@
                 @if (
                     ($displayOptions['show_meta'] ?? true) &&
                         (($displayOptions['published_date'] ?? false) || ($displayOptions['author'] ?? false)))
-                    <div class="text-muted mb-4 pb-3 border-bottom">
+                    <div class="text-document__meta text-muted mb-4 pb-3 border-bottom">
                         <small>
                             @if ($displayOptions['author'] ?? false)
-                                <i class="fas fa-user me-2"></i>
+                                <i class="fas fa-user me-2" aria-hidden="true"></i>
                                 <span class="me-3">By {{ $displayOptions['author'] }}</span>
                             @endif
                             @if ($displayOptions['published_date'] ?? false)
-                                <i class="fas fa-calendar-alt me-2"></i>
+                                <i class="fas fa-calendar-alt me-2" aria-hidden="true"></i>
                                 <time datetime="{{ $displayOptions['published_date'] }}">
                                     Published:
                                     {{ \Carbon\Carbon::parse($displayOptions['published_date'])->format('F j, Y') }}

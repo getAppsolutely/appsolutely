@@ -17,9 +17,10 @@
                     <div class="faq-section__accordion accordion" id="faqAccordion">
                         @foreach ($displayOptions['items'] as $index => $item)
                             @if (!empty($item['question']))
-                                <div class="accordion-item">
-                                    <h3 class="accordion-header">
-                                        <button class="accordion-button {{ $index === 0 ? '' : 'collapsed' }}"
+                                <div class="faq-section__accordion-item accordion-item">
+                                    <h3 class="faq-section__accordion-header accordion-header">
+                                        <button
+                                            class="faq-section__accordion-button accordion-button {{ $index === 0 ? '' : 'collapsed' }}"
                                             type="button" data-bs-toggle="collapse"
                                             data-bs-target="#faq{{ $index }}"
                                             aria-expanded="{{ $index === 0 ? 'true' : 'false' }}"
@@ -28,9 +29,9 @@
                                         </button>
                                     </h3>
                                     <div id="faq{{ $index }}"
-                                        class="accordion-collapse collapse {{ $index === 0 ? 'show' : '' }}"
+                                        class="faq-section__accordion-collapse accordion-collapse collapse {{ $index === 0 ? 'show' : '' }}"
                                         data-bs-parent="#faqAccordion">
-                                        <div class="accordion-body">
+                                        <div class="faq-section__accordion-body accordion-body">
                                             {!! md2html((string) ($item['answer'] ?? '')) !!}
                                         </div>
                                     </div>

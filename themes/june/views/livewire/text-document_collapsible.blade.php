@@ -4,9 +4,10 @@
             <div class="text-document-collapsible__col col-lg-8">
                 <div class="text-document-collapsible__container">
                     <!-- Collapsible Header -->
-                    <div class="text-document-collapsible__header" data-bs-toggle="collapse"
-                        data-bs-target="#textDocumentCollapsible{{ $blockId ?? 'default' }}" aria-expanded="false"
-                        aria-controls="textDocumentCollapsible{{ $blockId ?? 'default' }}">
+                    <button type="button"
+                        class="text-document-collapsible__header w-100 text-start border-0 bg-transparent p-0"
+                        data-bs-toggle="collapse" data-bs-target="#textDocumentCollapsible{{ $blockId ?? 'default' }}"
+                        aria-expanded="false" aria-controls="textDocumentCollapsible{{ $blockId ?? 'default' }}">
 
                         <div class="text-document-collapsible__header-content">
                             <!-- Title -->
@@ -28,7 +29,7 @@
                         <div class="text-document-collapsible__arrow">
                             <i class="bi bi-chevron-down text-primary" aria-hidden="true"></i>
                         </div>
-                    </div>
+                    </button>
 
                     <!-- Collapsible Content -->
                     <div class="collapse text-document-collapsible__content"
@@ -42,11 +43,11 @@
                                 <div class="text-document-collapsible__meta text-muted mb-3 pb-3 border-bottom">
                                     <small>
                                         @if ($displayOptions['author'] ?? false)
-                                            <i class="bi bi-person me-2"></i>
+                                            <i class="bi bi-person me-2" aria-hidden="true"></i>
                                             <span class="me-3">By {{ $displayOptions['author'] }}</span>
                                         @endif
                                         @if ($displayOptions['published_date'] ?? false)
-                                            <i class="bi bi-calendar3 me-2"></i>
+                                            <i class="bi bi-calendar3 me-2" aria-hidden="true"></i>
                                             <time datetime="{{ $displayOptions['published_date'] }}">
                                                 Published:
                                                 {{ \Carbon\Carbon::parse($displayOptions['published_date'])->format('F j, Y') }}
