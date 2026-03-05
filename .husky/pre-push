@@ -58,11 +58,12 @@ fi
 FAILED=0
 START_TIME=$(date +%s)
 
-# Run TypeScript type check (output streams directly to terminal)
+# Run TypeScript type check (show output only on failure)
 echo "📝 Type checking TypeScript files..."
-if npm run type-check:all; then
-    print_success "TypeScript type check passed"
-else
+OUTPUT=$(npm run type-check:all 2>&1)
+EXIT=$?
+if [ $EXIT -ne 0 ]; then
+    echo "$OUTPUT"
     print_error "TypeScript type check failed!"
     echo ""
     echo "💡 Fix the errors above, or run 'npm run type-check:all' to see them again."
@@ -70,11 +71,12 @@ else
 fi
 echo ""
 
-# Run linters (output streams directly to terminal)
+# Run linters (show output only on failure)
 echo "🧹 Running linters..."
-if npm run lint:all; then
-    print_success "Linting passed"
-else
+OUTPUT=$(npm run lint:all 2>&1)
+EXIT=$?
+if [ $EXIT -ne 0 ]; then
+    echo "$OUTPUT"
     print_error "Linting failed!"
     echo ""
     echo "💡 Fix the errors above, or run 'npm run lint:all:fix' to auto-fix."
@@ -98,13 +100,13 @@ if [ -z "$SKIP_BLADE_CHECK" ]; then
     fi
     
     if [ -n "$WORKSPACE_CONTAINER" ]; then
-        # Run Blade validation inside Docker container (output streams directly)
-        # Clear view cache first, then try to cache (which validates syntax)
-        if docker exec "$WORKSPACE_CONTAINER" bash -c "cd /var/www/appsolutely/site && php artisan view:clear && php artisan view:cache"; then
-            print_success "Blade templates validated"
-            # Clear cache again to avoid leaving cached views
+        # Run Blade validation inside Docker container (show output only on failure)
+        OUTPUT=$(docker exec "$WORKSPACE_CONTAINER" bash -c "cd /var/www/appsolutely/site && php artisan view:clear && php artisan view:cache" 2>&1)
+        EXIT=$?
+        if [ $EXIT -eq 0 ]; then
             docker exec "$WORKSPACE_CONTAINER" bash -c "cd /var/www/appsolutely/site && php artisan view:clear" >/dev/null 2>&1
         else
+            echo "$OUTPUT"
             print_error "Blade template validation failed!"
             echo ""
             echo "💡 Run 'docker exec $WORKSPACE_CONTAINER bash -c \"cd /var/www/appsolutely/site && php artisan view:cache\"' to see full errors."
@@ -115,10 +117,12 @@ if [ -z "$SKIP_BLADE_CHECK" ]; then
         # Fallback: try to run on host (may fail if PHP/dependencies not available)
         if command -v php >/dev/null 2>&1; then
             print_warning "Docker container not found. Running Blade validation on host (may fail if dependencies are missing)."
-            if php artisan view:clear && php artisan view:cache; then
-                print_success "Blade templates validated"
+            OUTPUT=$(php artisan view:clear && php artisan view:cache 2>&1)
+            EXIT=$?
+            if [ $EXIT -eq 0 ]; then
                 php artisan view:clear >/dev/null 2>&1
             else
+                echo "$OUTPUT"
                 print_error "Blade template validation failed!"
                 echo ""
                 echo "💡 Run 'php artisan view:cache' to see full validation errors."
@@ -136,13 +140,14 @@ elif [ -n "$SKIP_BLADE_CHECK" ]; then
     echo ""
 fi
 
-# Run frontend tests (Vitest)
+# Run frontend tests (Vitest) - show output only on failure
 # Set SKIP_FRONTEND_TESTS=1 to skip frontend tests during pre-push
 if [ -z "$SKIP_FRONTEND_TESTS" ]; then
     echo "🧪 Running frontend tests..."
-    if npm run test:frontend; then
-        print_success "Frontend tests passed"
-    else
+    OUTPUT=$(npm run test:frontend 2>&1)
+    EXIT=$?
+    if [ $EXIT -ne 0 ]; then
+        echo "$OUTPUT"
         print_error "Frontend tests failed!"
         echo ""
         echo "💡 Run 'npm run test:frontend' to see full test results."
@@ -171,10 +176,11 @@ if [ -z "$SKIP_PHP_TESTS" ]; then
     fi
     
     if [ -n "$WORKSPACE_CONTAINER" ]; then
-        # Run tests inside Docker container (output streams directly)
-        if docker exec "$WORKSPACE_CONTAINER" bash -c "cd /var/www/appsolutely/site && php artisan test --testdox"; then
-            print_success "PHP tests passed"
-        else
+        # Run tests inside Docker container (show output only on failure)
+        OUTPUT=$(docker exec "$WORKSPACE_CONTAINER" bash -c "cd /var/www/appsolutely/site && php artisan test --testdox" 2>&1)
+        EXIT=$?
+        if [ $EXIT -ne 0 ]; then
+            echo "$OUTPUT"
             print_error "PHP tests failed!"
             echo ""
             echo "💡 Run 'docker exec $WORKSPACE_CONTAINER bash -c \"cd /var/www/appsolutely/site && php artisan test\"' to see full test results."
@@ -185,9 +191,10 @@ if [ -z "$SKIP_PHP_TESTS" ]; then
         # Fallback: try to run on host (may fail if PHP/dependencies not available)
         if [ -f "./vendor/bin/phpunit" ]; then
             print_warning "Docker container not found. Running PHP tests on host (may fail if dependencies are missing)."
-            if ./vendor/bin/phpunit --testdox; then
-                print_success "PHP tests passed"
-            else
+            OUTPUT=$(./vendor/bin/phpunit --testdox 2>&1)
+            EXIT=$?
+            if [ $EXIT -ne 0 ]; then
+                echo "$OUTPUT"
                 print_error "PHP tests failed!"
                 echo ""
                 echo "💡 Run './vendor/bin/phpunit' to see full test results."
