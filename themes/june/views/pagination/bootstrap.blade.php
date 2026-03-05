@@ -1,14 +1,14 @@
 @php
-                    if (! isset($scrollTo)) {
-                        $scrollTo = 'body';
-                    }
+        if (! isset($scrollTo)) {
+            $scrollTo = 'body';
+        }
 
-                    $scrollIntoViewJsSnippet = ($scrollTo !== false)
-                        ? <<<JS
-                           (\$el.closest('{$scrollTo}') || document.querySelector('{$scrollTo}'))
+        $scrollIntoViewJsSnippet = ($scrollTo !== false)
+            ? <<<JS
+               (\$el.closest('{$scrollTo}') || document.querySelector('{$scrollTo}'))
     .scrollIntoView()
-                        JS
-                        : '';
+            JS
+            : '';
 @endphp
 
 <div>
@@ -62,7 +62,8 @@
                                     dusk="previousPage{{ $paginator->getPageName() == 'page' ? '' : '.' . $paginator->getPageName() }}"
                                     class="page-link" wire:click="previousPage('{{ $paginator->getPageName() }}')"
                                     x-on:click="{{ $scrollIntoViewJsSnippet }}" wire:loading.attr="disabled"
-                                    aria-label="@lang('pagination.previous')">&lsaquo;</button>
+                                    aria-label="@lang('pagination.previous')">&lsaquo;
+                                </button>
                             </li>
                         @endif
 
@@ -100,7 +101,8 @@
                                     dusk="nextPage{{ $paginator->getPageName() == 'page' ? '' : '.' . $paginator->getPageName() }}"
                                     class="page-link" wire:click="nextPage('{{ $paginator->getPageName() }}')"
                                     x-on:click="{{ $scrollIntoViewJsSnippet }}" wire:loading.attr="disabled"
-                                    aria-label="@lang('pagination.next')">&rsaquo;</button>
+                                    aria-label="@lang('pagination.next')">&rsaquo;
+                                </button>
                             </li>
                         @else
                             <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.next')">
