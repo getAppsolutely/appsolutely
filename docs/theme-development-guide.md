@@ -2,15 +2,19 @@
 
 This guide outlines best practices for developing themes in a Laravel-based CMS system with Livewire components, SCSS styling, and TypeScript functionality.
 
+**Theme stack variants:** Themes can use different CSS frameworks. The **default** theme uses **Tailwind** (`css/app.css`); the **june** theme uses **Bootstrap 5** (`sass/app.scss`). The examples in this guide are Bootstrap-oriented, but the structure and conventions apply to any stack.
+
 ## Table of Contents
 
 1. [Theme Structure](#theme-structure)
-2. [Blade Templates (Livewire Components)](#blade-templates-livewire-components)
-3. [SCSS Styling](#scss-styling)
-4. [TypeScript Components](#typescript-components)
-5. [Asset Management](#asset-management)
-6. [Best Practices](#best-practices)
-7. [File Organization](#file-organization)
+2. [Theme Manifest](#theme-manifest)
+3. [Parent Themes](#parent-themes)
+4. [Blade Templates (Livewire Components)](#blade-templates-livewire-components)
+5. [SCSS Styling](#scss-styling)
+6. [TypeScript Components](#typescript-components)
+7. [Asset Management](#asset-management)
+8. [Best Practices](#best-practices)
+9. [File Organization](#file-organization)
 
 ## Theme Structure
 
@@ -47,9 +51,76 @@ themes/
     │   │   └── hero-banner_fullscreen.blade.php   # Style-specific variant
     │   └── components/          # Reusable Blade components
     │       └── notice.blade.php
+    ├── manifest.json            # Block templates for Page Builder (see Theme Manifest)
     ├── vite.config.ts           # Vite build configuration
     └── README.md                # Theme documentation
 ```
+
+## Theme Manifest
+
+Each theme can define a `manifest.json` file that registers block templates for the Page Builder. The manifest is the source of truth for which blocks are available in the active theme.
+
+**Location:** `themes/{theme-name}/manifest.json`
+
+### Structure
+
+```json
+{
+    "version": "1.0.0",
+    "description": "Theme manifest - defines available templates and their configurations",
+    "templates": {
+        "block-key": {
+            "label": "Block Label",
+            "description": "Short description for the Page Builder",
+            "component": "App\\Livewire\\GeneralBlock",
+            "view": "block-view-name",
+            "displayOptions": {
+                "title": "Default Title",
+                "anchor_label": "Section Name"
+            },
+            "queryOptions": {},
+            "styles": ["default", "variant"]
+        }
+    }
+}
+```
+
+### Key Fields
+
+| Field            | Description                                                                                                  |
+| ---------------- | ------------------------------------------------------------------------------------------------------------ |
+| `component`      | Livewire component class (e.g. `App\\Livewire\\GeneralBlock` or a custom block)                              |
+| `view`           | View name (without path) — maps to `themes/{theme}/views/livewire/{view}.blade.php`                          |
+| `displayOptions` | Default visual/presentation config passed to the view as `$displayOptions`                                   |
+| `queryOptions`   | Default data-fetching config (for custom blocks that query repositories)                                     |
+| `styles`         | Available style variants (e.g. `["default", "fullscreen"]`) — enables `component-name_style.blade.php` views |
+
+### When to Add a Manifest Entry
+
+- **GeneralBlock templates** — Content-only blocks (no data querying) require a manifest entry and a view. No custom Livewire component or `page_blocks` record is needed.
+- **Custom blocks** — Blocks with their own Livewire component and `page_blocks` record still need a manifest entry so they appear in the Page Builder. The manifest `component` must match `page_blocks.class`.
+
+For full details on the block system, schemas, and block creation, see [Block System](block-system.md).
+
+## Parent Themes
+
+A theme can inherit views from a **parent theme**. If a view is not found in the active theme, Laravel looks for it in the parent.
+
+**Configuration:** `config/theme.php`
+
+```php
+'parent' => 'default',  // Parent theme name
+```
+
+**How it works:**
+
+- `ThemeService::setupTheme($themeName, $parentTheme)` is called with the resolved parent from `config('theme.parent')`.
+- The qirolab/laravel-themer package resolves views: **child theme first**, then **parent theme**.
+- Use a parent when building a child theme that overrides only some views (e.g. layouts, specific blocks) and inherits the rest.
+
+**Example:** If `june` has `parent => 'default'`, a missing `themes/june/views/livewire/some-block.blade.php` falls back to `themes/default/views/livewire/some-block.blade.php`.
+
+**Note:** Assets (SCSS, JS) are **not** inherited — each theme has its own Vite build. Only Blade views participate in the parent/child hierarchy.
 
 ## Blade Templates (Livewire Components)
 
@@ -188,18 +259,34 @@ Use `block [block_name] [block_name]-[style]` pattern on the **root div/section 
 }
 ```
 
+### Asset Helpers: `asset_url()` vs `themed_assets()`
+
+Use the correct helper depending on the asset source:
+
+| Helper                     | Use For                                                                                                | Example                                                                                                                     |
+| -------------------------- | ------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| **`asset_url($uri)`**      | CMS/storage assets: uploads, config-driven URLs (e.g. from `display_options`), paths under `assets/`   | `asset_url($displayOptions['video_url'])`, `asset_url($slide['url'])`, `asset_url('assets/images/logo.webp')`               |
+| **`themed_assets($path)`** | Theme assets built by Vite: images/fonts imported in JS or SCSS, or explicitly added to the Vite build | `themed_assets('/images/coming.png')` — asset must be imported in `assets.ts` or similar so it appears in the Vite manifest |
+
+**Rules of thumb:**
+
+- **Blade templates** — Use `asset_url()` for URLs that come from `$displayOptions`, `$queryOptions`, or CMS content (user uploads, media library).
+- **Theme static assets** — Use `themed_assets()` only for assets that are part of the theme build (imported in Vite). If the asset is not in the Vite manifest, `themed_assets()` will throw at runtime.
+
 ### Best Practices for Blade Templates
 
 1. **Consistent Structure**: Always wrap content in a root `<div>` or `<section>` for Livewire components
 2. **CSS Class Naming**: Use `block [block_name] [block_name]-[style]` pattern on the **root div/section element** for precise CSS control
 3. **Conditional Rendering**: Use `@if (!empty($displayOptions['key']))` for optional content
-4. **Asset URLs**: Always use `asset_url()` helper for media assets
+4. **Asset URLs**: Use `asset_url()` for CMS/storage media; use `themed_assets()` only for theme assets built by Vite (see [Asset Helpers](#asset-helpers-asset_url-vs-themed_assets) above)
 5. **Accessibility**: Include proper `alt` attributes and semantic HTML
 6. **Responsive Design**: Use Bootstrap classes for responsive behavior
 7. **Component Reusability**: Extract common patterns into separate components
 8. **Lazy Loading**: Use `lazy` class and `data-src` for performance
 
 ## SCSS Styling
+
+**Note:** This section uses **Bootstrap 5** (e.g. June theme). Themes using **Tailwind** (e.g. default) will have a different structure (`css/app.css`, Tailwind config) but the same organizational principles apply.
 
 ### Main SCSS Entry Point
 
@@ -731,6 +818,33 @@ export interface MediaSliderConfig {
 export {};
 ```
 
+### Client-Side Asset URLs
+
+When TypeScript needs to build asset URLs from data (e.g. CMS image paths in `data-photos`), pass the base URL via a data attribute on the container. **Do not** use a separate `asset_url` utility — prefer the data-attribute pattern.
+
+**Blade:** Add `data-asset-base-url` to the component container:
+
+```blade
+{{-- Example: themes/june/views/livewire/dynamic-form_interactive.blade.php --}}
+<section class="my-component" data-asset-base-url="{{ asset_url(null, false) }}" data-photos='@json($photos)'>
+```
+
+**TypeScript:** Read the base URL from the container and build full URLs:
+
+```typescript
+const baseUrl = container.getAttribute('data-asset-base-url') || '/assets/';
+const hash = container.getAttribute('data-asset-hash') || ''; // optional: build_hash()
+const fullUrl = (path: string) => {
+    const cleanBase = baseUrl.replace(/\/$/, '');
+    const cleanPath = path.startsWith('/') ? path : `/${path}`;
+    return `${cleanBase}${cleanPath}${hash ? `?v=${hash}` : ''}`;
+};
+```
+
+**When both are needed:** Add `data-asset-hash="{{ build_hash() }}"` for cache busting.
+
+**When to use:** Client-side rendering of image/video URLs from `displayOptions`, `data-*` attributes, or API responses. For theme static assets built by Vite, use `themed_assets()` in Blade or import the asset in your build.
+
 ### TypeScript Best Practices
 
 1. **Strict Typing**: Use TypeScript strict mode and proper type annotations
@@ -742,6 +856,66 @@ export {};
 7. **Error Handling**: Include try-catch blocks for critical operations
 
 ## Asset Management
+
+### Theme Build & Dev Workflow
+
+Themes are built and served via `themes.ts` (run with `tsx`). Each theme with a `vite.config.ts` is included.
+
+**Build (production):**
+
+```bash
+npm run build:themes
+# or: tsx themes.ts build
+# Builds all themes; optionally: tsx themes.ts build june default
+```
+
+**Dev (with HMR):**
+
+```bash
+npm run dev:themes
+# or: tsx themes.ts dev
+# Runs Vite dev server(s) for each theme; optionally: tsx themes.ts dev june
+```
+
+**Notes:**
+
+- Each theme uses its own port from `vite.config.ts` (e.g. June: 5177, default: 5175).
+- `npm run build` runs the main Vite build, then `build:themes`, then `build:page-builder`.
+- `npm run dev:all` runs main app, themes, and page builder concurrently.
+- Theme builds output to `public/build/themes/{theme-name}/`.
+
+### Including Theme Assets in Layouts
+
+Use the `@vite` directive with `themed_path()` and `themed_build_path()` so layouts work with any active theme:
+
+```blade
+{{-- themes/theme-name/views/layouts/public.blade.php --}}
+<head>
+    @livewireStyles
+    @vite([themed_path() . '/sass/app.scss', themed_path() . '/js/app.ts'], themed_build_path())
+</head>
+<body>
+    @yield('content')
+    @livewireScripts
+</body>
+```
+
+**Helpers:**
+
+| Helper                | Returns                                      | Use                                                              |
+| --------------------- | -------------------------------------------- | ---------------------------------------------------------------- |
+| `themed_path()`       | `themes/{active-theme}` (e.g. `themes/june`) | Input paths for `@vite` (relative to project root)               |
+| `themed_build_path()` | `build/themes/{active-theme}`                | Second argument to `@vite` (build directory for manifest lookup) |
+
+**Avoid hard-coding theme names:**
+
+```blade
+{{-- ❌ Don't: hard-coded theme --}}
+@vite(['themes/june/sass/app.scss', 'themes/june/js/app.ts'], 'build/themes/june')
+
+{{-- ✅ Do: theme-agnostic --}}
+@vite([themed_path() . '/sass/app.scss', themed_path() . '/js/app.ts'], themed_build_path())
+```
 
 ### Vite Configuration
 
@@ -777,7 +951,8 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            '@theme': path.resolve(__dirname, 'resources/themes/theme-name'),
+            // __dirname = theme root (themes/theme-name) when config is at themes/theme-name/vite.config.ts
+            '@theme': path.resolve(__dirname),
             '~bootstrap': path.resolve('node_modules/bootstrap'),
         },
     },
