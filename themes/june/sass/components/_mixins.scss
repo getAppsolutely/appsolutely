@@ -1,4 +1,5 @@
 // Animation mixins for reuse across components
+@use "../variables" as *;
 
 @mixin fade-in-up($delay: 0s) {
     opacity: 0;
@@ -92,6 +93,27 @@
             opacity: 1;
             transform: none;
             transition: none;
+        }
+    }
+}
+
+// Custom scrollbar (webkit) — use for scrollable form/content areas
+@mixin custom-scrollbar($width: 6px, $track: $gray-100, $thumb: $gray-500, $thumb-hover: $gray-700) {
+    &::-webkit-scrollbar {
+        width: $width;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: $track;
+        border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: $thumb;
+        border-radius: 3px;
+
+        &:hover {
+            background: $thumb-hover;
         }
     }
 }

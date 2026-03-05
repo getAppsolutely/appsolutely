@@ -1,5 +1,4 @@
-// Import animation mixins
-@import "mixins";
+@use "mixins" as *;
 
 // Feature Block Component Styles
 .features {

@@ -692,8 +692,13 @@ $input-btn-padding-x: 0.75rem;
 3. **Component Organization**: Create separate SCSS files for each component
 4. **Mixins**: Use mixins for reusable animation and styling patterns
 5. **Responsive Design**: Use Bootstrap's media query mixins consistently
-6. **Naming Conventions**: Use BEM methodology for custom classes
+6. **Naming Conventions**: Use BEM methodology for custom classes (`.block__element`, `.block__element--modifier`)
 7. **Performance**: Avoid deep nesting (max 3-4 levels)
+
+### SCSS Conventions
+
+- **Comments**: Use `//` for single-line and section comments; avoid `/* */` except for multi-line blocks
+- **Module system**: Use `@use` for internal dependencies (e.g. `@use "mixins" as *`); Bootstrap requires `@import` so app entry stays with `@import`
 
 ## TypeScript Components
 

@@ -1,4 +1,4 @@
-/* Bootstrap 5.3 Video Showcase Component Styles */
+// Video Showcase Component Styles
 .video-showcase {
     min-height: 100vh !important;
 
@@ -11,12 +11,11 @@
         min-height: 100%;
     }
 
-    /* Object-fit utilities for Bootstrap 5.3 */
     .object-fit-cover {
         object-fit: cover !important;
     }
 
-    /* Hide video controls completely if controls are disabled */
+    // Hide video controls when disabled
     video::-webkit-media-controls {
         display: none !important;
     }
@@ -37,7 +36,6 @@
         display: none !important;
     }
 
-    /* Enhanced button hover effects */
     .btn-primary {
         transition: all 0.3s ease;
         transform: translateY(0);
@@ -49,7 +47,6 @@
         }
     }
 
-    /* Smooth animations */
     .content-overlay {
         z-index: 3 !important;
         min-height: 100vh !important;
@@ -59,7 +56,6 @@
         }
     }
 
-    /* Stagger animation delays */
     h1 {
         animation-delay: 0.2s;
     }
@@ -95,7 +91,6 @@
     }
 }
 
-/* Keyframe animations */
 @keyframes fade-in-up {
     from {
         opacity: 0;
@@ -108,7 +103,6 @@
     }
 }
 
-/* Responsive adjustments for mobile */
 @include media-breakpoint-down(md) {
     .video-showcase {
         .display-1 {

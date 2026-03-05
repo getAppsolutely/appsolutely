@@ -55,8 +55,7 @@
 // Swiper CSS
 @import "swiper/css/bundle";
 
-// 6. Component imports
-@import "components/mixins";
+// 6. Component imports (Bootstrap uses @import; components load in same scope for mixin access)
 @import "components/common";
 @import "components/lazy-loading";
 @import "components/header";

@@ -1,5 +1,4 @@
-// Import animation mixins
-@import "mixins";
+@use "mixins" as *;
 
 // Hero banner container
 .hero-banner {
