@@ -144,7 +144,7 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-8">
                         <div class="table-responsive">
-                            <table class="table table-hover">
+                            <table class="specifications-section__table table table-hover">
                                 <thead>
                                     <tr>
                                         <th scope="col">Specification</th>

@@ -1,4 +1,4 @@
-<div>
+<div class="hero-banner__wrapper">
     @if (!empty($displayOptions['heroes']))
         @foreach ($displayOptions['heroes'] as $hero)
             <div class="hero-banner {{ $style ?? '' }}">

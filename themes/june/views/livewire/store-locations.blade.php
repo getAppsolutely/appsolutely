@@ -4,19 +4,19 @@
         @if ($displayOptions['title'] || $displayOptions['subtitle'] || $displayOptions['description'])
             <div class="store-locations__header text-center mb-5">
                 @if ($displayOptions['title'])
-                    <h2 class="display-5 fw-bold mb-3">
+                    <h2 class="store-locations__title display-5 fw-bold mb-3">
                         {{ $displayOptions['title'] }}
                     </h2>
                 @endif
 
                 @if ($displayOptions['subtitle'])
-                    <h3 class="h4 mb-4">
+                    <h3 class="store-locations__subtitle h4 mb-4">
                         {{ $displayOptions['subtitle'] }}
                     </h3>
                 @endif
 
                 @if ($displayOptions['description'])
-                    <p class="lead">
+                    <p class="store-locations__description lead">
                         {{ $displayOptions['description'] }}
                     </p>
                 @endif
@@ -357,9 +357,10 @@
 
         <!-- Optional Map Integration -->
         @if ($displayOptions['show_map'] && !empty($displayOptions['locations']) && $displayOptions['map_api_key'])
-            <div class="mt-5">
-                <h4 class="mb-3">Store Locations Map</h4>
-                <div id="store-locations-map" style="height: 400px; border-radius: 8px;" class="border"></div>
+            <div class="store-locations__map-section mt-5">
+                <h4 class="store-locations__map-title mb-3">Store Locations Map</h4>
+                <div id="store-locations-map" class="store-locations__map border"
+                    style="height: 400px; border-radius: 8px;"></div>
             </div>
 
             <script>

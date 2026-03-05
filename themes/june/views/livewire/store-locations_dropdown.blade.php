@@ -4,19 +4,19 @@
         @if ($displayOptions['title'] || $displayOptions['subtitle'] || $displayOptions['description'])
             <div class="store-locations-dropdown__header text-center mb-5">
                 @if ($displayOptions['title'])
-                    <h2 class="display-5 fw-bold mb-3">
+                    <h2 class="store-locations-dropdown__title display-5 fw-bold mb-3">
                         {{ $displayOptions['title'] }}
                     </h2>
                 @endif
 
                 @if ($displayOptions['subtitle'])
-                    <h3 class="h4 mb-4">
+                    <h3 class="store-locations-dropdown__subtitle h4 mb-4">
                         {{ $displayOptions['subtitle'] }}
                     </h3>
                 @endif
 
                 @if ($displayOptions['description'])
-                    <p class="lead">
+                    <p class="store-locations-dropdown__description lead">
                         {{ $displayOptions['description'] }}
                     </p>
                 @endif

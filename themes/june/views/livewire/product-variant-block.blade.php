@@ -126,7 +126,7 @@
                         }
                     }
                 "
-                class="product-variant-wrapper">
+                class="product-variant-block__alpine-root">
 
                 {{-- Embedded product data as JSON for reliable parsing --}}
                 <script type="application/json" data-product>@json($product)</script>

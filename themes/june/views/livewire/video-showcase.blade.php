@@ -74,7 +74,8 @@
 
     <!-- CTA Button - Bottom Center -->
     @if ($displayOptions['cta_text'] && $displayOptions['cta_link'])
-        <div class="position-absolute start-50 translate-middle-x" style="z-index: 4; bottom: 3rem;">
+        <div class="video-showcase__cta position-absolute start-50 translate-middle-x"
+            style="z-index: 4; bottom: 3rem;">
             <a href="{{ $displayOptions['cta_link'] }}" class="btn btn-light btn-lg px-3 py-2 fs-6 fw-bold rounded-3">
                 {{ $displayOptions['cta_text'] }}
             </a>

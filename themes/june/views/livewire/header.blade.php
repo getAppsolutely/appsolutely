@@ -5,12 +5,12 @@
         <div class="header__container container container-responsive d-flex align-items-center justify-content-between">
             <!-- Left: Logo -->
             <div class="header__left d-flex align-items-center flex-shrink-0">
-                <a href="{{ route('home') }}" class="navbar-brand m-0">
+                <a href="{{ route('home') }}" class="header__logo navbar-brand m-0">
                     @if ($displayOptions['logo'])
                         <img src="{{ asset_url('assets/images/logo-dark.webp') }}" alt="{{ site_title() }}"
-                            height="40" class="logo-dark">
+                            height="40" class="header__logo-img header__logo-img--dark">
                         <img src="{{ asset_url('assets/images/logo.webp') }}" alt="{{ site_title() }}" height="40"
-                            class="logo-light">
+                            class="header__logo-img header__logo-img--light">
                     @else
                         <span>{{ site_title() }}</span>
                     @endif
@@ -28,9 +28,9 @@
                     <ul class="navbar-nav flex-row align-items-center">
                         @foreach ($mainNavigation as $item)
                             <li
-                                class="nav-item ms-2 me-2 position-relative {{ $item->children->isNotEmpty() ? 'has-submenu' : '' }}">
+                                class="header__nav-item nav-item ms-2 me-2 position-relative {{ $item->children->isNotEmpty() ? 'header__nav-item--has-submenu has-submenu' : '' }}">
                                 @if ($item->children->isNotEmpty())
-                                    <a class="nav-link text-uppercase" href="#" role="button">
+                                    <a class="header__nav-link nav-link text-uppercase" href="#" role="button">
                                         @if ($item->icon)
                                             <i class="{{ $item->icon }} me-1" aria-hidden="true"></i>
                                         @endif
@@ -98,7 +98,7 @@
                                         </li>
                                     </ul>
                                 @else
-                                    <a class="nav-link text-uppercase {{ request()->routeIs($item->url) ? 'active' : '' }}"
+                                    <a class="header__nav-link nav-link text-uppercase {{ request()->routeIs($item->url) ? 'header__nav-link--active active' : '' }}"
                                         href="{{ app_uri($item->url) }}" target="{{ $item->target->value }}">
                                         @if ($item->icon)
                                             <i class="{{ $item->icon }} me-1" aria-hidden="true"></i>
@@ -130,8 +130,9 @@
                 @if ($mainNavigation->isNotEmpty())
                     <ul class="navbar-nav flex-column align-items-stretch">
                         @foreach ($mainNavigation as $item)
-                            <li class="nav-item {{ $item->children->isNotEmpty() ? 'has-submenu' : '' }}">
-                                <a class="nav-link text-uppercase {{ request()->routeIs($item->url) ? 'active' : '' }}"
+                            <li
+                                class="header__nav-item nav-item {{ $item->children->isNotEmpty() ? 'header__nav-item--has-submenu has-submenu' : '' }}">
+                                <a class="header__nav-link nav-link text-uppercase {{ request()->routeIs($item->url) ? 'header__nav-link--active active' : '' }}"
                                     href="{{ app_uri($item->url) }}" target="{{ $item->target->value }}">
                                     @if ($item->icon)
                                         <i class="{{ $item->icon }} me-1" aria-hidden="true"></i>
