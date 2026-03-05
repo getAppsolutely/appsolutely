@@ -50,6 +50,7 @@ function initToTopButton(): void {
     if (!toTop || !nav) return;
 
     function updateVisibility(): void {
+        if (!toTop) return;
         if (window.scrollY > SCROLL_THRESHOLD) {
             toTop.classList.add(TO_TOP_VISIBLE_CLASS);
         } else {
