@@ -3,7 +3,7 @@
         @foreach ($displayOptions['heroes'] as $hero)
             <div class="hero-banner {{ $style ?? '' }}">
                 @if (($hero['type'] ?? 'image') === 'video')
-                    <div class="hero-video-container position-absolute top-0 start-0 w-100 h-100">
+                    <div class="hero-banner__video-wrap position-absolute top-0 start-0 w-100 h-100">
                         <video class="lazy w-100 h-100 object-fit-cover" controls preload="none">
                             <source data-src="{{ asset_url($hero['url']) }}" type="video/mp4">
                             Your browser does not support the video tag.
@@ -11,7 +11,7 @@
                     </div>
                 @else
                     @if ($style == 'fullscreen')
-                        <div class="lazy lazy-bg hero-image-container" data-bg="{{ asset_url($hero['url']) }}">
+                        <div class="hero-banner__image-wrap lazy lazy-bg" data-bg="{{ asset_url($hero['url']) }}">
                         </div>
                     @else
                         <img class="lazy w-100 h-auto d-block" data-src="{{ asset_url($hero['url']) }}"
@@ -21,7 +21,7 @@
 
                 <!-- Content Overlay -->
                 @if (!empty($hero['model']) || !empty($hero['title']) || !empty($hero['subtitle']) || !empty($hero['link']))
-                    <div class="hero-banner-caption d-flex align-items-center justify-content-center">
+                    <div class="hero-banner__caption d-flex align-items-center justify-content-center">
                         <div class="container text-center text-white">
                             <div class="row justify-content-center">
                                 <div class="col-12 col-lg-8 col-xl-6">
@@ -59,7 +59,8 @@
                 @endif
 
                 <!-- Optional Overlay for better text readability -->
-                <div class="hero-overlay position-absolute top-0 start-0 w-100 h-100" style="opacity: 0.3; z-index: 1;">
+                <div class="hero-banner__overlay position-absolute top-0 start-0 w-100 h-100"
+                    style="opacity: 0.3; z-index: 1;">
                 </div>
 
                 @include('components.overseas-model-notice', [

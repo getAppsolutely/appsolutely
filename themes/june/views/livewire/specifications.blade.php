@@ -1,5 +1,5 @@
 <section class="specifications-section py-5">
-    <div class="container">
+    <div class="specifications-section__container container">
         <!-- Section Header -->
         @if ($displayOptions['title'] || $displayOptions['subtitle'] || $displayOptions['description'])
             <div class="specifications-section__header text-center mb-5">

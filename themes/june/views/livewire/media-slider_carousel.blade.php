@@ -2,20 +2,20 @@
     $sliderId = 'mediaSlider-' . $this->getId();
 @endphp
 
-<div class="media-slider-carousel-container media-slider">
+<div class="media-slider-carousel">
     {{-- Title, Subtitle, Description Section --}}
     @if (!empty($displayOptions['title']) || !empty($displayOptions['subtitle']) || !empty($displayOptions['description']))
-        <div class="media-slider-header container">
+        <div class="media-slider-carousel__header container">
             @if (!empty($displayOptions['title']))
-                <h2 class="media-slider-title">{{ $displayOptions['title'] }}</h2>
+                <h2 class="media-slider-carousel__title">{{ $displayOptions['title'] }}</h2>
             @endif
 
             @if (!empty($displayOptions['subtitle']))
-                <h3 class="media-slider-subtitle">{{ $displayOptions['subtitle'] }}</h3>
+                <h3 class="media-slider-carousel__subtitle">{{ $displayOptions['subtitle'] }}</h3>
             @endif
 
             @if (!empty($displayOptions['description']))
-                <div class="media-slider-description">
+                <div class="media-slider-carousel__description">
                     @if (is_array($displayOptions['description']))
                         @foreach ($displayOptions['description'] as $desc)
                             <p>{{ $desc }}</p>
@@ -30,21 +30,22 @@
 
     {{-- Navigation Controls --}}
     @if (!empty($displayOptions['slides']) && count($displayOptions['slides']) > 1)
-        <div class="media-slider-controls container">
-            <div class="media-slide-caption-container">
-                <div class="title-slider">
-                    <div class="title-slider-wrapper">
+        <div class="media-slider-carousel__controls container">
+            <div class="media-slider-carousel__caption-wrap">
+                <div class="media-slider-carousel__title-slider">
+                    <div class="media-slider-carousel__title-slider-inner">
                         @foreach ($displayOptions['slides'] as $index => $slide)
-                            <div class="title-slide @if ($index === 0) active @endif"
+                            <div class="media-slider-carousel__title-slide @if ($index === 0) active @endif"
                                 data-slide-index="{{ $index }}">
                                 @if (!empty($slide['title']))
-                                    <h4 class="slide-title">{{ $slide['title'] }}</h4>
+                                    <h4 class="media-slider-carousel__slide-title">{{ $slide['title'] }}</h4>
                                 @endif
                                 @if (!empty($slide['subtitle']))
-                                    <p class="slide-subtitle">{{ $slide['subtitle'] }}</p>
+                                    <p class="media-slider-carousel__slide-subtitle">{{ $slide['subtitle'] }}</p>
                                 @endif
                                 @if (!empty($slide['link']))
-                                    <a href="{{ $slide['link'] }}" class="btn btn-dark slide-btn">
+                                    <a href="{{ $slide['link'] }}"
+                                        class="media-slider-carousel__slide-btn btn btn-dark">
                                         Learn More
                                     </a>
                                 @endif
@@ -53,7 +54,7 @@
                     </div>
                 </div>
             </div>
-            <div class="media-slider-buttons">
+            <div class="media-slider-carousel__nav-buttons">
                 <div class="swiper-button-prev" data-slider-id="{{ $sliderId }}">
                     <i class="bi bi-chevron-left"></i>
                 </div>
@@ -70,16 +71,16 @@
             <div class="swiper-wrapper">
                 @foreach ($displayOptions['slides'] as $index => $slide)
                     <div class="swiper-slide">
-                        <div class="media-slide-content">
+                        <div class="media-slider-carousel__slide-content">
                             @if (($slide['type'] ?? 'image') === 'video')
-                                <div class="media-slide-video">
+                                <div class="media-slider-carousel__slide-video">
                                     <video class="lazy" data-src="{{ asset_url($slide['url']) }}" controls
                                         preload="none">
                                         Your browser does not support the video tag.
                                     </video>
                                 </div>
                             @else
-                                <div class="media-slide-image">
+                                <div class="media-slider-carousel__slide-image">
                                     <img class="lazy" data-src="{{ asset_url($slide['url']) }}"
                                         alt="{{ $slide['image_alt'] ?? '' }}" src="">
                                 </div>

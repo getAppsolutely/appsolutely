@@ -1,12 +1,3 @@
-// fullscreen styles
-.media-slider {
-    padding-top: 4rem;
-    padding-bottom: 2rem;
-    @include media-breakpoint-down(xxl) {
-        padding-bottom: 0;
-    }
-}
-
 // Bootstrap carousel fullscreen controls
 .section-full {
     display: flex;
@@ -15,7 +6,7 @@
     height: auto;
 
     // Carousel wrapper (flexible, minimum 60vh, prefers 80vh, can shrink if needed)
-    .media-slider-carousel-wrapper {
+    .media-slider-fullscreen__carousel {
         flex: 0 1 80vh;
         min-height: 60vh;
         max-height: 80vh;
@@ -38,7 +29,7 @@
     }
 
     // Items section (flexible, minimum 20vh, can grow)
-    .media-slider-items-section {
+    .media-slider-fullscreen__items {
         flex: 1 1 auto;
         min-height: 20vh;
         background-color: $light;
@@ -46,7 +37,7 @@
         align-items: center;
         padding: 1.5rem 0;
 
-        .media-slider-item-card {
+        .media-slider-fullscreen__item {
             height: 100%;
             min-height: 280px;
             display: flex;
@@ -64,7 +55,7 @@
                 box-shadow: 0 4px 16px $black-alpha-12;
             }
 
-            .media-slider-item-image-wrapper {
+            .media-slider-fullscreen__item-image-wrap {
                 flex: 1 1 auto;
                 min-height: 120px;
                 max-height: 200px;
@@ -72,7 +63,7 @@
                 overflow: hidden;
                 background-color: $lazy-loading-shimmer-start;
 
-                .media-slider-item-image {
+                .media-slider-fullscreen__item-image {
                     width: 100%;
                     height: 100%;
                     object-fit: cover;
@@ -80,14 +71,14 @@
                 }
             }
 
-            .media-slider-item-content {
+            .media-slider-fullscreen__item-content {
                 flex: 0 0 auto;
                 padding: 1rem;
                 display: flex;
                 flex-direction: column;
                 gap: 0.75rem;
 
-                .media-slider-item-name {
+                .media-slider-fullscreen__item-name {
                     font-size: 1.125rem;
                     font-weight: 600;
                     margin: 0;
@@ -97,12 +88,12 @@
                     overflow-wrap: break-word;
                 }
 
-                .media-slider-item-actions {
+                .media-slider-fullscreen__item-actions {
                     display: flex;
                     gap: 0.5rem;
                     justify-content: center;
 
-                    .media-slider-item-btn {
+                    .media-slider-fullscreen__item-btn {
                         flex: 1;
                         padding: 0.5rem 0.75rem;
                         font-size: 0.875rem;
@@ -149,7 +140,7 @@
     }
 }
 
-.media-slider-caption {
+.media-slider-fullscreen__caption {
     @extend %overlay-caption;
 
     top: 40% !important;
@@ -170,31 +161,37 @@
     }
 }
 
-.media-slider-btn {
+.media-slider-fullscreen__btn {
     @extend %overlay-btn;
 }
 
 // Carousel styles
-.media-slider-carousel-container {
-    .media-slider-header {
+.media-slider-carousel {
+    padding-top: 4rem;
+    padding-bottom: 2rem;
+    @include media-breakpoint-down(xxl) {
+        padding-bottom: 0;
+    }
+
+    .media-slider-carousel__header {
         margin-bottom: 1rem;
         padding: 0 1rem;
 
-        .media-slider-title {
+        .media-slider-carousel__title {
             font-size: 2rem;
             font-weight: 400;
             margin-bottom: 0.5rem;
             color: var(--bs-dark);
         }
 
-        .media-slider-subtitle {
+        .media-slider-carousel__subtitle {
             font-size: 1.5rem;
             font-weight: 400;
             margin-bottom: 1rem;
             color: var(--bs-secondary);
         }
 
-        .media-slider-description {
+        .media-slider-carousel__description {
             font-size: 1.1rem;
             line-height: 1.6;
             color: var(--bs-body-color);
@@ -244,7 +241,7 @@
                 flex-shrink: 0;
             }
 
-            .media-slide-content {
+            .media-slider-carousel__slide-content {
                 width: 100%;
                 height: 100%;
                 position: relative;
@@ -267,8 +264,8 @@
                 }
             }
 
-            .media-slide-image,
-            .media-slide-video {
+            .media-slider-carousel__slide-image,
+            .media-slider-carousel__slide-video {
                 width: 100%;
                 height: 100%;
                 position: relative;
@@ -282,7 +279,7 @@
                 }
             }
 
-            .media-slide-caption {
+            .media-slider-carousel__slide-caption {
                 position: absolute;
                 bottom: 0;
                 left: 0;
@@ -292,20 +289,20 @@
                 padding: 2rem 1.5rem 1.5rem;
                 text-align: left;
 
-                .slide-title {
+                .media-slider-carousel__slide-title {
                     font-size: 1.5rem;
                     font-weight: 600;
                     margin-bottom: 0.5rem;
                     color: $white;
                 }
 
-                .slide-subtitle {
+                .media-slider-carousel__slide-subtitle {
                     font-size: 1rem;
                     margin-bottom: 1rem;
                     opacity: 0.9;
                 }
 
-                .slide-btn {
+                .media-slider-carousel__slide-btn {
                     background: var(--bs-primary);
                     border: none;
                     padding: 0.5rem 1.5rem;
@@ -330,29 +327,29 @@
     }
 
     // External Navigation Controls
-    .media-slider-controls {
+    .media-slider-carousel__controls {
         display: flex;
         justify-content: space-between;
         align-items: center;
         gap: 1rem;
         margin-bottom: 1rem;
 
-        .media-slide-caption-container {
+        .media-slider-carousel__caption-wrap {
             flex: 1;
             margin-right: 1rem;
 
-            .title-slider {
+            .media-slider-carousel__title-slider {
                 position: relative;
                 overflow: hidden;
                 display: flex;
                 align-items: center;
 
-                .title-slider-wrapper {
+                .media-slider-carousel__title-slider-inner {
                     position: relative;
                     transition: transform 0.5s ease;
                     width: 100%;
 
-                    .title-slide {
+                    .media-slider-carousel__title-slide {
                         opacity: 0;
                         transform: translateX(20px);
                         transition: all 0.5s ease;
@@ -372,21 +369,21 @@
                             position: relative;
                         }
 
-                        .slide-title {
+                        .media-slider-carousel__slide-title {
                             font-size: 1rem;
                             margin-bottom: 0.5rem;
                             color: var(--bs-dark);
                             line-height: 1.2;
                         }
 
-                        .slide-subtitle {
+                        .media-slider-carousel__slide-subtitle {
                             font-size: 1rem;
                             margin-bottom: 1rem;
                             color: var(--bs-secondary);
                             line-height: 1.4;
                         }
 
-                        .slide-btn {
+                        .media-slider-carousel__slide-btn {
                             background: var(--bs-primary);
                             border: none;
                             padding: 0.5rem 1.5rem;
@@ -405,7 +402,7 @@
             }
         }
 
-        .media-slider-buttons {
+        .media-slider-carousel__nav-buttons {
             display: flex;
             gap: 1rem;
 
@@ -455,33 +452,33 @@
 // Responsive adjustments for fullscreen slider
 @include media-breakpoint-down(xxl) {
     .section-full {
-        .media-slider-carousel-wrapper {
+        .media-slider-fullscreen__carousel {
             flex: 0 1 75vh;
             min-height: 55vh;
             max-height: 75vh;
         }
 
-        .media-slider-items-section {
+        .media-slider-fullscreen__items {
             min-height: 25vh;
             padding: 1.25rem 0;
 
-            .media-slider-item-card {
+            .media-slider-fullscreen__item {
                 min-height: 260px;
 
-                .media-slider-item-image-wrapper {
+                .media-slider-fullscreen__item-image-wrap {
                     min-height: 110px;
                     max-height: 180px;
                 }
 
-                .media-slider-item-content {
+                .media-slider-fullscreen__item-content {
                     padding: 0.875rem;
 
-                    .media-slider-item-name {
+                    .media-slider-fullscreen__item-name {
                         font-size: 1rem;
                     }
 
-                    .media-slider-item-actions {
-                        .media-slider-item-btn {
+                    .media-slider-fullscreen__item-actions {
+                        .media-slider-fullscreen__item-btn {
                             padding: 0.45rem 0.65rem;
                             font-size: 0.8125rem;
                         }
@@ -491,18 +488,18 @@
         }
     }
 
-    .media-slider-carousel-container {
-        .media-slider-controls {
+    .media-slider-carousel {
+        .media-slider-carousel__controls {
             flex-direction: column;
             align-items: center;
             gap: 1rem;
 
-            .media-slide-caption-container {
+            .media-slider-carousel__caption-wrap {
                 width: 100%;
                 margin-right: 0;
             }
 
-            .media-slider-buttons {
+            .media-slider-carousel__nav-buttons {
                 display: flex;
                 gap: 1rem;
                 justify-content: flex-end;
@@ -520,35 +517,35 @@
 
 @include media-breakpoint-down(lg) {
     .section-full {
-        .media-slider-carousel-wrapper {
+        .media-slider-fullscreen__carousel {
             flex: 0 1 65vh;
             min-height: 50vh;
             max-height: 65vh;
         }
 
-        .media-slider-items-section {
+        .media-slider-fullscreen__items {
             min-height: 35vh;
             padding: 1.25rem 0;
 
-            .media-slider-item-card {
+            .media-slider-fullscreen__item {
                 min-height: 240px;
 
-                .media-slider-item-image-wrapper {
+                .media-slider-fullscreen__item-image-wrap {
                     min-height: 100px;
                     max-height: 160px;
                 }
 
-                .media-slider-item-content {
+                .media-slider-fullscreen__item-content {
                     padding: 1rem;
 
-                    .media-slider-item-name {
+                    .media-slider-fullscreen__item-name {
                         font-size: 1.0625rem;
                     }
 
-                    .media-slider-item-actions {
+                    .media-slider-fullscreen__item-actions {
                         gap: 0.5rem;
 
-                        .media-slider-item-btn {
+                        .media-slider-fullscreen__item-btn {
                             padding: 0.5rem 0.75rem;
                             font-size: 0.875rem;
                         }
@@ -558,13 +555,13 @@
         }
     }
 
-    .media-slider-carousel-container {
-        .media-slider-header {
-            .media-slider-title {
+    .media-slider-carousel {
+        .media-slider-carousel__header {
+            .media-slider-carousel__title {
                 font-size: 2rem;
             }
 
-            .media-slider-subtitle {
+            .media-slider-carousel__subtitle {
                 font-size: 1.25rem;
             }
         }
@@ -577,22 +574,22 @@
             }
         }
 
-        .media-slider-controls {
-            .media-slide-caption-container {
-                .title-slider {
-                    .title-slide {
-                        .slide-title {
+        .media-slider-carousel__controls {
+            .media-slider-carousel__caption-wrap {
+                .media-slider-carousel__title-slider {
+                    .media-slider-carousel__title-slide {
+                        .media-slider-carousel__slide-title {
                             font-size: 1.25rem;
                         }
 
-                        .slide-subtitle {
+                        .media-slider-carousel__slide-subtitle {
                             font-size: 0.9rem;
                         }
                     }
                 }
             }
 
-            .media-slider-buttons {
+            .media-slider-carousel__nav-buttons {
                 .swiper-button-next,
                 .swiper-button-prev {
                     width: 36px;
@@ -609,13 +606,13 @@
 
 @include media-breakpoint-down(md) {
     .section-full {
-        .media-slider-carousel-wrapper {
+        .media-slider-fullscreen__carousel {
             flex: 0 1 55vh;
             min-height: 45vh;
             max-height: 55vh;
         }
 
-        .media-slider-items-section {
+        .media-slider-fullscreen__items {
             min-height: 45vh;
             padding: 1.25rem 0;
 
@@ -624,26 +621,26 @@
                 padding-right: 0.75rem;
             }
 
-            .media-slider-item-card {
+            .media-slider-fullscreen__item {
                 min-height: 220px;
 
-                .media-slider-item-image-wrapper {
+                .media-slider-fullscreen__item-image-wrap {
                     min-height: 90px;
                     max-height: 140px;
                 }
 
-                .media-slider-item-content {
+                .media-slider-fullscreen__item-content {
                     padding: 0.875rem;
 
-                    .media-slider-item-name {
+                    .media-slider-fullscreen__item-name {
                         font-size: 1rem;
                     }
 
-                    .media-slider-item-actions {
+                    .media-slider-fullscreen__item-actions {
                         flex-direction: column;
                         gap: 0.5rem;
 
-                        .media-slider-item-btn {
+                        .media-slider-fullscreen__item-btn {
                             width: 100%;
                             padding: 0.5rem 0.75rem;
                             font-size: 0.875rem;
@@ -654,15 +651,15 @@
         }
     }
 
-    .media-slider-carousel-container {
-        .media-slider-header {
+    .media-slider-carousel {
+        .media-slider-carousel__header {
             margin-bottom: 1.5rem;
 
-            .media-slider-title {
+            .media-slider-carousel__title {
                 font-size: 1.75rem;
             }
 
-            .media-slider-subtitle {
+            .media-slider-carousel__subtitle {
                 font-size: 1.1rem;
             }
         }
@@ -675,19 +672,19 @@
             }
         }
 
-        .media-slider-controls {
-            .media-slide-caption-container {
-                .title-slider {
-                    .title-slide {
-                        .slide-title {
+        .media-slider-carousel__controls {
+            .media-slider-carousel__caption-wrap {
+                .media-slider-carousel__title-slider {
+                    .media-slider-carousel__title-slide {
+                        .media-slider-carousel__slide-title {
                             font-size: 1.1rem;
                         }
 
-                        .slide-subtitle {
+                        .media-slider-carousel__slide-subtitle {
                             font-size: 0.85rem;
                         }
 
-                        .slide-btn {
+                        .media-slider-carousel__slide-btn {
                             padding: 0.4rem 1.2rem;
                             font-size: 0.8rem;
                         }
@@ -695,7 +692,7 @@
                 }
             }
 
-            .media-slider-buttons {
+            .media-slider-carousel__nav-buttons {
                 .swiper-button-next,
                 .swiper-button-prev {
                     width: 32px;
@@ -711,7 +708,7 @@
 }
 
 // Simple Media Slider Styles
-.media-slider-simple-container {
+.media-slider-simple {
     width: 100%;
     height: 100%;
     position: relative;
@@ -729,8 +726,8 @@
             align-items: center;
             overflow: hidden;
 
-            .media-slide-image,
-            .media-slide-video {
+            .media-slider-simple__slide-image,
+            .media-slider-simple__slide-video {
                 width: 100%;
                 height: 100%;
                 position: relative;
@@ -761,7 +758,7 @@
     }
 
     // Bottom center navigation controls
-    .simple-slider-controls {
+    .media-slider-simple__controls {
         position: absolute;
         bottom: 20px;
         left: 50%;
@@ -811,13 +808,13 @@
 
 @include media-breakpoint-down(sm) {
     .section-full {
-        .media-slider-carousel-wrapper {
+        .media-slider-fullscreen__carousel {
             flex: 0 1 50vh;
             min-height: 40vh;
             max-height: 50vh;
         }
 
-        .media-slider-items-section {
+        .media-slider-fullscreen__items {
             min-height: 50vh;
             padding: 1rem 0;
 
@@ -830,23 +827,23 @@
                 --bs-gutter-x: 0.5rem;
             }
 
-            .media-slider-item-card {
+            .media-slider-fullscreen__item {
                 min-height: 200px;
 
-                .media-slider-item-image-wrapper {
+                .media-slider-fullscreen__item-image-wrap {
                     min-height: 80px;
                     max-height: 120px;
                 }
 
-                .media-slider-item-content {
+                .media-slider-fullscreen__item-content {
                     padding: 0.75rem;
 
-                    .media-slider-item-name {
+                    .media-slider-fullscreen__item-name {
                         font-size: 0.9375rem;
                     }
 
-                    .media-slider-item-actions {
-                        .media-slider-item-btn {
+                    .media-slider-fullscreen__item-actions {
+                        .media-slider-fullscreen__item-btn {
                             padding: 0.45rem 0.65rem;
                             font-size: 0.8125rem;
                         }
@@ -859,12 +856,12 @@
 
 // Responsive adjustments for simple slider
 @include media-breakpoint-down(xxl) {
-    .media-slider-simple-container {
+    .media-slider-simple {
         .swiper {
             min-height: auto !important;
         }
 
-        .simple-slider-controls {
+        .media-slider-simple__controls {
             bottom: 15px;
             gap: 0.75rem;
 

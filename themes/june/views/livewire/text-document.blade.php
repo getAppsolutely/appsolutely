@@ -1,7 +1,7 @@
 <section class="text-document py-5">
     <div class="text-document__container container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
+        <div class="text-document__row row justify-content-center">
+            <div class="text-document__content col-lg-8">
                 <!-- Title -->
                 @if ($displayOptions['title'] ?? false)
                     <h1 class="fw-bold text-dark mb-3">
@@ -39,7 +39,7 @@
 
                 <!-- Content -->
                 @if ($displayOptions['content'] ?? false)
-                    <div class="content-body markdown">
+                    <div class="text-document__body content-body markdown">
                         {!! md2html($displayOptions['content']) !!}
                     </div>
                 @endif

@@ -2,7 +2,7 @@
     $sliderId = 'mediaSlider-' . $this->getId();
 @endphp
 
-<div class="media-slider-simple-container">
+<div class="media-slider-simple">
     {{-- Swiper Carousel --}}
     @if (!empty($displayOptions['slides']))
         <div class="swiper {{ $sliderId }}" data-slider-id="{{ $sliderId }}">
@@ -10,13 +10,13 @@
                 @foreach ($displayOptions['slides'] as $index => $slide)
                     <div class="swiper-slide">
                         @if (($slide['type'] ?? 'image') === 'video')
-                            <div class="media-slide-video">
+                            <div class="media-slider-simple__slide-video">
                                 <video class="lazy" data-src="{{ asset_url($slide['url']) }}" controls preload="none">
                                     Your browser does not support the video tag.
                                 </video>
                             </div>
                         @else
-                            <div class="media-slide-image">
+                            <div class="media-slider-simple__slide-image">
                                 <img class="lazy" data-src="{{ asset_url($slide['url']) }}"
                                     alt="{{ $slide['image_alt'] ?? '' }}" src="">
                             </div>
@@ -33,7 +33,7 @@
 
         {{-- Navigation Controls at bottom center (if enabled) --}}
         @if ($displayOptions['show_controls'] && count($displayOptions['slides']) > 1)
-            <div class="simple-slider-controls">
+            <div class="media-slider-simple__controls">
                 <div class="swiper-button-prev" data-slider-id="{{ $sliderId }}">
                     <i class="bi bi-chevron-left"></i>
                 </div>
