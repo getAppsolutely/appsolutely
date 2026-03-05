@@ -123,15 +123,28 @@ function getRandomImageUrl(mapping: OptionsMapping): string | null {
 }
 
 /**
+ * Apply initial background image from URL parameter or random selection
+ */
+function applyInitialImage(
+    container: HTMLElement,
+    baseUrl: string,
+    urlValue: string | null,
+    mapping: OptionsMapping
+): void {
+    const imageUrl = urlValue ? findMatchingOption(urlValue, mapping) : getRandomImageUrl(mapping);
+    if (imageUrl) {
+        updateBackgroundImage(container, imageUrl, baseUrl);
+    }
+}
+
+/**
  * Initialize background from URL parameter or random selection
  */
 function initializeFromUrl(container: HTMLElement, baseUrl: string, triggerFieldName: string): void {
     const urlValue = getUrlParameter(triggerFieldName);
 
-    // Find the hidden field with options mapping
     const hiddenField = container.querySelector<HTMLInputElement>('input[type="hidden"][data-options-mapping]');
     if (!hiddenField) {
-        // Try again after a short delay in case form hasn't loaded yet
         setTimeout(() => {
             const delayedField = container.querySelector<HTMLInputElement>(
                 'input[type="hidden"][data-options-mapping]'
@@ -141,19 +154,7 @@ function initializeFromUrl(container: HTMLElement, baseUrl: string, triggerField
                     const mapping: OptionsMapping = JSON.parse(
                         delayedField.getAttribute('data-options-mapping') || '{}'
                     );
-                    let imageUrl: string | null = null;
-
-                    if (urlValue) {
-                        // Use URL parameter if available
-                        imageUrl = findMatchingOption(urlValue, mapping);
-                    } else {
-                        // Pick random image if no URL parameter
-                        imageUrl = getRandomImageUrl(mapping);
-                    }
-
-                    if (imageUrl) {
-                        updateBackgroundImage(container, imageUrl, baseUrl);
-                    }
+                    applyInitialImage(container, baseUrl, urlValue, mapping);
                 } catch (error) {
                     console.error('[DynamicFormInteractive] Failed to parse options mapping:', error);
                 }
@@ -164,19 +165,7 @@ function initializeFromUrl(container: HTMLElement, baseUrl: string, triggerField
 
     try {
         const mapping: OptionsMapping = JSON.parse(hiddenField.getAttribute('data-options-mapping') || '{}');
-        let imageUrl: string | null = null;
-
-        if (urlValue) {
-            // Use URL parameter if available
-            imageUrl = findMatchingOption(urlValue, mapping);
-        } else {
-            // Pick random image if no URL parameter
-            imageUrl = getRandomImageUrl(mapping);
-        }
-
-        if (imageUrl) {
-            updateBackgroundImage(container, imageUrl, baseUrl);
-        }
+        applyInitialImage(container, baseUrl, urlValue, mapping);
     } catch (error) {
         console.error('[DynamicFormInteractive] Failed to parse options mapping:', error);
     }

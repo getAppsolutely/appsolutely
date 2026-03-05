@@ -149,11 +149,23 @@ function initializeNativeFallback(container: HTMLElement): void {
 }
 
 /**
- * Check if Alpine.js has initialized a component
+ * Check if Alpine.js has initialized a component.
+ * Uses public APIs where possible; falls back to internal markers (Alpine 2/3).
+ * May need updating when Alpine releases new major versions.
  */
 function hasAlpineInitialized(element: HTMLElement): boolean {
     const alpineRoot = element.querySelector('[x-data]');
-    return !!(alpineRoot && (alpineRoot as unknown as { _x_dataStack?: unknown[] })._x_dataStack?.length);
+    if (!alpineRoot) return false;
+
+    try {
+        // Alpine 3: element.__x
+        if ((alpineRoot as unknown as { __x?: unknown }).__x !== undefined) return true;
+        // Alpine 2: element._x_dataStack
+        const stack = (alpineRoot as unknown as { _x_dataStack?: unknown[] })._x_dataStack;
+        return !!(stack && stack.length > 0);
+    } catch {
+        return false;
+    }
 }
 
 /**

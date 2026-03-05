@@ -69,9 +69,7 @@ class MediaSliderCarousel {
                         }
                     },
                     slideChange: function (this: SwiperType) {
-                        // Handle slide change events if needed
-                        self.pauseAllVideos();
-                        // Only update title slider if it exists
+                        self.pauseVideosInSlider(sliderElement);
                         if (self.hasTitleSlider(sliderId)) {
                             self.updateTitleSlider(sliderId, this.realIndex);
                         }
@@ -120,14 +118,11 @@ class MediaSliderCarousel {
                 });
             }
 
-            // Initialize Swiper
-            const swiper = new Swiper('.' + sliderId, swiperConfig);
+            // Initialize Swiper with element reference (avoids selector injection)
+            const swiper = new Swiper(sliderElement, swiperConfig);
 
             // Store swiper instance
             this.swipers.set(sliderId, swiper);
-
-            // Add video handling
-            this.handleVideoSlides(sliderElement, swiper);
         });
     }
 
@@ -178,32 +173,11 @@ class MediaSliderCarousel {
         }
     }
 
-    handleVideoSlides(sliderElement: HTMLElement, swiper: SwiperType): void {
-        const videoSlides = sliderElement.querySelectorAll<HTMLVideoElement>('.swiper-slide video');
-
-        videoSlides.forEach((video: HTMLVideoElement) => {
-            // Pause video when slide changes
-            swiper.on('slideChange', function () {
-                video.pause();
-            });
-
-            // Auto-play video when slide becomes active
-            swiper.on('slideChangeTransitionEnd', function () {
-                const activeSlide = sliderElement.querySelector('.swiper-slide-active');
-                const activeVideo = activeSlide?.querySelector<HTMLVideoElement>('video');
-
-                if (activeVideo && activeVideo === video) {
-                    // Optional: auto-play video in active slide
-                    // activeVideo.play();
-                }
-            });
-        });
-    }
-
-    pauseAllVideos(): void {
-        document.querySelectorAll<HTMLVideoElement>('.swiper-slide video').forEach((video: HTMLVideoElement) => {
-            video.pause();
-        });
+    /**
+     * Pause all videos within a specific slider (single handler, no per-video listeners)
+     */
+    private pauseVideosInSlider(sliderElement: HTMLElement): void {
+        sliderElement.querySelectorAll<HTMLVideoElement>('.swiper-slide video').forEach((video) => video.pause());
     }
 
     // Destroy specific slider

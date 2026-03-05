@@ -6,7 +6,8 @@
 
 // Import Lodash for utility functions
 import _ from 'lodash';
-window._ = _ as any;
+// Lodash types can conflict with @types/lodash; cast to satisfy Window augmentation
+window._ = _ as unknown as import('lodash').LoDashStatic;
 
 /**
  * Bootstrap 5.3.0 JavaScript

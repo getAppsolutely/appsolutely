@@ -10,6 +10,20 @@ export interface AssetPaths {
     };
 }
 
+// Photo gallery (from data-photos JSON)
+export interface Photo {
+    image_src: string;
+    title?: string;
+    subtitle?: string;
+    description?: string;
+    alt?: string;
+    caption?: string;
+    link?: string;
+    category?: string;
+    tags?: string[];
+    price?: string;
+}
+
 // Component interfaces
 export interface HeaderInstance {
     header: HTMLElement | null;

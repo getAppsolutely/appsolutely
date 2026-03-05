@@ -1,19 +1,7 @@
 // Photo Gallery client-side filtering
 
 import { buildUrl } from '../utils/url';
-
-interface Photo {
-    image_src: string;
-    title?: string;
-    subtitle?: string;
-    description?: string;
-    alt?: string;
-    caption?: string;
-    link?: string;
-    category?: string;
-    tags?: string[];
-    price?: string;
-}
+import type { Photo } from '../types';
 
 document.addEventListener('DOMContentLoaded', () => {
     const grid = document.getElementById('gallery-grid');

@@ -52,10 +52,16 @@ class StoreLocationsDropdown {
         }
     }
 
+    private static readonly SECTION_TO_LINK_ID: Record<string, string> = {
+        'phone-section': 'selected-location-phone',
+        'email-section': 'selected-location-email',
+        'website-section': 'selected-location-website',
+    };
+
     // Utility function to update link
     updateLink(id: string, href?: string, text?: string, displayType: string = 'flex'): void {
         const element = document.getElementById(id);
-        const linkId = id.replace('-section', '').replace('phone', 'selected-location-phone').replace('email', 'selected-location-email').replace('website', 'selected-location-website');
+        const linkId = StoreLocationsDropdown.SECTION_TO_LINK_ID[id] ?? id.replace('-section', '');
         const link = document.getElementById(linkId) as HTMLAnchorElement | null;
 
         if (element && link && href) {
@@ -72,20 +78,22 @@ class StoreLocationsDropdown {
         if (!hours) return '';
 
         // Split by comma with optional spaces (matching PHP preg_split('/\s*,\s*/', ...))
-        const lines = hours.split(/\s*,\s*/).filter(line => line.trim());
-        const rows = lines.map(line => {
-            // Split on first colon to separate day from time
-            const colonIndex = line.indexOf(':');
-            if (colonIndex === -1) {
-                // No colon found, treat entire line as day
-                return `<tr><td class="pe-2 text-nowrap">${line.trim()}</td><td class="ps-2 text-muted">-</td></tr>`;
-            }
+        const lines = hours.split(/\s*,\s*/).filter((line) => line.trim());
+        const rows = lines
+            .map((line) => {
+                // Split on first colon to separate day from time
+                const colonIndex = line.indexOf(':');
+                if (colonIndex === -1) {
+                    // No colon found, treat entire line as day
+                    return `<tr><td class="pe-2 text-nowrap">${line.trim()}</td><td class="ps-2 text-muted">-</td></tr>`;
+                }
 
-            const day = line.substring(0, colonIndex).trim();
-            const time = line.substring(colonIndex + 1).trim();
+                const day = line.substring(0, colonIndex).trim();
+                const time = line.substring(colonIndex + 1).trim();
 
-            return `<tr><td class="pe-2 text-nowrap">${day}</td><td class="ps-2 text-muted">${time.replace(/:00 /g, '').toLowerCase()}</td></tr>`;
-        }).join('');
+                return `<tr><td class="pe-2 text-nowrap">${day}</td><td class="ps-2 text-muted">${time.replace(/:00 /g, '').toLowerCase()}</td></tr>`;
+            })
+            .join('');
 
         const titleHtml = sectionTitle ? `<div class="small mb-1 fw-semibold">${sectionTitle}</div>` : '';
         const tableHtml = `<table class="table table-sm table-borderless mb-0 align-middle w-auto"><tbody>${rows}</tbody></table>`;
@@ -96,7 +104,7 @@ class StoreLocationsDropdown {
     // Generate services badges HTML
     generateServicesBadges(services?: string[]): string {
         if (!services?.length) return '';
-        return services.map(service => `<span class="badge bg-light text-dark border">${service}</span>`).join('');
+        return services.map((service) => `<span class="badge bg-light text-dark border">${service}</span>`).join('');
     }
 
     // Update location display
@@ -160,7 +168,7 @@ class StoreLocationsDropdown {
 
         const selectedOption = this.elements.select.options[this.elements.select.selectedIndex];
         const locationData = selectedOption.getAttribute('data-location');
-        
+
         if (!locationData) {
             this.toggleElement('no-selection-message', true);
             this.toggleElement('selected-location-display', false);
@@ -191,4 +199,3 @@ document.addEventListener('DOMContentLoaded', () => {
     storeLocationsDropdown.toggleElement('no-selection-message', true);
     storeLocationsDropdown.toggleElement('selected-location-display', false);
 });
-

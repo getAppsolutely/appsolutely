@@ -1,7 +1,8 @@
 /**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
+ * June Theme Entry Point
+ *
+ * Loads Bootstrap, Axios, Lodash, and theme components.
+ * Uses vanilla JavaScript with Livewire for interactivity.
  */
 
 import './bootstrap';
