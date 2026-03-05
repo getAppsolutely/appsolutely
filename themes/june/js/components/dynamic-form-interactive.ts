@@ -5,6 +5,13 @@
 
 import { buildUrl } from '../utils/url';
 
+/** Delay (ms) to wait for Livewire to render form elements before initializing */
+const LIVEWIRE_RENDER_DELAY_MS = 100;
+/** Delay (ms) to retry when hidden field with options mapping is not yet in DOM */
+const HIDDEN_FIELD_POLL_DELAY_MS = 200;
+/** Delay (ms) for ResizeObserver fallback when measuring form height */
+const FALLBACK_RESIZE_DELAY_MS = 100;
+
 interface OptionsMapping {
     [key: string]: string;
 }
@@ -113,7 +120,7 @@ function syncHeight(container: HTMLElement): void {
         cleanup = () => observer.disconnect();
     } else {
         window.addEventListener('resize', updateHeight);
-        setTimeout(updateHeight, 100);
+        setTimeout(updateHeight, FALLBACK_RESIZE_DELAY_MS);
         cleanup = () => window.removeEventListener('resize', updateHeight);
     }
 
@@ -168,7 +175,7 @@ function initializeFromUrl(container: HTMLElement, baseUrl: string, triggerField
                     console.error('[DynamicFormInteractive] Failed to parse options mapping:', error);
                 }
             }
-        }, 200);
+        }, HIDDEN_FIELD_POLL_DELAY_MS);
         return;
     }
 
@@ -247,7 +254,7 @@ function initializeComponent(container: HTMLElement): void {
     // Setup form listeners (with delay to ensure form is rendered)
     setTimeout(() => {
         setupFormListeners(container, baseUrl, triggerFieldName);
-    }, 100);
+    }, LIVEWIRE_RENDER_DELAY_MS);
 }
 
 /**
@@ -268,17 +275,17 @@ function initializeAllComponents(): void {
 function setupLivewireListeners(): void {
     // Re-initialize on Livewire load
     document.addEventListener('livewire:load', () => {
-        setTimeout(initializeAllComponents, 100);
+        setTimeout(initializeAllComponents, LIVEWIRE_RENDER_DELAY_MS);
     });
 
     // Re-initialize on Livewire update
     document.addEventListener('livewire:update', () => {
-        setTimeout(initializeAllComponents, 100);
+        setTimeout(initializeAllComponents, LIVEWIRE_RENDER_DELAY_MS);
     });
 
     // Re-initialize on Livewire navigation (SPA)
     document.addEventListener('livewire:navigated', () => {
-        setTimeout(initializeAllComponents, 100);
+        setTimeout(initializeAllComponents, LIVEWIRE_RENDER_DELAY_MS);
     });
 }
 
@@ -288,10 +295,10 @@ function setupLivewireListeners(): void {
 function init(): void {
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(initializeAllComponents, 100);
+            setTimeout(initializeAllComponents, LIVEWIRE_RENDER_DELAY_MS);
         });
     } else {
-        setTimeout(initializeAllComponents, 100);
+        setTimeout(initializeAllComponents, LIVEWIRE_RENDER_DELAY_MS);
     }
 
     setupLivewireListeners();

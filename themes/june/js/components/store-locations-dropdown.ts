@@ -1,16 +1,6 @@
 // Store Locations Dropdown Component
 
-/**
- * Escape string for safe use in HTML text content (prevents XSS).
- */
-function escapeHtml(text: string): string {
-    return text
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-}
+import { escapeHtml } from '../utils/escape';
 
 interface StoreLocation {
     name?: string;

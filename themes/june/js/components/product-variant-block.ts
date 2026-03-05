@@ -85,10 +85,16 @@ function initializeNativeFallback(container: HTMLElement): void {
             priceEl.textContent = String(price);
         }
 
-        // Update specs
+        // Update specs (use textContent to prevent XSS)
         const specsList = container.querySelector<HTMLElement>('.product-variant-block__specs .list-group');
         if (specsList && variant?.specs) {
-            specsList.innerHTML = variant.specs.map((spec) => `<li class="list-group-item">${spec}</li>`).join('');
+            specsList.innerHTML = '';
+            variant.specs.forEach((spec) => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item';
+                li.textContent = spec;
+                specsList.appendChild(li);
+            });
         }
 
         // Update color options

@@ -154,28 +154,58 @@ export class Header implements HeaderInstance {
 
 // Single header instance; recreated on resize with proper cleanup
 let headerInstance: Header | null = null;
+let debouncedInitHeader: (() => void) | null = null;
+let scrollObserver: IntersectionObserver | null = null;
 
 function initHeader(): void {
     headerInstance?.destroy();
     headerInstance = new Header();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    initHeader();
-
-    // Scroll state: add .scrolled when #scrollTrigger leaves viewport
+function setupScrollObserver(): void {
+    scrollObserver?.disconnect();
     const trigger = document.getElementById('scrollTrigger');
     const navbar = document.getElementById('main-header');
     if (trigger && navbar) {
-        const observer = new IntersectionObserver(
+        scrollObserver = new IntersectionObserver(
             ([entry]: IntersectionObserverEntry[]) => {
                 navbar.classList.toggle('scrolled', !entry.isIntersecting);
             },
             { rootMargin: '0px', threshold: 0 }
         );
-        observer.observe(trigger);
+        scrollObserver.observe(trigger);
+    } else {
+        scrollObserver = null;
     }
+}
 
-    // Reinitialize on resize (dropdown behavior depends on viewport width); debounced to avoid leak
-    window.addEventListener('resize', _.debounce(initHeader, 150));
+function setupResizeListener(): void {
+    if (debouncedInitHeader) {
+        window.removeEventListener('resize', debouncedInitHeader);
+    }
+    debouncedInitHeader = _.debounce(initHeader, 150);
+    window.addEventListener('resize', debouncedInitHeader);
+}
+
+function cleanup(): void {
+    headerInstance?.destroy();
+    headerInstance = null;
+    scrollObserver?.disconnect();
+    scrollObserver = null;
+    if (debouncedInitHeader) {
+        window.removeEventListener('resize', debouncedInitHeader);
+        debouncedInitHeader = null;
+    }
+}
+
+function init(): void {
+    initHeader();
+    setupScrollObserver();
+    setupResizeListener();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('livewire:navigated', () => {
+    cleanup();
+    init();
 });

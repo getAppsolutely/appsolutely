@@ -15,7 +15,7 @@ declare global {
             };
         };
         lazyLoadInstance?: import('vanilla-lazyload').ILazyLoadInstance;
-        lazyManager?: { update(): void };
+        lazyManager?: { update(): void; destroy(): void };
         MediaSliderCarousel?: unknown;
         openSmartMap?: (lat: number, lng: number, name?: string) => void;
         pageBuilderData?: string;

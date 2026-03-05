@@ -70,11 +70,11 @@ function initToTopButton(): void {
     let ticking = false;
     window.addEventListener('scroll', () => {
         if (ticking) return;
+        ticking = true;
         window.requestAnimationFrame(() => {
             updateVisibility();
             ticking = false;
         });
-        ticking = true;
     });
 }
 
@@ -90,11 +90,11 @@ function initAnchorNav(): void {
     let ticking = false;
     window.addEventListener('scroll', () => {
         if (ticking) return;
+        ticking = true;
         window.requestAnimationFrame(() => {
             updateActiveLink(links);
             ticking = false;
         });
-        ticking = true;
     });
 
     links.forEach((link) => {

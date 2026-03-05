@@ -6,6 +6,7 @@
  */
 
 import LazyLoad, { type ILazyLoadInstance, type ILazyLoadOptions } from 'vanilla-lazyload';
+import { escapeHtmlAttr } from '../utils/escape';
 
 interface LazyLoadOptions {
     rootMargin?: string;
@@ -123,18 +124,11 @@ class LazyLoadingManager {
     }
 
     /**
-     * Escape string for safe use in HTML attributes (prevents XSS).
-     */
-    private static escapeHtmlAttr(s: string): string {
-        return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    }
-
-    /**
      * Create lazy image element with proper attributes.
      * Uses attribute escaping to prevent XSS when src/alt/className contain user input.
      */
     static createLazyImage(src: string, alt: string = '', className: string = ''): string {
-        const e = LazyLoadingManager.escapeHtmlAttr;
+        const e = escapeHtmlAttr;
         return `<img class="lazy ${e(className)}" data-src="${e(src)}" alt="${e(alt)}" loading="lazy" />`;
     }
 
@@ -143,7 +137,7 @@ class LazyLoadingManager {
      * Uses attribute escaping to prevent XSS when src/poster/className contain user input.
      */
     static createLazyVideo(src: string, poster?: string, className: string = ''): string {
-        const e = LazyLoadingManager.escapeHtmlAttr;
+        const e = escapeHtmlAttr;
         const posterAttr = poster ? ` poster="${e(poster)}"` : '';
         return `<video class="lazy ${e(className)}" data-src="${e(src)}"${posterAttr} controls preload="none">Your browser does not support the video tag.</video>`;
     }
@@ -153,7 +147,7 @@ class LazyLoadingManager {
      * Uses attribute escaping to prevent XSS when src/className contain user input.
      */
     static createLazyBackground(src: string, className: string = ''): string {
-        const e = LazyLoadingManager.escapeHtmlAttr;
+        const e = escapeHtmlAttr;
         return `<div class="lazy lazy-bg ${e(className)}" data-bg="${e(src)}"></div>`;
     }
 }

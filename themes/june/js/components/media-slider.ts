@@ -88,8 +88,8 @@ class MediaSliderCarousel {
                     slidesPerView: 1,
                     spaceBetween: 0,
                     navigation: {
-                        nextEl: '.swiper-button-next[data-slider-id="' + sliderId + '"]',
-                        prevEl: '.swiper-button-prev[data-slider-id="' + sliderId + '"]',
+                        nextEl: `.swiper-button-next[data-slider-id="${sliderId}"]`,
+                        prevEl: `.swiper-button-prev[data-slider-id="${sliderId}"]`,
                     },
                     pagination: {
                         el: '.swiper-pagination',
@@ -102,8 +102,8 @@ class MediaSliderCarousel {
                     slidesPerView: 'auto',
                     spaceBetween: 30,
                     navigation: {
-                        nextEl: '.swiper-button-next[data-slider-id="' + sliderId + '"]',
-                        prevEl: '.swiper-button-prev[data-slider-id="' + sliderId + '"]',
+                        nextEl: `.swiper-button-next[data-slider-id="${sliderId}"]`,
+                        prevEl: `.swiper-button-prev[data-slider-id="${sliderId}"]`,
                     },
                     breakpoints: {
                         320: {

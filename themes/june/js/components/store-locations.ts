@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const lng = parseFloat(link.getAttribute('data-map-lng') || '0');
         const name = link.getAttribute('data-map-name') || '';
 
-        if (lat && lng) {
+        if (Number.isFinite(lat) && Number.isFinite(lng)) {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 openSmartMap(lat, lng, name);
