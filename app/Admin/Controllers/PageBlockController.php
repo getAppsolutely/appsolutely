@@ -49,10 +49,12 @@ final class PageBlockController extends AdminBaseController
 
     protected function blockSettingsGrid(): Grid
     {
-        return Grid::make(PageBlockSetting::query()->with(['block', 'page']), function (Grid $grid) {
+        return Grid::make(PageBlockSetting::query()->with(['block', 'blockValue', 'page']), function (Grid $grid) {
             $grid->column('id', __t('ID'))->sortable();
-            $grid->column('page.title', __t('Page'));
-            $grid->column('block.title', __t('Block'));
+            $grid->column('page.name', __t('Page'));
+            $grid->column('block_display_label', __t('Block'))->display(fn () => $this->block_display_label);
+            $grid->column('display_options_title', __t('Title'));
+            $grid->column('display_options_style', __t('Style'));
             $grid->column('remark', __t('Remark'))->editable();
             $grid->column('sort', __t('Sort'))->editable();
             $grid->column('status', __t('Status'))->switch();

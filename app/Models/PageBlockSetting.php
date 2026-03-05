@@ -10,6 +10,7 @@ use App\Models\Traits\ClearsResponseCache;
 use App\Models\Traits\ScopePublished;
 use App\Models\Traits\ScopeReference;
 use App\Models\Traits\ScopeStatus;
+use App\Services\Contracts\ManifestServiceInterface;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 final class PageBlockSetting extends Model
@@ -36,7 +37,7 @@ final class PageBlockSetting extends Model
         'expired_at'   => 'datetime',
     ];
 
-    protected $appends = [];
+    protected $appends = ['block_display_label', 'display_options_title', 'display_options_style'];
 
     /**
      * Check if block value's display_options, query_options, or theme is dirty and create new block value if needed
@@ -127,5 +128,45 @@ final class PageBlockSetting extends Model
 
         return is_string($queryOptions) ? json_decode($queryOptions, true) : $queryOptions;
 
+    }
+
+    /**
+     * Get block display label from manifest (blockValue.view → manifest template label),
+     * fallback to block.reference or block.title.
+     */
+    public function getBlockDisplayLabelAttribute(): string
+    {
+        $view  = $this->blockValue?->view;
+        $theme = $this->blockValue?->theme;
+        if (! empty($view)) {
+            $config = \app(ManifestServiceInterface::class)->getTemplateConfig($view, $theme);
+            if (! empty($config['label'])) {
+                return $config['label'];
+            }
+        }
+
+        return $this->block?->reference ?: $this->block?->title ?? '';
+    }
+
+    /**
+     * Get title from display_options. Returns empty string if not set.
+     */
+    public function getDisplayOptionsTitleAttribute(): string
+    {
+        $options = $this->display_options_value;
+        $title   = $options['title'] ?? null;
+
+        return $title !== null && $title !== '' ? (string) $title : '';
+    }
+
+    /**
+     * Get style from display_options. Returns 'default' if not set.
+     */
+    public function getDisplayOptionsStyleAttribute(): string
+    {
+        $options = $this->display_options_value;
+        $style   = $options['style'] ?? null;
+
+        return $style !== null && $style !== '' ? (string) $style : 'default';
     }
 }
