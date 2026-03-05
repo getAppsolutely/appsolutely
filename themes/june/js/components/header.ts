@@ -78,13 +78,15 @@ export class Header implements HeaderInstance {
     }
 
     handleDropdownHover(signal: AbortSignal): void {
+        // Viewport check at bind time: desktop (hover) vs mobile (click). Resize triggers re-init (see initHeader).
+        const DESKTOP_BREAKPOINT = 1200;
+
         this.submenuItems?.forEach((item: Element) => {
             const submenu = item.querySelector<HTMLElement>('.submenu');
             let hoverTimeout: ReturnType<typeof setTimeout>;
 
             if (submenu) {
-                // Desktop hover effect
-                if (window.innerWidth >= 1200) {
+                if (window.innerWidth >= DESKTOP_BREAKPOINT) {
                     item.addEventListener(
                         'mouseenter',
                         () => {
@@ -106,8 +108,7 @@ export class Header implements HeaderInstance {
                     );
                 }
 
-                // Mobile click effect
-                if (window.innerWidth < 1200) {
+                if (window.innerWidth < DESKTOP_BREAKPOINT) {
                     const navLink = item.querySelector<HTMLElement>('.nav-link');
                     navLink?.addEventListener(
                         'click',
