@@ -65,19 +65,19 @@
             font-size: 1.5rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
-            color: #1a1a1a;
+            color: $overlay-dark-start;
         }
 
         .dynamic-form-subtitle {
             font-size: 1rem;
             font-weight: 500;
             margin-bottom: 0.5rem;
-            color: #666;
+            color: $gray-600;
         }
 
         .dynamic-form-description {
             font-size: 0.875rem;
-            color: #666;
+            color: $gray-600;
             margin-bottom: 0;
         }
     }
@@ -93,7 +93,7 @@
             font-size: 0.75rem;
             font-weight: 600;
             margin-bottom: 0.25rem;
-            color: #333;
+            color: $gray-800;
         }
 
         .form-control,
@@ -127,16 +127,16 @@
         }
 
         &::-webkit-scrollbar-track {
-            background: #f1f1f1;
+            background: $gray-100;
             border-radius: 3px;
         }
 
         &::-webkit-scrollbar-thumb {
-            background: #888;
+            background: $gray-500;
             border-radius: 3px;
 
             &:hover {
-                background: #555;
+                background: $gray-700;
             }
         }
     }
@@ -148,7 +148,7 @@
 
         .dynamic-form-success-icon {
             font-size: 4rem;
-            color: #212529;
+            color: $body-color;
             margin-bottom: 1rem;
         }
 
@@ -156,28 +156,28 @@
             font-size: 1.5rem;
             font-weight: 700;
             margin-bottom: 1rem;
-            color: #1a1a1a;
+            color: $overlay-dark-start;
         }
 
         .dynamic-form-success-message {
             font-size: 1rem;
-            color: #666;
+            color: $gray-600;
             margin-bottom: 1.5rem;
         }
 
         .dynamic-form-reset-btn {
             padding: 0.75rem 1.5rem;
             font-size: 0.875rem;
-            border: 1px solid #333;
+            border: 1px solid $gray-800;
             background: transparent;
-            color: #333;
+            color: $gray-800;
             border-radius: 0.25rem;
             cursor: pointer;
             transition: all 0.3s ease;
 
             &:hover {
-                background: #333;
-                color: #fff;
+                background: $gray-800;
+                color: $white;
             }
         }
     }
@@ -185,9 +185,9 @@
     // Error Message
     .dynamic-form-error {
         padding: 0.75rem 1rem;
-        background: #e9ecef;
-        color: #212529;
-        border: 1px solid #dee2e6;
+        background: $gray-200;
+        color: $body-color;
+        border: 1px solid $gray-300;
         border-radius: 0.25rem;
         font-size: 0.875rem;
         margin-top: 1rem;
@@ -240,7 +240,7 @@
         }
 
         .dynamic-form-wrapper {
-            background: #fff;
+            background: $white;
             padding: 1.5rem;
             border-radius: 0.5rem;
             box-shadow: 0 2px 10px rgb(0 0 0 / 10%);

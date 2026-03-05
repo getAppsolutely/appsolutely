@@ -3,7 +3,7 @@
 
 .text-document-collapsible {
     &__container {
-        background: #fff;
+        background: $white;
         border: 1px solid $gray-400;
         border-radius: $border-radius-lg;
         box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 7.5%);
@@ -52,19 +52,19 @@
         // Active state when expanded
         &[aria-expanded="true"] {
             background: $gray-200;
-            color: #fff;
+            color: $white;
             border-color: $gray-200;
 
             .text-document-collapsible__title,
             .text-document-collapsible__subtitle {
-                color: #fff;
+                color: $white;
             }
 
             .text-document-collapsible__arrow {
                 transform: rotate(180deg);
 
                 i {
-                    color: #fff;
+                    color: $white;
                 }
             }
         }
@@ -106,7 +106,7 @@
 
     &__body {
         padding: $spacer * 1.25;
-        background: #fff;
+        background: $white;
     }
 
     &__meta {

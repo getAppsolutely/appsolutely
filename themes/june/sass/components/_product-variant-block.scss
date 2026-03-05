@@ -6,7 +6,7 @@
         display: none !important;
     }
 
-    background-color: #f8f9fa;
+    background-color: $light;
 
     .product-header {
         .product-meta {
@@ -16,11 +16,11 @@
 
     .variant-tabs {
         .nav-tabs {
-            border-bottom: 2px solid #dee2e6;
+            border-bottom: 2px solid $gray-300;
         }
 
         .nav-link {
-            color: #495057;
+            color: $gray-700;
             border: none;
             border-bottom: 3px solid transparent;
             padding: 1rem 1.5rem;
@@ -28,7 +28,7 @@
             cursor: pointer;
 
             // iOS Safari touch improvements
-            -webkit-tap-highlight-color: rgb(0 123 255 / 20%);
+            -webkit-tap-highlight-color: rgba($primary, 0.2);
             touch-action: manipulation;
             user-select: none;
 
@@ -40,8 +40,8 @@
             justify-content: center;
 
             &:hover {
-                border-bottom-color: #007bff;
-                color: #007bff;
+                border-bottom-color: $primary;
+                color: $primary;
             }
 
             &:active {
@@ -49,8 +49,8 @@
             }
 
             &.active {
-                color: #007bff;
-                border-bottom-color: #007bff;
+                color: $primary;
+                border-bottom-color: $primary;
                 background-color: transparent;
                 font-weight: 600;
             }
@@ -68,7 +68,7 @@
             }
 
             &.active {
-                box-shadow: 0 0 0 3px rgb(0 123 255 / 30%);
+                box-shadow: 0 0 0 3px rgba($primary, 0.3);
             }
         }
     }
@@ -95,16 +95,16 @@
             transition: all 0.2s ease;
 
             &:hover {
-                border-left-color: #007bff;
-                background-color: #f8f9fa;
+                border-left-color: $primary;
+                background-color: $light;
             }
         }
     }
 
     .price-section {
         padding: 1rem;
-        background-color: #fff;
+        background-color: $white;
         border-radius: 0.5rem;
-        border-left: 4px solid #007bff;
+        border-left: 4px solid $primary;
     }
 }

@@ -124,7 +124,7 @@
             transform: none !important;
             order: 1;
             padding: 2rem 0;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            background: linear-gradient(135deg, $overlay-dark-start 0%, $overlay-dark-end 100%);
 
             &.in-view {
                 transform: none !important;
