@@ -91,27 +91,26 @@ if [ -z "$SKIP_BLADE_CHECK" ]; then
     
     # Detect Docker container name (try common Laradock workspace container names)
     WORKSPACE_CONTAINER=""
-    if docker ps --format '{{.Names}}' | grep -q "^laradock-workspace-1$"; then
+    if docker ps --format '{{.Names}}' 2>/dev/null | grep -q "^laradock-workspace-1$"; then
         WORKSPACE_CONTAINER="laradock-workspace-1"
-    elif docker ps --format '{{.Names}}' | grep -q "^laradock_workspace_1$"; then
+    elif docker ps --format '{{.Names}}' 2>/dev/null | grep -q "^laradock_workspace_1$"; then
         WORKSPACE_CONTAINER="laradock_workspace_1"
-    elif docker ps --format '{{.Names}}' | grep -qE "^.*workspace.*$"; then
-        WORKSPACE_CONTAINER=$(docker ps --format '{{.Names}}' | grep -E "^.*workspace.*$" | head -1)
+    elif docker ps --format '{{.Names}}' 2>/dev/null | grep -q "^laradock_workspace$"; then
+        WORKSPACE_CONTAINER="laradock_workspace"
+    elif docker ps --format '{{.Names}}' 2>/dev/null | grep -qE "^.*workspace.*$"; then
+        WORKSPACE_CONTAINER=$(docker ps --format '{{.Names}}' 2>/dev/null | grep -E "^.*workspace.*$" | head -1)
     fi
     
     if [ -n "$WORKSPACE_CONTAINER" ]; then
-        # Run Blade validation inside Docker container (show output only on failure)
-        OUTPUT=$(docker exec "$WORKSPACE_CONTAINER" bash -c "cd /var/www/appsolutely/site && php artisan view:clear && php artisan view:cache" 2>&1)
-        EXIT=$?
-        if [ $EXIT -eq 0 ]; then
-            docker exec "$WORKSPACE_CONTAINER" bash -c "cd /var/www/appsolutely/site && php artisan view:clear" >/dev/null 2>&1
-        else
-            echo "$OUTPUT"
+        # Run Blade validation inside Docker container (stream output so it shows in terminal)
+        if ! docker exec "$WORKSPACE_CONTAINER" bash -c "cd /var/www/appsolutely/site && php artisan view:clear && php artisan view:cache"; then
             print_error "Blade template validation failed!"
             echo ""
             echo "💡 Run 'docker exec $WORKSPACE_CONTAINER bash -c \"cd /var/www/appsolutely/site && php artisan view:cache\"' to see full errors."
             echo "💡 Or set SKIP_BLADE_CHECK=1 to skip Blade template validation during pre-push."
             FAILED=1
+        else
+            docker exec "$WORKSPACE_CONTAINER" bash -c "cd /var/www/appsolutely/site && php artisan view:clear" >/dev/null 2>&1
         fi
     else
         # Fallback: try to run on host (may fail if PHP/dependencies not available)
@@ -167,20 +166,19 @@ if [ -z "$SKIP_PHP_TESTS" ]; then
     
     # Detect Docker container name (try common Laradock workspace container names)
     WORKSPACE_CONTAINER=""
-    if docker ps --format '{{.Names}}' | grep -q "^laradock-workspace-1$"; then
+    if docker ps --format '{{.Names}}' 2>/dev/null | grep -q "^laradock-workspace-1$"; then
         WORKSPACE_CONTAINER="laradock-workspace-1"
-    elif docker ps --format '{{.Names}}' | grep -q "^laradock_workspace_1$"; then
+    elif docker ps --format '{{.Names}}' 2>/dev/null | grep -q "^laradock_workspace_1$"; then
         WORKSPACE_CONTAINER="laradock_workspace_1"
-    elif docker ps --format '{{.Names}}' | grep -qE "^.*workspace.*$"; then
-        WORKSPACE_CONTAINER=$(docker ps --format '{{.Names}}' | grep -E "^.*workspace.*$" | head -1)
+    elif docker ps --format '{{.Names}}' 2>/dev/null | grep -q "^laradock_workspace$"; then
+        WORKSPACE_CONTAINER="laradock_workspace"
+    elif docker ps --format '{{.Names}}' 2>/dev/null | grep -qE "^.*workspace.*$"; then
+        WORKSPACE_CONTAINER=$(docker ps --format '{{.Names}}' 2>/dev/null | grep -E "^.*workspace.*$" | head -1)
     fi
     
     if [ -n "$WORKSPACE_CONTAINER" ]; then
-        # Run tests inside Docker container (show output only on failure)
-        OUTPUT=$(docker exec "$WORKSPACE_CONTAINER" bash -c "cd /var/www/appsolutely/site && php artisan test --testdox" 2>&1)
-        EXIT=$?
-        if [ $EXIT -ne 0 ]; then
-            echo "$OUTPUT"
+        # Run tests inside Docker container (stream output so errors show in terminal)
+        if ! docker exec "$WORKSPACE_CONTAINER" bash -c "cd /var/www/appsolutely/site && php artisan test --testdox"; then
             print_error "PHP tests failed!"
             echo ""
             echo "💡 Run 'docker exec $WORKSPACE_CONTAINER bash -c \"cd /var/www/appsolutely/site && php artisan test\"' to see full test results."
