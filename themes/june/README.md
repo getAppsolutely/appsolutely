@@ -45,7 +45,7 @@ themes/{theme-name}/
 
 ### Typography
 
-- **Font Family**: Nunito (Google Fonts)
+- **Font Family**: Montserrat (Google Fonts)
 - **Base Font Size**: 0.9rem
 - **Line Height**: 1.6
 
@@ -146,8 +146,8 @@ Located in `views/livewire/`:
 
 ```scss
 // Custom utility classes
-.text-nunito {
-    font-family: 'Nunito', sans-serif;
+.text-montserrat {
+    font-family: Montserrat, 'Noto Sans Thai', sans-serif;
 }
 ```
 
@@ -190,7 +190,7 @@ Located in `views/livewire/`:
 
 - Clean, minimalist design
 - Consistent spacing using Bootstrap's spacing system
-- Clear typography hierarchy with Nunito font
+- Clear typography hierarchy with Montserrat font
 - Subtle shadows and transitions for depth
 
 ### Responsive Design

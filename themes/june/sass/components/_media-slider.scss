@@ -51,7 +51,7 @@
             min-height: 280px;
             display: flex;
             flex-direction: column;
-            background: white;
+            background: $white;
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 2px 8px rgb(0 0 0 / 8%);
@@ -288,7 +288,7 @@
                 left: 0;
                 right: 0;
                 background: linear-gradient(transparent, rgb(0 0 0 / 80%));
-                color: white;
+                color: $white;
                 padding: 2rem 1.5rem 1.5rem;
                 text-align: left;
 
@@ -296,7 +296,7 @@
                     font-size: 1.5rem;
                     font-weight: 600;
                     margin-bottom: 0.5rem;
-                    color: white;
+                    color: $white;
                 }
 
                 .slide-subtitle {
@@ -429,7 +429,7 @@
 
                 &:hover {
                     background: var(--bs-secondary);
-                    color: white;
+                    color: $white;
                     transform: translateY(-1px);
                     box-shadow: 0 4px 12px rgb(0 0 0 / 12%);
                 }
