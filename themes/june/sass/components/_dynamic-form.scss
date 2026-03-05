@@ -1,4 +1,5 @@
 // Dynamic Form Interactive Styles
+// BEM Methodology: Block__Element--Modifier
 @use "mixins" as *;
 
 .dynamic-form-interactive {
@@ -8,44 +9,44 @@
     overflow: hidden;
 
     // Background Container
-    .dynamic-form-background {
+    &__background {
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
         z-index: 0;
+    }
 
-        .dynamic-form-background-image {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
+    &__background-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
 
-            &.active {
-                opacity: 1;
-            }
-        }
-
-        .dynamic-form-background-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, $black-alpha-05 0%, $black-alpha-10 100%);
-            z-index: 1;
+        &.active {
+            opacity: 1;
         }
     }
 
+    &__background-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, $black-alpha-05 0%, $black-alpha-10 100%);
+        z-index: 1;
+    }
+
     // Form Container
-    .dynamic-form-container {
+    &__container {
         position: relative;
         z-index: 2;
         width: 100%;
@@ -53,38 +54,38 @@
     }
 
     // Form Wrapper
-    .dynamic-form-wrapper {
+    &__wrapper {
         position: relative;
         width: 100%;
     }
 
     // Form Header
-    .dynamic-form-header {
+    &__header {
         margin-bottom: 1rem;
-
-        .dynamic-form-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: $overlay-dark-start;
-        }
-
-        .dynamic-form-subtitle {
-            font-size: 1rem;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            color: $gray-600;
-        }
-
-        .dynamic-form-description {
-            font-size: 0.875rem;
-            color: $gray-600;
-            margin-bottom: 0;
-        }
     }
 
-    // Form Content Wrapper
-    .dynamic-form-content-wrapper {
+    &__title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: $overlay-dark-start;
+    }
+
+    &__subtitle {
+        font-size: 1rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        color: $gray-600;
+    }
+
+    &__description {
+        font-size: 0.875rem;
+        color: $gray-600;
+        margin-bottom: 0;
+    }
+
+    // Form Content
+    &__content {
         // Compact form styling
         .form-group {
             margin-bottom: 0.5rem;
@@ -126,48 +127,48 @@
     }
 
     // Success Message
-    .dynamic-form-success {
+    &__success {
         text-align: center;
         padding: 2rem 1rem;
+    }
 
-        .dynamic-form-success-icon {
-            font-size: 4rem;
-            color: $body-color;
-            margin-bottom: 1rem;
-        }
+    &__success-icon {
+        font-size: 4rem;
+        color: $body-color;
+        margin-bottom: 1rem;
+    }
 
-        .dynamic-form-success-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: $overlay-dark-start;
-        }
+    &__success-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: $overlay-dark-start;
+    }
 
-        .dynamic-form-success-message {
-            font-size: 1rem;
-            color: $gray-600;
-            margin-bottom: 1.5rem;
-        }
+    &__success-message {
+        font-size: 1rem;
+        color: $gray-600;
+        margin-bottom: 1.5rem;
+    }
 
-        .dynamic-form-reset-btn {
-            padding: 0.75rem 1.5rem;
-            font-size: 0.875rem;
-            border: 1px solid $gray-800;
-            background: transparent;
-            color: $gray-800;
-            border-radius: 0.25rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
+    &__reset-btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.875rem;
+        border: 1px solid $gray-800;
+        background: transparent;
+        color: $gray-800;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
 
-            &:hover {
-                background: $gray-800;
-                color: $white;
-            }
+        &:hover {
+            background: $gray-800;
+            color: $white;
         }
     }
 
     // Error Message
-    .dynamic-form-error {
+    &__error {
         padding: 0.75rem 1rem;
         background: $gray-200;
         color: $body-color;
@@ -179,7 +180,7 @@
 
     // Desktop Layout (≥992px)
     @include media-breakpoint-up(lg) {
-        .dynamic-form-container {
+        &__container {
             min-height: auto;
             display: flex;
             align-items: center;
@@ -187,7 +188,7 @@
             padding: 8rem 2rem 4rem;
         }
 
-        .dynamic-form-wrapper {
+        &__wrapper {
             position: relative;
             width: 40%;
             max-width: 500px;
@@ -198,39 +199,37 @@
             box-shadow: 0 10px 40px $black-alpha-10;
         }
 
-        .dynamic-form-header {
-            .dynamic-form-title {
-                font-size: 1.75rem;
-            }
+        &__title {
+            font-size: 1.75rem;
+        }
 
-            .dynamic-form-subtitle {
-                font-size: 1.125rem;
-            }
+        &__subtitle {
+            font-size: 1.125rem;
+        }
 
-            .dynamic-form-description {
-                font-size: 0.9375rem;
-            }
+        &__description {
+            font-size: 0.9375rem;
         }
     }
 
     // Mobile Layout (<992px)
     @include media-breakpoint-down(md) {
-        .dynamic-form-background {
+        &__background {
             min-height: 50vh;
         }
 
-        .dynamic-form-container {
+        &__container {
             padding: 1.5rem 1rem;
         }
 
-        .dynamic-form-wrapper {
+        &__wrapper {
             background: $white;
             padding: 1.5rem;
             border-radius: 0.5rem;
             box-shadow: 0 2px 10px $black-alpha-10;
         }
 
-        .dynamic-form-content-wrapper {
+        &__content {
             .form-group {
                 margin-bottom: 0.75rem;
             }

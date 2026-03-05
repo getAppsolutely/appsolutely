@@ -74,7 +74,7 @@ function findMatchingOption(value: string, mapping: OptionsMapping): string | nu
  * Update background image
  */
 function updateBackgroundImage(container: HTMLElement, imageUrl: string, baseUrl: string): void {
-    const backgroundImageEl = container.querySelector<HTMLElement>('.dynamic-form-background-image');
+    const backgroundImageEl = container.querySelector<HTMLElement>('.dynamic-form-interactive__background-image');
     if (!backgroundImageEl) return;
 
     const normalizedUrl = normalizeAssetUrl(imageUrl, baseUrl);
@@ -102,8 +102,8 @@ function updateBackgroundImage(container: HTMLElement, imageUrl: string, baseUrl
  * Sync height between background and form container
  */
 function syncHeight(container: HTMLElement): void {
-    const backgroundEl = container.querySelector<HTMLElement>('.dynamic-form-background');
-    const formContainerEl = container.querySelector<HTMLElement>('.dynamic-form-container');
+    const backgroundEl = container.querySelector<HTMLElement>('.dynamic-form-interactive__background');
+    const formContainerEl = container.querySelector<HTMLElement>('.dynamic-form-interactive__container');
 
     if (!backgroundEl || !formContainerEl) return;
 

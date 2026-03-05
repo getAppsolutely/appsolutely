@@ -4,8 +4,7 @@
             <div class="text-document-collapsible__col col-lg-8">
                 <div class="text-document-collapsible__container">
                     <!-- Collapsible Header -->
-                    <button type="button"
-                        class="text-document-collapsible__header w-100 text-start border-0 bg-transparent p-0"
+                    <button type="button" class="text-document-collapsible__header w-100 text-start border-0"
                         data-bs-toggle="collapse" data-bs-target="#textDocumentCollapsible{{ $blockId ?? 'default' }}"
                         aria-expanded="false" aria-controls="textDocumentCollapsible{{ $blockId ?? 'default' }}">
 

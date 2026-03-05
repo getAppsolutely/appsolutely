@@ -52,7 +52,7 @@
             <!-- Error Flash Message -->
             @if (session()->has('error'))
                 <div class="dynamic-form-interactive__error">
-                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <i class="fas fa-exclamation-triangle me-2" aria-hidden="true"></i>
                     {{ session('error') }}
                 </div>
             @endif
