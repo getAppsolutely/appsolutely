@@ -75,6 +75,24 @@
     .btn {
         animation-delay: 0.8s;
     }
+
+    @media (prefers-reduced-motion: reduce) {
+        .content-overlay > * {
+            animation: none;
+        }
+
+        .btn-primary {
+            transition: none;
+        }
+
+        h1,
+        h2,
+        p,
+        .btn {
+            animation: none;
+            animation-delay: unset;
+        }
+    }
 }
 
 /* Keyframe animations */

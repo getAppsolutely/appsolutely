@@ -42,6 +42,12 @@
         opacity 0.8s ease,
         transform 0.8s ease;
 
+    @media (prefers-reduced-motion: reduce) {
+        opacity: 1;
+        transform: translate(-50%, -30%);
+        transition: none;
+    }
+
     // Animate children with staggered delays
     img {
         max-width: 20vw;
