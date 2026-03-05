@@ -23,7 +23,7 @@
                             <label for="{{ $fieldName }}" class="form-label fw-semibold">
                                 {{ $fieldConfig['label'] }}
                                 @if ($fieldConfig['required'] ?? false)
-                                    <span class="text-danger">*</span>
+                                    <span class="text-dark">*</span>
                                 @endif
                             </label>
                             <input type="{{ $fieldConfig['type']->value }}" id="{{ $fieldName }}"
@@ -42,7 +42,7 @@
                             <label for="{{ $fieldName }}" class="form-label fw-semibold">
                                 {{ $fieldConfig['label'] }}
                                 @if ($fieldConfig['required'] ?? false)
-                                    <span class="text-danger">*</span>
+                                    <span class="text-dark">*</span>
                                 @endif
                             </label>
                             <input type="date" id="{{ $fieldName }}"
@@ -61,7 +61,7 @@
                             <label for="{{ $fieldName }}" class="form-label fw-semibold">
                                 {{ $fieldConfig['label'] }}
                                 @if ($fieldConfig['required'] ?? false)
-                                    <span class="text-danger">*</span>
+                                    <span class="text-dark">*</span>
                                 @endif
                             </label>
                             <select id="{{ $fieldName }}"
@@ -85,7 +85,7 @@
                             <label for="{{ $fieldName }}" class="form-label fw-semibold">
                                 {{ $fieldConfig['label'] }}
                                 @if ($fieldConfig['required'] ?? false)
-                                    <span class="text-danger">*</span>
+                                    <span class="text-dark">*</span>
                                 @endif
                             </label>
                             <textarea id="{{ $fieldName }}" class="form-control @error($errorName) is-invalid @enderror"
@@ -107,7 +107,7 @@
                                 <label for="{{ $fieldName }}" class="form-check-label fw-semibold">
                                     {{ $fieldConfig['label'] }}
                                     @if ($fieldConfig['required'] ?? false)
-                                        <span class="text-danger">*</span>
+                                        <span class="text-dark">*</span>
                                     @endif
                                 </label>
                                 @error($errorName)
@@ -122,7 +122,7 @@
                             <label for="{{ $fieldName }}" class="form-label fw-semibold">
                                 {{ $fieldConfig['label'] }}
                                 @if ($fieldConfig['required'] ?? false)
-                                    <span class="text-danger">*</span>
+                                    <span class="text-dark">*</span>
                                 @endif
                             </label>
                             <select id="{{ $fieldName }}"

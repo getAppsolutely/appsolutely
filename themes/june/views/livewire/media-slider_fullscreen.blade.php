@@ -25,7 +25,7 @@
                                 <p class="lead">{{ $slide['subtitle'] }}</p>
                             @endif
                             @if (!empty($slide['link']))
-                                <a href="{{ $slide['link'] }}" class="btn btn-primary media-slider-btn">
+                                <a href="{{ $slide['link'] }}" class="btn btn-dark media-slider-btn">
                                     Learn More
                                 </a>
                             @endif

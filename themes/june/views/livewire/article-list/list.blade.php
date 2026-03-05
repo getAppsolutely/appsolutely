@@ -25,7 +25,7 @@
                                 <img src="{{ $article->cover }}" class="card-img-top" alt="{{ $article->title }}"
                                     style="height: 200px; object-fit: cover;">
                                 @if ($article->categories->first())
-                                    <span class="badge bg-primary position-absolute top-0 start-0 m-3">
+                                    <span class="badge bg-dark position-absolute top-0 start-0 m-3">
                                         {{ $article->categories->first()->name }}
                                     </span>
                                 @endif
@@ -68,7 +68,7 @@
                             <!-- Read More Button -->
                             @if ($displayOptions['show_read_more'] ?? true)
                                 <div class="mt-auto">
-                                    <a href="{{ nested_url($article->slug) }}" class="btn btn-outline-primary btn-sm">
+                                    <a href="{{ nested_url($article->slug) }}" class="btn btn-outline-dark btn-sm">
                                         {{ $displayOptions['read_more_text'] ?? 'Read More' }}
                                         <i class="fas fa-arrow-right ms-1"></i>
                                     </a>

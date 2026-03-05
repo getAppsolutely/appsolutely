@@ -44,7 +44,7 @@
                                     <p class="slide-subtitle">{{ $slide['subtitle'] }}</p>
                                 @endif
                                 @if (!empty($slide['link']))
-                                    <a href="{{ $slide['link'] }}" class="btn btn-primary slide-btn">
+                                    <a href="{{ $slide['link'] }}" class="btn btn-dark slide-btn">
                                         Learn More
                                     </a>
                                 @endif
@@ -90,6 +90,6 @@
             </div>
         </div>
     @else
-        <div class="alert alert-info">No slides available</div>
+        <div class="alert alert-secondary">No slides available</div>
     @endif
 </div>
