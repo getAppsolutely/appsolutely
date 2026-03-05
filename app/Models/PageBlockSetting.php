@@ -59,7 +59,7 @@ final class PageBlockSetting extends Model
             'id'              => PageBlockValue::getFirstMissingId(),
             'block_id'        => $this->block_id,
             'theme'           => $this->blockValue->theme,
-            'view'            => '',
+            'view'            => (string) ($this->blockValue->view ?? ''),
             'query_options'   => $this->blockValue->query_options,
             'display_options' => $this->blockValue->display_options,
             'scripts'         => $this->blockValue->scripts,
