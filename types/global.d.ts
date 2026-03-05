@@ -8,7 +8,6 @@ declare global {
         bootstrap: typeof BootstrapNamespace;
         assets?: {
             images: {
-                coming: string;
                 rednote: string;
             };
         };
