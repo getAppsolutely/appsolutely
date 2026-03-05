@@ -135,5 +135,7 @@ function initVideoShowcase(): void {
     videoShowcaseInstance.init();
 }
 
-export { initVideoShowcase as init };
+export function init(): void {
+    initVideoShowcase();
+}
 export default VideoShowcase;

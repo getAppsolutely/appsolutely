@@ -113,4 +113,6 @@ function initAnchorNav(): void {
     initToTopButton();
 }
 
-export { initAnchorNav as init };
+export function init(): void {
+    initAnchorNav();
+}

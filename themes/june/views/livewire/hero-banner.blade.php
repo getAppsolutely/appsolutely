@@ -6,7 +6,7 @@
                     <div class="hero-banner__video-wrap position-absolute top-0 start-0 w-100 h-100">
                         <video class="lazy w-100 h-100 object-fit-cover" controls preload="none">
                             <source data-src="{{ asset_url($hero['url']) }}" type="video/mp4">
-                            Your browser does not support the video tag.
+                            {{ __t('Your browser does not support the video tag.') }}
                         </video>
                     </div>
                 @else
@@ -43,13 +43,13 @@
                                     @if (!empty($hero['link']))
                                         <a href="{{ $hero['link'] }}"
                                             class="hero-banner__btn btn btn-light btn-lg fw-semibold fs-6 px-3 py-2 border border-white">
-                                            {{ __('global.hero.learn_more') }}
+                                            {{ __t('Learn More') }}
                                         </a>
                                     @endif
                                     @if (!empty($hero['test_drive_link']))
                                         <a href="{{ $hero['test_drive_link'] }}"
                                             class="hero-banner__btn btn btn-light btn-lg fw-semibold fs-6 ms-3 px-3 py-2 border border-white">
-                                            {{ __('global.hero.test_drive') }}
+                                            {{ __t('Test Drive') }}
                                         </a>
                                     @endif
                                 </div>
