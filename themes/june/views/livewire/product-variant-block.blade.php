@@ -287,7 +287,7 @@
                         <div class="variant-info mb-4" x-show="initialized" x-cloak>
                             <h2 class="h3 fw-bold mb-2" x-text="currentVariant?.name || 'Variant'"></h2>
                             <div class="price-section mb-3" x-show="getFormattedPrice() !== null">
-                                <span class="h4 fw-bold text-primary">
+                                <span class="h4 fw-bold">
                                     $<span x-text="getFormattedPrice()"></span>
                                     <span x-show="shouldShowPriceSuffix()"> RRP. <small
                                             class="fs-6">+ORC</small></span>
