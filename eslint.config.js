@@ -80,6 +80,10 @@ export default [
                 IntersectionObserverInit: 'readonly',
                 ResizeObserver: 'readonly',
 
+                // Abort API
+                AbortController: 'readonly',
+                AbortSignal: 'readonly',
+
                 // Fetch API types
                 Response: 'readonly',
                 Request: 'readonly',

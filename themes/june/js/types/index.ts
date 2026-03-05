@@ -19,10 +19,10 @@ export interface HeaderInstance {
     submenuItems: NodeListOf<Element> | null;
     init(): void;
     bindEvents(): void;
-    checkScroll(): void;
+    destroy(): void;
     toggleMobileMenu(): void;
     closeMobileMenu(): void;
-    handleDropdownHover(): void;
+    handleDropdownHover(signal: AbortSignal): void;
     showMegaMenu(submenu: HTMLElement): void;
     hideMegaMenu(submenu: HTMLElement): void;
 }

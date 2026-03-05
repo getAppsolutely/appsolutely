@@ -1,8 +1,10 @@
 /**
  * Header Component JavaScript
- * Handles scroll detection, hover effects, and mobile menu functionality
+ * Handles hover effects, mobile menu, and dropdown functionality.
+ * Scroll state (.scrolled) is handled by IntersectionObserver on #scrollTrigger.
  */
 
+import _ from 'lodash';
 import type { HeaderInstance } from '../types';
 
 export class Header implements HeaderInstance {
@@ -12,12 +14,15 @@ export class Header implements HeaderInstance {
     navbarCollapse: HTMLElement | null;
     submenuItems: NodeListOf<Element> | null;
 
+    private abortController: AbortController;
+
     constructor() {
         this.header = document.querySelector<HTMLElement>('#main-header');
         this.navbar = this.header?.querySelector<HTMLElement>('.navbar') ?? null;
         this.navbarToggler = this.header?.querySelector<HTMLElement>('.navbar-toggler') ?? null;
         this.navbarCollapse = this.header?.querySelector<HTMLElement>('.navbar-collapse') ?? null;
         this.submenuItems = this.header?.querySelectorAll('.has-submenu') ?? null;
+        this.abortController = new AbortController();
 
         this.init();
     }
@@ -26,41 +31,33 @@ export class Header implements HeaderInstance {
         if (!this.header) return;
 
         this.bindEvents();
-        this.checkScroll();
     }
 
     bindEvents(): void {
-        // Scroll event for header background change
-        window.addEventListener('scroll', () => {
-            this.checkScroll();
-        });
+        const { signal } = this.abortController;
 
         // Mobile menu toggle
         if (this.navbarToggler && this.navbarCollapse) {
-            this.navbarToggler.addEventListener('click', () => {
-                this.toggleMobileMenu();
-            });
+            this.navbarToggler.addEventListener('click', () => this.toggleMobileMenu(), { signal });
         }
 
         // Close mobile menu when clicking outside
-        document.addEventListener('click', (e: MouseEvent) => {
-            if (this.navbarCollapse?.classList.contains('show') && !this.navbar?.contains(e.target as Node)) {
-                this.closeMobileMenu();
-            }
-        });
+        document.addEventListener(
+            'click',
+            (e: MouseEvent) => {
+                if (this.navbarCollapse?.classList.contains('show') && !this.navbar?.contains(e.target as Node)) {
+                    this.closeMobileMenu();
+                }
+            },
+            { signal }
+        );
 
-        // Handle dropdown hover effects
-        this.handleDropdownHover();
+        // Handle dropdown hover effects (desktop) and click (mobile)
+        this.handleDropdownHover(signal);
     }
 
-    checkScroll(): void {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-        if (scrollTop > 50) {
-            this.header?.classList.add('scrolled');
-        } else {
-            this.header?.classList.remove('scrolled');
-        }
+    destroy(): void {
+        this.abortController.abort();
     }
 
     toggleMobileMenu(): void {
@@ -80,8 +77,7 @@ export class Header implements HeaderInstance {
         }
     }
 
-    handleDropdownHover(): void {
-        // Handle mega menu hover effects
+    handleDropdownHover(signal: AbortSignal): void {
         this.submenuItems?.forEach((item: Element) => {
             const submenu = item.querySelector<HTMLElement>('.submenu');
             let hoverTimeout: ReturnType<typeof setTimeout>;
@@ -89,40 +85,44 @@ export class Header implements HeaderInstance {
             if (submenu) {
                 // Desktop hover effect
                 if (window.innerWidth >= 1200) {
-                    item.addEventListener('mouseenter', () => {
-                        clearTimeout(hoverTimeout);
-                        this.showMegaMenu(submenu);
-                        // Add active class to parent nav item
-                        item.classList.add('active');
-                    });
-
-                    item.addEventListener('mouseleave', () => {
-                        // Add small delay before hiding to prevent flickering
-                        hoverTimeout = setTimeout(() => {
-                            this.hideMegaMenu(submenu);
-                            item.classList.remove('active');
-                        }, 150);
-                    });
+                    item.addEventListener(
+                        'mouseenter',
+                        () => {
+                            clearTimeout(hoverTimeout);
+                            this.showMegaMenu(submenu);
+                            item.classList.add('active');
+                        },
+                        { signal }
+                    );
+                    item.addEventListener(
+                        'mouseleave',
+                        () => {
+                            hoverTimeout = setTimeout(() => {
+                                this.hideMegaMenu(submenu);
+                                item.classList.remove('active');
+                            }, 150);
+                        },
+                        { signal }
+                    );
                 }
 
                 // Mobile click effect
                 if (window.innerWidth < 1200) {
                     const navLink = item.querySelector<HTMLElement>('.nav-link');
-
-                    navLink?.addEventListener('click', (e: Event) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-
-                        // Close other submenus
-                        this.submenuItems?.forEach((otherItem: Element) => {
-                            if (otherItem !== item) {
-                                otherItem.classList.remove('show');
-                            }
-                        });
-
-                        // Toggle current submenu
-                        item.classList.toggle('show');
-                    });
+                    navLink?.addEventListener(
+                        'click',
+                        (e: Event) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            this.submenuItems?.forEach((otherItem: Element) => {
+                                if (otherItem !== item) {
+                                    otherItem.classList.remove('show');
+                                }
+                            });
+                            item.classList.toggle('show');
+                        },
+                        { signal }
+                    );
                 }
             }
         });
@@ -151,41 +151,30 @@ export class Header implements HeaderInstance {
     }
 }
 
-// Initialize header when DOM is loaded
+// Single header instance; recreated on resize with proper cleanup
+let headerInstance: Header | null = null;
+
+function initHeader(): void {
+    headerInstance?.destroy();
+    headerInstance = new Header();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    new Header();
-});
+    initHeader();
 
-// Handle window resize
-window.addEventListener('resize', () => {
-    // Reinitialize header functionality on resize
-    setTimeout(() => {
-        new Header();
-    }, 100);
-});
-
-(() => {
+    // Scroll state: add .scrolled when #scrollTrigger leaves viewport
     const trigger = document.getElementById('scrollTrigger');
     const navbar = document.getElementById('main-header');
-
-    if (!trigger || !navbar) {
-        console.warn('[navbar-scroll] Missing required elements');
-        return;
+    if (trigger && navbar) {
+        const observer = new IntersectionObserver(
+            ([entry]: IntersectionObserverEntry[]) => {
+                navbar.classList.toggle('scrolled', !entry.isIntersecting);
+            },
+            { rootMargin: '0px', threshold: 0 }
+        );
+        observer.observe(trigger);
     }
 
-    const observer = new IntersectionObserver(
-        ([entry]: IntersectionObserverEntry[]) => {
-            if (!entry.isIntersecting) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        },
-        {
-            rootMargin: '0px',
-            threshold: 0,
-        }
-    );
-
-    observer.observe(trigger);
-})();
+    // Reinitialize on resize (dropdown behavior depends on viewport width); debounced to avoid leak
+    window.addEventListener('resize', _.debounce(initHeader, 150));
+});
