@@ -26,7 +26,7 @@
 @endphp
 
 <section class="product-variant-block py-5" id="{{ $blockId }}" wire:key="product-variant-{{ $this->getId() }}">
-    <div class="container">
+    <div class="product-variant-block__container container">
         @if (empty($product))
             <div class="alert alert-warning">No product data configured</div>
         @elseif (empty($variants))
@@ -279,7 +279,7 @@
                                     </div>
                                 @endif
                                 @if (!empty($firstVariant['promotion']) && $showPriceSuffix)
-                                    <div class="promotion-row text-danger">
+                                    <div class="product-variant-block__promotion text-danger">
                                         <strong>Launch Offer:</strong> {{ $firstVariant['promotion'] }}
                                     </div>
                                 @endif
@@ -296,7 +296,7 @@
                                             class="fs-6">+ORC</small></span>
                                 </span>
                             </div>
-                            <div class="promotion-row text-danger"
+                            <div class="product-variant-block__promotion text-danger"
                                 x-show="currentVariant?.promotion && shouldShowPriceSuffix()">
                                 <strong>Launch Offer:</strong> <span x-text="currentVariant?.promotion"></span>
                             </div>

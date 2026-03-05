@@ -1,7 +1,7 @@
 <section class="text-document-collapsible py-5">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
+    <div class="text-document-collapsible__wrapper container">
+        <div class="text-document-collapsible__row row justify-content-center">
+            <div class="text-document-collapsible__col col-lg-8">
                 <div class="text-document-collapsible__container">
                     <!-- Collapsible Header -->
                     <div class="text-document-collapsible__header" data-bs-toggle="collapse"
@@ -26,7 +26,7 @@
 
                         <!-- Arrow Icon -->
                         <div class="text-document-collapsible__arrow">
-                            <i class="bi bi-chevron-down text-primary"></i>
+                            <i class="bi bi-chevron-down text-primary" aria-hidden="true"></i>
                         </div>
                     </div>
 

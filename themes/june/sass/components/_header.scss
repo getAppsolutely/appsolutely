@@ -17,7 +17,7 @@
     }
 
     .navbar {
-        .header-left {
+        .header__left {
             .navbar-brand {
                 img {
                     @include media-breakpoint-down(md) {
@@ -31,7 +31,7 @@
 }
 
 // Coming soon ribbon
-.coming-ribbon {
+.header__coming-ribbon {
     transform: rotate(90deg);
     transform-origin: top right;
     z-index: 2;
@@ -46,7 +46,7 @@
 #main-header .btn {
     color: $light;
 
-    .submenu a.dropdown-item span.d-inline-block {
+    .header__submenu a.dropdown-item span.d-inline-block {
         display: block;
         font-size: 1.25rem;
         white-space: normal;
@@ -67,7 +67,7 @@
     display: none;
 }
 
-.header-center .navbar-nav .nav-item > .submenu {
+.header__center .navbar-nav .nav-item > .header__submenu {
     position: fixed !important;
     left: 0 !important;
     right: 0 !important;
@@ -96,7 +96,7 @@
             gap: 1.5rem;
         }
 
-        .submenu-item {
+        .header__submenu-item {
             display: flex;
             justify-content: center;
             text-align: center;
@@ -132,12 +132,12 @@
         }
     }
 
-    .submenu-buttons a {
+    .header__submenu-buttons a {
         font-size: 0.75rem;
     }
 }
 
-.header-center .navbar-nav .nav-item:hover > .submenu {
+.header__center .navbar-nav .nav-item:hover > .header__submenu {
     display: block !important;
     opacity: 1;
     pointer-events: auto;
@@ -145,7 +145,7 @@
 }
 
 // Enhanced mega menu item styling
-.header-center .navbar-nav .nav-item.has-submenu > .nav-link {
+.header__center .navbar-nav .nav-item.has-submenu > .nav-link {
     position: relative;
 
     &::after {
@@ -165,8 +165,8 @@
     }
 }
 
-#main-header.scrolled:has(.header-left a:hover),
-#main-header.scrolled:has(.header-center .navbar-nav .nav-item:hover) {
+#main-header.scrolled:has(.header__left a:hover),
+#main-header.scrolled:has(.header__center .navbar-nav .nav-item:hover) {
     color: $body-bg;
 
     .navbar,
@@ -177,8 +177,8 @@
     }
 }
 
-#main-header:has(.header-left a:hover),
-#main-header:has(.header-center .navbar-nav .nav-item:hover) {
+#main-header:has(.header__left a:hover),
+#main-header:has(.header__center .navbar-nav .nav-item:hover) {
     background: $body-bg;
     color: $body-color;
     box-shadow: 0 4px 20px $black-alpha-15;
@@ -203,7 +203,7 @@
     }
 }
 
-.header-mobile-overlay {
+.header__mobile-overlay {
     display: none;
     position: fixed;
     inset: 0;
@@ -218,7 +218,7 @@
         animation: none;
     }
 
-    .header-mobile-close {
+    .header__mobile-close {
         display: flex;
         justify-content: flex-end;
         font-size: 2.5rem;
@@ -230,7 +230,7 @@
         line-height: 1;
     }
 
-    .header-mobile-nav {
+    .header__mobile-nav {
         .navbar-nav {
             font-size: 1.7rem;
             padding-left: 0.5rem;
@@ -253,7 +253,7 @@
                     padding-bottom: 0.7rem;
                 }
 
-                .submenu {
+                .header__submenu {
                     display: grid;
                     grid-template-columns: repeat(2, minmax(0, 1fr));
                     gap: 1.25rem;
@@ -273,7 +273,7 @@
             }
         }
 
-        .header-mobile-testdrive {
+        .header__mobile-booking {
             margin: 2rem 1.5rem 1.5rem;
 
             .btn {
@@ -298,19 +298,19 @@
     }
 }
 
-#header-mobile-toggle:checked ~ .header-mobile-overlay {
+#header-mobile-toggle:checked ~ .header__mobile-overlay {
     display: block;
 }
 
-.header-mobile-overlay,
-.header-mobile-overlay .nav-link,
-.header-mobile-overlay .dropdown-item {
+.header__mobile-overlay,
+.header__mobile-overlay .nav-link,
+.header__mobile-overlay .dropdown-item {
     color: $body-color !important;
 }
 
-.header-mobile-close,
+.header__mobile-close,
 .navbar-toggler,
-.header-mobile-testdrive .btn {
+.header__mobile-booking .btn {
     min-height: $touch-target-min;
     min-width: $touch-target-min;
 }

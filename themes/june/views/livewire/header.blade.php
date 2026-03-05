@@ -1,10 +1,10 @@
-<header id="main-header">
-    <nav class="navbar navbar-expand-xl">
+<header id="main-header" class="header">
+    <nav class="header__nav navbar navbar-expand-xl">
         <!-- Hamburger Menu Toggle (pure CSS) -->
-        <input type="checkbox" id="header-mobile-toggle" class="d-none" />
-        <div class="container container-responsive d-flex align-items-center justify-content-between">
+        <input type="checkbox" id="header-mobile-toggle" class="header__toggle d-none" aria-hidden="true" />
+        <div class="header__container container container-responsive d-flex align-items-center justify-content-between">
             <!-- Left: Logo -->
-            <div class="header-left d-flex align-items-center flex-shrink-0">
+            <div class="header__left d-flex align-items-center flex-shrink-0">
                 <a href="{{ route('home') }}" class="navbar-brand m-0">
                     @if ($displayOptions['logo'])
                         <img src="{{ asset_url('assets/images/logo-dark.webp') }}" alt="{{ site_title() }}"
@@ -17,13 +17,13 @@
                 </a>
             </div>
 
-            <label for="header-mobile-toggle" class="navbar-toggler bg-white d-xl-none ms-2 mb-0"
+            <label for="header-mobile-toggle" class="header__toggler navbar-toggler bg-white d-xl-none ms-2 mb-0"
                 aria-label="Toggle navigation" tabindex="0">
-                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon" aria-hidden="true"></span>
             </label>
 
             <!-- Center: Main Navigation (hidden below 1200px) -->
-            <div class="header-center flex-grow-1 d-none d-xl-flex justify-content-center">
+            <div class="header__center flex-grow-1 d-none d-xl-flex justify-content-center">
                 @if ($mainNavigation->isNotEmpty())
                     <ul class="navbar-nav flex-row align-items-center">
                         @foreach ($mainNavigation as $item)
@@ -37,13 +37,13 @@
                                         {{ $item->title }}
                                     </a>
                                     <!-- Submenu markup -->
-                                    <ul class="submenu list-unstyled m-0 p-0 position-absolute">
+                                    <ul class="header__submenu submenu list-unstyled m-0 p-0 position-absolute">
                                         <li class="d-flex justify-content-center w-100">
                                             <div class="container-xxl">
                                                 <div class="row justify-content-center g-4">
                                                     @foreach ($item->children as $child)
                                                         <div
-                                                            class="col-auto submenu-item d-flex flex-column align-items-center">
+                                                            class="header__submenu-item col-auto d-flex flex-column align-items-center">
                                                             <a class="dropdown-item text-center d-block p-3"
                                                                 href="{{ app_uri($child->url) }}"
                                                                 target="{{ $child->target->value }}">
@@ -58,7 +58,7 @@
                                                                         @if (($child->setting['flag_coming_soon'] ?? '') === 'true')
                                                                             <img src="{{ themed_assets('/images/coming.png') }}"
                                                                                 alt="Coming soon"
-                                                                                class="position-absolute coming-ribbon"
+                                                                                class="header__coming-ribbon position-absolute"
                                                                                 style="top: 56px; right: 0; width: 56px;">
                                                                         @endif
                                                                     </span>
@@ -66,7 +66,7 @@
                                                                 <span
                                                                     class="d-block pt-3 fw-semibold">{{ $child->title }}</span>
                                                                 @if (!empty($child->setting['price']))
-                                                                    <div class="price-section mt-2">
+                                                                    <div class="header__price-section mt-2">
                                                                         <span class="fs-6">
                                                                             {{ $child->setting['price'] }}
                                                                             <small>+ORC</small>
@@ -76,7 +76,7 @@
                                                             </a>
                                                             @if (!empty($child->setting['learn_more_link']) || !empty($child->setting['test_drive_link']))
                                                                 <div
-                                                                    class="ms-3 submenu-buttons d-flex justify-content-center gap-2 mt-2">
+                                                                    class="header__submenu-buttons ms-3 d-flex justify-content-center gap-2 mt-2">
                                                                     @if (!empty($child->setting['learn_more_link']))
                                                                         <a href="{{ $child->setting['learn_more_link'] }}"
                                                                             class="btn btn-sm fw-semibold px-2 py-2 border bg-white text-dark">
@@ -114,7 +114,7 @@
 
             <!-- Right: Booking Button (hidden below 1200px) -->
             @if (($displayOptions['booking']['text'] ?? null) && ($displayOptions['booking']['url'] ?? null))
-                <div class="header-right d-none d-xl-block flex-shrink-0">
+                <div class="header__right d-none d-xl-block flex-shrink-0">
                     <a href="{{ $displayOptions['booking']['url'] }}" class="btn btn-outline-light-primary">
                         {{ $displayOptions['booking']['text'] }}
                     </a>
@@ -123,9 +123,10 @@
         </div>
 
         <!-- Hamburger Menu Overlay/Layer (for mobile/tablet, pure CSS toggle) -->
-        <div class="header-mobile-overlay d-xl-none">
-            <label for="header-mobile-toggle" class="header-mobile-close" tabindex="0">&times;</label>
-            <nav class="header-mobile-nav">
+        <div class="header__mobile-overlay d-xl-none">
+            <label for="header-mobile-toggle" class="header__mobile-close" tabindex="0"
+                aria-label="Close menu">&times;</label>
+            <nav class="header__mobile-nav" aria-label="Mobile navigation">
                 @if ($mainNavigation->isNotEmpty())
                     <ul class="navbar-nav flex-column align-items-stretch">
                         @foreach ($mainNavigation as $item)
@@ -138,7 +139,7 @@
                                     {{ $item->title }}
                                 </a>
                                 @if ($item->children->isNotEmpty())
-                                    <ul class="submenu list-unstyled m-0 p-0">
+                                    <ul class="header__submenu submenu list-unstyled m-0 p-0">
                                         @foreach ($item->children as $child)
                                             <li>
                                                 <a class="dropdown-item text-center" href="{{ app_uri($child->url) }}"
@@ -154,7 +155,7 @@
                                                             @if (($child->setting['flag_coming_soon'] ?? '') === 'true')
                                                                 <img src="{{ themed_assets('/images/coming.png') }}"
                                                                     alt="Coming soon"
-                                                                    class="position-absolute coming-ribbon"
+                                                                    class="header__coming-ribbon position-absolute"
                                                                     style="top: 48px; right: -6px; width: 48px;">
                                                             @endif
                                                         </span>
@@ -172,7 +173,7 @@
 
                 <!-- Mobile Booking Button -->
                 @if (($displayOptions['booking']['text'] ?? null) && ($displayOptions['booking']['url'] ?? null))
-                    <div class="header-mobile-testdrive mt-4">
+                    <div class="header__mobile-booking mt-4">
                         <a href="{{ $displayOptions['booking']['url'] }}" class="btn btn-outline-light-primary w-100">
                             {{ $displayOptions['booking']['text'] }}
                         </a>
