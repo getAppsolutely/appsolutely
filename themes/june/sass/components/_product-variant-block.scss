@@ -28,7 +28,7 @@
             cursor: pointer;
 
             // iOS Safari touch improvements
-            -webkit-tap-highlight-color: rgba($primary, 0.2);
+            -webkit-tap-highlight-color: $primary-alpha-20;
             touch-action: manipulation;
             user-select: none;
 
@@ -68,7 +68,7 @@
             }
 
             &.active {
-                box-shadow: 0 0 0 3px rgba($primary, 0.3);
+                box-shadow: 0 0 0 3px $primary-alpha-30;
             }
         }
     }

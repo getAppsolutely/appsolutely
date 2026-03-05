@@ -46,7 +46,7 @@
 
         &:focus {
             outline: none;
-            box-shadow: 0 0 0 0.2rem rgba($gray-200, 0.25);
+            box-shadow: 0 0 0 0.2rem $gray-200-alpha-25;
         }
 
         // Active state when expanded

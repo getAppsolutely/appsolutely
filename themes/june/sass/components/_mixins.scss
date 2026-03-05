@@ -66,8 +66,8 @@
     }
 }
 
-@mixin stagger-animation($base-delay: 0.2s, $stagger: 0.2s) {
-    @for $i from 1 through 3 {
+@mixin stagger-animation($base-delay: 0.2s, $stagger: 0.2s, $count: 5) {
+    @for $i from 1 through $count {
         &:nth-child(#{$i}) {
             @include fade-in-up($base-delay + ($i - 1) * $stagger);
         }

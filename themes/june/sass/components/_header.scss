@@ -181,7 +181,7 @@
 #main-header:has(.header-center .navbar-nav .nav-item:hover) {
     background: $body-bg;
     color: $body-color;
-    box-shadow: 0 4px 20px rgb(0 0 0 / 15%);
+    box-shadow: 0 4px 20px $black-alpha-15;
 
     .navbar,
     .navbar-nav .nav-link,
@@ -208,7 +208,7 @@
     position: fixed;
     inset: 0;
     z-index: 2000;
-    background: rgba($body-bg, 0.98);
+    background: $header-mobile-overlay-bg;
     backdrop-filter: blur(10px);
     overflow-y: auto;
     padding: 0 1.5rem;
