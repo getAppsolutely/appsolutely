@@ -1,22 +1,22 @@
-<section class="specifications-section py-5">
-    <div class="specifications-section__container container">
+<section class="specifications py-5">
+    <div class="specifications__container container">
         <!-- Section Header -->
         @if ($displayOptions['title'] || $displayOptions['subtitle'] || $displayOptions['description'])
-            <div class="specifications-section__header text-center mb-5">
+            <div class="specifications__header text-center mb-5">
                 @if ($displayOptions['title'])
-                    <h2 class="specifications-section__title display-5 fw-bold mb-3">
+                    <h2 class="specifications__title display-5 fw-bold mb-3">
                         {{ $displayOptions['title'] }}
                     </h2>
                 @endif
 
                 @if ($displayOptions['subtitle'])
-                    <h3 class="specifications-section__subtitle h4 mb-4">
+                    <h3 class="specifications__subtitle h4 mb-4">
                         {{ $displayOptions['subtitle'] }}
                     </h3>
                 @endif
 
                 @if ($displayOptions['description'])
-                    <p class="specifications-section__description lead">
+                    <p class="specifications__description lead">
                         {{ $displayOptions['description'] }}
                     </p>
                 @endif
@@ -27,23 +27,23 @@
         @if (!empty($displayOptions['specifications']))
             @if ($displayOptions['layout'] === 'grid')
                 <!-- Grid Layout -->
-                <div class="specifications-section__grid row g-4">
+                <div class="specifications__grid row g-4">
                     @foreach ($displayOptions['specifications'] as $spec)
-                        <div class="specifications-section__grid-item col-md-{{ 12 / $displayOptions['columns'] }}">
-                            <div class="specifications-section__item p-4 h-100 border rounded-3 shadow-sm">
-                                <div class="specifications-section__item-content">
-                                    <h5 class="specifications-section__item-label fw-semibold mb-2">
+                        <div class="specifications__grid-item col-md-{{ 12 / $displayOptions['columns'] }}">
+                            <div class="specifications__item p-4 h-100 border rounded-3 shadow-sm">
+                                <div class="specifications__item-content">
+                                    <h5 class="specifications__item-label fw-semibold mb-2">
                                         @if ($spec['icon'] ?? false)
                                             <i class="{{ $spec['icon'] }} me-2" aria-hidden="true"></i>
                                         @endif
                                         {{ $spec['label'] }}
                                     </h5>
 
-                                    <div class="specifications-section__item-value">
+                                    <div class="specifications__item-value">
                                         {{ $spec['value'] }}
                                         @if ($spec['unit'] ?? false)
                                             <span
-                                                class="specifications-section__item-value-unit text-muted">{{ $spec['unit'] }}</span>
+                                                class="specifications__item-value-unit text-muted">{{ $spec['unit'] }}</span>
                                         @endif
                                     </div>
                                 </div>
@@ -58,26 +58,26 @@
                         <div class="row g-4">
                             <!-- Dimensions Column -->
                             <div class="col-xl-6">
-                                <div class="specifications-section__column">
-                                    <h4 class="specifications-section__section-title">Dimensions</h4>
-                                    <hr class="specifications-section__divider">
+                                <div class="specifications__column">
+                                    <h4 class="specifications__section-title">Dimensions</h4>
+                                    <hr class="specifications__divider">
                                     @if (!empty($displayOptions['dimensions']))
                                         @foreach ($displayOptions['dimensions'] as $spec)
-                                            <div class="specifications-section__row">
+                                            <div class="specifications__row">
                                                 @if ($spec['label'])
-                                                    <span class="specifications-section__label">
+                                                    <span class="specifications__label">
                                                         {{ $spec['label'] }}
                                                     </span>
                                                 @endif
-                                                <span class="specifications-section__value">
+                                                <span class="specifications__value">
                                                     {{ $spec['value'] }}
                                                     @if ($spec['unit'] ?? false)
                                                         <span
-                                                            class="specifications-section__value--unit">{{ $spec['unit'] }}</span>
+                                                            class="specifications__value--unit">{{ $spec['unit'] }}</span>
                                                     @endif
                                                 </span>
                                             </div>
-                                            <hr class="specifications-section__divider">
+                                            <hr class="specifications__divider">
                                         @endforeach
                                     @endif
                                 </div>
@@ -85,52 +85,52 @@
 
                             <!-- Drive Column -->
                             <div class="col-xl-6">
-                                <div class="specifications-section__column">
-                                    <h4 class="specifications-section__section-title">Drive</h4>
-                                    <hr class="specifications-section__divider">
+                                <div class="specifications__column">
+                                    <h4 class="specifications__section-title">Drive</h4>
+                                    <hr class="specifications__divider">
                                     @if (!empty($displayOptions['drives']))
                                         @foreach ($displayOptions['drives'] as $spec)
-                                            <div class="specifications-section__row">
+                                            <div class="specifications__row">
                                                 @if ($spec['label'])
-                                                    <span class="specifications-section__label">
+                                                    <span class="specifications__label">
                                                         {{ $spec['label'] }}
                                                     </span>
                                                 @endif
-                                                <span class="specifications-section__value">
+                                                <span class="specifications__value">
                                                     {{ $spec['value'] }}
                                                     @if ($spec['unit'] ?? false)
                                                         <span
-                                                            class="specifications-section__value--unit">{{ $spec['unit'] }}</span>
+                                                            class="specifications__value--unit">{{ $spec['unit'] }}</span>
                                                     @endif
                                                 </span>
                                             </div>
-                                            <hr class="specifications-section__divider">
+                                            <hr class="specifications__divider">
                                         @endforeach
                                     @endif
                                 </div>
                             </div>
 
                             <div class="col-xl-4 d-none">
-                                <div class="specifications-section__column">
-                                    <h4 class="specifications-section__section-title">Key Features</h4>
-                                    <hr class="specifications-section__divider">
+                                <div class="specifications__column">
+                                    <h4 class="specifications__section-title">Key Features</h4>
+                                    <hr class="specifications__divider">
                                     @if (!empty($displayOptions['specifications']))
                                         @foreach ($displayOptions['specifications'] as $spec)
-                                            <div class="specifications-section__row">
+                                            <div class="specifications__row">
                                                 @if ($spec['label'])
-                                                    <span class="specifications-section__label">
+                                                    <span class="specifications__label">
                                                         {{ $spec['label'] }}
                                                     </span>
                                                 @endif
-                                                <span class="specifications-section__value text-start">
+                                                <span class="specifications__value text-start">
                                                     {{ $spec['value'] }}
                                                     @if ($spec['unit'] ?? false)
                                                         <span
-                                                            class="specifications-section__value--unit">{{ $spec['unit'] }}</span>
+                                                            class="specifications__value--unit">{{ $spec['unit'] }}</span>
                                                     @endif
                                                 </span>
                                             </div>
-                                            <hr class="specifications-section__divider">
+                                            <hr class="specifications__divider">
                                         @endforeach
                                     @endif
                                 </div>
@@ -144,7 +144,7 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-8">
                         <div class="table-responsive">
-                            <table class="specifications-section__table table table-hover">
+                            <table class="specifications__table table table-hover">
                                 <thead>
                                     <tr>
                                         <th scope="col">Specification</th>
@@ -178,9 +178,9 @@
 
         <!-- Download Button -->
         @if ($displayOptions['download_url'] ?? false)
-            <div class="specifications-section__download text-center mt-5">
+            <div class="specifications__download text-center mt-5">
                 <a href="{{ asset_url($displayOptions['download_url']) }}"
-                    class="specifications-section__download-btn btn btn-light border-dark fw-bold px-3 py-3 fs-6 rounded-3 shadow-lg"
+                    class="specifications__download-btn btn btn-light border-dark fw-bold px-3 py-3 fs-6 rounded-3 shadow-lg"
                     download="{{ $displayOptions['download_filename'] ?? 'specifications' }}" target="_blank"
                     rel="noopener noreferrer">
                     <i class="fas fa-download me-2" aria-hidden="true"></i>

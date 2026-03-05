@@ -1,37 +1,37 @@
-<section class="dynamic-form-section py-5">
-    <div class="dynamic-form-section__container container">
+<section class="dynamic-form py-5">
+    <div class="dynamic-form__container container">
         @if (!$submitted)
             <!-- Form Header -->
             @if ($displayOptions['title'] || $displayOptions['subtitle'] || $displayOptions['description'])
-                <div class="dynamic-form-section__header text-center mb-5">
+                <div class="dynamic-form__header text-center mb-5">
                     @if ($displayOptions['title'])
-                        <h2 class="dynamic-form-section__title display-6 fw-bold mb-3">{{ $displayOptions['title'] }}
+                        <h2 class="dynamic-form__title display-6 fw-bold mb-3">{{ $displayOptions['title'] }}
                         </h2>
                     @endif
 
                     @if ($displayOptions['subtitle'])
-                        <h3 class="dynamic-form-section__subtitle h5 text-muted mb-4">{{ $displayOptions['subtitle'] }}
+                        <h3 class="dynamic-form__subtitle h5 text-muted mb-4">{{ $displayOptions['subtitle'] }}
                         </h3>
                     @endif
 
                     @if ($displayOptions['description'])
-                        <p class="dynamic-form-section__description lead text-muted">{{ $displayOptions['description'] }}
+                        <p class="dynamic-form__description lead text-muted">{{ $displayOptions['description'] }}
                         </p>
                     @endif
                 </div>
             @endif
 
             <!-- Form Container -->
-            <div class="dynamic-form-section__form-wrap row justify-content-center">
+            <div class="dynamic-form__form-wrap row justify-content-center">
                 <div class="col-lg-8 col-xl-6">
                     @if ($displayOptions['theme'] === 'card')
-                        <div class="dynamic-form-section__card card border-0 shadow-lg">
+                        <div class="dynamic-form__card card border-0 shadow-lg">
                             <div class="card-body p-5">
                                 @include('livewire.dynamic-form-content')
                             </div>
                         </div>
                     @else
-                        <div class="dynamic-form-section__form-container">
+                        <div class="dynamic-form__form-container">
                             @include('livewire.dynamic-form-content')
                         </div>
                     @endif
@@ -39,10 +39,10 @@
             </div>
         @else
             <!-- Success Message -->
-            <div class="dynamic-form-section__success-wrap text-center py-5">
+            <div class="dynamic-form__success-wrap text-center py-5">
                 <div class="row justify-content-center">
                     <div class="col-lg-6">
-                        <div class="dynamic-form-section__success">
+                        <div class="dynamic-form__success">
                             <div class="mb-4">
                                 <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
                             </div>
@@ -64,7 +64,7 @@
 
         <!-- Error Flash Message -->
         @if (session()->has('error'))
-            <div class="dynamic-form-section__error-wrap row justify-content-center mt-4">
+            <div class="dynamic-form__error-wrap row justify-content-center mt-4">
                 <div class="col-lg-8 col-xl-6">
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <i class="fas fa-exclamation-triangle me-2"></i>
