@@ -1,7 +1,7 @@
 <div class="hero-banner__wrapper">
     @if (!empty($displayOptions['heroes']))
         @foreach ($displayOptions['heroes'] as $hero)
-            <div class="hero-banner {{ $style ?? '' }}">
+            <div class="hero-banner hero-banner-{{ $style ?? 'default' }}">
                 @if (($hero['type'] ?? 'image') === 'video')
                     <div class="hero-banner__video-wrap position-absolute top-0 start-0 w-100 h-100">
                         <video class="lazy w-100 h-100 object-fit-cover" controls preload="none">

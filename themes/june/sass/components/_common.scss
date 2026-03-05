@@ -1,3 +1,5 @@
+@use "mixins" as *;
+
 .container.container-responsive {
     @include media-breakpoint-down(xxl) {
         max-width: 94vw;
@@ -19,75 +21,17 @@
     }
 }
 
-// Shared button styles placeholder
-%btn-outline-light-primary {
-    color: $light;
-    background: transparent;
-    border: 2px solid $light;
-    font-weight: 600;
-    font-size: 1rem;
-    padding: 0.375rem 0.75rem;
-    transition:
-        color 0.3s,
-        border-color 0.3s,
-        background 0.3s;
-    min-width: $touch-target-min;
-    min-height: $touch-target-min;
-
-    i {
-        margin-right: 0.5rem;
-    }
-
-    &:hover {
-        color: $gray-400 !important;
-        border-color: $gray-500;
-        background: transparent;
-    }
-}
-
-// Class for HTML usage
+// Shared button/overlay classes (use mixins for clearer output than @extend)
 .btn-outline-light-primary {
-    @extend %btn-outline-light-primary;
+    @include btn-outline-light-primary;
 }
 
-// Shared overlay caption placeholder
-%overlay-caption {
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%, -40%);
-    text-align: center;
-    width: 100%;
-    color: $light;
-    z-index: 10;
-
-    h2 {
-        font-size: 3rem;
-        font-weight: 700;
-        text-shadow: 0 2px 8px $black-alpha-40;
-    }
-
-    p.lead {
-        font-size: 1rem;
-        font-weight: 400;
-        text-shadow: 0 1px 4px $black-alpha-30;
-    }
-}
-
-// Class for HTML usage
 .overlay-caption {
-    @extend %overlay-caption;
+    @include overlay-caption;
 }
 
-// Overlay button placeholder
-%overlay-btn {
-    @extend %btn-outline-light-primary;
-
-    margin-top: 1.5rem;
-}
-
-// Class for HTML usage
 .overlay-btn {
-    @extend %overlay-btn;
+    @include overlay-btn;
 }
 
 .icon-rednote {
@@ -110,6 +54,7 @@
         display: block;
         overflow-x: auto;
         white-space: nowrap;
+        @include custom-scrollbar;
 
         @include media-breakpoint-up(md) {
             display: table;

@@ -55,25 +55,8 @@
 // Swiper CSS
 @import "swiper/css/bundle";
 
-// 6. Component imports (Bootstrap uses @import; components load in same scope for mixin access)
-@import "components/common";
-@import "components/lazy-loading";
-@import "components/header";
-@import "components/footer";
-@import "components/media-slider";
-@import "components/hero-banner";
-@import "components/video-showcase";
-@import "components/transition-section";
-@import "components/features";
-@import "components/features-fashionable";
-@import "components/specifications";
-@import "components/text-document-collapsible";
-@import "components/product-variant-block";
-@import "components/dynamic-form";
-@import "components/error-page";
-@import "components/faq-section";
-@import "components/user-manual";
-@import "components/anchor";
+// 6. Component imports (grouped in components/_index.scss)
+@import "components/index";
 
 // 7. Custom styles
 body {

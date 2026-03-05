@@ -1,8 +1,8 @@
-// FAQ Section Component
+// FAQ Section Component (BEM)
 // Accordion button selected state uses light/dark semantic colors
 
 .faq-section {
-    .accordion-button:not(.collapsed) {
+    &__accordion-button:not(.collapsed) {
         background-color: var(--bs-secondary-bg);
         color: var(--bs-emphasis-color);
     }

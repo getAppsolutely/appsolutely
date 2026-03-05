@@ -20,7 +20,7 @@
                 transform: translateY(0);
             }
 
-            .hero-banner-btn {
+            .hero-banner__btn {
                 opacity: 1;
                 transform: translateY(0);
             }
@@ -30,7 +30,7 @@
 
 // Hero banner caption
 .hero-banner__caption {
-    @extend %overlay-caption;
+    @include overlay-caption;
 
     top: 15% !important;
 
@@ -76,14 +76,14 @@
         }
     }
 
-    .hero-banner-btn {
+    .hero-banner__btn {
         @include fade-in-up(0.6s);
     }
 }
 
-// Button styles
-.hero-banner-btn {
-    @extend %overlay-btn;
+// Button styles (BEM: block__element)
+.hero-banner__btn {
+    @include overlay-btn;
 }
 
 .hero-banner__image-wrap {
@@ -92,7 +92,8 @@
     background-repeat: no-repeat;
 }
 
-:not(.fullscreen) {
+// Default style (not fullscreen)
+.hero-banner:not(.hero-banner-fullscreen) {
     & > .hero-banner__image-wrap {
         aspect-ratio: 16 / 9;
     }
@@ -107,7 +108,8 @@
     }
 }
 
-.fullscreen {
+// Fullscreen style modifier
+.hero-banner-fullscreen {
     & > .hero-banner__image-wrap {
         width: 100%;
         height: 100vh;
@@ -119,7 +121,7 @@
 
 // Responsive: Reorder caption and image on smaller screens
 @include media-breakpoint-down(xxl) {
-    .hero-banner.default {
+    .hero-banner.hero-banner-default {
         display: flex;
         flex-direction: column;
 

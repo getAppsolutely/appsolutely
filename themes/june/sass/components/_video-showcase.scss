@@ -1,4 +1,6 @@
 // Video Showcase Component Styles
+@use "mixins" as *;
+
 .video-showcase {
     min-height: 100vh !important;
 
@@ -52,7 +54,7 @@
         min-height: 100vh !important;
 
         > * {
-            animation: fade-in-up 1s ease-out;
+            @include animate-fade-in-up(1s);
         }
     }
 
@@ -75,31 +77,13 @@
     @media (prefers-reduced-motion: reduce) {
         .video-showcase__content > * {
             animation: none;
+            opacity: 1;
+            transform: none;
         }
 
         .btn-primary {
             transition: none;
         }
-
-        h1,
-        h2,
-        p,
-        .btn {
-            animation: none;
-            animation-delay: unset;
-        }
-    }
-}
-
-@keyframes fade-in-up {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
     }
 }
 

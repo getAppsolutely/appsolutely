@@ -1,3 +1,5 @@
+@use "mixins" as *;
+
 // Bootstrap carousel fullscreen controls
 .section-full {
     display: flex;
@@ -141,7 +143,7 @@
 }
 
 .media-slider-fullscreen__caption {
-    @extend %overlay-caption;
+    @include overlay-caption;
 
     top: 40% !important;
 
@@ -162,7 +164,7 @@
 }
 
 .media-slider-fullscreen__btn {
-    @extend %overlay-btn;
+    @include overlay-btn;
 }
 
 // Carousel styles

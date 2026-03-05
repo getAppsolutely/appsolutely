@@ -1,0 +1,26 @@
+// Component imports — grouped by type for clarity
+// Bootstrap uses @import; components load in same scope for mixin access
+
+// Layout
+@import "common";
+@import "header";
+@import "footer";
+
+// Utilities
+@import "lazy-loading";
+
+// Blocks
+@import "hero-banner";
+@import "video-showcase";
+@import "media-slider";
+@import "transition-section";
+@import "features";
+@import "features-fashionable";
+@import "specifications";
+@import "text-document-collapsible";
+@import "product-variant-block";
+@import "dynamic-form";
+@import "error-page";
+@import "faq-section";
+@import "user-manual";
+@import "anchor";

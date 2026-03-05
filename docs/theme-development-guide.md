@@ -707,7 +707,7 @@ $input-btn-padding-x: 0.75rem;
 1. **Import Order**: Follow Bootstrap's recommended import order
 2. **Variable Overrides**: Override Bootstrap variables before importing Bootstrap
 3. **Component Organization**: Create separate SCSS files for each component
-4. **Mixins**: Use mixins for reusable animation and styling patterns
+4. **Mixins**: Use mixins for reusable animation and styling patterns. Two animation patterns: `fade-in-up` (transition-based, triggered by `.animate` via Intersection Observer) for scroll-triggered effects; `animate-fade-in-up` (keyframe-based) for load-triggered effects. Add `@media (prefers-reduced-motion: reduce)` override when using `animate-fade-in-up`.
 5. **Responsive Design**: Use Bootstrap's media query mixins consistently
 6. **Naming Conventions**: Use BEM methodology for custom classes (`.block__element`, `.block__element--modifier`)
 7. **Performance**: Avoid deep nesting (max 3-4 levels)
