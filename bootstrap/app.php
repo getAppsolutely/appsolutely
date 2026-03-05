@@ -31,6 +31,10 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\RestrictRoutePrefixes::class,
             \App\Http\Middleware\SetThemeMiddleware::class,
             \Spatie\ResponseCache\Middlewares\CacheResponse::class,
+            // Minify HTML, CSS, JS (order matters: CSS/JS first, then HTML)
+            \Fahlisaputra\Minify\Middleware\MinifyHtml::class,
+            \Fahlisaputra\Minify\Middleware\MinifyCss::class,
+            \Fahlisaputra\Minify\Middleware\MinifyJavascript::class,
         ]);
 
         $middleware->api(append: [
