@@ -43,7 +43,10 @@ final class PageController extends AdminBaseController
             $grid->actions(function (Grid\Displayers\Actions $actions) {
                 $actions->disableView();
 
-                $reference =  $actions?->row?->reference;
+                $pageId    = $actions->row?->id;
+                $reference = $actions->row?->reference;
+                $blockUrl  = admin_route('pages.blocks.index') . '?page_id=' . (int) $pageId . '#block-settings';
+                $actions->prepend(admin_link_action('Manage Blocks', $blockUrl, '_blank', 'icon-box', 'primary'));
                 $actions->prepend(admin_link_action('Design', admin_route('pages.design', [$reference]), '_blank'));
             });
         });

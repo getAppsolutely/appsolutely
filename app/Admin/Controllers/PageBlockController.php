@@ -64,6 +64,12 @@ final class PageBlockController extends AdminBaseController
                 $query->where('scope', BlockScope::Page->value);
             });
 
+            // Apply page_id filter when passed from Pages list link
+            $pageId = request('page_id');
+            if ($pageId !== null && $pageId !== '') {
+                $grid->model()->where('page_id', (int) $pageId);
+            }
+
             $grid->model()->orderByDesc('page_id');
             $grid->quickSearch('id', 'type', 'template');
             $grid->filter(function (Grid\Filter $filter) {
