@@ -155,30 +155,68 @@ When a component's `$style` property is set to a specific value (like "fullscree
 - `hero-banner.blade.php` - Default hero banner layout
 - `hero-banner_fullscreen.blade.php` - Fullscreen hero banner variant
 
-### Component Structure & CSS Naming
+### Page Wrapper Alignment
 
-Livewire components should follow a consistent structure with proper CSS class naming for style control:
+Each block is rendered inside a page-level wrapper in `resources/views/pages/show.blade.php`:
 
-**CSS Class Naming Convention:**
-Use `block [block_name] [block_name]-[style]` pattern on the **root div/section element**:
-
-```php
-{{-- themes/theme-name/views/livewire/hero-banner.blade.php Default style --}}
-<div class="block hero-banner hero-banner-default">
-    {{-- Content --}}
-</div>
-
-{{-- themes/theme-name/views/livewire/hero-banner_fullscreen.blade.php Style-specific variant --}}
-<div class="block hero-banner hero-banner-fullscreen">
-    {{-- Content --}}
+```blade
+<div id="block-{{ $block->reference }}" class="block-wrapper">
+    @renderBlock($block, $page)
 </div>
 ```
 
+**Livewire Blade views should align with this structure:**
+
+- Use a **single root element** that wraps all block content
+- The root element becomes the direct child of `block-wrapper`; keep structure simple and predictable
+- Mirror the wrapper's purpose: one semantic container per block, no stray siblings
+
+### Component Structure & CSS Naming (Unified)
+
+Use a consistent root element and BEM-style class naming across all Livewire block views.
+
+**Root Element:**
+
+- **`<section>`** — For most blocks (hero-banner, features, faq-section, etc.). Semantic and accessible.
+- **`<header>`** — For header blocks (matches Livewire component name).
+- **`<footer>`** — For footer blocks (matches Livewire component name).
+- **`<nav>`** — For navigation blocks (e.g. anchor/section navigation).
+
+**Root Classes (BEM-style):**
+
+Use `block-name` on the root. For style variants, add `block-name--style` (BEM modifier) or use a compound class `block-name-style` when the view file is style-specific:
+
+```php
+{{-- themes/theme-name/views/livewire/hero-banner.blade.php Default style --}}
+<section class="hero-banner hero-banner--default">
+    {{-- Content --}}
+</section>
+
+{{-- themes/theme-name/views/livewire/hero-banner_fullscreen.blade.php Style-specific variant --}}
+<section class="hero-banner hero-banner--fullscreen">
+    {{-- Content --}}
+</section>
+
+{{-- header.blade.php — semantic element matches component name --}}
+<header class="header">
+    {{-- Content --}}
+</header>
+
+{{-- anchor.blade.php — nav for section navigation --}}
+<nav class="anchor-nav" role="navigation" aria-label="...">
+    {{-- Content --}}
+</nav>
+```
+
+**Child elements:** Use BEM `block-name__element` for inner structure (e.g. `hero-banner__caption`, `faq-section__container`).
+
 **Examples:**
 
-- `block hero-banner hero-banner-default` - Default hero banner
-- `block hero-banner hero-banner-fullscreen` - Fullscreen hero banner
-- `block media-slider media-slider-carousel` - Carousel media slider
+- `hero-banner hero-banner--default` — Default hero banner
+- `hero-banner hero-banner--fullscreen` — Fullscreen hero banner
+- `media-slider media-slider--carousel` — Carousel media slider
+- `header` — Header block (root `<header>`)
+- `footer` — Footer block (root `<footer>`)
 
 ### When to Use Style Variants vs Conditional Rendering
 
@@ -194,30 +232,30 @@ Use `block [block_name] [block_name]-[style]` pattern on the **root div/section 
 
 ```php
 {{-- hero-banner.blade.php - Simple banner with image --}}
-<div class="block hero-banner hero-banner-default">
-    <img class="hero-image" src="{{ $image }}" alt="{{ $title }}">
-    <div class="hero-caption">
+<section class="hero-banner hero-banner--default">
+    <img class="hero-banner__image" src="{{ $image }}" alt="{{ $title }}">
+    <div class="hero-banner__caption">
         <h2>{{ $title }}</h2>
     </div>
-</div>
+</section>
 
 {{-- hero-banner_fullscreen.blade.php - Complex fullscreen layout --}}
-<div class="block hero-banner hero-banner-fullscreen">
-    <div class="hero-video-background">
+<section class="hero-banner hero-banner--fullscreen">
+    <div class="hero-banner__video-background">
         <video autoplay muted loop>
             <source src="{{ $video }}" type="video/mp4">
         </video>
     </div>
-    <div class="hero-content-overlay">
-        <div class="hero-text-animation">
-            <h1 class="animated-title">{{ $title }}</h1>
-            <p class="animated-subtitle">{{ $subtitle }}</p>
+    <div class="hero-banner__content-overlay">
+        <div class="hero-banner__text-animation">
+            <h1 class="hero-banner__title">{{ $title }}</h1>
+            <p class="hero-banner__subtitle">{{ $subtitle }}</p>
         </div>
-        <div class="hero-interactive-elements">
-            <button class="cta-button">{{ $ctaText }}</button>
+        <div class="hero-banner__actions">
+            <button class="hero-banner__cta">{{ $ctaText }}</button>
         </div>
     </div>
-</div>
+</section>
 ```
 
 **Use Conditional Rendering When:**
@@ -231,19 +269,19 @@ Use `block [block_name] [block_name]-[style]` pattern on the **root div/section 
 
 ```php
 {{-- hero-banner.blade.php - Same structure, different styling --}}
-<div class="block hero-banner {{ $style === 'fullscreen' ? 'hero-banner-fullscreen' : 'hero-banner-default' }}">
-    <div class="hero-image-container {{ $style === 'fullscreen' ? 'hero-fullscreen' : 'hero-standard' }}">
+<section class="hero-banner {{ $style === 'fullscreen' ? 'hero-banner--fullscreen' : 'hero-banner--default' }}">
+    <div class="hero-banner__image-wrap {{ $style === 'fullscreen' ? 'hero-banner__image-wrap--fullscreen' : 'hero-banner__image-wrap--standard' }}">
         <img src="{{ $image }}" alt="{{ $title }}">
     </div>
-    <div class="hero-caption {{ $style === 'fullscreen' ? 'hero-caption-center' : 'hero-caption-bottom' }}">
+    <div class="hero-banner__caption {{ $style === 'fullscreen' ? 'hero-banner__caption--center' : 'hero-banner__caption--bottom' }}">
         <h2>{{ $title }}</h2>
         @if($style === 'fullscreen')
-            <p class="hero-subtitle-large">{{ $subtitle }}</p>
+            <p class="hero-banner__subtitle hero-banner__subtitle--large">{{ $subtitle }}</p>
         @else
-            <p class="hero-subtitle">{{ $subtitle }}</p>
+            <p class="hero-banner__subtitle">{{ $subtitle }}</p>
         @endif
     </div>
-</div>
+</section>
 ```
 
 **Decision Matrix:**
@@ -261,17 +299,17 @@ Use `block [block_name] [block_name]-[style]` pattern on the **root div/section 
 
 ```scss
 // Target all hero-banner blocks regardless of style
-.block.hero-banner {
+.hero-banner {
     // Common styles for all hero banner variants
 }
 
 // Target only default hero-banner blocks
-.block.hero-banner.hero-banner-default {
+.hero-banner.hero-banner--default {
     // Default-specific styles
 }
 
 // Target only fullscreen hero-banner blocks
-.block.hero-banner.hero-banner-fullscreen {
+.hero-banner.hero-banner--fullscreen {
     // Fullscreen-specific styles
 }
 ```
@@ -292,8 +330,8 @@ Use the correct helper depending on the asset source:
 
 ### Best Practices for Blade Templates
 
-1. **Consistent Structure**: Always wrap content in a root `<div>` or `<section>` for Livewire components
-2. **CSS Class Naming**: Use `block [block_name] [block_name]-[style]` pattern on the **root div/section element** for precise CSS control
+1. **Consistent Structure**: Use a single root element per Livewire view — `<section>` for most blocks; `<header>`, `<footer>`, or `<nav>` when the block purpose matches. Align with the page's `block-wrapper` structure.
+2. **CSS Class Naming**: Use BEM-style `block-name` and `block-name--style` on the root; `block-name__element` for children
 3. **Conditional Rendering**: Use `@if (!empty($displayOptions['key']))` for optional content
 4. **Asset URLs**: Use `asset_url()` for CMS/storage media; use `themed_assets()` only for theme assets built by Vite (see [Asset Helpers](#asset-helpers-asset_url-vs-themed_assets) above)
 5. **Accessibility**: Include proper `alt` attributes and semantic HTML
