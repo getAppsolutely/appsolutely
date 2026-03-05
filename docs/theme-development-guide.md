@@ -698,7 +698,38 @@ $input-btn-padding-x: 0.75rem;
 ### SCSS Conventions
 
 - **Comments**: Use `//` for single-line and section comments; avoid `/* */` except for multi-line blocks
-- **Module system**: Use `@use` for internal dependencies (e.g. `@use "mixins" as *`); Bootstrap requires `@import` so app entry stays with `@import`
+- **Variables**: Use `$touch-target-min` (44px) for interactive elements to meet accessibility guidelines. Add other semantic variables only when a value is used in 2+ places.
+
+### SCSS Module System (@import vs @use)
+
+The June theme uses a **hybrid** approach because Bootstrap 5 and some third-party CSS (Swiper, Bootstrap Icons) only support `@import`.
+
+| Layer             | Directive                  | Reason                                                                                                                                                                         |
+| ----------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **app.scss**      | `@import`                  | Bootstrap, Swiper, and Bootstrap Icons require `@import`. The entry point loads everything into a single global scope so variables and mixins are available to all components. |
+| **components/**   | `@use "mixins" as *`       | Components that need mixins use the modern module system. `as *` loads mixins into the current scope (no namespace prefix).                                                    |
+| **\_mixins.scss** | `@use "../variables" as *` | Mixins need variables; they load the variables module.                                                                                                                         |
+
+**Rules:**
+
+1. **app.scss** — Use `@import` for Bootstrap, variables, and all component partials. Do not change to `@use`; Bootstrap's Sass does not support it.
+2. **Component partials** — Use `@use "mixins" as *` when you need mixins (e.g. `fade-in-up`, `custom-scrollbar`, `media-breakpoint-*`). Variables are in the global scope from app.scss, so no `@use` for variables.
+3. **\_mixins.scss** — Use `@use "../variables" as *` so mixins can reference `$gray-100`, `$black-alpha-10`, etc.
+4. **New components** — If a component needs only variables (no mixins), no `@use` is needed. If it needs mixins, add `@use "mixins" as *` at the top.
+
+**Example:**
+
+```scss
+// themes/june/sass/components/_hero-banner.scss
+@use 'mixins' as *;
+
+.hero-banner-caption {
+    h4 {
+        @include fade-in-up(0.2s); // from mixins
+    }
+    color: $light; // from global scope (app.scss imports variables)
+}
+```
 
 ## TypeScript Components
 

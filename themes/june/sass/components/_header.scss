@@ -247,8 +247,8 @@
 
                 .nav-link,
                 .dropdown-item {
-                    min-height: 44px;
-                    min-width: 44px;
+                    min-height: $touch-target-min;
+                    min-width: $touch-target-min;
                     padding-top: 0.7rem;
                     padding-bottom: 0.7rem;
                 }
@@ -311,8 +311,8 @@
 .header-mobile-close,
 .navbar-toggler,
 .header-mobile-testdrive .btn {
-    min-height: 44px;
-    min-width: 44px;
+    min-height: $touch-target-min;
+    min-width: $touch-target-min;
 }
 
 // Enhanced navbar toggler styling

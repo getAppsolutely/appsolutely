@@ -36,8 +36,8 @@
             user-select: none;
 
             // Ensure adequate touch target size (minimum 44x44px for iOS)
-            min-height: 44px;
-            min-width: 44px;
+            min-height: $touch-target-min;
+            min-width: $touch-target-min;
             display: inline-flex;
             align-items: center;
             justify-content: center;

@@ -31,8 +31,8 @@
         color 0.3s,
         border-color 0.3s,
         background 0.3s;
-    min-width: 44px;
-    min-height: 44px;
+    min-width: $touch-target-min;
+    min-height: $touch-target-min;
 
     i {
         margin-right: 0.5rem;
