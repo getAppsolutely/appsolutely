@@ -15,7 +15,7 @@
             height: 1em;
             margin-left: 1.25rem;
             margin-right: 1.25rem;
-            background-color: rgb(255 255 255 / 35%);
+            background-color: $white-alpha-35;
             flex-shrink: 0;
         }
     }
@@ -30,11 +30,11 @@
             color 0.2s;
 
         &:hover {
-            color: rgb(255 255 255 / 90%) !important;
+            color: $white-alpha-90 !important;
         }
 
         &--active {
-            border-bottom-color: rgb(255 255 255 / 90%);
+            border-bottom-color: $white-alpha-90;
             font-weight: 600;
         }
     }
@@ -60,11 +60,11 @@
         border: none;
         border-radius: 50%;
         background-color: var(--bs-dark, $dark);
-        color: rgb(255 255 255 / 90%);
+        color: $white-alpha-90;
         cursor: pointer;
         opacity: 0;
         visibility: hidden;
-        box-shadow: 0 2px 8px rgb(0 0 0 / 20%);
+        box-shadow: 0 2px 8px $black-alpha-20;
         transition:
             opacity 0.2s,
             visibility 0.2s,
@@ -81,11 +81,11 @@
             color: $white;
             background-color: $anchor-to-top-hover-bg;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgb(0 0 0 / 25%);
+            box-shadow: 0 4px 12px $black-alpha-25;
         }
 
         &:focus-visible {
-            outline: 2px solid rgb(255 255 255 / 60%);
+            outline: 2px solid $white-alpha-60;
             outline-offset: 2px;
         }
 

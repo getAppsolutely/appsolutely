@@ -50,8 +50,7 @@
 @import "~bootstrap/scss/utilities/api";
 @import "bootstrap-icons/font/bootstrap-icons";
 
-// Google Fonts
-@import "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans+Thai:wght@100..900&display=swap";
+// Google Fonts: loaded via <link> in layout for non-blocking load (see public.blade.php)
 
 // Swiper CSS
 @import "swiper/css/bundle";

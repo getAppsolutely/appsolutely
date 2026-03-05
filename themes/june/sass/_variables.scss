@@ -125,3 +125,28 @@ $anchor-to-top-hover-bg: #374151;
 
 // Price section accent (product variant block)
 $price-accent: #3490dc;
+
+// Black/white with opacity (shadows, overlays) — use instead of hardcoded rgb()
+$black-alpha-04: rgb(0 0 0 / 4%);
+$black-alpha-05: rgb(0 0 0 / 5%);
+$black-alpha-06: rgb(0 0 0 / 6%);
+$black-alpha-08: rgb(0 0 0 / 8%);
+$black-alpha-10: rgb(0 0 0 / 10%);
+$black-alpha-12: rgb(0 0 0 / 12%);
+$black-alpha-15: rgb(0 0 0 / 15%);
+$black-alpha-18: rgb(0 0 0 / 18%);
+$black-alpha-20: rgb(0 0 0 / 20%);
+$black-alpha-25: rgb(0 0 0 / 25%);
+$black-alpha-30: rgb(0 0 0 / 30%);
+$black-alpha-40: rgb(0 0 0 / 40%);
+$black-alpha-50: rgb(0 0 0 / 50%);
+$black-alpha-60: rgb(0 0 0 / 60%);
+$black-alpha-70: rgb(0 0 0 / 70%);
+$black-alpha-80: rgb(0 0 0 / 80%);
+$white-alpha-10: rgb(255 255 255 / 10%);
+$white-alpha-15: rgb(255 255 255 / 15%);
+$white-alpha-35: rgb(255 255 255 / 35%);
+$white-alpha-60: rgb(255 255 255 / 60%);
+$white-alpha-90: rgb(255 255 255 / 90%);
+$white-alpha-95: rgb(255 255 255 / 95%);
+$white-alpha-98: rgb(255 255 255 / 98%);

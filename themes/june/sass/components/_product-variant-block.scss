@@ -60,11 +60,11 @@
     .color-selection {
         .color-option {
             transition: all 0.2s ease;
-            box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+            box-shadow: 0 2px 4px $black-alpha-10;
 
             &:hover {
                 transform: scale(1.1);
-                box-shadow: 0 4px 8px rgb(0 0 0 / 20%);
+                box-shadow: 0 4px 8px $black-alpha-20;
             }
 
             &.active {

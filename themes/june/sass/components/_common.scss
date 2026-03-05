@@ -63,13 +63,13 @@
     h2 {
         font-size: 3rem;
         font-weight: 700;
-        text-shadow: 0 2px 8px rgb(0 0 0 / 40%);
+        text-shadow: 0 2px 8px $black-alpha-40;
     }
 
     p.lead {
         font-size: 1rem;
         font-weight: 400;
-        text-shadow: 0 1px 4px rgb(0 0 0 / 30%);
+        text-shadow: 0 1px 4px $black-alpha-30;
     }
 }
 

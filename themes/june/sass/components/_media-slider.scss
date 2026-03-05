@@ -54,14 +54,14 @@
             background: $white;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgb(0 0 0 / 8%);
+            box-shadow: 0 2px 8px $black-alpha-08;
             transition:
                 transform 0.3s ease,
                 box-shadow 0.3s ease;
 
             &:hover {
                 transform: translateY(-4px);
-                box-shadow: 0 4px 16px rgb(0 0 0 / 12%);
+                box-shadow: 0 4px 16px $black-alpha-12;
             }
 
             .media-slider-item-image-wrapper {
@@ -287,7 +287,7 @@
                 bottom: 0;
                 left: 0;
                 right: 0;
-                background: linear-gradient(transparent, rgb(0 0 0 / 80%));
+                background: linear-gradient(transparent, $black-alpha-80);
                 color: $white;
                 padding: 2rem 1.5rem 1.5rem;
                 text-align: left;
@@ -416,11 +416,11 @@
                 height: 30px;
                 margin: 0;
                 color: var(--bs-secondary);
-                background: rgb(255 255 255 / 95%);
+                background: $white-alpha-95;
 
                 // border: 1px solid var(--bs-secondary);
                 border-radius: 50%;
-                box-shadow: 0 2px 8px rgb(0 0 0 / 8%);
+                box-shadow: 0 2px 8px $black-alpha-08;
                 transition: all 0.3s ease;
                 cursor: pointer;
                 display: flex;
@@ -431,7 +431,7 @@
                     background: var(--bs-secondary);
                     color: $white;
                     transform: translateY(-1px);
-                    box-shadow: 0 4px 12px rgb(0 0 0 / 12%);
+                    box-shadow: 0 4px 12px $black-alpha-12;
                 }
 
                 &:active {
@@ -777,9 +777,9 @@
             height: 40px;
             margin: 0;
             color: $white;
-            background: rgb(0 0 0 / 60%);
+            background: $black-alpha-60;
             border-radius: 50%;
-            box-shadow: 0 2px 8px rgb(0 0 0 / 30%);
+            box-shadow: 0 2px 8px $black-alpha-30;
             transition: all 0.3s ease;
             cursor: pointer;
             display: flex;
@@ -787,9 +787,9 @@
             justify-content: center;
 
             &:hover {
-                background: rgb(0 0 0 / 80%);
+                background: $black-alpha-80;
                 transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgb(0 0 0 / 40%);
+                box-shadow: 0 4px 12px $black-alpha-40;
             }
 
             &:active {
