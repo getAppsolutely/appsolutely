@@ -58,45 +58,26 @@ fi
 FAILED=0
 START_TIME=$(date +%s)
 
-# Run TypeScript type check with output capture
+# Run TypeScript type check (output streams directly to terminal)
 echo "📝 Type checking TypeScript files..."
-TYPE_CHECK_OUTPUT=$(npm run -s type-check:all 2>&1)
-TYPE_CHECK_EXIT=$?
-
-if [ $TYPE_CHECK_EXIT -eq 0 ]; then
+if npm run type-check:all; then
     print_success "TypeScript type check passed"
 else
     print_error "TypeScript type check failed!"
     echo ""
-    # Show first 10 errors
-    echo "$TYPE_CHECK_OUTPUT" | grep -E "error TS" | head -10
-    if [ $(echo "$TYPE_CHECK_OUTPUT" | grep -E "error TS" | wc -l) -gt 10 ]; then
-        echo "... (and more errors)"
-    fi
-    echo ""
-    echo "💡 Run 'npm run type-check:all' to see all errors."
+    echo "💡 Fix the errors above, or run 'npm run type-check:all' to see them again."
     FAILED=1
 fi
 echo ""
 
-# Run linters with output capture
+# Run linters (output streams directly to terminal)
 echo "🧹 Running linters..."
-LINT_OUTPUT=$(npm run -s lint:all 2>&1)
-LINT_EXIT=$?
-
-if [ $LINT_EXIT -eq 0 ]; then
+if npm run lint:all; then
     print_success "Linting passed"
 else
     print_error "Linting failed!"
     echo ""
-    # Show first 10 linting errors
-    echo "$LINT_OUTPUT" | grep -E "(error|warning)" | head -10
-    if [ $(echo "$LINT_OUTPUT" | grep -E "(error|warning)" | wc -l) -gt 10 ]; then
-        echo "... (and more errors)"
-    fi
-    echo ""
-    echo "💡 Run 'npm run lint:all' to see all errors."
-    echo "💡 Or run 'npm run lint:all:fix' to auto-fix issues."
+    echo "💡 Fix the errors above, or run 'npm run lint:all:fix' to auto-fix."
     FAILED=1
 fi
 echo ""
@@ -117,25 +98,16 @@ if [ -z "$SKIP_BLADE_CHECK" ]; then
     fi
     
     if [ -n "$WORKSPACE_CONTAINER" ]; then
-        # Run Blade validation inside Docker container
+        # Run Blade validation inside Docker container (output streams directly)
         # Clear view cache first, then try to cache (which validates syntax)
-        BLADE_VALIDATION_OUTPUT=$(docker exec "$WORKSPACE_CONTAINER" bash -c "cd /var/www/appsolutely/site && php artisan view:clear 2>&1 && php artisan view:cache 2>&1")
-        BLADE_VALIDATION_EXIT=$?
-        
-        if [ $BLADE_VALIDATION_EXIT -eq 0 ]; then
+        if docker exec "$WORKSPACE_CONTAINER" bash -c "cd /var/www/appsolutely/site && php artisan view:clear && php artisan view:cache"; then
             print_success "Blade templates validated"
             # Clear cache again to avoid leaving cached views
             docker exec "$WORKSPACE_CONTAINER" bash -c "cd /var/www/appsolutely/site && php artisan view:clear" >/dev/null 2>&1
         else
             print_error "Blade template validation failed!"
             echo ""
-            # Show validation errors
-            echo "$BLADE_VALIDATION_OUTPUT" | grep -E "(error|Error|Exception|syntax)" | head -20
-            if [ $(echo "$BLADE_VALIDATION_OUTPUT" | grep -E "(error|Error|Exception|syntax)" | wc -l) -gt 20 ]; then
-                echo "... (and more errors)"
-            fi
-            echo ""
-            echo "💡 Run 'docker exec $WORKSPACE_CONTAINER bash -c \"cd /var/www/appsolutely/site && php artisan view:cache\"' to see full validation errors."
+            echo "💡 Run 'docker exec $WORKSPACE_CONTAINER bash -c \"cd /var/www/appsolutely/site && php artisan view:cache\"' to see full errors."
             echo "💡 Or set SKIP_BLADE_CHECK=1 to skip Blade template validation during pre-push."
             FAILED=1
         fi
@@ -143,16 +115,11 @@ if [ -z "$SKIP_BLADE_CHECK" ]; then
         # Fallback: try to run on host (may fail if PHP/dependencies not available)
         if command -v php >/dev/null 2>&1; then
             print_warning "Docker container not found. Running Blade validation on host (may fail if dependencies are missing)."
-            BLADE_VALIDATION_OUTPUT=$(php artisan view:clear 2>&1 && php artisan view:cache 2>&1)
-            BLADE_VALIDATION_EXIT=$?
-            
-            if [ $BLADE_VALIDATION_EXIT -eq 0 ]; then
+            if php artisan view:clear && php artisan view:cache; then
                 print_success "Blade templates validated"
                 php artisan view:clear >/dev/null 2>&1
             else
                 print_error "Blade template validation failed!"
-                echo ""
-                echo "$BLADE_VALIDATION_OUTPUT" | grep -E "(error|Error|Exception|syntax)" | head -20
                 echo ""
                 echo "💡 Run 'php artisan view:cache' to see full validation errors."
                 echo "💡 Or set SKIP_BLADE_CHECK=1 to skip Blade template validation during pre-push."
@@ -173,18 +140,10 @@ fi
 # Set SKIP_FRONTEND_TESTS=1 to skip frontend tests during pre-push
 if [ -z "$SKIP_FRONTEND_TESTS" ]; then
     echo "🧪 Running frontend tests..."
-    FRONTEND_TEST_OUTPUT=$(npm run -s test:frontend 2>&1)
-    FRONTEND_TEST_EXIT=$?
-    
-    if [ $FRONTEND_TEST_EXIT -eq 0 ]; then
+    if npm run test:frontend; then
         print_success "Frontend tests passed"
-        # Show test summary (last 20 lines which usually contain the summary)
-        echo "$FRONTEND_TEST_OUTPUT" | tail -20
     else
         print_error "Frontend tests failed!"
-        echo ""
-        # Show test output (last 40 lines for context)
-        echo "$FRONTEND_TEST_OUTPUT" | tail -40
         echo ""
         echo "💡 Run 'npm run test:frontend' to see full test results."
         echo "💡 Or set SKIP_FRONTEND_TESTS=1 to skip frontend tests during pre-push."
@@ -212,39 +171,33 @@ if [ -z "$SKIP_PHP_TESTS" ]; then
     fi
     
     if [ -n "$WORKSPACE_CONTAINER" ]; then
-        # Run tests inside Docker container
-        PHP_TEST_OUTPUT=$(docker exec "$WORKSPACE_CONTAINER" bash -c "cd /var/www/appsolutely/site && php artisan test --testdox" 2>&1)
-        PHP_TEST_EXIT=$?
+        # Run tests inside Docker container (output streams directly)
+        if docker exec "$WORKSPACE_CONTAINER" bash -c "cd /var/www/appsolutely/site && php artisan test --testdox"; then
+            print_success "PHP tests passed"
+        else
+            print_error "PHP tests failed!"
+            echo ""
+            echo "💡 Run 'docker exec $WORKSPACE_CONTAINER bash -c \"cd /var/www/appsolutely/site && php artisan test\"' to see full test results."
+            echo "💡 Or set SKIP_PHP_TESTS=1 to skip PHP tests during pre-push."
+            FAILED=1
+        fi
     else
         # Fallback: try to run on host (may fail if PHP/dependencies not available)
         if [ -f "./vendor/bin/phpunit" ]; then
             print_warning "Docker container not found. Running PHP tests on host (may fail if dependencies are missing)."
-            PHP_TEST_OUTPUT=$(./vendor/bin/phpunit --testdox 2>&1)
-            PHP_TEST_EXIT=$?
+            if ./vendor/bin/phpunit --testdox; then
+                print_success "PHP tests passed"
+            else
+                print_error "PHP tests failed!"
+                echo ""
+                echo "💡 Run './vendor/bin/phpunit' to see full test results."
+                echo "💡 Or set SKIP_PHP_TESTS=1 to skip PHP tests during pre-push."
+                FAILED=1
+            fi
         else
             print_warning "Docker container not found and PHPUnit not available on host."
             print_warning "Skipping PHP tests. Run tests manually: docker exec laradock-workspace-1 bash -c 'cd /var/www/appsolutely/site && php artisan test'"
-            PHP_TEST_EXIT=0  # Don't fail the hook if we can't run tests
         fi
-    fi
-    
-    if [ $PHP_TEST_EXIT -eq 0 ]; then
-        print_success "PHP tests passed"
-        # Show test summary (last 15 lines which usually contain the summary)
-        echo "$PHP_TEST_OUTPUT" | tail -15
-    else
-        print_error "PHP tests failed!"
-        echo ""
-        # Show test output (last 30 lines for context)
-        echo "$PHP_TEST_OUTPUT" | tail -30
-        echo ""
-        if [ -n "$WORKSPACE_CONTAINER" ]; then
-            echo "💡 Run 'docker exec $WORKSPACE_CONTAINER bash -c \"cd /var/www/appsolutely/site && php artisan test\"' to see full test results."
-        else
-            echo "💡 Run './vendor/bin/phpunit' to see full test results."
-        fi
-        echo "💡 Or set SKIP_PHP_TESTS=1 to skip PHP tests during pre-push."
-        FAILED=1
     fi
     echo ""
 elif [ -n "$SKIP_PHP_TESTS" ]; then
