@@ -6,7 +6,7 @@
             </div>
         </div>
     </div>
-    @if($page['nested'])
+    @if ($page['nested'])
         @include('livewire.article-list.detail')
     @else
         @include('livewire.article-list.list')

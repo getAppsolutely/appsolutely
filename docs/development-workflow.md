@@ -24,13 +24,13 @@ Pre-commit hooks automatically run before each commit to ensure code quality.
 
 **Automated by `lint-staged`:**
 
-| File Type                  | Actions                             |
-| -------------------------- | ----------------------------------- |
-| `*.php`                    | Laravel Pint (automatic formatting) |
-| `*.blade.php`              | Laravel Pint (automatic formatting) |
-| `*.scss`                   | Prettier → Stylelint --fix          |
-| `*.{ts,tsx,js,jsx}`        | Prettier → ESLint --fix             |
-| `*.{css,json,md,html,vue}` | Prettier                            |
+| File Type                  | Actions                                |
+| -------------------------- | -------------------------------------- |
+| `*.php`                    | Laravel Pint (automatic formatting)    |
+| `*.blade.php`              | blade-formatter (automatic formatting) |
+| `*.scss`                   | Prettier → Stylelint --fix             |
+| `*.{ts,tsx,js,jsx}`        | Prettier → ESLint --fix                |
+| `*.{css,json,md,html,vue}` | Prettier                               |
 
 ### How It Works
 
@@ -308,6 +308,7 @@ npm run lint:scss         # Check Stylelint
 npm run lint:fix          # Fix ESLint issues
 npm run lint:scss:fix     # Fix Stylelint issues
 ./vendor/bin/pint         # Fix PHP issues
+npx blade-formatter --write '**/*.blade.php'  # Fix Blade template formatting
 ```
 
 ### Type Check Errors
@@ -416,6 +417,7 @@ graph TD
 - [ESLint Rules](https://eslint.org/docs/rules/)
 - [Stylelint Rules](https://stylelint.io/user-guide/rules/)
 - [Laravel Pint](https://laravel.com/docs/pint)
+- [blade-formatter](https://github.com/shufo/blade-formatter)
 - [Husky Documentation](https://typicode.github.io/husky/)
 - [lint-staged](https://github.com/okonet/lint-staged)
 

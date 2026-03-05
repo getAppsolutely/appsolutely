@@ -24,6 +24,7 @@
         "format": "prettier --write '**/*.{scss,css,ts,tsx,js,jsx,json,md,html,vue}'",
         "format:check": "prettier --check '**/*.{scss,css,ts,tsx,js,jsx,json,md,html,vue}'",
         "format:scss": "prettier --write '**/*.scss'",
+        "format:blade": "blade-formatter --write --no-php-syntax-check '**/*.blade.php'",
         "format:all": "npm run format && npm run lint:all:fix",
         "test": "npm run test:js && npm run test:php",
         "test:js": "npm run type-check:all && npm run lint && npm run lint:scss && npm run test:frontend",
@@ -54,6 +55,7 @@
         "@vitest/ui": "^4.0.8",
         "autoprefixer": "^10.4.19",
         "axios": "^1.7.4",
+        "blade-formatter": "^1.44.2",
         "bootstrap": "^5.3.0",
         "concurrently": "^9.2.0",
         "detect-port": "^2.1.0",
@@ -97,7 +99,7 @@
             "./vendor/bin/pint"
         ],
         "*.blade.php": [
-            "./vendor/bin/pint"
+            "blade-formatter --write --no-php-syntax-check"
         ],
         "*.scss": [
             "prettier --write",

@@ -12,7 +12,12 @@
         @endif
 
         @php
-            $items = array_values(array_filter($displayOptions['items'] ?? [], fn ($item) => !empty($item['title']) || !empty($item['image_src']) || !empty($item['links'])));
+            $items = array_values(
+                array_filter(
+                    $displayOptions['items'] ?? [],
+                    fn($item) => !empty($item['title']) || !empty($item['image_src']) || !empty($item['links']),
+                ),
+            );
         @endphp
 
         @if (!empty($items))
@@ -22,12 +27,9 @@
                         <div class="card h-100 shadow-sm">
                             @if (!empty($item['image_src']))
                                 <div class="ratio ratio-4x3">
-                                    <img
-                                        class="lazy card-img-top object-fit-cover"
-                                        data-src="{{ asset_url($item['image_src']) }}"
-                                        alt="{{ $item['title'] ?? '' }}"
-                                        src=""
-                                    >
+                                    <img class="lazy card-img-top object-fit-cover"
+                                        data-src="{{ asset_url($item['image_src']) }}" alt="{{ $item['title'] ?? '' }}"
+                                        src="">
                                 </div>
                             @endif
                             <div class="card-body d-flex flex-column">
@@ -38,12 +40,8 @@
                                     <div class="pt-3 d-flex flex-column gap-2">
                                         @foreach ($item['links'] as $link)
                                             @if (!empty($link['url']))
-                                                <a
-                                                    href="{{ asset_url($link['url']) }}"
-                                                    class="user-manual__link"
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
+                                                <a href="{{ asset_url($link['url']) }}" class="user-manual__link"
+                                                    target="_blank" rel="noopener noreferrer">
                                                     <i class="fas fa-file-pdf" aria-hidden="true"></i>
                                                     {{ $link['label'] ?? 'Download PDF' }}
                                                 </a>

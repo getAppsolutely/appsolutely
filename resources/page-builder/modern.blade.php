@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Design your "{{ $page->name }}" Page - Page Builder</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    
+
     <!-- Page Builder Assets (includes GrapesJS, FontAwesome, TailwindCSS) -->
     @vite(['resources/page-builder/assets/scss/app.scss', 'resources/page-builder/assets/ts/app.ts'], 'build/page-builder')
 </head>
@@ -46,27 +47,27 @@
                     <i class="fas fa-cube mr-1 mt-2"></i><span id="block-count">0</span> blocks
                 </div>
                 <button id="save-config-btn"
-                        class="flex items-center bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-md text-sm">
+                    class="flex items-center bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-md text-sm">
                     <i class="fas fa-undo mr-2"></i>Config Save
                 </button>
                 <button id="undo-btn"
-                        class="flex items-center bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-md text-sm">
+                    class="flex items-center bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-md text-sm">
                     <i class="fas fa-undo mr-2"></i>Undo
                 </button>
                 <button id="redo-btn"
-                        class="flex items-center bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-md text-sm">
+                    class="flex items-center bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-md text-sm">
                     <i class="fas fa-redo mr-2"></i>Redo
                 </button>
                 <button id="reset-btn"
-                        class="flex items-center bg-slate-100 hover:bg-red-200 px-3 py-1 rounded-md text-sm">
+                    class="flex items-center bg-slate-100 hover:bg-red-200 px-3 py-1 rounded-md text-sm">
                     <i class="fas fa-eraser mr-2"></i>Reset
                 </button>
                 <button id="save-btn"
-                        class="flex items-center bg-primary hover:bg-indigo-600 px-4 py-1 rounded-md text-sm text-white">
+                    class="flex items-center bg-primary hover:bg-indigo-600 px-4 py-1 rounded-md text-sm text-white">
                     <i class="fas fa-save mr-2"></i>Save
                 </button>
                 <button id="preview-btn"
-                        class="flex items-center bg-secondary hover:bg-purple-600 px-4 py-1 rounded-md text-sm text-white">
+                    class="flex items-center bg-secondary hover:bg-purple-600 px-4 py-1 rounded-md text-sm text-white">
                     <i class="fas fa-eye mr-2"></i>Preview
                 </button>
             </div>
@@ -91,7 +92,7 @@
 
                 <div class="relative mb-4 hidden">
                     <input type="text" placeholder="Search blocks..."
-                           class="w-full px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                        class="w-full px-4 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
                     <i class="fas fa-search absolute right-3 top-3 text-slate-400"></i>
                 </div>
 
@@ -116,7 +117,8 @@
     </main>
 
     <!-- Preview Modal -->
-    <div id="preview-modal" class="fixed inset-0 bg-black bg-opacity-75 items-center justify-center z-50 hidden pt-[10vh]">
+    <div id="preview-modal"
+        class="fixed inset-0 bg-black bg-opacity-75 items-center justify-center z-50 hidden pt-[10vh]">
         <div class="bg-white rounded-lg w-11/12 mx-auto h-11/12 my-auto overflow-hidden">
             <div class="flex justify-between items-center px-6 py-4 border-b">
                 <h3 class="text-lg font-semibold">Preview</h3>
@@ -135,11 +137,12 @@
         window.pageBuilderData = @json(json_encode($page['setting']));
         window.pageBuilderConfig = {
             blockRegistryUrl: '{{ admin_route('api.pages.block-registry') }}',
-            saveUrl: '{{ admin_route('api.pages.save',[$reference]) }}',
-            resetUrl: '{{ admin_route('api.pages.reset',[$reference]) }}',
-            dataUrl: '{{ admin_route('api.pages.data',[$reference]) }}',
+            saveUrl: '{{ admin_route('api.pages.save', [$reference]) }}',
+            resetUrl: '{{ admin_route('api.pages.reset', [$reference]) }}',
+            dataUrl: '{{ admin_route('api.pages.data', [$reference]) }}',
             themedStyles: @json(themed_styles())
         };
     </script>
 </body>
+
 </html>

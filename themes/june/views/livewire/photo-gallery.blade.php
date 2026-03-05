@@ -1,18 +1,20 @@
 <section class="container my-5 photo-gallery">
     @php
-        $photos = array_values(array_filter($displayOptions['photos'] ?? [], fn ($p) => !empty($p['image_src'] ?? null)));
+        $photos = array_values(
+            array_filter($displayOptions['photos'] ?? [], fn($p) => !empty($p['image_src'] ?? null)),
+        );
     @endphp
 
-    @if(isset($displayOptions['title']) || isset($displayOptions['subtitle']) || isset($displayOptions['descriptions']))
+    @if (isset($displayOptions['title']) || isset($displayOptions['subtitle']) || isset($displayOptions['descriptions']))
         <div class="text-center mb-4">
-            @if(!empty($displayOptions['title']))
+            @if (!empty($displayOptions['title']))
                 <h2 class="mb-2">{{ $displayOptions['title'] }}</h2>
             @endif
-            @if(!empty($displayOptions['subtitle']))
+            @if (!empty($displayOptions['subtitle']))
                 <p class="lead mb-2">{{ $displayOptions['subtitle'] }}</p>
             @endif
-            @if(!empty($displayOptions['descriptions']))
-                @foreach($displayOptions['descriptions'] as $description)
+            @if (!empty($displayOptions['descriptions']))
+                @foreach ($displayOptions['descriptions'] as $description)
                     <p class="text-muted mb-0">{{ $description }}</p>
                 @endforeach
             @endif
@@ -39,5 +41,3 @@
         </div>
     </template>
 </section>
-
-

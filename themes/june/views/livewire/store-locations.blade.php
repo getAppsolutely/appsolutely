@@ -1,21 +1,21 @@
 <section class="store-locations-section py-5">
     <div class="container">
         <!-- Section Header -->
-        @if($displayOptions['title'] || $displayOptions['subtitle'] || $displayOptions['description'])
+        @if ($displayOptions['title'] || $displayOptions['subtitle'] || $displayOptions['description'])
             <div class="text-center mb-5">
-                @if($displayOptions['title'])
+                @if ($displayOptions['title'])
                     <h2 class="display-5 fw-bold mb-3">
                         {{ $displayOptions['title'] }}
                     </h2>
                 @endif
 
-                @if($displayOptions['subtitle'])
+                @if ($displayOptions['subtitle'])
                     <h3 class="h4 mb-4">
                         {{ $displayOptions['subtitle'] }}
                     </h3>
                 @endif
 
-                @if($displayOptions['description'])
+                @if ($displayOptions['description'])
                     <p class="lead">
                         {{ $displayOptions['description'] }}
                     </p>
@@ -24,29 +24,31 @@
         @endif
 
         <!-- Store Locations Content -->
-        @if(!empty($displayOptions['locations']))
-            @if($displayOptions['layout'] === 'grid')
+        @if (!empty($displayOptions['locations']))
+            @if ($displayOptions['layout'] === 'grid')
                 <!-- Grid Layout -->
                 <div class="row g-4">
-                    @foreach($displayOptions['locations'] as $location)
-                        @if($location['show'] ?? false)
+                    @foreach ($displayOptions['locations'] as $location)
+                        @if ($location['show'] ?? false)
                             <div class="col-lg-{{ 12 / $displayOptions['columns'] }} col-md-6 mb-4">
-                                <div class="store-card h-100 card border-0 shadow-lg position-relative
-                                {{ ($location['featured'] ?? false) ? 'border-2 border-dark' : '' }}">
+                                <div
+                                    class="store-card h-100 card border-0 shadow-lg position-relative
+                                {{ $location['featured'] ?? false ? 'border-2 border-dark' : '' }}">
 
-                                    @if($location['featured'] ?? false)
+                                    @if ($location['featured'] ?? false)
                                         <div class="position-absolute top-0 end-0 m-3">
-                                        <span class="badge bg-dark text-white fs-6 px-3 py-2">
-                                            <i class="fas fa-star me-1"></i>Featured
-                                        </span>
+                                            <span class="badge bg-dark text-white fs-6 px-3 py-2">
+                                                <i class="fas fa-star me-1"></i>Featured
+                                            </span>
                                         </div>
                                     @endif
 
                                     <div class="card-body p-4">
                                         <div class="mb-3">
                                             <h5 class="store-name fw-bold text-dark mb-1">{{ $location['name'] }}</h5>
-                                            @if($location['type'] ?? false)
-                                                <p class="text-muted small mb-0 text-uppercase fw-semibold">{{ $location['type'] }}</p>
+                                            @if ($location['type'] ?? false)
+                                                <p class="text-muted small mb-0 text-uppercase fw-semibold">
+                                                    {{ $location['type'] }}</p>
                                             @endif
                                         </div>
 
@@ -54,40 +56,40 @@
                                             <div class="d-flex align-items-start mb-2">
                                                 <i class="fas bi bi-geo-alt-fill text-muted me-2"></i>
                                                 <div class="flex-grow-1">
-                                                    @if(isset($location['latitude']) && isset($location['longitude']))
+                                                    @if (isset($location['latitude']) && isset($location['longitude']))
                                                         <a href="javascript:void(0)"
-                                                           class="text-decoration-none text-dark fw-medium"
-                                                           data-map-lat="{{ $location['latitude'] }}"
-                                                           data-map-lng="{{ $location['longitude'] }}"
-                                                           data-map-name="{{ $location['name'] ?? '' }}"
-                                                           aria-label="Open map for {{ $location['name'] }}">{{ $location['address'] }}</a>
+                                                            class="text-decoration-none text-dark fw-medium"
+                                                            data-map-lat="{{ $location['latitude'] }}"
+                                                            data-map-lng="{{ $location['longitude'] }}"
+                                                            data-map-name="{{ $location['name'] ?? '' }}"
+                                                            aria-label="Open map for {{ $location['name'] }}">{{ $location['address'] }}</a>
                                                     @else
                                                         <div class="fw-medium">{{ $location['address'] }}</div>
                                                     @endif
 
                                                     <div class="text-muted small d-none">
-                                                        @if($location['city'] ?? false)
+                                                        @if ($location['city'] ?? false)
                                                             {{ $location['city'] }}
                                                         @endif
-                                                        @if($location['state'] ?? false)
+                                                        @if ($location['state'] ?? false)
                                                             , {{ $location['state'] }}
                                                         @endif
-                                                        @if($location['zip_code'] ?? false)
+                                                        @if ($location['zip_code'] ?? false)
                                                             {{ $location['zip_code'] }}
                                                         @endif
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            @if($location['phone'] ?? false)
+                                            @if ($location['phone'] ?? false)
                                                 <div class="d-flex align-items-center mb-2">
                                                     <i class="fas bi-telephone-fill text-muted me-2"></i>
                                                     <a href="tel:{{ $location['phone'] }}"
-                                                       class="text-decoration-none text-dark fw-medium">{{ $location['phone'] }}</a>
+                                                        class="text-decoration-none text-dark fw-medium">{{ $location['phone'] }}</a>
                                                 </div>
                                             @endif
 
-                                            @if($location['hours'] ?? false)
+                                            @if ($location['hours'] ?? false)
                                                 <div class="small mb-1 fw-semibold">Vehicle Sales</div>
                                                 @php($__hoursLines = preg_split('/\s*,\s*/', $location['hours']))
                                                 <div class="d-flex align-items-start mb-3">
@@ -96,20 +98,23 @@
                                                         <table
                                                             class="table table-sm table-borderless mb-0 align-middle w-auto">
                                                             <tbody>
-                                                            @foreach($__hoursLines as $__line)
-                                                                @php($__parts = explode(':', $__line, 2))
-                                                                <tr>
-                                                                    <td class="pe-2 text-nowrap">{{ trim($__parts[0] ?? '') }}</td>
-                                                                    <td class="ps-2 text-muted">{{ str_replace(':00', '', strtolower(trim($__parts[1] ?? ''))) }}</td>
-                                                                </tr>
-                                                            @endforeach
+                                                                @foreach ($__hoursLines as $__line)
+                                                                    @php($__parts = explode(':', $__line, 2))
+                                                                    <tr>
+                                                                        <td class="pe-2 text-nowrap">
+                                                                            {{ trim($__parts[0] ?? '') }}</td>
+                                                                        <td class="ps-2 text-muted">
+                                                                            {{ str_replace(':00', '', strtolower(trim($__parts[1] ?? ''))) }}
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforeach
                                                             </tbody>
                                                         </table>
                                                     </div>
                                                 </div>
                                             @endif
 
-                                            @if($location['service_hours'] ?? false)
+                                            @if ($location['service_hours'] ?? false)
                                                 <div class="small mb-1 fw-semibold">Servicing & Parts</div>
                                                 @php($__hoursLines = preg_split('/\s*,\s*/', $location['service_hours']))
                                                 <div class="d-flex align-items-start mb-3">
@@ -118,13 +123,16 @@
                                                         <table
                                                             class="table table-sm table-borderless mb-0 align-middle w-auto">
                                                             <tbody>
-                                                            @foreach($__hoursLines as $__line)
-                                                                @php($__parts = explode(':', $__line, 2))
-                                                                <tr>
-                                                                    <td class="pe-2 text-nowrap">{{ trim($__parts[0] ?? '') }}</td>
-                                                                    <td class="ps-2 text-muted">{{ str_replace(':00', '', strtolower(trim($__parts[1] ?? ''))) }}</td>
-                                                                </tr>
-                                                            @endforeach
+                                                                @foreach ($__hoursLines as $__line)
+                                                                    @php($__parts = explode(':', $__line, 2))
+                                                                    <tr>
+                                                                        <td class="pe-2 text-nowrap">
+                                                                            {{ trim($__parts[0] ?? '') }}</td>
+                                                                        <td class="ps-2 text-muted">
+                                                                            {{ str_replace(':00', '', strtolower(trim($__parts[1] ?? ''))) }}
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforeach
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -132,11 +140,11 @@
                                             @endif
                                         </div>
 
-                                        @if(!empty($location['services']))
+                                        @if (!empty($location['services']))
                                             <div class="services mb-4">
                                                 <div class="small text-muted mb-2 fw-semibold">Available Services:</div>
                                                 <div class="d-flex flex-wrap gap-1">
-                                                    @foreach($location['services'] as $service)
+                                                    @foreach ($location['services'] as $service)
                                                         <span
                                                             class="badge bg-light text-dark border">{{ $service }}</span>
                                                     @endforeach
@@ -149,15 +157,15 @@
                         @endif
                     @endforeach
                 </div>
-
             @elseif($displayOptions['layout'] === 'list')
                 <!-- List Layout -->
                 <div class="store-list">
-                    @foreach($displayOptions['locations'] as $location)
-                        <div class="store-item card border-0 shadow-sm mb-4 position-relative
-                            {{ ($location['featured'] ?? false) ? 'border-2 border-dark' : '' }}">
+                    @foreach ($displayOptions['locations'] as $location)
+                        <div
+                            class="store-item card border-0 shadow-sm mb-4 position-relative
+                            {{ $location['featured'] ?? false ? 'border-2 border-dark' : '' }}">
 
-                            @if($location['featured'] ?? false)
+                            @if ($location['featured'] ?? false)
                                 <div class="position-absolute top-0 end-0 m-3">
                                     <span class="badge bg-dark text-white fs-6 px-3 py-2">
                                         <i class="fas fa-star me-1"></i>Featured
@@ -170,9 +178,11 @@
                                     <div class="col-12">
                                         <div class="d-flex justify-content-between align-items-start mb-3">
                                             <div>
-                                                <h5 class="store-name fw-bold text-dark mb-1">{{ $location['name'] }}</h5>
-                                                @if($location['type'] ?? false)
-                                                    <p class="text-muted small mb-0 text-uppercase fw-semibold">{{ $location['type'] }}</p>
+                                                <h5 class="store-name fw-bold text-dark mb-1">{{ $location['name'] }}
+                                                </h5>
+                                                @if ($location['type'] ?? false)
+                                                    <p class="text-muted small mb-0 text-uppercase fw-semibold">
+                                                        {{ $location['type'] }}</p>
                                                 @endif
                                             </div>
                                         </div>
@@ -183,36 +193,36 @@
                                                     <div class="d-flex align-items-start mb-3">
                                                         <i class="fas fa-map-marker-alt text-muted me-3 mt-1"></i>
                                                         <div class="flex-grow-1">
-                                                            @if(isset($location['latitude']) && isset($location['longitude']))
+                                                            @if (isset($location['latitude']) && isset($location['longitude']))
                                                                 <a href="javascript:void(0)"
-                                                                   class="text-decoration-none text-dark fw-medium"
-                                                                   data-map-lat="{{ $location['latitude'] }}"
-                                                                   data-map-lng="{{ $location['longitude'] }}"
-                                                                   data-map-name="{{ $location['name'] ?? '' }}"
-                                                                   aria-label="Open map for {{ $location['name'] }}">{{ $location['address'] }}</a>
+                                                                    class="text-decoration-none text-dark fw-medium"
+                                                                    data-map-lat="{{ $location['latitude'] }}"
+                                                                    data-map-lng="{{ $location['longitude'] }}"
+                                                                    data-map-name="{{ $location['name'] ?? '' }}"
+                                                                    aria-label="Open map for {{ $location['name'] }}">{{ $location['address'] }}</a>
                                                             @else
                                                                 <div class="fw-medium">{{ $location['address'] }}</div>
                                                             @endif
                                                             <div class="text-muted small">
-                                                                @if($location['city'] ?? false)
+                                                                @if ($location['city'] ?? false)
                                                                     {{ $location['city'] }}
                                                                 @endif
-                                                                @if($location['state'] ?? false)
+                                                                @if ($location['state'] ?? false)
                                                                     , {{ $location['state'] }}
                                                                 @endif
                                                             </div>
                                                         </div>
                                                     </div>
 
-                                                    @if($location['phone'] ?? false)
+                                                    @if ($location['phone'] ?? false)
                                                         <div class="d-flex align-items-center mb-3">
                                                             <i class="fas fa-phone text-muted me-3"></i>
                                                             <a href="tel:{{ $location['phone'] }}"
-                                                               class="text-decoration-none text-dark fw-medium">{{ $location['phone'] }}</a>
+                                                                class="text-decoration-none text-dark fw-medium">{{ $location['phone'] }}</a>
                                                         </div>
                                                     @endif
 
-                                                    @if($location['hours'] ?? false)
+                                                    @if ($location['hours'] ?? false)
                                                         <div class="small text-muted mb-1 fw-semibold">Vehicle Sales
                                                         </div>
                                                         @php($__hoursLines = preg_split('/\s*,\s*/', $location['hours']))
@@ -222,13 +232,16 @@
                                                                 <table
                                                                     class="table table-sm table-borderless mb-0 align-middle w-auto">
                                                                     <tbody>
-                                                                    @foreach($__hoursLines as $__line)
-                                                                        @php($__parts = explode(':', $__line, 2))
-                                                                        <tr>
-                                                                            <td class="pe-2 fw-semibold text-nowrap">{{ trim($__parts[0] ?? '') }}</td>
-                                                                            <td class="ps-2 text-muted">{{ trim($__parts[1] ?? '') }}</td>
-                                                                        </tr>
-                                                                    @endforeach
+                                                                        @foreach ($__hoursLines as $__line)
+                                                                            @php($__parts = explode(':', $__line, 2))
+                                                                            <tr>
+                                                                                <td
+                                                                                    class="pe-2 fw-semibold text-nowrap">
+                                                                                    {{ trim($__parts[0] ?? '') }}</td>
+                                                                                <td class="ps-2 text-muted">
+                                                                                    {{ trim($__parts[1] ?? '') }}</td>
+                                                                            </tr>
+                                                                        @endforeach
                                                                     </tbody>
                                                                 </table>
                                                             </div>
@@ -238,13 +251,13 @@
                                             </div>
 
                                             <div class="col-lg-6">
-                                                @if(!empty($location['services']))
+                                                @if (!empty($location['services']))
                                                     <div class="services mb-4">
                                                         <div class="small text-muted mb-2 fw-semibold">Available
                                                             Services:
                                                         </div>
                                                         <div class="d-flex flex-wrap gap-1 mb-3">
-                                                            @foreach($location['services'] as $service)
+                                                            @foreach ($location['services'] as $service)
                                                                 <span
                                                                     class="badge bg-light text-dark border">{{ $service }}</span>
                                                             @endforeach
@@ -259,7 +272,6 @@
                         </div>
                     @endforeach
                 </div>
-
             @else
                 <!-- Table Layout -->
                 <div class="row justify-content-center">
@@ -267,68 +279,69 @@
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead>
-                                <tr>
-                                    <th scope="col">Store Name</th>
-                                    <th scope="col">Address</th>
-                                    <th scope="col">Phone</th>
-                                    <th scope="col">Hours</th>
-                                </tr>
+                                    <tr>
+                                        <th scope="col">Store Name</th>
+                                        <th scope="col">Address</th>
+                                        <th scope="col">Phone</th>
+                                        <th scope="col">Hours</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($displayOptions['locations'] as $location)
-                                    <tr class="{{ ($location['featured'] ?? false) ? 'table-dark text-white' : '' }}">
-                                        <td>
-                                            <div class="fw-semibold">{{ $location['name'] }}</div>
-                                            @if($location['type'] ?? false)
-                                                <small class="text-muted">{{ $location['type'] }}</small>
-                                            @endif
-                                            @if($location['featured'] ?? false)
-                                                <span class="badge bg-light text-dark ms-1">Featured</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if(isset($location['latitude']) && isset($location['longitude']))
-                                                <a href="javascript:void(0)"
-                                                   class="text-decoration-none text-dark"
-                                                   data-map-lat="{{ $location['latitude'] }}"
-                                                   data-map-lng="{{ $location['longitude'] }}"
-                                                   data-map-name="{{ $location['name'] ?? '' }}"
-                                                   aria-label="Open map for {{ $location['name'] }}">{{ $location['address'] }}</a>
-                                            @else
-                                                {{ $location['address'] }}
-                                            @endif
-                                            @if($location['city'] ?? false)
-                                                <br><small
-                                                    class="text-muted">{{ $location['city'] }}@if($location['state'] ?? false)
-                                                        , {{ $location['state'] }}
-                                                    @endif</small>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if($location['phone'] ?? false)
-                                                <a href="tel:{{ $location['phone'] }}"
-                                                   class="text-decoration-none">{{ $location['phone'] }}</a>
-                                            @else
-                                                -
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if($location['hours'] ?? false)
-                                                @php($__hoursLines = preg_split('/\s*,\s*/', $location['hours']))
-                                                <small>
-                                                    @foreach($__hoursLines as $__line)
-                                                        @php($__parts = explode(':', $__line, 2))
-                                                        <div><span
-                                                                class="me-2">{{ trim($__parts[0] ?? '') }}:</span>{{ trim($__parts[1] ?? '') }}
-                                                        </div>
-                                                    @endforeach
-                                                </small>
-                                            @else
-                                                -
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                    @foreach ($displayOptions['locations'] as $location)
+                                        <tr
+                                            class="{{ $location['featured'] ?? false ? 'table-dark text-white' : '' }}">
+                                            <td>
+                                                <div class="fw-semibold">{{ $location['name'] }}</div>
+                                                @if ($location['type'] ?? false)
+                                                    <small class="text-muted">{{ $location['type'] }}</small>
+                                                @endif
+                                                @if ($location['featured'] ?? false)
+                                                    <span class="badge bg-light text-dark ms-1">Featured</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if (isset($location['latitude']) && isset($location['longitude']))
+                                                    <a href="javascript:void(0)"
+                                                        class="text-decoration-none text-dark"
+                                                        data-map-lat="{{ $location['latitude'] }}"
+                                                        data-map-lng="{{ $location['longitude'] }}"
+                                                        data-map-name="{{ $location['name'] ?? '' }}"
+                                                        aria-label="Open map for {{ $location['name'] }}">{{ $location['address'] }}</a>
+                                                @else
+                                                    {{ $location['address'] }}
+                                                @endif
+                                                @if ($location['city'] ?? false)
+                                                    <br><small class="text-muted">{{ $location['city'] }}@if ($location['state'] ?? false)
+                                                            , {{ $location['state'] }}
+                                                        @endif
+                                                    </small>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($location['phone'] ?? false)
+                                                    <a href="tel:{{ $location['phone'] }}"
+                                                        class="text-decoration-none">{{ $location['phone'] }}</a>
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($location['hours'] ?? false)
+                                                    @php($__hoursLines = preg_split('/\s*,\s*/', $location['hours']))
+                                                    <small>
+                                                        @foreach ($__hoursLines as $__line)
+                                                            @php($__parts = explode(':', $__line, 2))
+                                                            <div><span
+                                                                    class="me-2">{{ trim($__parts[0] ?? '') }}:</span>{{ trim($__parts[1] ?? '') }}
+                                                            </div>
+                                                        @endforeach
+                                                    </small>
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -338,7 +351,7 @@
         @endif
 
         <!-- Optional Map Integration -->
-        @if($displayOptions['show_map'] && !empty($displayOptions['locations']) && $displayOptions['map_api_key'])
+        @if ($displayOptions['show_map'] && !empty($displayOptions['locations']) && $displayOptions['map_api_key'])
             <div class="mt-5">
                 <h4 class="mb-3">Store Locations Map</h4>
                 <div id="store-locations-map" style="height: 400px; border-radius: 8px;" class="border"></div>
@@ -359,7 +372,10 @@
                     locations.forEach(location => {
                         if (location.latitude && location.longitude) {
                             const marker = new google.maps.Marker({
-                                position: {lat: parseFloat(location.latitude), lng: parseFloat(location.longitude)},
+                                position: {
+                                    lat: parseFloat(location.latitude),
+                                    lng: parseFloat(location.longitude)
+                                },
                                 map: map,
                                 title: location.name
                             });
@@ -382,7 +398,8 @@
                 }
             </script>
             <script async defer
-                    src="https://maps.googleapis.com/maps/api/js?key={{ $displayOptions['map_api_key'] }}&callback=initStoreMap"></script>
+                src="https://maps.googleapis.com/maps/api/js?key={{ $displayOptions['map_api_key'] }}&callback=initStoreMap">
+            </script>
         @endif
     </div>
 </section>

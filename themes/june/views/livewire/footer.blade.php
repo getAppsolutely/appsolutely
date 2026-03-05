@@ -4,29 +4,29 @@
         <div class="row py-5">
             <!-- Left Side - Footer Menu -->
             <div class="col-lg-8">
-                @if($footerMenuItems->isNotEmpty())
+                @if ($footerMenuItems->isNotEmpty())
                     <div class="row">
-                        @foreach($footerMenuItems->take(4) as $menuItem)
+                        @foreach ($footerMenuItems->take(4) as $menuItem)
                             <div class="col-md-3">
                                 <div class="footer-menu-section">
                                     <h5 class="text-white fw-semibold text-uppercase mb-3">
-                                        @if($menuItem->url)
+                                        @if ($menuItem->url)
                                             <a href="{{ app_uri($menuItem->url) }}"
-                                               target="{{ $menuItem->target->value }}"
-                                               class="text-white text-decoration-none">
+                                                target="{{ $menuItem->target->value }}"
+                                                class="text-white text-decoration-none">
                                                 {{ $menuItem->title }}
                                             </a>
                                         @else
                                             {{ $menuItem->title }}
                                         @endif
                                     </h5>
-                                    @if($menuItem->children->isNotEmpty())
+                                    @if ($menuItem->children->isNotEmpty())
                                         <ul class="list-unstyled">
-                                            @foreach($menuItem->children as $child)
+                                            @foreach ($menuItem->children as $child)
                                                 <li class="mb-2">
                                                     <a href="{{ app_uri($child->url) }}"
-                                                       target="{{ $child->target->value }}"
-                                                       class="text-white text-decoration-none footer-link">
+                                                        target="{{ $child->target->value }}"
+                                                        class="text-white text-decoration-none footer-link">
                                                         {{ $child->title }}
                                                     </a>
                                                 </li>
@@ -37,8 +37,8 @@
                                         <ul class="list-unstyled">
                                             <li class="mb-2">
                                                 <a href="{{ app_uri($menuItem->url) }}"
-                                                   target="{{ $menuItem->target->value }}"
-                                                   class="text-white text-decoration-none footer-link">
+                                                    target="{{ $menuItem->target->value }}"
+                                                    class="text-white text-decoration-none footer-link">
                                                     {{ $menuItem->title }}
                                                 </a>
                                             </li>
@@ -54,24 +54,22 @@
             <!-- Right Side - Logo and Social Media -->
             <div class="col-lg-4 text-lg-end">
                 <!-- Logo -->
-                @if($displayOptions['logo'] ?? false)
+                @if ($displayOptions['logo'] ?? false)
                     <div class="mb-4">
-                        @if(site_title())
-                            <img src="{{ asset_url('assets/images/logo-dark.webp') }}"
-                                 alt="{{ site_title() }}"
-                                 height="40">
+                        @if (site_title())
+                            <img src="{{ asset_url('assets/images/logo-dark.webp') }}" alt="{{ site_title() }}"
+                                height="40">
                         @endif
                     </div>
                 @endif
 
                 <!-- Social Media Menu -->
-                @if($socialMediaItems->isNotEmpty())
+                @if ($socialMediaItems->isNotEmpty())
                     <div class="social-media-menu">
-                        @foreach($socialMediaItems as $socialItem)
-                            <a href="{{ $socialItem->url }}"
-                               target="{{ $socialItem->target->value }}"
-                               class="text-white text-decoration-none me-3 footer-link">
-                                @if($socialItem->icon)
+                        @foreach ($socialMediaItems as $socialItem)
+                            <a href="{{ $socialItem->url }}" target="{{ $socialItem->target->value }}"
+                                class="text-white text-decoration-none me-3 footer-link">
+                                @if ($socialItem->icon)
                                     <i class="{{ $socialItem->icon }} fs-5"></i>
                                 @else
                                     {{ $socialItem->title }}
@@ -96,18 +94,17 @@
                             {{ $displayOptions[$field] }}<br>
                         @endif
                     @endforeach
-                    {{ $displayOptions['copyright']['text']??null }}
+                    {{ $displayOptions['copyright']['text'] ?? null }}
                 </p>
             </div>
 
             <!-- Right Side - Policy Menu -->
             <div class="col-lg-6">
-                @if($policyMenuItems->isNotEmpty())
+                @if ($policyMenuItems->isNotEmpty())
                     <div class="policy-menu text-lg-end">
-                        @foreach($policyMenuItems as $policyItem)
-                            <a href="{{ app_uri($policyItem->url) }}"
-                               target="{{ $policyItem->target->value }}"
-                               class="text-white text-decoration-none me-3 footer-link">
+                        @foreach ($policyMenuItems as $policyItem)
+                            <a href="{{ app_uri($policyItem->url) }}" target="{{ $policyItem->target->value }}"
+                                class="text-white text-decoration-none me-3 footer-link">
                                 {{ $policyItem->title }}
                             </a>
                         @endforeach

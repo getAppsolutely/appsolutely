@@ -9,8 +9,8 @@
                     @if ($displayOptions['logo'])
                         <img src="{{ asset_url('assets/images/logo-dark.webp') }}" alt="{{ site_title() }}"
                             height="40" class="logo-dark">
-                        <img src="{{ asset_url('assets/images/logo.webp') }}" alt="{{ site_title() }}"
-                            height="40" class="logo-light">
+                        <img src="{{ asset_url('assets/images/logo.webp') }}" alt="{{ site_title() }}" height="40"
+                            class="logo-light">
                     @else
                         <span>{{ site_title() }}</span>
                     @endif
@@ -63,7 +63,8 @@
                                                                         @endif
                                                                     </span>
                                                                 @endif
-                                                                <span class="d-block pt-3 fw-semibold">{{ $child->title }}</span>
+                                                                <span
+                                                                    class="d-block pt-3 fw-semibold">{{ $child->title }}</span>
                                                                 @if (!empty($child->setting['price']))
                                                                     <div class="price-section mt-2">
                                                                         <span class="fs-6">

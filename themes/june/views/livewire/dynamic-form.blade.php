@@ -1,18 +1,18 @@
 <section class="dynamic-form-section py-5">
     <div class="container">
-        @if(!$submitted)
+        @if (!$submitted)
             <!-- Form Header -->
-            @if($displayOptions['title'] || $displayOptions['subtitle'] || $displayOptions['description'])
+            @if ($displayOptions['title'] || $displayOptions['subtitle'] || $displayOptions['description'])
                 <div class="text-center mb-5">
-                    @if($displayOptions['title'])
+                    @if ($displayOptions['title'])
                         <h2 class="display-6 fw-bold mb-3">{{ $displayOptions['title'] }}</h2>
                     @endif
 
-                    @if($displayOptions['subtitle'])
+                    @if ($displayOptions['subtitle'])
                         <h3 class="h5 text-muted mb-4">{{ $displayOptions['subtitle'] }}</h3>
                     @endif
 
-                    @if($displayOptions['description'])
+                    @if ($displayOptions['description'])
                         <p class="lead text-muted">{{ $displayOptions['description'] }}</p>
                     @endif
                 </div>
@@ -21,7 +21,7 @@
             <!-- Form Container -->
             <div class="row justify-content-center">
                 <div class="col-lg-8 col-xl-6">
-                    @if($displayOptions['theme'] === 'card')
+                    @if ($displayOptions['theme'] === 'card')
                         <div class="card border-0 shadow-lg">
                             <div class="card-body p-5">
                                 @include('livewire.dynamic-form-content')
@@ -44,7 +44,7 @@
                                 <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
                             </div>
 
-                            @if($displayOptions['success_title'])
+                            @if ($displayOptions['success_title'])
                                 <h3 class="h2 fw-bold text-dark mb-3">{{ $displayOptions['success_title'] }}</h3>
                             @endif
 
@@ -60,7 +60,7 @@
         @endif
 
         <!-- Error Flash Message -->
-        @if(session()->has('error'))
+        @if (session()->has('error'))
             <div class="row justify-content-center mt-4">
                 <div class="col-lg-8 col-xl-6">
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
