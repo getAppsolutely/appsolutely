@@ -1,4 +1,4 @@
-<div class="features-fullscreen">
+<section class="features-fullscreen">
     @if (isset($displayOptions['title']))
         <div class="features-fullscreen__header text-center">
             <div class="container">
@@ -53,4 +53,4 @@
             </div>
         </div>
     @endif
-</div>
+</section>

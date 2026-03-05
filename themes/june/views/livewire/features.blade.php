@@ -1,4 +1,4 @@
-<div class="features container">
+<section class="features container">
     @if (isset($displayOptions['title']))
         <div class="features__header text-center mb-5">
             <h2 class="features__title">{{ $displayOptions['title'] }}</h2>
@@ -91,4 +91,4 @@
             </div>
         </div>
     @endif
-</div>
+</section>

@@ -1,4 +1,4 @@
-<div class="features-fashionable">
+<section class="features-fashionable">
     @if (isset($displayOptions['title']))
         <div class="features-fashionable__header text-center mb-5">
             <div class="container">
@@ -57,4 +57,4 @@
             </div>
         </div>
     @endif
-</div>
+</section>
