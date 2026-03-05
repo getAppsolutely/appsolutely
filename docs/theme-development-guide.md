@@ -87,13 +87,30 @@ Each theme can define a `manifest.json` file that registers block templates for 
 
 ### Key Fields
 
-| Field            | Description                                                                                                  |
-| ---------------- | ------------------------------------------------------------------------------------------------------------ |
-| `component`      | Livewire component class (e.g. `App\\Livewire\\GeneralBlock` or a custom block)                              |
-| `view`           | View name (without path) — maps to `themes/{theme}/views/livewire/{view}.blade.php`                          |
-| `displayOptions` | Default visual/presentation config passed to the view as `$displayOptions`                                   |
-| `queryOptions`   | Default data-fetching config (for custom blocks that query repositories)                                     |
-| `styles`         | Available style variants (e.g. `["default", "fullscreen"]`) — enables `component-name_style.blade.php` views |
+| Field                      | Description                                                                                                  |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `component`                | Livewire component class (e.g. `App\\Livewire\\GeneralBlock` or a custom block)                              |
+| `view`                     | View name (without path) — maps to `themes/{theme}/views/livewire/{view}.blade.php`                          |
+| `displayOptions`           | Default visual/presentation config passed to the view as `$displayOptions`                                   |
+| `queryOptions`             | Default data-fetching config (for custom blocks that query repositories)                                     |
+| `displayOptionsDefinition` | Schema for form generation — field definitions (type, label, default, options, etc.) for `displayOptions`    |
+| `queryOptionsDefinition`   | Schema for form generation — field definitions for `queryOptions`                                            |
+| `styles`                   | Available style variants (e.g. `["default", "fullscreen"]`) — enables `component-name_style.blade.php` views |
+
+### displayOptionsDefinition and queryOptionsDefinition
+
+These optional keys define the **schema** for each field in `displayOptions` and `queryOptions`. They follow the same format as `page_blocks.schema` (see [Block System](block-system.md#schema-system)) and are used by the Page Builder to generate dynamic forms for editing block configuration.
+
+Each field in a definition can have:
+
+- `type` — `text`, `textarea`, `number`, `boolean`, `select`, `url`, `email`, `date`, `color`, `object`, `table`
+- `label` — Human-readable label for the form
+- `description` — Optional help text
+- `required` — Whether the field is required
+- `default` — Default value
+- `options` — For `select`: `[{ "value": "...", "label": "..." }]`
+- `fields` — For `object` and `table`: nested field definitions
+- Type-specific: `min`, `max`, `step`, `max_length`, etc.
 
 ### When to Add a Manifest Entry
 

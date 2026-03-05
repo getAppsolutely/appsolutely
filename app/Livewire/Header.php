@@ -17,7 +17,6 @@ final class Header extends GeneralBlock
     protected array $defaultQueryOptions = [
         'main_navigation' => 'main-navigation',
         'auth_menu'       => 'auth-menu',
-        'footer_menu'     => 'footer-menu',
     ];
 
     protected function initializeComponent(Container $container): void

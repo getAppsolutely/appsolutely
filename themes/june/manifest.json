@@ -12,6 +12,11 @@
                 "cta_url": "/test-drive",
                 "cta_icon": "fa-steering-wheel"
             },
+            "displayOptionsDefinition": {
+                "cta_text": { "type": "text", "label": "CTA Text", "default": "Book a test drive" },
+                "cta_url": { "type": "url", "label": "CTA URL", "default": "/test-drive" },
+                "cta_icon": { "type": "text", "label": "CTA Icon (Font Awesome class)", "default": "fa-steering-wheel" }
+            },
             "styles": ["default"]
         },
         "article-list": {
@@ -38,6 +43,54 @@
                 "order_by": "published_at",
                 "order_direction": "desc"
             },
+            "displayOptionsDefinition": {
+                "anchor_label": { "type": "text", "label": "Anchor Label", "default": "Articles" },
+                "title": { "type": "text", "label": "Title", "default": "Latest Articles" },
+                "subtitle": {
+                    "type": "textarea",
+                    "label": "Subtitle",
+                    "default": "Stay updated with our latest articles and news"
+                },
+                "show_featured_image": { "type": "boolean", "label": "Show Featured Image", "default": true },
+                "show_excerpt": { "type": "boolean", "label": "Show Excerpt", "default": true },
+                "show_author": { "type": "boolean", "label": "Show Author", "default": true },
+                "show_date": { "type": "boolean", "label": "Show Date", "default": true },
+                "show_read_more": { "type": "boolean", "label": "Show Read More", "default": true },
+                "read_more_text": { "type": "text", "label": "Read More Text", "default": "Read More" },
+                "layout": {
+                    "type": "select",
+                    "label": "Layout",
+                    "options": [
+                        { "value": "grid", "label": "Grid" },
+                        { "value": "list", "label": "List" }
+                    ],
+                    "default": "grid"
+                }
+            },
+            "queryOptionsDefinition": {
+                "posts_per_page": { "type": "number", "label": "Posts Per Page", "min": 1, "max": 50, "default": 6 },
+                "category_filter": { "type": "text", "label": "Category Filter", "default": "" },
+                "tag_filter": { "type": "text", "label": "Tag Filter", "default": "" },
+                "order_by": {
+                    "type": "select",
+                    "label": "Order By",
+                    "options": [
+                        { "value": "published_at", "label": "Published Date" },
+                        { "value": "title", "label": "Title" },
+                        { "value": "created_at", "label": "Created Date" }
+                    ],
+                    "default": "published_at"
+                },
+                "order_direction": {
+                    "type": "select",
+                    "label": "Order Direction",
+                    "options": [
+                        { "value": "asc", "label": "Ascending" },
+                        { "value": "desc", "label": "Descending" }
+                    ],
+                    "default": "desc"
+                }
+            },
             "styles": ["default"]
         },
         "dynamic-form": {
@@ -60,6 +113,45 @@
             },
             "queryOptions": {
                 "form_slug": ""
+            },
+            "displayOptionsDefinition": {
+                "anchor_label": { "type": "text", "label": "Anchor Label", "default": "Book a Test Drive" },
+                "title": { "type": "text", "label": "Title", "default": "Test Drive Booking" },
+                "subtitle": { "type": "text", "label": "Subtitle", "default": "Book your test drive today" },
+                "description": {
+                    "type": "textarea",
+                    "label": "Description",
+                    "default": "Fill out the form below and we'll get back to you as soon as possible."
+                },
+                "submit_text": { "type": "text", "label": "Submit Button Text", "default": "Book Test Drive" },
+                "success_title": { "type": "text", "label": "Success Title", "default": "Thank You!" },
+                "success_message": {
+                    "type": "textarea",
+                    "label": "Success Message",
+                    "default": "✅ Your test drive booking has been submitted. We'll contact you soon to confirm your appointment."
+                },
+                "layout": {
+                    "type": "select",
+                    "label": "Layout",
+                    "options": [{ "value": "form", "label": "Form" }],
+                    "default": "form"
+                },
+                "theme": {
+                    "type": "select",
+                    "label": "Theme",
+                    "options": [{ "value": "default", "label": "Default" }],
+                    "default": "default"
+                },
+                "columns": { "type": "number", "label": "Columns", "min": 1, "max": 3, "default": 1 },
+                "redirect_after_submit": { "type": "url", "label": "Redirect After Submit", "default": "" }
+            },
+            "queryOptionsDefinition": {
+                "form_slug": {
+                    "type": "text",
+                    "label": "Form Slug",
+                    "description": "Reference to the dynamic form to render",
+                    "default": ""
+                }
             },
             "styles": ["default", "interactive", "content"]
         },
@@ -97,6 +189,34 @@
                     }
                 ]
             },
+            "displayOptionsDefinition": {
+                "anchor_label": { "type": "text", "label": "Anchor Label", "default": "Features" },
+                "title": { "type": "text", "label": "Title", "default": "" },
+                "subtitle": { "type": "textarea", "label": "Subtitle", "default": "" },
+                "descriptions": {
+                    "type": "table",
+                    "label": "Descriptions",
+                    "fields": { "text": { "type": "textarea", "label": "Text" } },
+                    "default": [""]
+                },
+                "features": {
+                    "type": "table",
+                    "label": "Features",
+                    "fields": {
+                        "type": {
+                            "type": "select",
+                            "label": "Type",
+                            "options": [{ "value": "image", "label": "Image" }],
+                            "default": "image"
+                        },
+                        "url": { "type": "text", "label": "Image URL", "default": "" },
+                        "title": { "type": "text", "label": "Title", "default": "" },
+                        "subtitle": { "type": "text", "label": "Subtitle", "default": "" },
+                        "link": { "type": "url", "label": "Link", "default": "" }
+                    },
+                    "default": []
+                }
+            },
             "styles": ["default", "fashionable", "fullscreen", "rows"]
         },
         "footer": {
@@ -129,6 +249,47 @@
                 "social_media": "social-media",
                 "policy_menu": "policy-menu"
             },
+            "displayOptionsDefinition": {
+                "logo": { "type": "boolean", "label": "Show Logo", "default": true },
+                "contact": {
+                    "type": "object",
+                    "label": "Contact",
+                    "fields": {
+                        "enabled": { "type": "boolean", "label": "Enabled", "default": true },
+                        "phone": { "type": "text", "label": "Phone", "default": "+64 9 379 5555" },
+                        "email": { "type": "email", "label": "Email", "default": "info@company.com" },
+                        "address": { "type": "text", "label": "Address", "default": "123 Main Street, Auckland, NZ" }
+                    }
+                },
+                "newsletter": {
+                    "type": "object",
+                    "label": "Newsletter",
+                    "fields": {
+                        "enabled": { "type": "boolean", "label": "Enabled", "default": true },
+                        "title": { "type": "text", "label": "Title", "default": "Subscribe to our newsletter" },
+                        "text": { "type": "text", "label": "Text", "default": "Get the latest updates and offers" }
+                    }
+                },
+                "company_name": { "type": "text", "label": "Company Name", "default": "" },
+                "address": { "type": "text", "label": "Address", "default": "" },
+                "email": { "type": "email", "label": "Email", "default": "" },
+                "copyright": {
+                    "type": "object",
+                    "label": "Copyright",
+                    "fields": {
+                        "text": {
+                            "type": "text",
+                            "label": "Text",
+                            "default": "© 2025 Your Company. All rights reserved."
+                        }
+                    }
+                }
+            },
+            "queryOptionsDefinition": {
+                "footer_menu": { "type": "text", "label": "Footer Menu Reference", "default": "footer-menu" },
+                "social_media": { "type": "text", "label": "Social Media Reference", "default": "social-media" },
+                "policy_menu": { "type": "text", "label": "Policy Menu Reference", "default": "policy-menu" }
+            },
             "styles": ["default"]
         },
         "header": {
@@ -145,8 +306,26 @@
             },
             "queryOptions": {
                 "main_navigation": "main-navigation",
-                "auth_menu": "auth-menu",
-                "footer_menu": "footer-menu"
+                "auth_menu": "auth-menu"
+            },
+            "displayOptionsDefinition": {
+                "logo": { "type": "boolean", "label": "Show Logo", "default": true },
+                "booking": {
+                    "type": "object",
+                    "label": "Booking CTA",
+                    "fields": {
+                        "text": { "type": "text", "label": "Text", "default": "Book A Test Drive" },
+                        "url": { "type": "url", "label": "URL", "default": "/test-drive" }
+                    }
+                }
+            },
+            "queryOptionsDefinition": {
+                "main_navigation": {
+                    "type": "text",
+                    "label": "Main Navigation Reference",
+                    "default": "main-navigation"
+                },
+                "auth_menu": { "type": "text", "label": "Auth Menu Reference", "default": "auth-menu" }
             },
             "styles": ["default"]
         },
@@ -173,6 +352,29 @@
                         "subtitle": "Slide Subtitle 2"
                     }
                 ]
+            },
+            "displayOptionsDefinition": {
+                "anchor_label": { "type": "text", "label": "Anchor Label", "default": "Overview" },
+                "heroes": {
+                    "type": "table",
+                    "label": "Hero Slides",
+                    "fields": {
+                        "type": {
+                            "type": "select",
+                            "label": "Type",
+                            "options": [
+                                { "value": "image", "label": "Image" },
+                                { "value": "video", "label": "Video" }
+                            ],
+                            "default": "image"
+                        },
+                        "link": { "type": "url", "label": "Link", "default": "/" },
+                        "url": { "type": "text", "label": "Media URL", "default": "" },
+                        "title": { "type": "text", "label": "Title", "default": "" },
+                        "subtitle": { "type": "text", "label": "Subtitle", "default": "" }
+                    },
+                    "default": []
+                }
             },
             "styles": ["default"]
         },
@@ -206,6 +408,41 @@
                 "show_controls": true,
                 "show_indicators": true,
                 "autoplay": true
+            },
+            "displayOptionsDefinition": {
+                "anchor_label": { "type": "text", "label": "Anchor Label", "default": "Gallery" },
+                "title": { "type": "text", "label": "Title", "default": "Media Slider" },
+                "subtitle": { "type": "text", "label": "Subtitle", "default": "Media Slider Subtitle" },
+                "description": {
+                    "type": "table",
+                    "label": "Description",
+                    "fields": { "text": { "type": "textarea", "label": "Text" } },
+                    "default": []
+                },
+                "slides": {
+                    "type": "table",
+                    "label": "Slides",
+                    "fields": {
+                        "type": {
+                            "type": "select",
+                            "label": "Type",
+                            "options": [
+                                { "value": "image", "label": "Image" },
+                                { "value": "video", "label": "Video" }
+                            ],
+                            "default": "image"
+                        },
+                        "link": { "type": "url", "label": "Link", "default": "/" },
+                        "url": { "type": "text", "label": "Media URL", "default": "" },
+                        "title": { "type": "text", "label": "Title", "default": "" },
+                        "subtitle": { "type": "text", "label": "Subtitle", "default": "" }
+                    },
+                    "default": []
+                },
+                "vehicles": { "type": "table", "label": "Vehicles", "fields": {}, "default": [] },
+                "show_controls": { "type": "boolean", "label": "Show Controls", "default": true },
+                "show_indicators": { "type": "boolean", "label": "Show Indicators", "default": true },
+                "autoplay": { "type": "boolean", "label": "Autoplay", "default": true }
             },
             "styles": ["default", "carousel", "fullscreen"]
         },
@@ -246,6 +483,30 @@
                     }
                 ]
             },
+            "displayOptionsDefinition": {
+                "anchor_label": { "type": "text", "label": "Anchor Label", "default": "Gallery" },
+                "title": { "type": "text", "label": "Title", "default": "Photo Gallery" },
+                "subtitle": { "type": "text", "label": "Subtitle", "default": "" },
+                "descriptions": {
+                    "type": "table",
+                    "label": "Descriptions",
+                    "fields": { "text": { "type": "textarea", "label": "Text" } },
+                    "default": []
+                },
+                "photos": {
+                    "type": "table",
+                    "label": "Photos",
+                    "fields": {
+                        "image_src": { "type": "text", "label": "Image Source", "default": "" },
+                        "title": { "type": "text", "label": "Title", "default": "" },
+                        "subtitle": { "type": "text", "label": "Subtitle", "default": "" },
+                        "alt": { "type": "text", "label": "Alt Text", "default": "" },
+                        "caption": { "type": "text", "label": "Caption", "default": "" },
+                        "link": { "type": "url", "label": "Link", "default": "" }
+                    },
+                    "default": []
+                }
+            },
             "styles": ["default"]
         },
         "product-variant-block": {
@@ -256,6 +517,10 @@
             "displayOptions": {
                 "anchor_label": "Colour Options",
                 "product": {}
+            },
+            "displayOptionsDefinition": {
+                "anchor_label": { "type": "text", "label": "Anchor Label", "default": "Colour Options" },
+                "product": { "type": "object", "label": "Product", "fields": {}, "default": {} }
             },
             "styles": ["default"]
         },
@@ -309,6 +574,56 @@
                 "download_filename": "",
                 "download_label": ""
             },
+            "displayOptionsDefinition": {
+                "anchor_label": { "type": "text", "label": "Anchor Label", "default": "Spec" },
+                "title": { "type": "text", "label": "Title", "default": "Item Specifications" },
+                "subtitle": { "type": "text", "label": "Subtitle", "default": "Overview of Key Features & Details" },
+                "description": {
+                    "type": "textarea",
+                    "label": "Description",
+                    "default": "Explore the core specifications and visual highlights of this product offering."
+                },
+                "layout": {
+                    "type": "select",
+                    "label": "Layout",
+                    "options": [
+                        { "value": "table", "label": "Table" },
+                        { "value": "list", "label": "List" }
+                    ],
+                    "default": "table"
+                },
+                "columns": { "type": "number", "label": "Columns", "min": 1, "max": 4, "default": 2 },
+                "dimensions": {
+                    "type": "table",
+                    "label": "Dimensions",
+                    "fields": {
+                        "label": { "type": "text", "label": "Label", "default": "" },
+                        "value": { "type": "text", "label": "Value", "default": "" }
+                    },
+                    "default": []
+                },
+                "drives": {
+                    "type": "table",
+                    "label": "Drives",
+                    "fields": {
+                        "label": { "type": "text", "label": "Label", "default": "" },
+                        "value": { "type": "text", "label": "Value", "default": "" }
+                    },
+                    "default": []
+                },
+                "specifications": {
+                    "type": "table",
+                    "label": "Specifications",
+                    "fields": {
+                        "label": { "type": "text", "label": "Label", "default": "" },
+                        "value": { "type": "text", "label": "Value", "default": "" }
+                    },
+                    "default": []
+                },
+                "download_url": { "type": "url", "label": "Download URL", "default": "#" },
+                "download_filename": { "type": "text", "label": "Download Filename", "default": "" },
+                "download_label": { "type": "text", "label": "Download Label", "default": "" }
+            },
             "styles": ["default"]
         },
         "store-locations": {
@@ -348,6 +663,49 @@
                     }
                 ]
             },
+            "displayOptionsDefinition": {
+                "anchor_label": { "type": "text", "label": "Anchor Label", "default": "Locations" },
+                "title": { "type": "text", "label": "Title", "default": "Store Locations" },
+                "subtitle": { "type": "text", "label": "Subtitle", "default": "Find a Location Near You" },
+                "description": {
+                    "type": "textarea",
+                    "label": "Description",
+                    "default": "Visit our retail points for personalized services and unique in-store experiences."
+                },
+                "layout": {
+                    "type": "select",
+                    "label": "Layout",
+                    "options": [
+                        { "value": "grid", "label": "Grid" },
+                        { "value": "list", "label": "List" }
+                    ],
+                    "default": "grid"
+                },
+                "columns": { "type": "number", "label": "Columns", "min": 1, "max": 4, "default": 2 },
+                "show_map": { "type": "boolean", "label": "Show Map", "default": true },
+                "map_api_key": { "type": "text", "label": "Map API Key", "default": "YOUR_API_KEY_PLACEHOLDER" },
+                "locations": {
+                    "type": "table",
+                    "label": "Locations",
+                    "fields": {
+                        "name": { "type": "text", "label": "Name", "default": "" },
+                        "address": { "type": "text", "label": "Address", "default": "" },
+                        "city": { "type": "text", "label": "City", "default": "" },
+                        "state": { "type": "text", "label": "State/Region", "default": "" },
+                        "zip_code": { "type": "text", "label": "ZIP Code", "default": "" },
+                        "country": { "type": "text", "label": "Country", "default": "" },
+                        "phone": { "type": "text", "label": "Phone", "default": "" },
+                        "email": { "type": "email", "label": "Email", "default": "" },
+                        "website": { "type": "url", "label": "Website", "default": "" },
+                        "hours": { "type": "text", "label": "Hours", "default": "" },
+                        "image": { "type": "text", "label": "Image URL", "default": "" },
+                        "latitude": { "type": "text", "label": "Latitude", "default": "" },
+                        "longitude": { "type": "text", "label": "Longitude", "default": "" },
+                        "featured": { "type": "boolean", "label": "Featured", "default": false }
+                    },
+                    "default": []
+                }
+            },
             "styles": ["default", "dropdown"]
         },
         "text-document": {
@@ -363,6 +721,19 @@
                 "published_date": null,
                 "author": "Anonymous",
                 "show_meta": true
+            },
+            "displayOptionsDefinition": {
+                "anchor_label": { "type": "text", "label": "Anchor Label", "default": "Overview" },
+                "title": { "type": "text", "label": "Title", "default": "Sample Title" },
+                "subtitle": { "type": "text", "label": "Subtitle", "default": "Optional Subtitle" },
+                "content": {
+                    "type": "textarea",
+                    "label": "Content",
+                    "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>"
+                },
+                "published_date": { "type": "date", "label": "Published Date", "default": null },
+                "author": { "type": "text", "label": "Author", "default": "Anonymous" },
+                "show_meta": { "type": "boolean", "label": "Show Meta", "default": true }
             },
             "styles": ["default", "collapsible"]
         },
@@ -385,6 +756,37 @@
                 "responsive": {
                     "mobile_height": "200px",
                     "hide_on_mobile": false
+                }
+            },
+            "displayOptionsDefinition": {
+                "anchor_label": { "type": "text", "label": "Anchor Label", "default": "Transition" },
+                "image": { "type": "text", "label": "Background Image URL", "default": "" },
+                "height": { "type": "text", "label": "Height", "default": "300px" },
+                "background_position": { "type": "text", "label": "Background Position", "default": "center center" },
+                "background_size": { "type": "text", "label": "Background Size", "default": "cover" },
+                "overlay": {
+                    "type": "object",
+                    "label": "Overlay",
+                    "fields": {
+                        "enabled": { "type": "boolean", "label": "Enabled", "default": false },
+                        "color": { "type": "color", "label": "Color", "default": "#000000" },
+                        "opacity": {
+                            "type": "number",
+                            "label": "Opacity",
+                            "min": 0,
+                            "max": 1,
+                            "step": 0.1,
+                            "default": 0.3
+                        }
+                    }
+                },
+                "responsive": {
+                    "type": "object",
+                    "label": "Responsive",
+                    "fields": {
+                        "mobile_height": { "type": "text", "label": "Mobile Height", "default": "200px" },
+                        "hide_on_mobile": { "type": "boolean", "label": "Hide on Mobile", "default": false }
+                    }
                 }
             },
             "styles": ["default"]
@@ -424,6 +826,63 @@
                 ],
                 "fallback_text": "Your browser does not support the video tag."
             },
+            "displayOptionsDefinition": {
+                "anchor_label": { "type": "text", "label": "Anchor Label", "default": "Video" },
+                "video_url": { "type": "text", "label": "Video URL", "default": "assets/videos/your-video.mp4" },
+                "poster_image": {
+                    "type": "text",
+                    "label": "Poster Image URL",
+                    "default": "assets/images/posters/your-poster.webp"
+                },
+                "title": { "type": "text", "label": "Title", "default": "Your Title Here" },
+                "subtitle": { "type": "text", "label": "Subtitle", "default": "Your Subtitle Here" },
+                "description": {
+                    "type": "textarea",
+                    "label": "Description",
+                    "default": "Your descriptive text goes here."
+                },
+                "cta_text": { "type": "text", "label": "CTA Text", "default": "Call To Action" },
+                "cta_link": { "type": "url", "label": "CTA Link", "default": "/your/cta/link" },
+                "autoplay": { "type": "boolean", "label": "Autoplay", "default": true },
+                "loop": { "type": "boolean", "label": "Loop", "default": true },
+                "muted": { "type": "boolean", "label": "Muted", "default": true },
+                "controls": { "type": "boolean", "label": "Show Controls", "default": false },
+                "mobile_fallback_image": { "type": "text", "label": "Mobile Fallback Image", "default": "" },
+                "overlay_opacity": {
+                    "type": "number",
+                    "label": "Overlay Opacity",
+                    "min": 0,
+                    "max": 1,
+                    "step": 0.1,
+                    "default": 0.4
+                },
+                "text_color": { "type": "text", "label": "Text Color", "default": "white" },
+                "text_position": {
+                    "type": "select",
+                    "label": "Text Position",
+                    "options": [
+                        { "value": "center", "label": "Center" },
+                        { "value": "left", "label": "Left" },
+                        { "value": "right", "label": "Right" }
+                    ],
+                    "default": "center"
+                },
+                "video_format": { "type": "text", "label": "Video Format", "default": "mp4" },
+                "fallback_videos": {
+                    "type": "table",
+                    "label": "Fallback Videos",
+                    "fields": {
+                        "url": { "type": "text", "label": "URL", "default": "" },
+                        "format": { "type": "text", "label": "Format", "default": "webm" }
+                    },
+                    "default": []
+                },
+                "fallback_text": {
+                    "type": "text",
+                    "label": "Fallback Text",
+                    "default": "Your browser does not support the video tag."
+                }
+            },
             "styles": ["default", "simple"]
         },
         "user-manual": {
@@ -451,6 +910,29 @@
                     }
                 ]
             },
+            "displayOptionsDefinition": {
+                "anchor_label": { "type": "text", "label": "Anchor Label", "default": "Manuals" },
+                "title": { "type": "text", "label": "Title", "default": "User Manuals" },
+                "subtitle": { "type": "text", "label": "Subtitle", "default": "Download guides and documentation" },
+                "items": {
+                    "type": "table",
+                    "label": "Manual Items",
+                    "fields": {
+                        "image_src": { "type": "text", "label": "Cover Image URL", "default": "" },
+                        "title": { "type": "text", "label": "Title", "default": "" },
+                        "links": {
+                            "type": "table",
+                            "label": "Links",
+                            "fields": {
+                                "label": { "type": "text", "label": "Label", "default": "" },
+                                "url": { "type": "url", "label": "URL", "default": "" }
+                            },
+                            "default": []
+                        }
+                    },
+                    "default": []
+                }
+            },
             "styles": ["default"]
         },
         "faq-section": {
@@ -476,6 +958,24 @@
                         "answer": "Yes, we ship to many countries worldwide. Shipping costs and delivery times vary by location."
                     }
                 ]
+            },
+            "displayOptionsDefinition": {
+                "anchor_label": { "type": "text", "label": "Anchor Label", "default": "FAQ" },
+                "title": { "type": "text", "label": "Title", "default": "Frequently Asked Questions" },
+                "subtitle": {
+                    "type": "text",
+                    "label": "Subtitle",
+                    "default": "Find answers to common questions below."
+                },
+                "items": {
+                    "type": "table",
+                    "label": "FAQ Items",
+                    "fields": {
+                        "question": { "type": "text", "label": "Question", "default": "" },
+                        "answer": { "type": "textarea", "label": "Answer", "default": "" }
+                    },
+                    "default": []
+                }
             },
             "styles": ["default"]
         }
