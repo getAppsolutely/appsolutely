@@ -1,7 +1,5 @@
 // Photo Gallery client-side filtering
 
-import { asset_url } from '../utils/asset-url';
-
 interface Photo {
     image_src: string;
     title?: string;
@@ -15,9 +13,23 @@ interface Photo {
     price?: string;
 }
 
+/**
+ * Build full asset URL from base URL and relative path (light-weight, no utils import)
+ */
+function buildAssetUrl(uri: string, baseUrl: string): string {
+    if (!uri || String(uri).trim() === '') return '';
+    if (/^(https?:)?\/\//.test(uri)) return uri;
+    const base = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+    const path = uri.startsWith('/') ? uri.slice(1) : uri;
+    return `${base}/${path}`;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const grid = document.getElementById('gallery-grid');
     if (!grid) return;
+
+    const section = grid.closest<HTMLElement>('.photo-gallery');
+    const baseUrl = section?.getAttribute('data-asset-base-url') || '/assets/';
 
     const PLACEHOLDER_URL = 'https://placehold.co/500x500?text=Coming+Soon';
 
@@ -78,7 +90,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Use placeholder when image_src is empty or missing; also handle load errors
         if (img) {
             const imageUrl =
-                p.image_src && String(p.image_src).trim() !== '' ? asset_url(p.image_src) : PLACEHOLDER_URL;
+                p.image_src && String(p.image_src).trim() !== ''
+                    ? buildAssetUrl(p.image_src, baseUrl)
+                    : PLACEHOLDER_URL;
             img.setAttribute('data-src', imageUrl);
             img.alt = p.alt || p.title || '';
             img.addEventListener(

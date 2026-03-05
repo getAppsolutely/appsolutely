@@ -1,4 +1,4 @@
-<section class="photo-gallery container my-5">
+<section class="photo-gallery container my-5" data-asset-base-url="{{ asset_url(null, false) }}">
     @php
         $photos = array_values(
             array_filter($displayOptions['photos'] ?? [], fn($p) => !empty($p['image_src'] ?? null)),

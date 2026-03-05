@@ -8,9 +8,6 @@
 import _ from 'lodash';
 window._ = _ as any;
 
-// Import asset URL utility (makes it globally available)
-import './utils/asset-url';
-
 /**
  * Bootstrap 5.3.0 JavaScript
  *

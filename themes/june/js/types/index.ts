@@ -27,7 +27,7 @@ export interface HeaderInstance {
     hideMegaMenu(submenu: HTMLElement): void;
 }
 
-// Extend Window interface for June-specific globals (_, bootstrap, axios, assets, asset_url, etc. are declared in types/global.d.ts and themes/june/js/utils/asset-url.ts)
+// Extend Window interface for June-specific globals (_, bootstrap, axios, assets, etc. are declared in types/global.d.ts)
 declare global {
     interface Window {
         lazyManager?: {
