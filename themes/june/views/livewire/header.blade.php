@@ -55,12 +55,6 @@
                                                                         <img class="img-fluid mb-2"
                                                                             src="{{ asset_url($child->thumbnail) }}"
                                                                             alt="{{ $child->title }}">
-                                                                        @if (($child->setting['flag_coming_soon'] ?? '') === 'true')
-                                                                            <img src="{{ themed_assets('/images/coming.png') }}"
-                                                                                alt="Coming soon"
-                                                                                class="header__coming-ribbon position-absolute"
-                                                                                style="top: 56px; right: 0; width: 56px;">
-                                                                        @endif
                                                                     </span>
                                                                 @endif
                                                                 <span
@@ -150,15 +144,9 @@
                                                     @endif
                                                     @if ($child->thumbnail)
                                                         <span class="d-block position-relative">
-                                                            <img class=""
+                                                            <img class="img-fluid"
                                                                 src="{{ asset_url($child->thumbnail) }}"
-                                                                alt="{{ $child->title }}" style="width: 100%">
-                                                            @if (($child->setting['flag_coming_soon'] ?? '') === 'true')
-                                                                <img src="{{ themed_assets('/images/coming.png') }}"
-                                                                    alt="Coming soon"
-                                                                    class="header__coming-ribbon position-absolute"
-                                                                    style="top: 48px; right: -6px; width: 48px;">
-                                                            @endif
+                                                                alt="{{ $child->title }}">
                                                         </span>
                                                     @endif
                                                     <span class="d-inline-block">{{ $child->title }}</span>

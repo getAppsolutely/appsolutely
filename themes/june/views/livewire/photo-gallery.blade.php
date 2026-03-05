@@ -5,7 +5,7 @@
         );
     @endphp
 
-    @if (isset($displayOptions['title']) || isset($displayOptions['subtitle']) || isset($displayOptions['descriptions']))
+    @if (!empty($displayOptions['title']) || !empty($displayOptions['subtitle']) || !empty($displayOptions['descriptions']))
         <div class="photo-gallery__header text-center mb-4">
             @if (!empty($displayOptions['title']))
                 <h2 class="photo-gallery__title mb-2">{{ $displayOptions['title'] }}</h2>

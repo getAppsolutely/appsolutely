@@ -324,10 +324,10 @@ Use `block-name` on the root. For style variants, add `block-name--style` (BEM m
 
 Use the correct helper depending on the asset source:
 
-| Helper                     | Use For                                                                                                | Example                                                                                                                     |
-| -------------------------- | ------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
-| **`asset_url($uri)`**      | CMS/storage assets: uploads, config-driven URLs (e.g. from `display_options`), paths under `assets/`   | `asset_url($displayOptions['video_url'])`, `asset_url($slide['url'])`, `asset_url('assets/images/logo.webp')`               |
-| **`themed_assets($path)`** | Theme assets built by Vite: images/fonts imported in JS or SCSS, or explicitly added to the Vite build | `themed_assets('/images/coming.png')` — asset must be imported in `assets.ts` or similar so it appears in the Vite manifest |
+| Helper                     | Use For                                                                                                | Example                                                                                                                      |
+| -------------------------- | ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| **`asset_url($uri)`**      | CMS/storage assets: uploads, config-driven URLs (e.g. from `display_options`), paths under `assets/`   | `asset_url($displayOptions['video_url'])`, `asset_url($slide['url'])`, `asset_url('assets/images/logo.webp')`                |
+| **`themed_assets($path)`** | Theme assets built by Vite: images/fonts imported in JS or SCSS, or explicitly added to the Vite build | `themed_assets('/images/rednote.svg')` — asset must be imported in `assets.ts` or similar so it appears in the Vite manifest |
 
 **Rules of thumb:**
 

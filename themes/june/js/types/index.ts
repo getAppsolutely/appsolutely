@@ -12,7 +12,6 @@ export type ComponentInit = () => void;
 // Asset types
 export interface AssetPaths {
     images: {
-        coming: string;
         rednote: string;
     };
 }
