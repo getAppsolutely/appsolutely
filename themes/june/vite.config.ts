@@ -43,7 +43,7 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            '@june': path.resolve(__dirname, 'resources/themes/june'),
+            '@june': path.resolve(__dirname),
             '~bootstrap': path.resolve('node_modules/bootstrap'),
         },
     },

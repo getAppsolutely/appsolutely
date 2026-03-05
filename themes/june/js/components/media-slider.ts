@@ -63,7 +63,6 @@ class MediaSliderCarousel {
                 },
                 on: {
                     init: function (this: SwiperType) {
-                        //console.log('Media slider initialized:', sliderId);
                         // Only update title slider if it exists
                         if (self.hasTitleSlider(sliderId)) {
                             self.updateTitleSlider(sliderId, 0);

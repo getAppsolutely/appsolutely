@@ -31,22 +31,17 @@ export function openSmartMap(lat: number, lng: number, name: string = ''): void 
     const googleWebURL = `https://www.google.com/maps?q=${encodedName}&ll=${lat},${lng}`;
 
     if (/iphone|ipad|mac/.test(ua)) {
-        // iOS/iPadOS/macOS: Try Google Maps app first, fallback to Apple Maps
-        const now = Date.now();
+        // iOS/iPadOS/macOS: Try Google Maps app first via hidden iframe.
+        // If still on page after 1200ms, Google Maps app is not installed → fallback to Apple Maps.
         const iframe = document.createElement('iframe');
         iframe.style.display = 'none';
         iframe.src = googleAppURL;
         document.body.appendChild(iframe);
 
-        // If 1.5 seconds pass without leaving the page, Google Maps app is not installed
-        // Fallback to Apple Maps
         setTimeout(() => {
-            const elapsed = Date.now() - now;
-            if (elapsed < 1500) {
-                window.location.href = appleURL;
-            }
             if (document.body.contains(iframe)) {
                 document.body.removeChild(iframe);
+                window.location.href = appleURL;
             }
         }, 1200);
     } else if (/android/.test(ua)) {
@@ -58,13 +53,7 @@ export function openSmartMap(lat: number, lng: number, name: string = ''): void 
     }
 }
 
-// Make function globally accessible
-declare global {
-    interface Window {
-        openSmartMap: (lat: number, lng: number, name?: string) => void;
-    }
-}
-
+// Make function globally accessible (Window.openSmartMap declared in types/global.d.ts)
 window.openSmartMap = openSmartMap;
 
 // Initialize on DOM ready

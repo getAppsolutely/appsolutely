@@ -38,11 +38,6 @@ class VideoShowcase {
     handleVideoEvents(): void {
         if (!this.video) return;
 
-        // Add loading state
-        this.video.addEventListener('loadstart', () => {
-            //console.log('Video loading started');
-        });
-
         // Try to play video when it's loaded
         this.video.addEventListener('loadeddata', () => {
             if (this.video && this.video.readyState >= 3) {
@@ -56,14 +51,8 @@ class VideoShowcase {
         });
 
         // Handle video errors
-        this.video.addEventListener('error', (e: Event) => {
-            console.error('Video error:', e);
+        this.video.addEventListener('error', () => {
             this.handleVideoError();
-        });
-
-        // Handle video ended (for non-looping videos)
-        this.video.addEventListener('ended', () => {
-            console.log('Video ended');
         });
     }
 
@@ -74,27 +63,18 @@ class VideoShowcase {
         const playPromise = this.video.play();
 
         if (playPromise !== undefined) {
-            playPromise
-                .then(() => {
-                    //console.log('Video autoplay started successfully');
-                })
-                .catch((error: Error) => {
-                    console.log('Video autoplay prevented by browser policy:', error);
-                    this.handleAutoplayBlocked();
-                });
+            playPromise.catch(() => {
+                this.handleAutoplayBlocked();
+            });
         }
     }
 
     handleAutoplayBlocked(): void {
-        // Could add user interaction to start video
-        // For example, show a play button overlay
-        console.log('Autoplay blocked - could show play button');
-
-        // Option: Add click listener to start video on user interaction
+        // Add click listener to start video on user interaction (browsers require user gesture for autoplay)
         document.addEventListener(
             'click',
             () => {
-                this.video?.play().catch((e: Error) => console.log('Manual play failed:', e));
+                this.video?.play().catch(() => {});
             },
             { once: true }
         );
@@ -120,7 +100,7 @@ class VideoShowcase {
                 entries.forEach((entry: IntersectionObserverEntry) => {
                     if (entry.isIntersecting) {
                         // Video is in view - play it
-                        this.video?.play().catch((e: Error) => console.log('Play failed:', e));
+                        this.video?.play().catch(() => {});
                     } else {
                         // Video is out of view - pause it to save resources
                         this.video?.pause();

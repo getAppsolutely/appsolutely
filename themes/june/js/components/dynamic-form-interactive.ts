@@ -3,29 +3,10 @@
  * Handles background image switching, height synchronization, and Livewire event handling
  */
 
+import { buildUrl } from '../utils/url';
+
 interface OptionsMapping {
     [key: string]: string;
-}
-
-/**
- * Normalize asset URL to handle various formats
- */
-function normalizeAssetUrl(url: string, baseUrl: string): string {
-    if (!url) return '';
-
-    // Already absolute URL (http://, https://, //)
-    if (/^(https?:)?\/\//.test(url)) {
-        return url;
-    }
-
-    // Normalize base URL (remove trailing slash)
-    const base = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
-
-    // Remove leading slash from path to avoid double slashes
-    const path = url.startsWith('/') ? url.slice(1) : url;
-
-    // Prepend base URL to path (handles both root-relative and relative paths)
-    return `${base}/${path}`;
 }
 
 /**
@@ -77,7 +58,7 @@ function updateBackgroundImage(container: HTMLElement, imageUrl: string, baseUrl
     const backgroundImageEl = container.querySelector<HTMLElement>('.dynamic-form-interactive__background-image');
     if (!backgroundImageEl) return;
 
-    const normalizedUrl = normalizeAssetUrl(imageUrl, baseUrl);
+    const normalizedUrl = buildUrl(imageUrl, baseUrl);
 
     // Don't update if it's already the same image
     const currentBg = backgroundImageEl.style.backgroundImage;

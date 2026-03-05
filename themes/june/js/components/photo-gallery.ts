@@ -1,5 +1,7 @@
 // Photo Gallery client-side filtering
 
+import { buildUrl } from '../utils/url';
+
 interface Photo {
     image_src: string;
     title?: string;
@@ -11,17 +13,6 @@ interface Photo {
     category?: string;
     tags?: string[];
     price?: string;
-}
-
-/**
- * Build full asset URL from base URL and relative path (light-weight, no utils import)
- */
-function buildAssetUrl(uri: string, baseUrl: string): string {
-    if (!uri || String(uri).trim() === '') return '';
-    if (/^(https?:)?\/\//.test(uri)) return uri;
-    const base = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
-    const path = uri.startsWith('/') ? uri.slice(1) : uri;
-    return `${base}/${path}`;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -90,9 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Use placeholder when image_src is empty or missing; also handle load errors
         if (img) {
             const imageUrl =
-                p.image_src && String(p.image_src).trim() !== ''
-                    ? buildAssetUrl(p.image_src, baseUrl)
-                    : PLACEHOLDER_URL;
+                p.image_src && String(p.image_src).trim() !== '' ? buildUrl(p.image_src, baseUrl) : PLACEHOLDER_URL;
             img.setAttribute('data-src', imageUrl);
             img.alt = p.alt || p.title || '';
             img.addEventListener(
@@ -101,8 +90,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (img.getAttribute('data-src') !== PLACEHOLDER_URL) {
                         img.setAttribute('data-src', PLACEHOLDER_URL);
                         // Trigger lazy loading update if available
-                        if ((window as any).lazyManager) {
-                            (window as any).lazyManager.update();
+                        if (window.lazyManager) {
+                            window.lazyManager.update();
                         }
                     }
                 },
@@ -179,8 +168,8 @@ document.addEventListener('DOMContentLoaded', () => {
         list.forEach((p: Photo) => grid.appendChild(buildCard(p)));
 
         // Update lazy loading for newly added images
-        if ((window as any).lazyManager) {
-            (window as any).lazyManager.update();
+        if (window.lazyManager) {
+            window.lazyManager.update();
         }
     };
 

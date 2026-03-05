@@ -9,11 +9,14 @@ declare global {
         bootstrap: typeof BootstrapNamespace;
         _: LoDashStatic;
         assets?: Record<string, unknown>;
+        lazyLoadInstance?: import('vanilla-lazyload').ILazyLoadInstance;
+        lazyManager?: { update(): void };
         MediaSliderCarousel?: unknown;
-        showSelectedLocation?: (locationIndex: string | number) => void;
+        openSmartMap?: (lat: number, lng: number, name?: string) => void;
         pageBuilderData?: string;
         pageBuilderConfig?: PageBuilderConfig;
         pageBuilderService?: PageBuilderService;
+        showSelectedLocation?: (locationIndex: string | number) => void;
         grapesjs?: import('./grapesjs').GrapesJS;
     }
 

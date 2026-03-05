@@ -5,7 +5,7 @@
  * for images, videos, and background images across the June theme.
  */
 
-import LazyLoad from 'vanilla-lazyload';
+import LazyLoad, { type ILazyLoadInstance, type ILazyLoadOptions } from 'vanilla-lazyload';
 
 interface LazyLoadOptions {
     rootMargin?: string;
@@ -17,7 +17,7 @@ interface LazyLoadOptions {
 }
 
 class LazyLoadingManager {
-    private lazyLoadInstance: any = null;
+    private lazyLoadInstance: ILazyLoadInstance | null = null;
     private defaultOptions: LazyLoadOptions = {
         rootMargin: '50px 0px',
         threshold: 0.1,
@@ -60,11 +60,11 @@ class LazyLoadingManager {
                     }
                 }
             },
-        } as any);
+        } as ILazyLoadOptions);
 
         // Make instance available globally for debugging
         if (typeof window !== 'undefined') {
-            (window as any).lazyLoadInstance = this.lazyLoadInstance;
+            window.lazyLoadInstance = this.lazyLoadInstance;
         }
     }
 
@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Make manager available globally for dynamic content
     if (typeof window !== 'undefined') {
-        (window as any).lazyManager = lazyManager;
+        window.lazyManager = lazyManager;
     }
 });
 
