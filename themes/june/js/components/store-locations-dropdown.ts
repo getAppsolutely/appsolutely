@@ -197,14 +197,12 @@ class StoreLocationsDropdown {
     }
 }
 
-// Initialize component
-const storeLocationsDropdown = new StoreLocationsDropdown();
+let storeLocationsDropdown: StoreLocationsDropdown | null = null;
 
-// Make function globally accessible
-window.showSelectedLocation = (locationIndex: string | number) => storeLocationsDropdown.showSelected(locationIndex);
-
-// Initialize on DOM ready
-document.addEventListener('DOMContentLoaded', () => {
+export function init(): void {
+    storeLocationsDropdown = new StoreLocationsDropdown();
+    window.showSelectedLocation = (locationIndex: string | number) =>
+        storeLocationsDropdown!.showSelected(locationIndex);
     storeLocationsDropdown.toggleElement('no-selection-message', true);
     storeLocationsDropdown.toggleElement('selected-location-display', false);
-});
+}

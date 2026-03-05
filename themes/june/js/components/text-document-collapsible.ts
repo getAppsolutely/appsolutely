@@ -190,10 +190,11 @@ class TextDocumentCollapsible {
     }
 }
 
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-    new TextDocumentCollapsible();
-});
+let textDocumentCollapsibleInstance: TextDocumentCollapsible | null = null;
 
-// Export for module usage
+export function init(): void {
+    if (textDocumentCollapsibleInstance) return;
+    textDocumentCollapsibleInstance = new TextDocumentCollapsible();
+}
+
 export default TextDocumentCollapsible;

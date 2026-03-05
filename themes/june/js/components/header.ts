@@ -2,6 +2,7 @@
  * Header Component JavaScript
  * Handles hover effects, mobile menu, and dropdown functionality.
  * Scroll state (.scrolled) is handled by IntersectionObserver on #scrollTrigger.
+ * Uses .main-header class for selector (id retained for backward compatibility).
  */
 
 import _ from 'lodash';
@@ -17,7 +18,7 @@ export class Header implements HeaderInstance {
     private abortController: AbortController;
 
     constructor() {
-        this.header = document.querySelector<HTMLElement>('#main-header');
+        this.header = document.querySelector<HTMLElement>('.main-header');
         this.navbar = this.header?.querySelector<HTMLElement>('.navbar') ?? null;
         this.navbarToggler = this.header?.querySelector<HTMLElement>('.navbar-toggler') ?? null;
         this.navbarCollapse = this.header?.querySelector<HTMLElement>('.navbar-collapse') ?? null;
@@ -165,7 +166,7 @@ function initHeader(): void {
 function setupScrollObserver(): void {
     scrollObserver?.disconnect();
     const trigger = document.getElementById('scrollTrigger');
-    const navbar = document.getElementById('main-header');
+    const navbar = document.querySelector<HTMLElement>('.main-header');
     if (trigger && navbar) {
         scrollObserver = new IntersectionObserver(
             ([entry]: IntersectionObserverEntry[]) => {
@@ -198,14 +199,9 @@ function cleanup(): void {
     }
 }
 
-function init(): void {
+export function init(): void {
+    cleanup();
     initHeader();
     setupScrollObserver();
     setupResizeListener();
 }
-
-document.addEventListener('DOMContentLoaded', init);
-document.addEventListener('livewire:navigated', () => {
-    cleanup();
-    init();
-});

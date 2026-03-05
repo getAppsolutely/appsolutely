@@ -92,6 +92,12 @@
     background-repeat: no-repeat;
 }
 
+// Optional overlay for text readability
+.hero-banner__overlay {
+    opacity: 0.3;
+    z-index: 1;
+}
+
 // Default style (not fullscreen)
 .hero-banner:not(.hero-banner-fullscreen) {
     & > .hero-banner__image-wrap {

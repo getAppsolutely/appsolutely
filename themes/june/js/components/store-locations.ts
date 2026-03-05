@@ -56,9 +56,7 @@ export function openSmartMap(lat: number, lng: number, name: string = ''): void 
 // Make function globally accessible (Window.openSmartMap declared in types/global.d.ts)
 window.openSmartMap = openSmartMap;
 
-// Initialize on DOM ready
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize map links with data attributes
+export function init(): void {
     const mapLinks = document.querySelectorAll<HTMLAnchorElement>('[data-map-lat][data-map-lng]');
     mapLinks.forEach((link) => {
         const lat = parseFloat(link.getAttribute('data-map-lat') || '0');
@@ -72,7 +70,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
-});
+}
 
-// Export for module usage
 export default openSmartMap;

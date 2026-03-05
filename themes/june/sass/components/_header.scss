@@ -1,6 +1,6 @@
 @use "mixins" as *;
 
-#main-header {
+.main-header {
     background: transparent;
     font-size: 1rem;
     font-weight: 600;
@@ -43,11 +43,11 @@
     box-shadow: none !important;
 }
 
-#main-header .navbar,
-#main-header .navbar-nav .nav-link,
-#main-header .header__logo,
-#main-header .navbar-brand,
-#main-header .btn {
+.main-header .navbar,
+.main-header .navbar-nav .nav-link,
+.main-header .header__logo,
+.main-header .navbar-brand,
+.main-header .btn {
     color: $light;
 
     .header__submenu a.dropdown-item span.d-inline-block {
@@ -171,8 +171,8 @@
     }
 }
 
-#main-header.scrolled:has(.header__left a:hover),
-#main-header.scrolled:has(.header__center .navbar-nav .nav-item:hover) {
+.main-header.scrolled:has(.header__left a:hover),
+.main-header.scrolled:has(.header__center .navbar-nav .nav-item:hover) {
     color: $body-bg;
 
     .navbar,
@@ -184,8 +184,8 @@
     }
 }
 
-#main-header:has(.header__left a:hover),
-#main-header:has(.header__center .navbar-nav .nav-item:hover) {
+.main-header:has(.header__left a:hover),
+.main-header:has(.header__center .navbar-nav .nav-item:hover) {
     background: $body-bg;
     color: $body-color;
     box-shadow: 0 4px 20px $black-alpha-15;

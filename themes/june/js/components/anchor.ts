@@ -113,4 +113,4 @@ function initAnchorNav(): void {
     initToTopButton();
 }
 
-document.addEventListener('DOMContentLoaded', initAnchorNav);
+export { initAnchorNav as init };

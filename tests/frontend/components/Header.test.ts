@@ -15,7 +15,7 @@ describe('Header Component', () => {
         // Setup DOM
         document.body.innerHTML = `
       <div id="scrollTrigger"></div>
-      <header id="main-header">
+      <header id="main-header" class="main-header">
         <nav class="navbar">
           <button class="navbar-toggler" aria-expanded="false">Toggle</button>
           <div class="navbar-collapse"></div>
@@ -23,7 +23,7 @@ describe('Header Component', () => {
       </header>
     `;
 
-        headerElement = document.getElementById('main-header') as HTMLElement;
+        headerElement = document.querySelector('.main-header') as HTMLElement;
         navbarToggler = headerElement.querySelector('.navbar-toggler') as HTMLElement;
         navbarCollapse = headerElement.querySelector('.navbar-collapse') as HTMLElement;
     });
@@ -32,23 +32,6 @@ describe('Header Component', () => {
         const header = new Header();
         expect(header.header).toBeTruthy();
         expect(header.navbar).toBeTruthy();
-    });
-
-    it('should add scrolled class when scrolling', () => {
-        const header = new Header();
-
-        // Mock scroll position
-        Object.defineProperty(window, 'pageYOffset', {
-            writable: true,
-            value: 100,
-        });
-        Object.defineProperty(document.documentElement, 'scrollTop', {
-            writable: true,
-            value: 100,
-        });
-
-        header.checkScroll();
-        expect(headerElement.classList.contains('scrolled')).toBe(true);
     });
 
     it('should toggle mobile menu', () => {

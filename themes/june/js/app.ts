@@ -3,22 +3,13 @@
  *
  * Loads Bootstrap, Axios, Lodash, and theme components.
  * Uses vanilla JavaScript with Livewire for interactivity.
+ * Component init is centralized in init.ts.
  */
 
 import './bootstrap';
 import './components/lazy-loading.ts';
 import './assets';
+import './init';
 
-// Import component JavaScript
-import './components/header';
-import './components/hero-banner';
-import './components/video-showcase';
-import './components/media-slider';
-import './components/features';
-import './components/text-document-collapsible';
-import './components/store-locations-dropdown';
+// Store locations exports openSmartMap (used by Blade)
 import './components/store-locations';
-import './components/photo-gallery';
-import './components/product-variant-block';
-import './components/dynamic-form-interactive';
-import './components/anchor';

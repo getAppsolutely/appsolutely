@@ -3,7 +3,7 @@
 import { buildUrl } from '../utils/url';
 import type { Photo } from '../types';
 
-document.addEventListener('DOMContentLoaded', () => {
+export function init(): void {
     const grid = document.getElementById('gallery-grid');
     if (!grid) return;
 
@@ -192,4 +192,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     renderFilters();
     renderGrid('all');
-});
+}

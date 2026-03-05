@@ -191,10 +191,15 @@ function initializeAllBlocks(): void {
     });
 }
 
+let livewireListenersSetup = false;
+
 /**
- * Setup Livewire event listeners for SPA navigation
+ * Setup Livewire event listeners for SPA navigation (once)
  */
 function setupLivewireListeners(): void {
+    if (livewireListenersSetup) return;
+    livewireListenersSetup = true;
+
     document.addEventListener('livewire:navigated', () => {
         setTimeout(initializeAllBlocks, 100);
     });
@@ -207,18 +212,9 @@ function setupLivewireListeners(): void {
 /**
  * Main initialization
  */
-function init(): void {
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(initializeAllBlocks, 100);
-        });
-    } else {
-        setTimeout(initializeAllBlocks, 100);
-    }
-
+export function init(): void {
+    setTimeout(initializeAllBlocks, 100);
     setupLivewireListeners();
 }
-
-init();
 
 export { initializeNativeFallback, initializeAllBlocks };

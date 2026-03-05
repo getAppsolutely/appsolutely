@@ -269,21 +269,23 @@ function initializeAllComponents(): void {
     });
 }
 
+let livewireListenersSetup = false;
+
 /**
- * Setup Livewire event listeners
+ * Setup Livewire event listeners (once)
  */
 function setupLivewireListeners(): void {
-    // Re-initialize on Livewire load
+    if (livewireListenersSetup) return;
+    livewireListenersSetup = true;
+
     document.addEventListener('livewire:load', () => {
         setTimeout(initializeAllComponents, LIVEWIRE_RENDER_DELAY_MS);
     });
 
-    // Re-initialize on Livewire update
     document.addEventListener('livewire:update', () => {
         setTimeout(initializeAllComponents, LIVEWIRE_RENDER_DELAY_MS);
     });
 
-    // Re-initialize on Livewire navigation (SPA)
     document.addEventListener('livewire:navigated', () => {
         setTimeout(initializeAllComponents, LIVEWIRE_RENDER_DELAY_MS);
     });
@@ -292,18 +294,9 @@ function setupLivewireListeners(): void {
 /**
  * Main initialization
  */
-function init(): void {
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(initializeAllComponents, LIVEWIRE_RENDER_DELAY_MS);
-        });
-    } else {
-        setTimeout(initializeAllComponents, LIVEWIRE_RENDER_DELAY_MS);
-    }
-
+export function init(): void {
+    setTimeout(initializeAllComponents, LIVEWIRE_RENDER_DELAY_MS);
     setupLivewireListeners();
 }
-
-init();
 
 export { initializeComponent, initializeAllComponents };

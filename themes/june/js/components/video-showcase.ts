@@ -135,8 +135,5 @@ function initVideoShowcase(): void {
     videoShowcaseInstance.init();
 }
 
-document.addEventListener('DOMContentLoaded', initVideoShowcase);
-document.addEventListener('livewire:navigated', initVideoShowcase);
-
-// Export for potential use in other modules
+export { initVideoShowcase as init };
 export default VideoShowcase;

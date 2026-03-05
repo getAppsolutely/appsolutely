@@ -5,6 +5,6 @@
 
 import { observeInView } from '../utils/scroll-animation';
 
-document.addEventListener('DOMContentLoaded', () => {
+export function init(): void {
     observeInView('.hero-banner', { threshold: 0.3 });
-});
+}

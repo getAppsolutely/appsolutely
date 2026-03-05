@@ -42,13 +42,13 @@
                                     @endif
                                     @if (!empty($hero['link']))
                                         <a href="{{ $hero['link'] }}"
-                                            class="btn btn-light btn-lg fw-semibold fs-6 px-3 py-2 border border-white">
+                                            class="hero-banner__btn btn btn-light btn-lg fw-semibold fs-6 px-3 py-2 border border-white">
                                             Learn More
                                         </a>
                                     @endif
                                     @if (!empty($hero['test_drive_link']))
                                         <a href="{{ $hero['test_drive_link'] }}"
-                                            class="btn btn-light btn-lg fw-semibold fs-6 ms-3 px-3 py-2 border border-white">
+                                            class="hero-banner__btn btn btn-light btn-lg fw-semibold fs-6 ms-3 px-3 py-2 border border-white">
                                             Test Drive
                                         </a>
                                     @endif
@@ -59,9 +59,7 @@
                 @endif
 
                 <!-- Optional Overlay for better text readability -->
-                <div class="hero-banner__overlay position-absolute top-0 start-0 w-100 h-100"
-                    style="opacity: 0.3; z-index: 1;">
-                </div>
+                <div class="hero-banner__overlay position-absolute top-0 start-0 w-100 h-100"></div>
 
                 @include('components.overseas-model-notice', [
                     'show' => !empty($hero['flag_overseas']),

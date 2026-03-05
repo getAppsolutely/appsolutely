@@ -1,4 +1,4 @@
-<header id="main-header" class="header">
+<header id="main-header" class="main-header header">
     <nav class="header__nav navbar navbar-expand-xl">
         <!-- Hamburger Menu Toggle (pure CSS) -->
         <input type="checkbox" id="header-mobile-toggle" class="header__toggle d-none" aria-hidden="true" />

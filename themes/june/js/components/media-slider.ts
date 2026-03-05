@@ -15,24 +15,8 @@ class MediaSliderCarousel {
     }
 
     init(): void {
-        // Initialize existing sliders on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            this.initializeSliders();
-        });
-
-        // Handle Livewire SPA navigation (full page replace – destroy stale instances before re-init)
-        document.addEventListener('livewire:navigated', () => {
-            this.destroyAll();
-            this.initializeSliders();
-        });
-
-        // Note: Livewire 3 morph events (morph, morphed) are internal and not dispatched on document.
-        // livewire:navigated covers full SPA navigation; destroyAll() avoids duplicate/stale sliders.
-
-        // Handle component updates
-        document.addEventListener('livewire:updated', () => {
-            this.initializeSliders();
-        });
+        // DOMContentLoaded and livewire:navigated are handled by init.ts
+        // livewire:updated is handled at module level to avoid duplicate listeners
     }
 
     initializeSliders(): void {
@@ -201,8 +185,17 @@ class MediaSliderCarousel {
     }
 }
 
-// Initialize the media slider carousel
-new MediaSliderCarousel();
+let mediaSliderInstance: MediaSliderCarousel | null = null;
+
+export function init(): void {
+    mediaSliderInstance?.destroyAll();
+    mediaSliderInstance = new MediaSliderCarousel();
+    mediaSliderInstance.initializeSliders();
+}
+
+document.addEventListener('livewire:updated', () => {
+    mediaSliderInstance?.initializeSliders();
+});
 
 // Export for potential external use
 window.MediaSliderCarousel = MediaSliderCarousel;
