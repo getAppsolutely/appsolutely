@@ -2,6 +2,13 @@
  * June Theme Type Definitions
  */
 
+/**
+ * Component init function signature.
+ * All theme components must export an init function matching this type.
+ * Called by init.ts on DOMContentLoaded and livewire:navigated.
+ */
+export type ComponentInit = () => void;
+
 // Asset types
 export interface AssetPaths {
     images: {

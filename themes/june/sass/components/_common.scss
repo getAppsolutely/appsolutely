@@ -39,7 +39,7 @@
     width: 1.125rem !important; // 18px to match Bootstrap Icons width
     height: 1.125rem !important; // 18px to match Bootstrap Icons height
     vertical-align: -0.125em; // Match Bootstrap Icons vertical alignment
-    background: url("../images/rednote.svg") no-repeat center center;
+    background: url($icon-rednote-path) no-repeat center center;
     background-size: contain;
     filter: grayscale(1); // Monochrome theme: render icon in grayscale
 }

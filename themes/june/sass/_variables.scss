@@ -129,6 +129,9 @@ $header-mobile-overlay-bg: rgba($body-bg, 0.98);
 // Touch target minimum (accessibility: 44x44px for iOS)
 $touch-target-min: 44px;
 
+// Theme image paths (relative to sass/components/ when used in component partials)
+$icon-rednote-path: "../images/rednote.svg";
+
 // Price section accent (product variant block)
 $price-accent: #3490dc;
 

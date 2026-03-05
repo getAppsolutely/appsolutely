@@ -38,4 +38,11 @@ return [
         'go_to_top'          => '返回顶部',
         'section_navigation' => '区块导航',
     ],
+    'hero' => [
+        'learn_more' => '了解更多',
+        'test_drive' => '试驾',
+    ],
+    'dynamic_form' => [
+        'submit_another_request' => '再次提交请求',
+    ],
 ];

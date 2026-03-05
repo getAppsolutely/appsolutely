@@ -43,13 +43,13 @@
                                     @if (!empty($hero['link']))
                                         <a href="{{ $hero['link'] }}"
                                             class="hero-banner__btn btn btn-light btn-lg fw-semibold fs-6 px-3 py-2 border border-white">
-                                            Learn More
+                                            {{ __('global.hero.learn_more') }}
                                         </a>
                                     @endif
                                     @if (!empty($hero['test_drive_link']))
                                         <a href="{{ $hero['test_drive_link'] }}"
                                             class="hero-banner__btn btn btn-light btn-lg fw-semibold fs-6 ms-3 px-3 py-2 border border-white">
-                                            Test Drive
+                                            {{ __('global.hero.test_drive') }}
                                         </a>
                                     @endif
                                 </div>

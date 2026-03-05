@@ -41,4 +41,11 @@ return [
         'go_to_top'          => '返回頂部',
         'section_navigation' => '區塊導航',
     ],
+    'hero' => [
+        'learn_more' => '了解更多',
+        'test_drive' => '試駕',
+    ],
+    'dynamic_form' => [
+        'submit_another_request' => '再次提交請求',
+    ],
 ];

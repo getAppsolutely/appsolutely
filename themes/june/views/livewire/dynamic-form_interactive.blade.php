@@ -44,7 +44,8 @@
                     <p class="dynamic-form-interactive__success-message">{{ $successMessage }}</p>
 
                     <button wire:click="resetForm" class="dynamic-form-interactive__reset-btn">
-                        <i class="fas fa-plus me-2" aria-hidden="true"></i>Submit Another Request
+                        <i class="fas fa-plus me-2"
+                            aria-hidden="true"></i>{{ __('global.dynamic_form.submit_another_request') }}
                     </button>
                 </div>
             @endif

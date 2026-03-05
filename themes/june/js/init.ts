@@ -2,10 +2,11 @@
  * June Theme Component Initialization
  *
  * Centralizes component init: runs all component inits on DOMContentLoaded
- * and livewire:navigated. Components export init functions; this module
- * orchestrates when they run.
+ * and livewire:navigated. Components export init functions (ComponentInit);
+ * this module orchestrates when they run.
  */
 
+import type { ComponentInit } from './types';
 import { init as initHeader } from './components/header';
 import { init as initHeroBanner } from './components/hero-banner';
 import { init as initAnchor } from './components/anchor';
@@ -19,7 +20,7 @@ import { init as initProductVariantBlock } from './components/product-variant-bl
 import { init as initDynamicFormInteractive } from './components/dynamic-form-interactive';
 import { init as initTextDocumentCollapsible } from './components/text-document-collapsible';
 
-const componentInits: Array<() => void> = [
+const componentInits: ComponentInit[] = [
     initHeader,
     initHeroBanner,
     initAnchor,
