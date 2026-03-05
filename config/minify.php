@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of Laravel Minify.
  *
@@ -129,11 +130,11 @@ return [
     |
     */
 
-    'ignore' => [
+    'ignore' => array_filter([
         //   "*/download/*",
-        //   "admin/*",
+        ($prefix = config('admin.route.prefix')) ? $prefix . '/*' : null,
         //   "*/user"
-    ],
+    ]),
 
     /*
     |--------------------------------------------------------------------------
