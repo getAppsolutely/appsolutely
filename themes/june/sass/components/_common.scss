@@ -1,5 +1,10 @@
 @use "mixins" as *;
 
+// IntersectionObserver trigger for scroll-based header state (1px height for valid intersection)
+.scroll-trigger {
+    height: 1px;
+}
+
 .container.container-responsive {
     @include media-breakpoint-down(xxl) {
         max-width: 94vw;

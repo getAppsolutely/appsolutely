@@ -36,7 +36,7 @@
 
 <body>
     {!! noscript() !!}
-    <div id="scrollTrigger" class="position-absolute top-0 w-100" style="height: 1px;"></div>
+    <div id="scrollTrigger" class="scroll-trigger position-absolute top-0 w-100"></div>
     <h1 class="d-none">{{ $page->h1_text ?? $page->title }}</h1>
     @yield('content')
     @livewireScripts

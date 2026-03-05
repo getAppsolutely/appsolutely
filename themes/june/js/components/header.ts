@@ -5,8 +5,8 @@
  * Uses .main-header class for selector (id retained for backward compatibility).
  */
 
-import _ from 'lodash';
 import type { HeaderInstance } from '../types';
+import { debounce } from '../utils/debounce';
 
 export class Header implements HeaderInstance {
     header: HTMLElement | null;
@@ -184,7 +184,7 @@ function setupResizeListener(): void {
     if (debouncedInitHeader) {
         window.removeEventListener('resize', debouncedInitHeader);
     }
-    debouncedInitHeader = _.debounce(initHeader, 150);
+    debouncedInitHeader = debounce(initHeader, 150);
     window.addEventListener('resize', debouncedInitHeader);
 }
 

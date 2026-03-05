@@ -1,13 +1,11 @@
 import type { AxiosStatic } from 'axios';
 import type * as BootstrapNamespace from 'bootstrap';
-import type { LoDashStatic } from 'lodash';
 import type { PageBuilderConfig, PageBuilderService } from './pagebuilder';
 
 declare global {
     interface Window {
         axios: AxiosStatic;
         bootstrap: typeof BootstrapNamespace;
-        _: LoDashStatic;
         assets?: {
             images: {
                 coming: string;

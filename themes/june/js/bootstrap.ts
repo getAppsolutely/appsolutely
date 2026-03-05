@@ -4,11 +4,6 @@
  * This file configures Bootstrap 5.3.0 and other JavaScript dependencies
  */
 
-// Import Lodash for utility functions
-import _ from 'lodash';
-// Lodash types can conflict with @types/lodash; cast to satisfy Window augmentation
-window._ = _ as unknown as import('lodash').LoDashStatic;
-
 /**
  * Bootstrap 5.3.0 JavaScript
  *
