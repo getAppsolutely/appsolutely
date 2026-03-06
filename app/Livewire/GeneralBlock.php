@@ -17,7 +17,11 @@ class GeneralBlock extends Component
      */
     public string $viewName = '';
 
-    public string $style = 'default';
+    /**
+     * View style variant (e.g. default, fullscreen).
+     * Set from page_block_values.view_style via BlockRendererService.
+     */
+    public string $viewStyle = 'default';
 
     public array $displayOptions = [];
 
@@ -138,8 +142,8 @@ class GeneralBlock extends Component
         }
 
         // First, try to find view with style suffix (e.g., "article-list_fullscreen")
-        if (! empty($this->style) && $this->style !== 'default') {
-            $styleViewName = $this->viewName . '_' . $this->style;
+        if (! empty($this->viewStyle) && $this->viewStyle !== 'default') {
+            $styleViewName = $this->viewName . '_' . $this->viewStyle;
             $styleViewPath = 'livewire.' . $styleViewName;
 
             if (view()->exists($styleViewPath)) {

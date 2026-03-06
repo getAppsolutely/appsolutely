@@ -37,14 +37,14 @@ final class PageBlockSetting extends Model
         'expired_at'   => 'datetime',
     ];
 
-    protected $appends = ['block_display_label', 'display_options_title', 'display_options_style'];
+    protected $appends = ['block_display_label', 'display_options_title', 'view_style'];
 
     /**
-     * Check if block value's display_options, query_options, or theme is dirty and create new block value if needed
+     * Check if block value's display_options, query_options, theme, anchor_label, or style is dirty and create new block value if needed
      */
     public function checkAndCreateNewBlockValue(): void
     {
-        if (! $this->blockValue || ! $this->blockValue->isDirty(['display_options', 'query_options', 'theme'])) {
+        if (! $this->blockValue || ! $this->blockValue->isDirty(['display_options', 'query_options', 'theme', 'anchor_label', 'view_style'])) {
             return;
         }
 
@@ -61,6 +61,8 @@ final class PageBlockSetting extends Model
             'block_id'        => $this->block_id,
             'theme'           => $this->blockValue->theme,
             'view'            => (string) ($this->blockValue->view ?? ''),
+            'view_style'      => $this->blockValue->view_style ?? 'default',
+            'anchor_label'    => $this->blockValue->anchor_label,
             'query_options'   => $this->blockValue->query_options,
             'display_options' => $this->blockValue->display_options,
             'scripts'         => $this->blockValue->scripts,
@@ -100,9 +102,14 @@ final class PageBlockSetting extends Model
 
         $displayOptions = $this->blockValue?->display_options;
         if (! empty($displayOptions)) {
-            return is_array($displayOptions)
+            $options = is_array($displayOptions)
                 ? $displayOptions
                 : (is_string($displayOptions) ? json_decode($displayOptions, true) : []);
+            if (is_array($options)) {
+                unset($options['anchor_label'], $options['style']);
+            }
+
+            return $options ?? [];
         }
 
         // Otherwise, return the block's schema_values (for global scope)
@@ -160,13 +167,13 @@ final class PageBlockSetting extends Model
     }
 
     /**
-     * Get style from display_options. Returns 'default' if not set.
+     * Get view style from block value column (page_block_values.view_style).
+     * Returns 'default' if not set.
      */
-    public function getDisplayOptionsStyleAttribute(): string
+    public function getViewStyleAttribute(): string
     {
-        $options = $this->display_options_value;
-        $style   = $options['style'] ?? null;
+        $columnStyle = $this->blockValue?->view_style;
 
-        return $style !== null && $style !== '' ? (string) $style : 'default';
+        return $columnStyle !== null && $columnStyle !== '' ? (string) $columnStyle : 'default';
     }
 }

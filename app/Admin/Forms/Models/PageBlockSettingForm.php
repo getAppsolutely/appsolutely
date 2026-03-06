@@ -47,6 +47,13 @@ class PageBlockSettingForm extends ModelForm
         $this->text('type', __t('Type'));
         $this->text('remark', __t('Remark'));
 
+        $this->text('blockValue.view_style', __t('View Style'))
+            ->default('default')
+            ->help(__t('View style variant (e.g. default, fullscreen)'));
+
+        $this->text('blockValue.anchor_label', __t('Anchor Label'))
+            ->help(__t('Section label for anchor navigation (leave empty to exclude)'));
+
         $this->textarea('blockValue.display_options', __t('Display Options'))
             ->rows(10)->help(__t('JSON format for display options'));
 
@@ -70,12 +77,34 @@ class PageBlockSettingForm extends ModelForm
         }
 
         // Handle block value updates
-        if (! empty($input['blockValue'])) {
+        if (! empty($input['blockValue']) && $model->blockValue) {
             $blockValueChanged = false;
 
+            if (isset($input['blockValue']['view_style'])) {
+                $model->blockValue->view_style = $input['blockValue']['view_style'] !== ''
+                    ? (string) $input['blockValue']['view_style']
+                    : 'default';
+                $blockValueChanged = true;
+            }
+
+            if (array_key_exists('anchor_label', $input['blockValue'])) {
+                $model->blockValue->anchor_label = $input['blockValue']['anchor_label'] !== ''
+                    ? (string) $input['blockValue']['anchor_label']
+                    : null;
+                $blockValueChanged = true;
+            }
+
             if (isset($input['blockValue']['display_options'])) {
-                $model->blockValue->display_options = $input['blockValue']['display_options'];
-                $blockValueChanged                  = true;
+                $displayOptions = $input['blockValue']['display_options'];
+                $parsed         = is_string($displayOptions) ? json_decode($displayOptions, true) : $displayOptions;
+
+                if (is_array($parsed)) {
+                    unset($parsed['anchor_label'], $parsed['style']);
+                    $model->blockValue->display_options = $parsed;
+                } else {
+                    $model->blockValue->display_options = $displayOptions;
+                }
+                $blockValueChanged = true;
             }
 
             if (isset($input['blockValue']['query_options'])) {

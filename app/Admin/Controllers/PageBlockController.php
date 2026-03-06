@@ -54,7 +54,7 @@ final class PageBlockController extends AdminBaseController
             $grid->column('page.name', __t('Page'));
             $grid->column('block_display_label', __t('Block'))->display(fn () => $this->block_display_label);
             $grid->column('display_options_title', __t('Title'));
-            $grid->column('display_options_style', __t('Style'));
+            $grid->column('view_style', __t('View Style'));
             $grid->column('remark', __t('Remark'))->editable();
             $grid->column('sort', __t('Sort'))->editable();
             $grid->column('status', __t('Status'))->switch();

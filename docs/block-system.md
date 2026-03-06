@@ -55,6 +55,9 @@ This separation allows:
 │ id               │
 │ block_id         │
 │ theme            │  → Optional: theme name (null = all themes)
+│ view             │
+│ view_style       │  → View style variant (default: 'default'); distinct from styles (CSS)
+│ anchor_label     │  → Section label for anchor nav (nullable)
 │ template         │
 │ scripts          │
 │ stylesheets      │
@@ -691,7 +694,7 @@ The manifest `component` is matched to `page_blocks.class`. Only manifest templa
 Sticky navigation bar that links to page sections below. Shows only **page-scoped** blocks after itself (excludes global blocks like footer).
 
 - **Order logic**: If the anchor block is at sort 3, it lists only blocks with sort > 3.
-- **Title source**: Only blocks with `anchor_label` in their displayOptions appear in the nav.
+- **Title source**: Only blocks with `anchor_label` (from `page_block_values.anchor_label` column) appear in the nav.
 - **Display options**: `cta_text`, `cta_url`, `cta_icon` for the optional call-to-action button on the right.
 - **Scroll targets**: Each block is wrapped with `id="block-{reference}"` for anchor links.
 

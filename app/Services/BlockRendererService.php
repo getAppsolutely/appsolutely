@@ -42,7 +42,9 @@ final readonly class BlockRendererService implements BlockRendererServiceInterfa
 
         $blockValue     = $block->blockValue ?? null;
         $viewName       = $blockValue?->view ?? '';
-        $style          = $block->displayOptionsValue['style'] ?? '';
+        $viewStyle      = ($blockValue?->view_style !== null && $blockValue?->view_style !== '')
+            ? (string) $blockValue->view_style
+            : 'default';
         $queryOptions   = $block->queryOptionsValue ?? [];
         $displayOptions = $block->displayOptionsValue ?? [];
         $pageData       = $page->toArray();
@@ -50,7 +52,7 @@ final readonly class BlockRendererService implements BlockRendererServiceInterfa
         $data = [
             'page'           => $pageData,
             'viewName'       => $viewName,
-            'style'          => $style,
+            'viewStyle'      => $viewStyle,
             'queryOptions'   => $queryOptions,
             'displayOptions' => $displayOptions,
             'blockSort'      => (int) ($block->sort ?? 0),
@@ -66,18 +68,21 @@ final readonly class BlockRendererService implements BlockRendererServiceInterfa
     /**
      * Build minimal block data for anchor navigation (used by Anchor block).
      *
-     * @return array<int, array{sort: int, reference: string, scope: string, view: string, display_options: array, block_title: string}>
+     * @return array<int, array{sort: int, reference: string, scope: string, view: string, anchor_label: string|null, display_options: array, block_title: string}>
      */
     private function buildBlocksForAnchor(GeneralPage $page): array
     {
         $blocks = $page->blocks ?? collect();
 
         return collect($blocks)->map(function ($b) {
+            $anchorLabel = $b->blockValue?->anchor_label;
+
             return [
                 'sort'            => (int) ($b->sort ?? 0),
                 'reference'       => (string) ($b->reference ?? ''),
                 'scope'           => (string) ($b->block?->scope ?? 'page'),
                 'view'            => (string) ($b->blockValue?->view ?? ''),
+                'anchor_label'    => $anchorLabel !== null && $anchorLabel !== '' ? (string) $anchorLabel : null,
                 'display_options' => $b->displayOptionsValue ?? [],
                 'block_title'     => (string) ($b->block?->title ?? ''),
             ];

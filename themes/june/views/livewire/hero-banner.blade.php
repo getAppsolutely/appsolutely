@@ -2,7 +2,7 @@
     <div class="hero-banner__wrapper">
         @if (!empty($displayOptions['heroes']))
             @foreach ($displayOptions['heroes'] as $hero)
-                <div class="hero-banner hero-banner--{{ $style ?? 'default' }}">
+                <div class="hero-banner hero-banner--{{ $viewStyle ?? 'default' }}">
                     @if (($hero['type'] ?? 'image') === 'video')
                         <div class="hero-banner__video-wrap position-absolute top-0 start-0 w-100 h-100">
                             <video class="lazy w-100 h-100 object-fit-cover" controls preload="none">
@@ -11,7 +11,7 @@
                             </video>
                         </div>
                     @else
-                        @if ($style == 'fullscreen')
+                        @if ($viewStyle == 'fullscreen')
                             <div class="hero-banner__image-wrap lazy lazy-bg" data-bg="{{ asset_url($hero['url']) }}">
                             </div>
                         @else

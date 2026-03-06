@@ -1,4 +1,4 @@
-<section class="video-showcase video-showcase--{{ $style ?? 'default' }} position-relative overflow-hidden w-100">
+<section class="video-showcase video-showcase--{{ $viewStyle ?? 'default' }} position-relative overflow-hidden w-100">
     <!-- Background Video -->
     <div class="video-showcase__background position-absolute top-0 start-0 w-100 h-100" style="z-index: 1;">
         <video class="lazy w-100 h-100 object-fit-cover" @if ($displayOptions['autoplay']) autoplay @endif

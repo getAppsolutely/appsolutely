@@ -75,8 +75,7 @@ Each theme can define a `manifest.json` file that registers block templates for 
             "component": "App\\Livewire\\GeneralBlock",
             "view": "block-view-name",
             "displayOptions": {
-                "title": "Default Title",
-                "anchor_label": "Section Name"
+                "title": "Default Title"
             },
             "queryOptions": {},
             "styles": ["default", "variant"]

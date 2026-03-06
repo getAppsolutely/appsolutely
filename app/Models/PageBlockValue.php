@@ -17,6 +17,8 @@ final class PageBlockValue extends Model
         'block_id',
         'theme',
         'view',
+        'view_style',
+        'anchor_label',
         'query_options',
         'display_options',
         'scripts',

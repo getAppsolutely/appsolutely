@@ -11,14 +11,14 @@ use Illuminate\Contracts\Container\Container;
  * Anchor block: sticky navigation bar linking to sections below.
  *
  * Shows only page-scoped blocks after itself (excludes global blocks like footer).
- * Only includes blocks that have anchor_label in displayOptions.
+ * Only includes blocks that have anchor_label (from page_block_values.anchor_label column).
  */
 final class Anchor extends GeneralBlock
 {
     public int $blockSort = 0;
 
     /**
-     * @var array<int, array{sort: int, reference: string, scope: string, view: string, display_options: array, block_title: string}>
+     * @var array<int, array{sort: int, reference: string, scope: string, view: string, anchor_label: string|null, display_options: array, block_title: string}>
      */
     public array $blocksForAnchor = [];
 
@@ -46,15 +46,13 @@ final class Anchor extends GeneralBlock
                 continue;
             }
 
-            $reference      = (string) ($block['reference'] ?? '');
-            $displayOptions = $block['display_options'] ?? [];
+            $reference   = (string) ($block['reference'] ?? '');
+            $anchorLabel = $this->resolveAnchorLabel($block);
 
-            $title = $this->resolveTitle($displayOptions);
-
-            if ($title !== '' && $reference !== '') {
+            if ($anchorLabel !== '' && $reference !== '') {
                 $items[] = [
                     'reference' => $reference,
-                    'title'     => $title,
+                    'title'     => $anchorLabel,
                 ];
             }
         }
@@ -63,11 +61,13 @@ final class Anchor extends GeneralBlock
     }
 
     /**
-     * Resolve anchor label. Returns empty string if block has no anchor_label in displayOptions.
+     * Resolve anchor label from block data (page_block_values.anchor_label column).
      */
-    private function resolveTitle(array $displayOptions): string
+    private function resolveAnchorLabel(array $block): string
     {
-        return trim((string) ($displayOptions['anchor_label'] ?? ''));
+        $anchorLabel = $block['anchor_label'] ?? null;
+
+        return $anchorLabel !== null && $anchorLabel !== '' ? trim((string) $anchorLabel) : '';
     }
 
     protected function getExtraData(): array
